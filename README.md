@@ -11,6 +11,14 @@ Then recompile by running:
 NEVER run scripts directly from the internets. So, 
 
 ```
-wget 
-./ubuntu.sh
+wget https://raw.githubusercontent.com/unamatasanatarai/dotfiles/master/ubuntu.sh
+chmod +x ubuntu.sh
+sudo ./ubuntu.sh
 ```
+
+## What does it do?
+
+1. `full-upgrade` your system.
+1. update vim
+1. copy .vimrc file
+1. install git
