@@ -39,10 +39,6 @@ print_in_green() {
     print_in_color "$1" 2
 }
 
-print_in_purple() {
-    print_in_color "$1" 5
-}
-
 print_in_red() {
     print_in_color "$1" 1
 }
@@ -56,10 +52,10 @@ print_question() {
 }
 
 print_success() {
-    print_in_green "   [✔] $1\n"
+    print_in_green "\n\n   [✔] $1\n\n\n"
 }
 
-print_warning() {
-    print_in_yellow "   [!] $1\n"
+proclaim() {
+    print_in_yellow "\n\n   [!] $1\n\n\n"
 }
 

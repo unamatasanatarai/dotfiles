@@ -22,3 +22,4 @@ sudo ./ubuntu.sh
 1. update vim
 1. copy .vimrc file
 1. install git
+1. install docker

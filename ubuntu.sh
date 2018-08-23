@@ -40,10 +40,6 @@ print_in_green() {
     print_in_color "$1" 2
 }
 
-print_in_purple() {
-    print_in_color "$1" 5
-}
-
 print_in_red() {
     print_in_color "$1" 1
 }
@@ -57,32 +53,55 @@ print_question() {
 }
 
 print_success() {
-    print_in_green "   [✔] $1\n"
+    print_in_green "\n\n   [✔] $1\n\n\n"
 }
 
-print_warning() {
-    print_in_yellow "   [!] $1\n"
+proclaim() {
+    print_in_yellow "\n\n   [!] $1\n\n\n"
 }
 
 VERSION="0.1"
 
 ask_for_sudo
 
-say_in_purple "Injecting .vimrc .bash_aliases"
+proclaim "Injecting .vimrc .bash_aliases"
 cd ~
+[ -e .vimrc ] && rm -f .vimrc
+[ -e .bash_aliases ] && rm -f .bash_aliases
 wget https://raw.githubusercontent.com/unamatasanatarai/dotfiles/master/.vimrc
 wget https://raw.githubusercontent.com/unamatasanatarai/dotfiles/master/.bash_aliases
-print_success
+print_success "Injected .vimrc .bash_aliases"
 
 apt update
 apt -y full-upgrade
-# install stuff to have latest docker
+
+proclaim "Installing bare necessities"
 apt install -y apt-transport-https ca-certificates \
   curl software-properties-common vim git
+print_success "Installed bare minimum"
 
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
-add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
+_=$(command -v docker)
+if [ "$?" != 0 ]; then
+  proclaim "Adding docker apt-repo"
+  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+  add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
+  print_success "Added docker apt-repo"
 
-apt update
+  apt update
 
-apt install -y docker-ce
+  proclaim "Installing docker"
+  apt install -y docker-ce
+  print_success "Installed docker"
+fi
+
+_=$(command -v docker-compose)
+if [ "$?" != 0 ]; then
+  proclaim "Installing docker-compose"
+  curl -L https://github.com/docker/compose/releases/download/1.22.0/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+  chmod +x /usr/local/bin/docker-compose
+  print_success "Installed docker-compose"
+fi
+
+proclaim "Autocleanup apt"
+apt autoremove -y
+print_success "Cleandup apt"
