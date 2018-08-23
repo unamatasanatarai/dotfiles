@@ -22,7 +22,7 @@ set titlestring=%t%(\ %M%)%(\ (%{expand(\"%:~:.:h\")})%)%(\ %a%)
 
 " text wrapping. Typically I don't like it. so by default, it's a no no
 set nowrap
-set wrapmargin=2
+set wrapmargin=0
 set breakindentopt=shift:2,sbr
 set showbreak=↪
 set breakindent
