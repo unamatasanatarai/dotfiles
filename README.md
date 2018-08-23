@@ -22,7 +22,8 @@ sudo ./ubuntu.sh
 1. update vim
 1. copy .vimrc file
 1. install
-  1. git
-  1. curl
-  1. docker
-  1. docker-compose
+    - git
+    - curl
+    - docker
+    - docker-compose
+
