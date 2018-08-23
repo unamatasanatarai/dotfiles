@@ -21,5 +21,8 @@ sudo ./ubuntu.sh
 1. `full-upgrade` your system.
 1. update vim
 1. copy .vimrc file
-1. install git
-1. install docker
+1. install
+  1. git
+  1. curl
+  1. docker
+  1. docker-compose
