@@ -1,4 +1,11 @@
-#!/usr/bin/env bash
+ROOT_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
+
+ask_for_sudo() {
+  if [ "$EUID" -ne 0 ]; then
+    print_question "Do you sudo\n"
+    exit 1
+  fi
+}
 
 answer_is_yes() {
     [[ "$REPLY" =~ ^[Yy]$ ]] \
@@ -46,18 +53,6 @@ print_in_yellow() {
 
 print_question() {
     print_in_yellow "   [?] $1"
-}
-
-print_result() {
-
-    if [ "$1" -eq 0 ]; then
-        print_success "$2"
-    else
-        print_error "$2"
-    fi
-
-    return "$1"
-
 }
 
 print_success() {

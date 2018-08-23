@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
+ROOT_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
+
+ask_for_sudo() {
+  if [ "$EUID" -ne 0 ]; then
+    print_question "Do you sudo\n"
+    exit 1
+  fi
+}
 
 answer_is_yes() {
     [[ "$REPLY" =~ ^[Yy]$ ]] \
@@ -48,18 +56,6 @@ print_question() {
     print_in_yellow "   [?] $1"
 }
 
-print_result() {
-
-    if [ "$1" -eq 0 ]; then
-        print_success "$2"
-    else
-        print_error "$2"
-    fi
-
-    return "$1"
-
-}
-
 print_success() {
     print_in_green "   [✔] $1\n"
 }
@@ -68,18 +64,25 @@ print_warning() {
     print_in_yellow "   [!] $1\n"
 }
 
-#!/usr/bin/env bash
 VERSION="0.1"
 
-# load utilities for shorthand calls and making things pretty
-cd "$(dirname "${BASH_SOURCE[0]}")" \
-&& . "utils.sh"
+ask_for_sudo
 
-if [ "$EUID" -ne 0 ]; then
-  print_in_red "sudo ? please ?\n"
-fi
+say_in_purple "Injecting .vimrc .bash_aliases"
+cd ~
+wget https://raw.githubusercontent.com/unamatasanatarai/dotfiles/master/.vimrc
+wget https://raw.githubusercontent.com/unamatasanatarai/dotfiles/master/.bash_aliases
+print_success
 
 apt update
 apt -y full-upgrade
-apt install -y vim git
+# install stuff to have latest docker
+apt install -y apt-transport-https ca-certificates \
+  curl software-properties-common vim git
 
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
+
+apt update
+
+apt install -y docker-ce

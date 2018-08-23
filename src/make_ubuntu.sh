@@ -2,7 +2,12 @@
 
 echo "Will produce a runnable ubuntu file from sources"
 
-cat utils.sh ubuntu.sh > ../ubuntu.sh
+ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
+
+cd $ROOT
+
+echo "#!/usr/bin/env bash
+$(cat utils.sh ubuntu.sh)" > ../ubuntu.sh
 chmod +x ../ubuntu.sh
 
 echo " [✔]"
