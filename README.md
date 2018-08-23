@@ -25,6 +25,8 @@ sudo ./ubuntu.sh
 1. install
     - git
     - curl
+    - htop
+    - ncdu
     - docker
     - docker-compose
 
