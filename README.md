@@ -20,7 +20,8 @@ sudo ./ubuntu.sh
 
 1. `full-upgrade` your system.
 1. update vim
-1. copy .vimrc file
+1. inject .vimrc
+1. inject .bash_aliases
 1. install
     - git
     - curl
