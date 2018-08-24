@@ -40,6 +40,7 @@ echo "assign [class=\"Gnome-terminal\"] \$workspace3" >> ~/.config/i3/config
 echo "hide_edge_borders both" >> ~/.config/i3/config
 echo "exec slack" >> ~/.config/i3/config
 echo "exec google-chrome" >> ~/.config/i3/config
+echo "focus_follows_mouse no" >> ~/.config/i3/config
 
 [ -f ~/.fonts ] && mkdir ~/.fonts
 cd ~/.fonts
