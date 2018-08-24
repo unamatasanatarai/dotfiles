@@ -1,7 +1,7 @@
 VERSION="0.1" ask_for_sudo
 
 SILENT=""
-if [ $1 = '--silent' ]; then
+if [[ $1 = '--silent' ]]; then
   SILENT=" > /dev/null 2>&1"
 fi
 
@@ -37,23 +37,23 @@ proclaim "Injecting .vimrc .bash_aliases"
 cd ~
 [ -e .vimrc ] && rm -f .vimrc
 [ -e .bash_aliases ] && rm -f .bash_aliases
-wget https://raw.githubusercontent.com/unamatasanatarai/dotfiles/master/.vimrc $SILENT
-wget https://raw.githubusercontent.com/unamatasanatarai/dotfiles/master/.bash_aliases $SILENT
+eval "wget https://raw.githubusercontent.com/unamatasanatarai/dotfiles/master/.vimrc $SILENT"
+eval "wget https://raw.githubusercontent.com/unamatasanatarai/dotfiles/master/.bash_aliases $SILENT"
 print_success "Injected .vimrc .bash_aliases"
 
 proclaim "apt update"
-apt update $SILENT
+eval "apt update $SILENT"
 print_success "apt update"
 
 proclaim "$APTINSTALLS"
-$APTINSTALLS $SILENT
+eval "${APTINSTALLS} ${SILENT}"
 print_success "$APTINSTALLS"
 
 proclaim "$SNAPINSTALLS"
 for item in "${SNAPINSTALLS[@]}"
 do
   proclaim "snap install ${item}"
-  snap install $item $SILENT
+  eval "snap install $item $SILENT"
   if [ "$?" != 0 ]; then
     print_error "${item}"
   else
@@ -64,19 +64,20 @@ done
 _=$(command -v docker-compose)
 if [ "$?" != 0 ]; then
   proclaim "Installing docker-compose"
-  curl -sL https://github.com/docker/compose/releases/download/1.22.0/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+  eval "curl -sL https://github.com/docker/compose/releases/download/1.22.0/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose"
   chmod +x /usr/local/bin/docker-compose
   print_success "Installed docker-compose"
 fi
 
 proclaim "Full system upgrade"
-apt update $SILENT
-apt -y full-upgrade $SILENT
+eval "apt update $SILENT"
+eval "apt -y full-upgrade $SILENT"
 print_success "Full system upgrade"
 
 proclaim "Autocleanup apt"
-apt autoremove -y $SILENT
+eval "apt autoremove -y $SILENT"
 print_success "Cleandup apt"
+
 print_in_yellow "
 
 ···············
