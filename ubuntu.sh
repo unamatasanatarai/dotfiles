@@ -60,7 +60,8 @@ print_success "Curl is now ready"
 APTINSTALLS="apt install -y"
 APTINSTALLS="${APTINSTALLS} apt-transport-https ca-certificates build-essential"
 APTINSTALLS="${APTINSTALLS} software-properties-common"
-APTINSTALLS="${APTINSTALLS} vim git htop ncdu ack shutter"
+APTINSTALLS="${APTINSTALLS} vim git htop ncdu ack"
+APTINSTALLS="${APTINSTALLS} shutter"
 APTINSTALLS="${APTINSTALLS} google-chrome-stable docker-ce"
 
 SNAPINSTALLS=()
@@ -119,6 +120,24 @@ if [ "$?" != 0 ]; then
   chmod +x /usr/local/bin/docker-compose
   print_success "Installed docker-compose"
 fi
+
+proclaim "Fixing Edit mode in Shutter"
+mkdir /tmp/shutter/
+cd /tmp/shutter/
+eval "wget https://launchpad.net/ubuntu/+archive/primary/+files/libgoocanvas-common_1.0.0-1_all.deb $SILENT"
+eval "wget https://launchpad.net/ubuntu/+archive/primary/+files/libgoocanvas3_1.0.0-1_amd64.deb $SILENT"
+eval "wget https://launchpad.net/ubuntu/+archive/primary/+files/libgoo-canvas-perl_0.06-2ubuntu3_amd64.deb $SILENT"
+
+eval "sudo dpkg -i libgoocanvas-common_1.0.0-1_all.deb $SILENT"
+eval "sudo apt -y -f install $SILENT"
+eval "sudo dpkg -i libgoocanvas3_1.0.0-1_amd64.deb $SILENT"
+eval "sudo apt -y -f install $SILENT"
+eval "sudo dpkg -i libgoo-canvas-perl_0.06-2ubuntu3_amd64.deb $SILENT"
+eval "sudo apt -y -f install $SILENT"
+
+cd ~
+rm -rf /tmp/shutter
+print_success "Fixed edit mode in Shutter"
 
 proclaim "Full system upgrade"
 eval "apt update $SILENT"
