@@ -26,6 +26,7 @@ sudo ./ubuntu.sh
     - ack
     - shutter
     - slack
+    - chrome
     - git
     - curl
     - htop

@@ -15,26 +15,41 @@ apt -y full-upgrade
 
 proclaim "Installing bare necessities"
 apt install -y apt-transport-https ca-certificates \
+  build-essential \
   curl software-properties-common vim git htop ncdu ack shutter
 print_success "Installed bare minimum"
 
 _=$(command -v slack)
 if [ "$?" != 0 ]; then
-  proclaim "Adding slack"
+  proclaim "Installing Slack"
   snap install slack --classic
   print_success "Slack installed"
 fi
 
-_=$(command -v docker)
+_=$(command -v google-chrome)
 if [ "$?" != 0 ]; then
-  proclaim "Adding docker apt-repo"
-  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
-  add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
-  print_success "Added docker apt-repo"
+  proclaim "Adding Chrome apt-repo"
+  curl -fsSL https://dl.google.com/linux/linux_signing_key.pub | apt-key add -
+  add-apt-repository "deb https://dl.google.com/linux/chrome/deb/ stable main"
+  print_success "Added Chrome apt-repo"
 
   apt update
 
-  proclaim "Installing docker"
+  proclaim "Installing Chrome"
+  apt install -y google-chrome-stable
+  proclaim "Installed Chrome"
+fi
+
+_=$(command -v docker)
+if [ "$?" != 0 ]; then
+  proclaim "Adding Docker apt-repo"
+  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+  add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
+  print_success "Added Docker apt-repo"
+
+  apt update
+
+  proclaim "Installing Docker"
   apt install -y docker-ce
   print_success "Installed docker"
 fi
