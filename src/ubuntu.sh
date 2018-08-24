@@ -26,10 +26,10 @@ proclaim "Injecting apt-repo keys"
 curl -fsSL https://dl.google.com/linux/linux_signing_key.pub | apt-key add -
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
 print_success "Injected apt-repo keys"
-_=`grep -q "dl.google.com/linux/chrome/deb" /etc/apt/sources.list`
+_=`grep -q "dl.google.com/linux/chrome/deb" /etc/apt/sources.list.d/google-chrome.list`
 if [ $? != 0 ]; then
   proclaim "Injecting Chrome apt-repo"
-  echo "deb [arch=amd64] https://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list
+  echo "deb [arch=amd64] https://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
   print_success "Injected Chrome apt-repo"
 fi
 
