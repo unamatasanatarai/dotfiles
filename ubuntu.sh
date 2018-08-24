@@ -77,7 +77,7 @@ apt -y full-upgrade
 
 proclaim "Installing bare necessities"
 apt install -y apt-transport-https ca-certificates \
-  curl software-properties-common vim git
+  curl software-properties-common vim git htop ncdu ack shutter
 print_success "Installed bare minimum"
 
 _=$(command -v docker)

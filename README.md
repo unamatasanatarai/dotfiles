@@ -23,6 +23,9 @@ sudo ./ubuntu.sh
 1. inject .vimrc
 1. inject .bash_aliases
 1. install
+    - ack
+    - shutter
+    - slack
     - git
     - curl
     - htop

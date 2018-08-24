@@ -15,8 +15,15 @@ apt -y full-upgrade
 
 proclaim "Installing bare necessities"
 apt install -y apt-transport-https ca-certificates \
-  curl software-properties-common vim git htop ncdu
+  curl software-properties-common vim git htop ncdu ack shutter
 print_success "Installed bare minimum"
+
+_=$(command -v slack)
+if [ "$?" != 0 ]; then
+  proclaim "Adding slack"
+  snap install slack --classic
+  print_success "Slack installed"
+fi
 
 _=$(command -v docker)
 if [ "$?" != 0 ]; then
