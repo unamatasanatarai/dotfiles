@@ -43,7 +43,9 @@ echo "exec google-chrome" >> ~/.config/i3/config
 
 [ -f ~/.fonts ] && mkdir ~/.fonts
 cd ~/.fonts
-#wget https://github.com/FortAwesome/Font-Awesome/raw/master/web-fonts-with-css/webfonts/fa-regular-400.ttf
+wget https://github.com/unamatasanatarai/dotfiles/raw/master/fonts/Font%20Awesome%205%20Free-Solid-900.otf
+wget https://github.com/unamatasanatarai/dotfiles/raw/master/fonts/Font%20Awesome%205%20Free-Regular-400.otf
+wget https://github.com/unamatasanatarai/dotfiles/raw/master/fonts/Font%20Awesome%205%20Brands-Regular-400.otf
 
 print_in_yellow "
 DONE!
