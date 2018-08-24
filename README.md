@@ -36,3 +36,5 @@ sudo ./ubuntu.sh --silent
     - docker
     - docker-compose
 
+## Working on
+ - i3 autoinstall and config
