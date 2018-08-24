@@ -52,10 +52,15 @@ if [[ $1 = '--silent' ]]; then
   SILENT=" > /dev/null 2>&1"
 fi
 
+proclaim "Curl is a must"
+eval "apt update $SILENT"
+eval "apt install -y curl $SILENT"
+print_success "Curl is now ready"
+
 APTINSTALLS="apt install -y"
 APTINSTALLS="${APTINSTALLS} apt-transport-https ca-certificates build-essential"
 APTINSTALLS="${APTINSTALLS} software-properties-common"
-APTINSTALLS="${APTINSTALLS} curl vim git htop ncdu ack shutter"
+APTINSTALLS="${APTINSTALLS} vim git htop ncdu ack shutter"
 APTINSTALLS="${APTINSTALLS} google-chrome-stable docker-ce"
 
 SNAPINSTALLS=()
