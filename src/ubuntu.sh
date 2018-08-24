@@ -15,7 +15,6 @@ APTINSTALLS="${APTINSTALLS} google-chrome-stable docker-ce"
 
 SNAPINSTALLS=()
 SNAPINSTALLS+=("slack --classic")
-SNAPINSTALLS+=("skype")
 
 proclaim "Injecting apt-repo keys"
 curl -fsSL https://dl.google.com/linux/linux_signing_key.pub | apt-key add -
