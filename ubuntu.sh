@@ -8,25 +8,8 @@ ask_for_sudo() {
   fi
 }
 
-answer_is_yes() {
-    [[ "$REPLY" =~ ^[Yy]$ ]] \
-        && return 0 \
-        || return 1
-}
-
-ask() {
-    print_question "$1"
-    read -r
-}
-
-ask_for_confirmation() {
-    print_question "$1 (y/n) "
-    read -r -n 1
-    printf "\n"
-}
-
 print_error() {
-    print_in_red "   [✖] $1 $2\n"
+    print_in_red "   [✖] $1 $2"
 }
 
 print_in_color() {
@@ -53,77 +36,97 @@ print_question() {
 }
 
 print_success() {
-    print_in_green "\n\n   [✔] $1\n\n\n"
+    print_in_green "   [✔] $1"
 }
 
 proclaim() {
-    print_in_yellow "\n\n   [!] $1\n\n\n"
+    print_in_yellow "\n   [!] $1"
 }
 
-VERSION="0.1"
+VERSION="0.1" 
 
 ask_for_sudo
+
+SILENT=""
+if [[ $1 = '--silent' ]]; then
+  SILENT=" > /dev/null 2>&1"
+fi
+
+APTINSTALLS="apt install -y"
+APTINSTALLS="${APTINSTALLS} apt-transport-https ca-certificates build-essential"
+APTINSTALLS="${APTINSTALLS} software-properties-common"
+APTINSTALLS="${APTINSTALLS} curl vim git htop ncdu ack shutter"
+APTINSTALLS="${APTINSTALLS} google-chrome-stable docker-ce"
+
+SNAPINSTALLS=()
+SNAPINSTALLS+=("slack --classic")
+
+proclaim "Injecting apt-repo keys"
+curl -fsSL https://dl.google.com/linux/linux_signing_key.pub | apt-key add -
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+print_success "Injected apt-repo keys"
+_=`grep -q "dl.google.com/linux/chrome/deb" /etc/apt/sources.list`
+if [ $? != 0 ]; then
+  proclaim "Injecting Chrome apt-repo"
+  echo "deb [arch=amd64] https://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list
+  print_success "Injected Chrome apt-repo"
+fi
+
+_=`grep -q "download.docker.com/linux/ubuntu" /etc/apt/sources.list`
+if [ $? != 0 ]; then
+  proclaim "Injecting Docker apt-repo"
+  echo "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" >> /etc/apt/sources.list
+  print_success "Injected Docker apt-repo"
+fi
 
 proclaim "Injecting .vimrc .bash_aliases"
 cd ~
 [ -e .vimrc ] && rm -f .vimrc
 [ -e .bash_aliases ] && rm -f .bash_aliases
-wget https://raw.githubusercontent.com/unamatasanatarai/dotfiles/master/.vimrc
-wget https://raw.githubusercontent.com/unamatasanatarai/dotfiles/master/.bash_aliases
+eval "wget https://raw.githubusercontent.com/unamatasanatarai/dotfiles/master/.vimrc $SILENT"
+eval "wget https://raw.githubusercontent.com/unamatasanatarai/dotfiles/master/.bash_aliases $SILENT"
 print_success "Injected .vimrc .bash_aliases"
 
-apt update
-apt -y full-upgrade
+proclaim "apt update"
+eval "apt update $SILENT"
+print_success "apt update"
 
-proclaim "Installing bare necessities"
-apt install -y apt-transport-https ca-certificates \
-  build-essential \
-  curl software-properties-common vim git htop ncdu ack shutter
-print_success "Installed bare minimum"
+proclaim "$APTINSTALLS"
+eval "${APTINSTALLS} ${SILENT}"
+print_success "$APTINSTALLS"
 
-_=$(command -v slack)
-if [ "$?" != 0 ]; then
-  proclaim "Installing Slack"
-  snap install slack --classic
-  print_success "Slack installed"
-fi
-
-_=$(command -v google-chrome)
-if [ "$?" != 0 ]; then
-  proclaim "Adding Chrome apt-repo"
-  curl -fsSL https://dl.google.com/linux/linux_signing_key.pub | apt-key add -
-  add-apt-repository "deb https://dl.google.com/linux/chrome/deb/ stable main"
-  print_success "Added Chrome apt-repo"
-
-  apt update
-
-  proclaim "Installing Chrome"
-  apt install -y google-chrome-stable
-  proclaim "Installed Chrome"
-fi
-
-_=$(command -v docker)
-if [ "$?" != 0 ]; then
-  proclaim "Adding Docker apt-repo"
-  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
-  add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
-  print_success "Added Docker apt-repo"
-
-  apt update
-
-  proclaim "Installing Docker"
-  apt install -y docker-ce
-  print_success "Installed docker"
-fi
+proclaim "$SNAPINSTALLS"
+for item in "${SNAPINSTALLS[@]}"
+do
+  proclaim "snap install ${item}"
+  eval "snap install $item $SILENT"
+  if [ "$?" != 0 ]; then
+    print_error "${item}"
+  else
+    print_success "${item}"
+  fi
+done
 
 _=$(command -v docker-compose)
 if [ "$?" != 0 ]; then
   proclaim "Installing docker-compose"
-  curl -L https://github.com/docker/compose/releases/download/1.22.0/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+  eval "curl -sL https://github.com/docker/compose/releases/download/1.22.0/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose"
   chmod +x /usr/local/bin/docker-compose
   print_success "Installed docker-compose"
 fi
 
+proclaim "Full system upgrade"
+eval "apt update $SILENT"
+eval "apt -y full-upgrade $SILENT"
+print_success "Full system upgrade"
+
 proclaim "Autocleanup apt"
-apt autoremove -y
+eval "apt autoremove -y $SILENT"
 print_success "Cleandup apt"
+
+print_in_yellow "
+
+···············
+· I ♥M H♥PPY! ·
+···············
+"

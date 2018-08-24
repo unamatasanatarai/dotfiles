@@ -7,25 +7,8 @@ ask_for_sudo() {
   fi
 }
 
-answer_is_yes() {
-    [[ "$REPLY" =~ ^[Yy]$ ]] \
-        && return 0 \
-        || return 1
-}
-
-ask() {
-    print_question "$1"
-    read -r
-}
-
-ask_for_confirmation() {
-    print_question "$1 (y/n) "
-    read -r -n 1
-    printf "\n"
-}
-
 print_error() {
-    print_in_red "   [✖] $1 $2\n"
+    print_in_red "   [✖] $1 $2"
 }
 
 print_in_color() {
@@ -52,10 +35,10 @@ print_question() {
 }
 
 print_success() {
-    print_in_green "\n\n   [✔] $1\n\n\n"
+    print_in_green "   [✔] $1"
 }
 
 proclaim() {
-    print_in_yellow "\n\n   [!] $1\n\n\n"
+    print_in_yellow "\n   [!] $1"
 }
 
