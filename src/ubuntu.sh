@@ -1,4 +1,6 @@
-VERSION="0.1" ask_for_sudo
+VERSION="0.1" 
+
+ask_for_sudo
 
 SILENT=""
 if [[ $1 = '--silent' ]]; then

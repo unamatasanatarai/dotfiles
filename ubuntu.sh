@@ -43,7 +43,9 @@ proclaim() {
     print_in_yellow "\n   [!] $1"
 }
 
-VERSION="0.1" ask_for_sudo
+VERSION="0.1" 
+
+ask_for_sudo
 
 SILENT=""
 if [[ $1 = '--silent' ]]; then
@@ -90,7 +92,7 @@ proclaim "apt update"
 eval "apt update $SILENT"
 print_success "apt update"
 
-proclaim "$APTINSTALLS $SILENT"
+proclaim "$APTINSTALLS"
 eval "${APTINSTALLS} ${SILENT}"
 print_success "$APTINSTALLS"
 
