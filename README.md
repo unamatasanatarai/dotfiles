@@ -14,6 +14,8 @@ NEVER run scripts directly from the internets. So,
 wget https://raw.githubusercontent.com/unamatasanatarai/dotfiles/master/ubuntu.sh
 chmod +x ubuntu.sh
 sudo ./ubuntu.sh
+# or if you do not care about any output
+sudo ./ubuntu.sh --silent
 ```
 
 ## What does it do?
