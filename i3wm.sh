@@ -54,9 +54,9 @@ apt install -y i3 i3blocks arc-theme \
   libxcb-xrm0 libxcb-xrm-dev automake scrot
 
 proclaim "Create basic directories for i3"
-[ -d ~/.config/i3/scripts ] && mkdir -p ~/.config/i3/scripts
-[ -d ~/.config/i3blocks ] && mkdir -p ~/.config/i3blocks
-[ -d ~/.fonts ] && mkdir ~/.fonts
+[ ! -d ~/.config/i3/scripts ] && mkdir -p ~/.config/i3/scripts
+[ ! -d ~/.config/i3blocks ] && mkdir -p ~/.config/i3blocks
+[ ! -d ~/.fonts ] && mkdir ~/.fonts
 print_success "Created basic i3 directories"
 
 proclaim "Copy i3 configs"
