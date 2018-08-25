@@ -25,6 +25,7 @@ proclaim "Copy i3 custom scripts"
 cd ~/.config/i3/scripts
 wget https://github.com/unamatasanatarai/dotfiles/raw/master/.config/i3/scripts/lock.sh
 wget https://github.com/unamatasanatarai/dotfiles/raw/master/.config/i3/scripts/lock.png
+chmod +x lock.sh
 print_success "Copied 3k custom scripts"
 
 proclaim "Download i3 fonts"
