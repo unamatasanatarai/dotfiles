@@ -8,6 +8,9 @@ Then recompile by running:
 ./src/make_ubuntu.sh
 
 ## Installation and usage on a new machine
+
+### Pure ubuntu
+
 NEVER run scripts directly from the internets. So, 
 
 ```
@@ -18,7 +21,7 @@ sudo ./ubuntu.sh
 sudo ./ubuntu.sh --silent
 ```
 
-## What does it do?
+#### What does it do?
 
 1. `full-upgrade` your system.
 1. update vim
@@ -36,5 +39,13 @@ sudo ./ubuntu.sh --silent
     - docker
     - docker-compose
 
-## Working on
- - i3 autoinstall and config
+### i3wm
+
+NEVER run scripts directly from the internets. So, 
+
+```
+wget https://raw.githubusercontent.com/unamatasanatarai/dotfiles/master/i3wm.sh
+chmod +x i3wm.sh
+sudo ./i3wm.sh
+```
+
