@@ -33,6 +33,10 @@ wget https://github.com/unamatasanatarai/dotfiles/raw/master/.fonts/System\ San\
 wget https://github.com/unamatasanatarai/dotfiles/raw/master/.fonts/Font\ Awesome\ 5\ Brands-Regular-400.otf
 wget https://github.com/unamatasanatarai/dotfiles/raw/master/.fonts/Font\ Awesome\ 5\ Free-Regular-400.otf
 wget https://github.com/unamatasanatarai/dotfiles/raw/master/.fonts/Font\ Awesome\ 5\ Free-Solid-900.otf
+wget https://github.com/unamatasanatarai/dotfiles/raw/master/.fonts/Hack-Bold.ttf
+wget https://github.com/unamatasanatarai/dotfiles/raw/master/.fonts/Hack-BoldItalic.ttf
+wget https://github.com/unamatasanatarai/dotfiles/raw/master/.fonts/Hack-Italic.ttf
+wget https://github.com/unamatasanatarai/dotfiles/raw/master/.fonts/Hack-Regular.ttf
 print_success "Downloaded i3 fonts"
 
 proclaim "Installing i3gaps"
