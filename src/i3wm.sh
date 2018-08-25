@@ -6,10 +6,10 @@ apt install -y i3 i3blocks arc-theme \
   libxcb-icccm4-dev libyajl-dev libstartup-notification0-dev \
   libxcb-randr0-dev libev-dev libxcb-cursor-dev libxcb-xinerama0-dev \
   libxcb-xkb-dev libxkbcommon-dev libxkbcommon-x11-dev autoconf \
-  libxcb-xrm0 libxcb-xrm-dev automake
+  libxcb-xrm0 libxcb-xrm-dev automake scrot
 
 proclaim "Create basic directories for i3"
-[ -f ~/.config/i3 ] && mkdir -p ~/.config/i3
+[ -f ~/.config/i3/scripts ] && mkdir -p ~/.config/i3/scripts
 [ -f ~/.config/i3blocks ] && mkdir -p ~/.config/i3blocks
 [ -f ~/.fonts ] && mkdir ~/.fonts
 print_success "Created basic i3 directories"
@@ -20,6 +20,12 @@ wget https://github.com/unamatasanatarai/dotfiles/raw/master/.config/i3/config
 cd ~/.config/i3blocks/
 wget https://github.com/unamatasanatarai/dotfiles/raw/master/.config/i3blocks/i3blocks/conf
 print_success "Copied i3 configs"
+
+proclaim "Copy i3 custom scripts"
+cd ~/.config/i3/scripts
+wget https://github.com/unamatasanatarai/dotfiles/raw/master/.config/i3/scripts/lock.sh
+wget https://github.com/unamatasanatarai/dotfiles/raw/master/.config/i3/scripts/lock.png
+print_success "Copied 3k custom scripts"
 
 proclaim "Download i3 fonts"
 cd ~/.fonts
