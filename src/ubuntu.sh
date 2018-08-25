@@ -43,15 +43,20 @@ if [ $? != 0 ]; then
   print_success "Injected Docker apt-repo"
 fi
 
-proclaim "Injecting .vimrc .bash_aliases .xinitrc"
+proclaim "Injecting .vimrc .bash_aliases .xinitrc terminalrc"
 cd ~
 [ -e .vimrc ] && rm -f .vimrc
 [ -e .bash_aliases ] && rm -f .bash_aliases
 [ -e .xinitrc ] && rm -f .xinitrc
+[ -f .config/xfce/terminal ] && mkdir -p .config/xfce/terminal
+[ -e .config/xfce/terminal/terminalrc ] && rm .config/xfce/terminal/terminalrc
 eval "wget https://raw.githubusercontent.com/unamatasanatarai/dotfiles/master/.vimrc $SILENT"
 eval "wget https://raw.githubusercontent.com/unamatasanatarai/dotfiles/master/.bash_aliases $SILENT"
 eval "wget https://raw.githubusercontent.com/unamatasanatarai/dotfiles/master/.xinitrc $SILENT"
-print_success "Injected .vimrc .bash_aliases .xinitrc"
+cd ~/.config/xfce/terminal/
+eval "wget https://raw.githubusercontent.com/unamatasanatarai/dotfiles/master/.config/xfce/terminal/terminalrc $SILENT"
+cd ~
+print_success "Injected .vimrc .bash_aliases .xinitrc terminalrc"
 
 proclaim "apt update"
 eval "apt update $SILENT"
