@@ -19,7 +19,7 @@ APTINSTALLS="apt install -y"
 APTINSTALLS="${APTINSTALLS} apt-transport-https ca-certificates build-essential"
 APTINSTALLS="${APTINSTALLS} software-properties-common"
 APTINSTALLS="${APTINSTALLS} vim git htop ncdu ack"
-APTINSTALLS="${APTINSTALLS} shutter"
+APTINSTALLS="${APTINSTALLS} shutter unclutter"
 APTINSTALLS="${APTINSTALLS} google-chrome-stable docker-ce"
 
 SNAPINSTALLS=()
@@ -43,13 +43,15 @@ if [ $? != 0 ]; then
   print_success "Injected Docker apt-repo"
 fi
 
-proclaim "Injecting .vimrc .bash_aliases"
+proclaim "Injecting .vimrc .bash_aliases .xinitrc"
 cd ~
 [ -e .vimrc ] && rm -f .vimrc
 [ -e .bash_aliases ] && rm -f .bash_aliases
+[ -e .xinitrc ] && rm -f .xinitrc
 eval "wget https://raw.githubusercontent.com/unamatasanatarai/dotfiles/master/.vimrc $SILENT"
 eval "wget https://raw.githubusercontent.com/unamatasanatarai/dotfiles/master/.bash_aliases $SILENT"
-print_success "Injected .vimrc .bash_aliases"
+eval "wget https://raw.githubusercontent.com/unamatasanatarai/dotfiles/master/.xinitrc $SILENT"
+print_success "Injected .vimrc .bash_aliases .xinitrc"
 
 proclaim "apt update"
 eval "apt update $SILENT"

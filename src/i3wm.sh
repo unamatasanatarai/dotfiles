@@ -1,53 +1,62 @@
 #!/usr/bin/env bash
-# apt install -y i3
+sudo add-apt-repository -y -u ppa:snwh/ppa
+
+apt install -y i3 i3blocks arc-theme \
+  moka-icon-theme faba-icon-theme faba-mono-icons \
+  libxcb1-dev libxcb-keysyms1-dev libpango1.0-dev libxcb-util0-dev \
+  libxcb-icccm4-dev libyajl-dev libstartup-notification0-dev \
+  libxcb-randr0-dev libev-dev libxcb-cursor-dev libxcb-xinerama0-dev \
+  libxcb-xkb-dev libxkbcommon-dev libxkbcommon-x11-dev autoconf \
+  libxcb-xrm0 libxcb-xrm-dev automake
+
 . ./utils.sh
 
-CONFIG="~/.config/i3/config"
-
-# Variabilize workspace names
-_=`grep -q 'variable workspace names' ~/.config/i3/config`
-if [ $? != 0 ]; then
-  eval "sed -i 's/# switch to workspace/# variable workspace names\n# switch to workspace/g' ${CONFIG}"
-fi
-
-variabilizeWorkspace() {
-  local WKEY=$1
-  local WNUM=$WKEY
-  if [ $WKEY = 0 ]; then
-    WNUM=10
-  fi
-  local WNAME=$2
-  proclaim "Replacing name of workspace ${WNAME}"
-  C='grep -q "set \$workspace${WKEY}" ~/.config/i3/config'
-  eval $C
-  if [ $? != 0 ]; then
-    eval "sed -i 's/# switch to workspace/set \$workspace${WKEY} \"${WNAME}\"\n# switch to workspace/g' ${CONFIG}"
-  fi
-  eval "sed -i 's/bindsym \$mod+${WKEY} workspace ${WNUM}/bindsym \$mod+${WKEY} workspace \$workspace${WKEY}/g' ${CONFIG}"
-  eval "sed -i 's/bindsym \$mod+Shift+${WKEY} move container to workspace ${WNUM}/bindsym \$mod+Shift+${WKEY} move container to workspace \$workspace${WKEY}/g' ${CONFIG}"
-  print_success "Replaced name of workspace ${WNAME}"
-}
-
-variabilizeWorkspace 0 "Other"
-variabilizeWorkspace 1 "1: "
-variabilizeWorkspace 2 "2: "
-variabilizeWorkspace 3 "3: "
-
-sed -i "s/status_command i3status/position top\n        status_command i3status/g" ~/.config/i3/config
-echo "assign [class=\"Slack\"] \$workspace2" >> ~/.config/i3/config
-echo "assign [class=\"Google-chrome\"] \$workspace1" >> ~/.config/i3/config
-echo "assign [class=\"Gnome-terminal\"] \$workspace3" >> ~/.config/i3/config
-echo "hide_edge_borders both" >> ~/.config/i3/config
-echo "exec slack" >> ~/.config/i3/config
-echo "exec google-chrome" >> ~/.config/i3/config
-echo "focus_follows_mouse no" >> ~/.config/i3/config
-
+proclaim "Create basic directories for i3"
+[ -f ~/.config/i3 ] && mkdir -p ~/.config/i3
+[ -f ~/.config/i3blocks ] && mkdir -p ~/.config/i3blocks
 [ -f ~/.fonts ] && mkdir ~/.fonts
+print_success "Created basic i3 directories"
+
+proclaim "Copy i3 configs"
+cd ~/.config/i3/
+wget https://github.com/unamatasanatarai/dotfiles/raw/master/.config/i3/config
+cd ~/.config/i3blocks/
+wget https://github.com/unamatasanatarai/dotfiles/raw/master/.config/i3blocks/i3blocks/conf
+print_success "Copied i3 configs"
+
+proclaim "Download i3 fonts"
 cd ~/.fonts
-wget https://github.com/unamatasanatarai/dotfiles/raw/master/fonts/Font%20Awesome%205%20Free-Solid-900.otf
-wget https://github.com/unamatasanatarai/dotfiles/raw/master/fonts/Font%20Awesome%205%20Free-Regular-400.otf
-wget https://github.com/unamatasanatarai/dotfiles/raw/master/fonts/Font%20Awesome%205%20Brands-Regular-400.otf
+wget https://github.com/unamatasanatarai/dotfiles/raw/master/.fonts/System San Francisco Display Bold.ttf
+wget https://github.com/unamatasanatarai/dotfiles/raw/master/.fonts/System San Francisco Display Regular.ttf
+wget https://github.com/unamatasanatarai/dotfiles/raw/master/.fonts/System San Francisco Display Thin.ttf
+wget https://github.com/unamatasanatarai/dotfiles/raw/master/.fonts/System San Francisco Display Ultralight.ttf
+wget https://github.com/unamatasanatarai/dotfiles/raw/master/.fonts/fa-brands-400.ttf
+wget https://github.com/unamatasanatarai/dotfiles/raw/master/.fonts/fa-regular-400.ttf
+wget https://github.com/unamatasanatarai/dotfiles/raw/master/.fonts/fa-solid-900.ttf
+print_success "Downloaded i3 fonts"
+
+proclaim "Installing i3gaps"
+cd /tmp
+
+# clone the repository
+git clone https://www.github.com/Airblader/i3 i3-gaps
+cd i3-gaps
+
+# compile & install
+autoreconf --force --install
+rm -rf build/
+mkdir -p build && cd build/
+
+# Disabling sanitizers is important for release versions!
+# The prefix and sysconfdir are, obviously, dependent on the distribution.
+../configure --prefix=/usr --sysconfdir=/etc --disable-sanitizers
+make
+make install
+print_success "i3gaps should have installed"
 
 print_in_yellow "
-DONE!
+
+···············
+· I ♥M H♥PPY! ·
+···············
 "
