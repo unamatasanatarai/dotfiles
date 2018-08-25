@@ -26,13 +26,13 @@ print_success "Copied i3 configs"
 
 proclaim "Download i3 fonts"
 cd ~/.fonts
-wget https://github.com/unamatasanatarai/dotfiles/raw/master/.fonts/System San Francisco Display Bold.ttf
-wget https://github.com/unamatasanatarai/dotfiles/raw/master/.fonts/System San Francisco Display Regular.ttf
-wget https://github.com/unamatasanatarai/dotfiles/raw/master/.fonts/System San Francisco Display Thin.ttf
-wget https://github.com/unamatasanatarai/dotfiles/raw/master/.fonts/System San Francisco Display Ultralight.ttf
-wget https://github.com/unamatasanatarai/dotfiles/raw/master/.fonts/fa-brands-400.ttf
-wget https://github.com/unamatasanatarai/dotfiles/raw/master/.fonts/fa-regular-400.ttf
-wget https://github.com/unamatasanatarai/dotfiles/raw/master/.fonts/fa-solid-900.ttf
+wget https://github.com/unamatasanatarai/dotfiles/raw/master/.fonts/System\ San\ Francisco\ Display\ Bold.ttf
+wget https://github.com/unamatasanatarai/dotfiles/raw/master/.fonts/System\ San\ Francisco\ Display\ Regular.ttf
+wget https://github.com/unamatasanatarai/dotfiles/raw/master/.fonts/System\ San\ Francisco\ Display\ Thin.ttf
+wget https://github.com/unamatasanatarai/dotfiles/raw/master/.fonts/System\ San\ Francisco\ Display\ Ultralight.ttf
+wget https://github.com/unamatasanatarai/dotfiles/raw/master/.fonts/Font\ Awesome\ 5\ Brands-Regular-400.otf
+wget https://github.com/unamatasanatarai/dotfiles/raw/master/.fonts/Font\ Awesome\ 5\ Free-Regular-400.otf
+wget https://github.com/unamatasanatarai/dotfiles/raw/master/.fonts/Font\ Awesome\ 5\ Free-Solid-900.otf
 print_success "Downloaded i3 fonts"
 
 proclaim "Installing i3gaps"
