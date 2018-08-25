@@ -43,8 +43,11 @@ proclaim() {
     print_in_yellow "\n   [!] $1"
 }
 
+proclaim "Adding apt-repo for i3gaps"
 sudo add-apt-repository -y -u ppa:snwh/ppa
+print_success "Added apt-repo for i3gaps"
 
+proclaim "Installing just about everything needed for i3"
 apt install -y i3 i3blocks arc-theme \
   moka-icon-theme faba-icon-theme faba-mono-icons \
   libxcb1-dev libxcb-keysyms1-dev libpango1.0-dev libxcb-util0-dev \
@@ -52,6 +55,7 @@ apt install -y i3 i3blocks arc-theme \
   libxcb-randr0-dev libev-dev libxcb-cursor-dev libxcb-xinerama0-dev \
   libxcb-xkb-dev libxkbcommon-dev libxkbcommon-x11-dev autoconf \
   libxcb-xrm0 libxcb-xrm-dev automake scrot
+print_success "Installed important things. Allrgiht!"
 
 proclaim "Create basic directories for i3"
 [ ! -d ~/.config/i3/scripts ] && mkdir -p ~/.config/i3/scripts
