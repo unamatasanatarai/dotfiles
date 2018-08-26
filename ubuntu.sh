@@ -93,7 +93,7 @@ cd ~
 [ -e .vimrc ] && rm -f .vimrc
 [ -e .bash_aliases ] && rm -f .bash_aliases
 [ -e .xinitrc ] && rm -f .xinitrc
-[ -f .config/xfce/terminal ] && mkdir -p .config/xfce/terminal
+[ ! -d .config/xfce/terminal ] && mkdir -p .config/xfce/terminal
 [ -e .config/xfce/terminal/terminalrc ] && rm .config/xfce/terminal/terminalrc
 eval "wget https://raw.githubusercontent.com/unamatasanatarai/dotfiles/master/.vimrc $SILENT"
 eval "wget https://raw.githubusercontent.com/unamatasanatarai/dotfiles/master/.bash_aliases $SILENT"
@@ -111,7 +111,7 @@ proclaim "$APTINSTALLS"
 eval "${APTINSTALLS} ${SILENT}"
 print_success "$APTINSTALLS"
 
-proclaim "$SNAPINSTALLS"
+proclaim "snap install: $SNAPINSTALLS"
 for item in "${SNAPINSTALLS[@]}"
 do
   proclaim "snap install ${item}"
