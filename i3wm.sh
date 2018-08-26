@@ -75,6 +75,7 @@ cd ~/.config/i3/scripts
 wget https://github.com/unamatasanatarai/dotfiles/raw/master/.config/i3/scripts/lock.sh
 wget https://github.com/unamatasanatarai/dotfiles/raw/master/.config/i3/scripts/lock.png
 wget https://github.com/unamatasanatarai/dotfiles/raw/master/.config/i3/scripts/confirm_logout.sh
+wget https://github.com/unamatasanatarai/dotfiles/raw/master/.config/i3/scripts/prompt.sh
 chmod +x *.sh
 print_success "Copied i3 custom scripts"
 
