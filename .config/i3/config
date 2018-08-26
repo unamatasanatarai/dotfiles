@@ -199,6 +199,8 @@ bar {
     urgent_workspace   $urgent-bg-color   $urgent-bg-color   $text-color
   }
 }
+
+focus_follows_mouse no
 assign [class="Slack"] $workspace2
 assign [class="Google-chrome"] $workspace1
 assign [class="Gnome-terminal"] $workspace3
@@ -206,11 +208,16 @@ for_window [class="Gnome-terminal"] focus
 hide_edge_borders both
 exec --no-startup-id slack
 exec --no-startup-id google-chrome
-focus_follows_mouse no
 exec --no-startup-id unclutter
+exec --no-startup-id nm-applet
+exec --no-startup-id volumeicon
 
 gaps outer 2
 gaps inner 2
 
 bindsym $mod+Shift+l exec "$HOME/.config/i3/scripts/lock.sh"
 
+# Pulse Audio controls
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% #increase sound volume
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% #decrease sound volume
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # mute sound
