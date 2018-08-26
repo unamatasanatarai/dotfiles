@@ -60,7 +60,7 @@ let g:netrw_banner=0
 let g:netrw_liststyle=3
 
 " feel me
-filetype off
+" filetype off
 set nocompatible
 set history=999
 set undolevels=999
@@ -111,15 +111,6 @@ fun! TrimTrailingWhitespace()
     call setreg('/', old_query)
 endfun
 autocmd BufWritePre *.php,*.js :call TrimTrailingWhitespace()
-
-" Time for plugins
-filetype off
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-Plugin 'VundleVim/Vundle.vim'
-Plugin 'ctrlpvim/ctrlp.vim'
-call vundle#end()
-filetype plugin indent on
 
 " ctrlp
 let g:ctrlp_max_files=0
