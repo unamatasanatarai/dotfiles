@@ -167,7 +167,7 @@ bindsym $mod+r mode "resize"
 
 # Disable titlebar
 #border none
-for_window [class="^.*"] border pixel 1
+for_window [class="^.*"] border none
 
 set $bg-color            #2f343f
 set $inactive-bg-color   #2f343f
