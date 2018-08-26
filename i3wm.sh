@@ -67,7 +67,7 @@ proclaim "Copy i3 configs"
 cd ~/.config/i3/
 wget https://github.com/unamatasanatarai/dotfiles/raw/master/.config/i3/config
 cd ~/.config/i3blocks/
-wget https://github.com/unamatasanatarai/dotfiles/raw/master/.config/i3blocks/i3blocks/conf
+wget https://github.com/unamatasanatarai/dotfiles/raw/master/.config/i3blocks/i3blocks.conf
 print_success "Copied i3 configs"
 
 proclaim "Copy i3 custom scripts"
