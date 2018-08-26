@@ -43,7 +43,7 @@ proclaim() {
     print_in_yellow "\n   [!] $1"
 }
 
-VERSION="0.1" 
+VERSION="0.5" 
 
 ask_for_sudo
 
@@ -153,6 +153,7 @@ proclaim "Spin up vim plugins"
 eval "mkdir -p ~/.vim/pack/vendor/start"
 cd ~/.vim/pack/vendor/start
 eval "git clone https://github.com/ctrlpvim/ctrlp.vim.git $SILENT"
+eval "git clone --depth=1 https://github.com/vim-syntastic/syntastic.git $SILENT"
 eval "chown -R $USER ~/.vim"
 print_success "Spun up vim plugins"
 
