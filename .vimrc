@@ -129,8 +129,6 @@ let g:ctrlp_show_hidden=1
 let g:ctrlp_switch_buffer=0
 let g:ctrlp_working_path_mode=0
 
-
-
 " read any possible local vim settings
 if filereadable(glob(".vimrc.local"))
   source .vimrc.local

@@ -104,6 +104,11 @@ cd ~
 rm -rf /tmp/shutter
 print_success "Fixed edit mode in Shutter"
 
+proclaim "Spin up vim plugins"
+eval "git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim $SILENT"
+vim +PluginInstall +qall
+print_success "Spun up vim plugins"
+
 proclaim "Full system upgrade"
 eval "apt update $SILENT"
 eval "apt -y full-upgrade $SILENT"
