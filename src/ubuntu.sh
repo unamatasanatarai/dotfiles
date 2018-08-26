@@ -18,7 +18,7 @@ fi
 APTINSTALLS="apt install -y"
 APTINSTALLS="${APTINSTALLS} apt-transport-https ca-certificates build-essential"
 APTINSTALLS="${APTINSTALLS} software-properties-common"
-APTINSTALLS="${APTINSTALLS} vim git htop ncdu ack"
+APTINSTALLS="${APTINSTALLS} vim git htop ncdu ack tree"
 APTINSTALLS="${APTINSTALLS} shutter unclutter"
 APTINSTALLS="${APTINSTALLS} google-chrome-stable docker-ce"
 
