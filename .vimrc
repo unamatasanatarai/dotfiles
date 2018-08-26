@@ -60,7 +60,6 @@ let g:netrw_banner=0
 let g:netrw_liststyle=3
 
 " feel me
-" filetype off
 set nocompatible
 set history=999
 set undolevels=999
@@ -119,6 +118,15 @@ let g:ctrlp_dotfiles=1
 let g:ctrlp_show_hidden=1
 let g:ctrlp_switch_buffer=0
 let g:ctrlp_working_path_mode=0
+
+" syntastic
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+" finally
+filetype plugin indent on
 
 " read any possible local vim settings
 if filereadable(glob(".vimrc.local"))
