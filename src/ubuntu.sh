@@ -106,7 +106,7 @@ print_success "Fixed edit mode in Shutter"
 
 proclaim "Spin up vim plugins"
 eval "git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim $SILENT"
-chwon -R $USER ~/.vim
+eval "chown -R $USER ~/.vim"
 vim +PluginInstall +qall
 print_success "Spun up vim plugins"
 
