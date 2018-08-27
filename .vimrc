@@ -1,3 +1,6 @@
+" reload automatically, if you modify this .vimrc
+autocmd BufWritePost .vimrc source $MYVIMRC
+
 " numbers and keybinding
 set relativenumber
 set number
