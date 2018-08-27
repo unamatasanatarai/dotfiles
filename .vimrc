@@ -1,6 +1,9 @@
-" numbers and highlights
+" numbers and keybinding
 set relativenumber
 set number
+nmap <Leader>nu :set nu! rnu!<CR>
+
+" highlighting lines
 highlight clear LineNr
 highlight clear CursorLineNr
 set ruler
@@ -86,8 +89,6 @@ set list
 
 " fix some keys please // aka: hardMode
 nnoremap <BS> <NOP>
-" stupid SHIFTing costs time and muscle pain
-nnoremap ; :
 
 inoremap <Up> <NOP>
 noremap <Up> <NOP>
@@ -100,6 +101,8 @@ noremap <Left> <NOP>
 
 inoremap <Right> <NOP>
 noremap <Right> <NOP>
+" quick save
+nmap ,w :w<CR>
 
 " Delete trailing white space on save
 fun! TrimTrailingWhitespace()

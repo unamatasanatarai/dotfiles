@@ -5,7 +5,10 @@ Because installing things is rarely fun
 Make changes only in the source files located in `/src` folder.
 
 Then recompile by running:
+```
 ./src/make_ubuntu.sh
+./src/make_i3wm.sh
+```
 
 ## Installation and usage on a new machine
 
@@ -28,10 +31,12 @@ sudo ./ubuntu.sh --silent
 1. inject .vimrc
 1. inject .bash_aliases
 1. install
+    - unclutter
+    - tree
     - ack
     - shutter
     - slack
-    - chrome
+    - google-chrome
     - git
     - curl
     - htop
@@ -49,3 +54,7 @@ chmod +x i3wm.sh
 sudo ./i3wm.sh
 ```
 
+## Vim stuff
+`<Leader>nu` will toggle numbers, cause sometimes you want to copy and paste with your mouse
+
+`,w` is now `:w<CR>

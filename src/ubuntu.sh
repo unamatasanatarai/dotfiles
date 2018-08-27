@@ -1,4 +1,4 @@
-VERSION="0.5" 
+VERSION="0.5"
 
 ask_for_sudo
 
