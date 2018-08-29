@@ -10,6 +10,9 @@ Then recompile by running:
 ./src/make_i3wm.sh
 ```
 
+## Colors
+for the amber look on ubuntu, #FFB000 and #FFCC00
+
 ## Installation and usage on a new machine
 
 ### Pure ubuntu
