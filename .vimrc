@@ -9,6 +9,7 @@ nmap <Leader>nu :set nu! rnu!<CR>
 " highlighting lines
 highlight clear LineNr
 highlight clear CursorLineNr
+highlight CursorLine term=bold cterm=bold guibg=214 guifg=16 ctermbg=214 ctermfg=16
 set ruler
 
 " search normalization
