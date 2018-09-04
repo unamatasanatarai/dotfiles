@@ -12,6 +12,7 @@ highlight clear CursorLineNr
 #highlight CursorLine term=bold cterm=bold guibg=214 guifg=16 ctermbg=214 ctermfg=16
 #highlight CursorLineNr term=bold cterm=bold guibg=214 guifg=16 ctermbg=214 ctermfg=16
 set ruler
+set background=dark
 
 " search normalization
 set incsearch
