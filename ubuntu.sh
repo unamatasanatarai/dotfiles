@@ -64,7 +64,7 @@ APTINSTALLS="apt install -y"
 APTINSTALLS="${APTINSTALLS} apt-transport-https ca-certificates build-essential"
 APTINSTALLS="${APTINSTALLS} software-properties-common"
 APTINSTALLS="${APTINSTALLS} vim git htop ncdu ack tree"
-APTINSTALLS="${APTINSTALLS} shutter unclutter"
+APTINSTALLS="${APTINSTALLS} shutter unclutter tmux"
 APTINSTALLS="${APTINSTALLS} google-chrome-stable docker-ce"
 
 SNAPINSTALLS=()
@@ -91,6 +91,7 @@ fi
 proclaim "Injecting .vimrc .bash_aliases .xinitrc terminalrc"
 cd ~
 [ -e .vimrc ] && rm -f .vimrc
+[ -e .tmux.conf ] && rm -f .tmux.conf
 [ -e .bash_aliases ] && rm -f .bash_aliases
 [ -e .xinitrc ] && rm -f .xinitrc
 [ ! -d .config/xfce/terminal ] && mkdir -p .config/xfce/terminal
@@ -98,6 +99,7 @@ cd ~
 eval "wget https://raw.githubusercontent.com/unamatasanatarai/dotfiles/master/.vimrc $SILENT"
 eval "wget https://raw.githubusercontent.com/unamatasanatarai/dotfiles/master/.bash_aliases $SILENT"
 eval "wget https://raw.githubusercontent.com/unamatasanatarai/dotfiles/master/.xinitrc $SILENT"
+eval "wget https://raw.githubusercontent.com/unamatasanatarai/dotfiles/master/.tmux.conf $SILENT"
 cd ~/.config/xfce/terminal/
 eval "wget https://raw.githubusercontent.com/unamatasanatarai/dotfiles/master/.config/xfce/terminal/terminalrc $SILENT"
 cd ~
