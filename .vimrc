@@ -86,7 +86,7 @@ match OverLength /\%81v.\+/
 
 " status bar
 set laststatus=2
-hi statusline cterm=None ctermfg=gray
+hi statusline cterm=None ctermfg=214
 set statusline=\ %-.42f\ %m%=%l:%c\ 
 
 " invisible characters
