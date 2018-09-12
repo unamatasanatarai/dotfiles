@@ -125,6 +125,11 @@ proclaim "Autocleanup apt"
 eval "apt autoremove -y $SILENT"
 print_success "Cleandup apt"
 
+
+#dock
+gsettings set org.gnome.shell.extensions.dash-to-dock extend-height false
+
+
 print_in_yellow "
 
 ···············
