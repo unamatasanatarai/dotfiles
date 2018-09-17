@@ -97,17 +97,17 @@ set list
 " fix some keys please // aka: hardMode
 nnoremap <BS> <NOP>
 
-inoremap <Up> <NOP>
-noremap <Up> <NOP>
+noremap <Up> <Esc>:echoe "try: k"<CR>
+inoremap <Up> <Esc>:echoe "try: k"<CR>
 
-inoremap <Down> <NOP>
-noremap <Down> <NOP>
+inoremap <Down> <Esc>:echoe "try: j"<CR>
+noremap <Down> <Esc>:echoe "try: j"<CR>
 
-inoremap <Left> <NOP>
-noremap <Left> <NOP>
+inoremap <Left> <Esc>:echoe "try: h"<CR>
+noremap <Left> <Esc>:echoe "try: h"<CR>
 
-inoremap <Right> <NOP>
-noremap <Right> <NOP>
+inoremap <Right> <Esc>:echoe "try: l"<CR>
+noremap <Right> <Esc>:echoe "try: l"<CR>
 
 " quick save
 nmap <Leader>w :w<CR>
