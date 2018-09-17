@@ -17,6 +17,7 @@ set background=dark
 " search normalization
 set incsearch
 set hlsearch
+set ignorecase
 set smartcase
 highlight clear Search
 highlight       Search    ctermfg=White  ctermbg=Black  cterm=bold
