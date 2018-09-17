@@ -108,12 +108,16 @@ noremap <Left> <NOP>
 
 inoremap <Right> <NOP>
 noremap <Right> <NOP>
+
 " quick save
 nmap <Leader>w :w<CR>
-"
+
 " quick commenting out, plus clear search buffer
-nmap <Leader>\ :s/^/#/g<CR>:let @/=""<CR>
-nmap <Leader>/ :s/^#*//g<CR>:let @/=""<CR>
+let b:comment_marker="#"
+au FileType php,js let b:comment_marker = '//'
+au FileType vim let b:comment_marker = '"'
+nmap <silent> <Leader>\ :s/^/\=b:comment_marker/<CR>:norm j<CR>:let @/=""<CR>
+nmap <silent> <Leader>/ :s/^<C-R>=escape(b:comment_marker,"\/")<CR>*//<CR>:norm j<CR>:let @/=""<CR>
 
 " Delete trailing white space on save
 fun! TrimTrailingWhitespace()
