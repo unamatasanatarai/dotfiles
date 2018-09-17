@@ -109,7 +109,11 @@ noremap <Left> <NOP>
 inoremap <Right> <NOP>
 noremap <Right> <NOP>
 " quick save
-nmap ,w :w<CR>
+nmap <Leader>w :w<CR>
+"
+" quick commenting out, plus clear search buffer
+nmap <Leader>\ :s/^/#/g<CR>:let @/=""<CR>
+nmap <Leader>/ :s/^#*//g<CR>:let @/=""<CR>
 
 " Delete trailing white space on save
 fun! TrimTrailingWhitespace()
