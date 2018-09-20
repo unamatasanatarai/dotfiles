@@ -2,20 +2,34 @@
 
 . ./_utils.sh
 
-say "Installing vim goodness"
+inform "Installing vim goodness"
 
+say "copy .vimrc ... "
 cd ~
 rm -f .vimrc
-wget https://raw.githubusercontent.com/unamatasanatarai/dotfiles/master/data/.vimrc
+wget -q https://raw.githubusercontent.com/unamatasanatarai/dotfiles/master/data/.vimrc
+say_done
 
+say "destroy .vim folder ... "
 rm -rf .vim/
 mkdir -p ".vim/pack/vendor/start"
-cd !$
-git clone --depth=1 https://github.com/ctrlpvim/ctrlp.vim.git
-git clone --depth=1 https://github.com/vim-syntastic/syntastic.git
-git clone --depth=1 https://github.com/907th/vim-auto-save.git
+cd .vim/pack/vendor/start
+say_done
+
+say "install ctrlp ... "
+git clone --depth=1 -q https://github.com/ctrlpvim/ctrlp.vim.git
+say_done
+say "install syntastic ... "
+git clone --depth=1 -q https://github.com/vim-syntastic/syntastic.git
+say_done
+say "install vim-auto-save ... "
+git clone --depth=1 -q https://github.com/907th/vim-auto-save.git
+say_done
+
+say "update vim help ... "
 vi "+helptags ~/.vim/pack/vendor/start/syntastic/doc" +qall
 vi "+helptags ~/.vim/pack/vendor/start/ctrlp.vim/doc" +qall
 vi "+helptags ~/.vim/pack/vendor/start/vim-auto-save/doc" +qall
-
 say_done
+
+inform "Happy VIMing"
