@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+command=$1
+
+case $command in 
+
+  vim )
+    cd scripts
+    ./vim
+    ;;
+
+  * )
+    echo "options: vim"
+    ;;
+esac
+
