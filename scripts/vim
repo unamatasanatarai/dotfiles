@@ -8,7 +8,7 @@ cd ~
 rm -f .vimrc
 wget https://raw.githubusercontent.com/unamatasanatarai/dotfiles/master/data/.vimrc
 
-rm -rf .vim
+rm -rf .vim/
 mkdir -p ".vim/pack/vendor/start"
 cd !$
 git clone --depth=1 https://github.com/ctrlpvim/ctrlp.vim.git
