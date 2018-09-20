@@ -2,7 +2,11 @@
 
 . ./_utils.sh
 
-inform "Installing vim goodness"
+inform_about_sudo
+
+say "\napt installing vim ... "
+sudo apt install -y vim > /dev/null 2>&1
+say_done
 
 say "copy .vimrc ... "
 cd ~
