@@ -37,3 +37,4 @@ vi "+helptags ~/.vim/pack/vendor/start/vim-auto-save/doc" +qall
 say_done
 
 inform "Happy VIMing"
+
