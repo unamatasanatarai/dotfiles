@@ -156,9 +156,11 @@ eval "mkdir -p ~/.vim/pack/vendor/start"
 cd ~/.vim/pack/vendor/start
 eval "git clone --depth=1 https://github.com/ctrlpvim/ctrlp.vim.git $SILENT"
 eval "git clone --depth=1 https://github.com/vim-syntastic/syntastic.git $SILENT"
+eval "git clone --depth=1 https://github.com/907th/vim-auto-save.git $SILENT"
 eval "chown -R $USER ~/.vim"
 eval 'vi "+helptags ~/.vim/pack/vendor/start/syntastic/doc" +qall'
 eval 'vi "+helptags ~/.vim/pack/vendor/start/ctrlp.vim/doc" +qall'
+eval 'vi "+helptags ~/.vim/pack/vendor/start/vim-auto-save/doc" +qall'
 print_success "Spun up vim plugins"
 
 proclaim "Full system upgrade"
