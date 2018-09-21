@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+. ./_utils.sh
+
+inform_about_sudo
+
+say "\ap install shutter ... "
+sudo apt install -y shutter > /dev/null 2>&1
+say_done
+
+say "fixing Edit mode in Shutter ... "
+mkdir /tmp/shutter/
+cd /tmp/shutter/
+wget -q https://launchpad.net/ubuntu/+archive/primary/+files/libgoocanvas-common_1.0.0-1_all.deb
+wget -q https://launchpad.net/ubuntu/+archive/primary/+files/libgoocanvas3_1.0.0-1_amd64.deb
+wget -q https://launchpad.net/ubuntu/+archive/primary/+files/libgoo-canvas-perl_0.06-2ubuntu3_amd64.deb
+
+sudo dpkg -i libgoocanvas-common_1.0.0-1_all.deb
+sudo apt -y -f install
+sudo dpkg -i libgoocanvas3_1.0.0-1_amd64.deb
+sudo apt -y -f install
+sudo dpkg -i libgoo-canvas-perl_0.06-2ubuntu3_amd64.deb
+sudo apt -y -f install
+
+cd ~
+rm -rf /tmp/shutter
+say_done
+
+inform "Happy SHUTTERing"

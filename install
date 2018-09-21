@@ -9,8 +9,13 @@ case $command in
     ./vim
     ;;
 
+  shutter )
+    cd scripts
+    ./shutter
+    ;;
+
   * )
-    echo "options: vim"
+    echo "options: vim|shutter"
     ;;
 esac
 
