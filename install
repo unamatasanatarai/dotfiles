@@ -14,8 +14,13 @@ case $command in
     ./shutter
     ;;
 
+  apt )
+    cd scripts
+    ./ubuntuapt
+    ;;
+
   * )
-    echo "options: vim|shutter"
+    echo "options: vim|shutter|apt"
     ;;
 esac
 

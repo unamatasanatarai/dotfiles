@@ -5,7 +5,7 @@
 inform_about_sudo
 
 say "\napt installing vim ... "
-sudo apt install -y vim > /dev/null 2>&1
+sudo apt install -y git vim > /dev/null 2>&1
 say_done
 
 say "copy .vimrc ... "

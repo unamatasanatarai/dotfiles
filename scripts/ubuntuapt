@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+. ./_utils.sh
+
+inform_about_sudo
+
+say "\nupdating and installing ubuntu basics ... "
+
+sudo apt update > /dev/null 2>&1
+sudo apt install -y curl git htop ncdu ack \
+  tree unclutter tmux ctags keepassxc
+say_done
+
+say "full system upgrade ... "
+sudo apt update > /dev/null 2>&1
+sudo apt full-upgrade -y
+say_done
+
+say "cleanup apt ... "
+sudo apt autoremove -y > /dev/null 2>&1
+say_done
+
+inform "Happy UBUNTUing"
+
