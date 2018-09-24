@@ -24,6 +24,11 @@ case $command in
     ./gsettingsunity
     ;;
 
+  docker )
+    cd scripts
+    ./docker
+    ;;
+
   * )
     echo "options: vim|shutter|apt"
     ;;
