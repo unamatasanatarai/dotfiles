@@ -20,5 +20,13 @@ say "cleanup apt ... "
 sudo apt autoremove -y > /dev/null 2>&1
 say_done
 
+say "Injecting dotfiles ... "
+cd ~
+wget https://raw.githubusercontent.com/unamatasanatarai/dotfiles/master/data/.bash_aliases
+wget https://raw.githubusercontent.com/unamatasanatarai/dotfiles/master/data/.xinitrc
+wget https://raw.githubusercontent.com/unamatasanatarai/dotfiles/master/data/.tmux.conf
+cd ~
+say_done
+
 inform "Happy UBUNTUing"
 
