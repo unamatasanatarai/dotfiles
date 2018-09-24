@@ -145,6 +145,9 @@ let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 
+" autosave
+" let g:auto_save = 1  " enable AutoSave on Vim startup
+
 " finally
 filetype plugin indent on
 
