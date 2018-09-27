@@ -29,11 +29,15 @@ say_done
 say "install vim-auto-save ... "
 git clone --depth=1 -q https://github.com/907th/vim-auto-save.git
 say_done
+say "install editorconfig ... "
+git clone --depth=1 -q https://github.com/editorconfig/editorconfig-vim.git
+say_done
 
 say "update vim help ... "
 vi "+helptags ~/.vim/pack/vendor/start/syntastic/doc" +qall
 vi "+helptags ~/.vim/pack/vendor/start/ctrlp.vim/doc" +qall
 vi "+helptags ~/.vim/pack/vendor/start/vim-auto-save/doc" +qall
+vi "+helptags ~/.vim/pack/vendor/start/editorconfig-vim/doc" +qall
 say_done
 
 inform "Happy VIMing"
