@@ -1,10 +1,10 @@
 #!/usr/local/bin/bash
 
-warning=50
+warning=70
 
-temp=$( /Users/pg/bin/osx-cpu-temp )
+temp=$( $HOME/bin/osx-cpu-temp )
 temp=${temp::-5}
 if (( $( echo "$temp > $warning" | bc -l ) )); then
-  osascript -e "display notification \"${temp}\""
+  osascript -e "display notification \"${temp}°C\""
 fi
 
