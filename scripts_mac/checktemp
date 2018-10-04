@@ -1,0 +1,10 @@
+#!/usr/local/bin/bash
+
+warning=50
+
+temp=$( /Users/pg/bin/osx-cpu-temp )
+temp=${temp::-5}
+if (( $( echo "$temp > $warning" | bc -l ) )); then
+  osascript -e "display notification \"${temp}\""
+fi
+
