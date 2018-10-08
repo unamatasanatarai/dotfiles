@@ -30,7 +30,7 @@ case $command in
     ;;
 
   * )
-    echo "options: vim|shutter|apt"
+    echo "options: vim|shutter|apt|docker|unity"
     ;;
 esac
 
