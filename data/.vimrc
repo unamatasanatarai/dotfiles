@@ -129,7 +129,7 @@ fun! TrimTrailingWhitespace()
     call setpos('.', save_cursor)
     call setreg('/', old_query)
 endfun
-autocmd BufWritePre *.php,*.js :call TrimTrailingWhitespace()
+autocmd BufWritePre *.html,*.php,*.js :call TrimTrailingWhitespace()
 
 " ctrlp
 let g:ctrlp_max_files=0
