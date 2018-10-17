@@ -17,6 +17,7 @@ say_done
 say "destroy .vim folder ... "
 rm -rf .vim/
 mkdir -p ".vim/pack/vendor/start"
+mkdir -p ".vim/undodir"
 cd .vim/pack/vendor/start
 say_done
 

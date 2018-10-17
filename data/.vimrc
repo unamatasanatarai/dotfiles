@@ -6,6 +6,10 @@ set relativenumber
 set number
 nmap <Leader>nu :set nu! rnu!<CR>
 
+" permanent undo is a good undo!
+set undodir=~/.vim/undodir
+set undofile
+
 " highlighting lines
 highlight clear LineNr
 highlight clear CursorLineNr

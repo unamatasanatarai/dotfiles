@@ -22,6 +22,9 @@ say_done
 
 say "Injecting dotfiles ... "
 cd ~
+rm -f .bash_aliases
+rm -f .xinitrc
+rm -f .tmux.conf
 wget https://raw.githubusercontent.com/unamatasanatarai/dotfiles/master/data/.bash_aliases
 wget https://raw.githubusercontent.com/unamatasanatarai/dotfiles/master/data/.xinitrc
 wget https://raw.githubusercontent.com/unamatasanatarai/dotfiles/master/data/.tmux.conf
