@@ -142,12 +142,11 @@ let g:ctrlp_dotfiles=1
 let g:ctrlp_show_hidden=1
 let g:ctrlp_switch_buffer=0
 let g:ctrlp_working_path_mode=0
+let g:ctrlp_custom_ignore = 'node_modules\|git'
 
-" syntastic
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
+" ale
+let g:ale_sign_error = '*'
+let g:ale_sign_warning = '!'
 
 " autosave
 " let g:auto_save = 1  " enable AutoSave on Vim startup

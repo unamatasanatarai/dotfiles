@@ -24,8 +24,8 @@ say_done
 say "install ctrlp ... "
 git clone --depth=1 -q https://github.com/ctrlpvim/ctrlp.vim.git
 say_done
-say "install syntastic ... "
-git clone --depth=1 -q https://github.com/vim-syntastic/syntastic.git
+say "install ale ... "
+git clone --depth=1 -q https://github.com/w0rp/ale.git
 say_done
 say "install vim-auto-save ... "
 git clone --depth=1 -q https://github.com/907th/vim-auto-save.git
@@ -35,7 +35,7 @@ git clone --depth=1 -q https://github.com/editorconfig/editorconfig-vim.git
 say_done
 
 say "update vim help ... "
-vi "+helptags ~/.vim/pack/vendor/start/syntastic/doc" +qall
+vi "+helptags ~/.vim/pack/vendor/start/ale/doc" +qall
 vi "+helptags ~/.vim/pack/vendor/start/ctrlp.vim/doc" +qall
 vi "+helptags ~/.vim/pack/vendor/start/vim-auto-save/doc" +qall
 vi "+helptags ~/.vim/pack/vendor/start/editorconfig-vim/doc" +qall
