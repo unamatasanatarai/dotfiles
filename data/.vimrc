@@ -1,10 +1,14 @@
 " reload automatically, if you modify this .vimrc
 autocmd BufWritePost .vimrc source $MYVIMRC
+" reload automatically, if local .virmc.local was updated
+autocmd BufWritePost .vimrc.local source $MYVIMRC
 
 " numbers and keybinding
 set relativenumber
 set number
-nmap <Leader>nu :set nu! rnu!<CR>
+let mapleader = "\<Space>"
+nnoremap <Leader>nu :set nu! rnu!<CR>
+nnoremap <Leader>w :w<CR>
 
 " permanent undo is a good undo!
 set undodir=~/.vim/undodir
