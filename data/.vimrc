@@ -9,6 +9,7 @@ set number
 let mapleader = "\<Space>"
 nnoremap <Leader>nu :set nu! rnu!<CR>
 nnoremap <Leader>w :w<CR>
+inoremap jj <Esc>
 
 " permanent undo is a good undo!
 set undodir=~/.vim/undodir
