@@ -1,3 +1,7 @@
+# Hide the deprecation warning (zsh)
+export BASH_SILENCE_DEPRECATION_WARNING=1
+
+# deprecated, but for now, home/bin also has some commands. LINK to /usr/local/bin in the future
 PATH="${PATH}:${HOME}/bin"
 export VISUAL=vim
 export EDITOR="$VISUAL"
