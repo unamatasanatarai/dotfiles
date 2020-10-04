@@ -1,4 +1,0 @@
-let g:auto_save = 1  " enable AutoSave on Vim startup
-set nobackup       "no backup files
-set nowritebackup  "only in case you don't want a backup file while editing
-set noswapfile     "no swap files

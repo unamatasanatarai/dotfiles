@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-
-. ./_utils.sh
-
-gsettings set org.gnome.shell.extensions.dash-to-dock extend-height false
-
-inform "Happy UNITYing"
