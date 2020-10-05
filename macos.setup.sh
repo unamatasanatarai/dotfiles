@@ -7,7 +7,7 @@ brew update
 brew cask install iterm2 brave-browser lulu sublime-text bitbar eloston-chromium tor-browser keepassxc
 
 # install my tools
-brew install vim htop curl wget git mysql tmux bash type
+brew install vim htop curl wget git mysql tmux bash type node yarn
 
 # we like bash a little more than zsh
 chsh -s /bin/bash
