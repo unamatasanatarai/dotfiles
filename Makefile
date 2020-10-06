@@ -34,13 +34,13 @@ link:
 
 	@for dir in $(config_dirs); do \
 		echo "link ~/.config/$$dir"; \
-		ln -s $(pwd)/.config/$$dir ~/.config/$$dir \
-	;done
+		ln -s $(pwd)/.config/$$dir ~/.config/$$dir; \
+	done
 
 	@for file in $(bin_dirs); do \
 		echo "link ~/bin/$$file"; \
-		ln -s $(pwd)/bin/$$file ~/bin/$$file \
-	;done 
+		ln -s $(pwd)/bin/$$file ~/bin/$$file; \
+	done 
 
 clean:
 	@echo -e "\n\033[32mRunning: clean\033[39m"
