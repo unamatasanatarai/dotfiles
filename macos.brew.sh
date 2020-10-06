@@ -22,3 +22,4 @@ make
 cd ..
 mv cpu-temp/osx-cpu-temp ./
 rm -rf cpu-temp
+defaults write com.matryer.BitBar pluginsDirectory -string "~/bin/bitbar"
