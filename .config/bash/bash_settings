@@ -1,0 +1,9 @@
+# Hide the deprecation warning (zsh) macos
+export BASH_SILENCE_DEPRECATION_WARNING=1
+
+PATH="${PATH}:${HOME}/bin"
+export VISUAL=vim
+export EDITOR="$VISUAL"
+
+export PS1="${debian_chroot:+($debian_chroot)}\$(if [ \$? == 0 ]; then echo 😀; else echo 😱; fi)\[\033[01;34m\] \u@\h \[\033[32m\]\w\[\033[33m\]\$(wrap_git_branch)\[\033[00m\] $ "
+
