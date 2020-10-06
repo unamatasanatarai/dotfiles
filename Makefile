@@ -2,6 +2,7 @@ SHELL := /bin/bash
 pwd := $(shell pwd)
 config_dirs := $(shell ls $(pwd)/.config)
 bin_dirs := $(shell ls $(pwd)/bin)
+files := ".bash_profile" ".vimrc" ".tmux.conf"
 
 .DEFAULT_GOAL := help
 
@@ -29,9 +30,10 @@ link:
 	@echo -e "\n\033[32mRunning: link\033[39m"
 
 	mv ~/.bash_profile ~/.bash_profile.bkp
-	ln -s $(pwd)/.bash_profile ~/.bash_profile
-	ln -s $(pwd)/.tmux.conf ~/.tmux.conf
-	ln -s $(pwd)/.vimrc ~/.vimrc
+	@for file in $(files); do \
+		echo "link ~/$$file"; \
+		ln -s $(pwd)/$$file ~/$$file; \
+	done
 
 	@for dir in $(config_dirs); do \
 		echo "link ~/.config/$$dir"; \
@@ -46,10 +48,12 @@ link:
 clean:
 	@echo -e "\n\033[32mRunning: clean\033[39m"
 
-	unlink ~/.tmux.conf
-	unlink ~/.vimrc
-	unlink ~/.bash_profile
-	touch ~/.bash_profile
+	@for file in $(files); do \
+		if [ -L ~/$$file ]; then \
+			echo "unlink ~/$$file"; \
+			unlink ~/$$file; \
+		fi \
+	done
 
 	@for dir in $(config_dirs); do \
 		if [ -L ~/.config/$$dir ]; then \
@@ -64,4 +68,10 @@ clean:
 			unlink ~/bin/$$file; \
 		fi \
 	done
+
+	@if [ -f ~/.bash_profile.bkp ]; then \
+		mv ~/.bash_profile.bkp ~/.bash_profile; \
+	else\
+		touch ~/.bash_profile; \
+	fi
 
