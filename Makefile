@@ -23,7 +23,8 @@ configure:
 
 install: unlink link
 	source ~/.bash_profile
-
+	./macos.install-brew.sh
+	./macos.set-settings.sh
 	@echo "Congratulations!"
 
 link:
