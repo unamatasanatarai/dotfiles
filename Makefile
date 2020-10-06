@@ -1,6 +1,7 @@
 SHELL := /bin/bash
 pwd := $(shell pwd)
 config_dirs := $(shell ls $(pwd)/.config)
+bin_dirs := $(shell ls $(pwd)/bin)
 
 .DEFAULT_GOAL := help
 
@@ -20,22 +21,29 @@ configure:
 	@if [ ! -d ~/bin ]; then mkdir ~/bin; fi
 
 install: clean link
-	@echo -e "\n\033[32mRunning: install\033[39m"
 	source ~/.bash_profile
 
+	@echo "Congratulations!"
+
 link:
-	@echo -e "\n\033[32mRunning: link_bash_profile\033[39m"
-	$(shell mv ~/.bash_profile ~/.bash_profile.bkp)
+	@echo -e "\n\033[32mRunning: link\033[39m"
+
+	mv ~/.bash_profile ~/.bash_profile.bkp
 	ln -s $(pwd)/.bash_profile ~/.bash_profile
 
-	@echo -e "\n\033[32mRunning: link\033[39m"
 	@for dir in $(config_dirs); do \
 		echo "link ~/.config/$$dir"; \
 		ln -s $(pwd)/.config/$$dir ~/.config/$$dir \
-	;done \
+	;done
+
+	@for file in $(bin_dirs); do \
+		echo "link ~/bin/$$file"; \
+		ln -s $(pwd)/bin/$$file ~/bin/$$file \
+	;done 
 
 clean:
 	@echo -e "\n\033[32mRunning: clean\033[39m"
+
 	unlink ~/.bash_profile
 	touch ~/.bash_profile
 
@@ -43,6 +51,13 @@ clean:
 		if [ -L ~/.config/$$dir ]; then \
 			echo "unlink ~/.config/$$dir"; \
 			unlink ~/.config/$$dir; \
+		fi \
+	done
+
+	@for file in $(bin_dirs); do \
+		if [ -L ~/bin/$$file ]; then \
+			echo "unlink ~/bin/$$file"; \
+			unlink ~/bin/$$file; \
 		fi \
 	done
 
