@@ -11,3 +11,25 @@ set number
 let mapleader = "\<Space>"
 nnoremap <Leader>w :w<CR>
 inoremap jj <Esc>
+
+" be quiet
+set noerrorbells
+set novisualbell
+
+
+" start scrolling sooner
+set scrolloff=2
+set sidescrolloff=5
+set sidescroll=1
+
+" :find *fuzzy*
+set path+=**
+
+" finally
+filetype plugin indent on
+
+" read any possible local vim settings
+if filereadable(glob(".vimrc.local"))
+  source .vimrc.local
+endif
+
