@@ -12,7 +12,7 @@ help:
 	@echo "Available targets:"
 	@echo "    - configure		Prepare entire environment"
 	@echo "    - install		Install everything"
-	@echo "    - clean		Uninstall everything"
+	@echo "    - unlink		Uninstall everything"
 	@echo "    - link		Link configurations"
 	@echo "    - help		Display this message"
 	@echo ""
@@ -21,7 +21,7 @@ configure:
 	@echo "Create ~/bin directory"
 	@if [ ! -d ~/bin ]; then mkdir ~/bin; fi
 
-install: clean link
+install: unlink link
 	source ~/.bash_profile
 
 	@echo "Congratulations!"
@@ -30,6 +30,7 @@ link:
 	@echo -e "\n\033[32mRunning: link\033[39m"
 
 	mv ~/.bash_profile ~/.bash_profile.bkp
+
 	@for file in $(files); do \
 		echo "link ~/$$file"; \
 		ln -s $(pwd)/$$file ~/$$file; \
@@ -45,8 +46,8 @@ link:
 		ln -s $(pwd)/bin/$$file ~/bin/$$file; \
 	done 
 
-clean:
-	@echo -e "\n\033[32mRunning: clean\033[39m"
+unlink:
+	@echo -e "\n\033[32mRunning: unlink\033[39m"
 
 	@for file in $(files); do \
 		if [ -L ~/$$file ]; then \
