@@ -31,6 +31,7 @@ link:
 	mv ~/.bash_profile ~/.bash_profile.bkp
 	ln -s $(pwd)/.bash_profile ~/.bash_profile
 	ln -s $(pwd)/.tmux.conf ~/.tmux.conf
+	ln -s $(pwd)/.vimrc ~/.vimrc
 
 	@for dir in $(config_dirs); do \
 		echo "link ~/.config/$$dir"; \
@@ -46,6 +47,7 @@ clean:
 	@echo -e "\n\033[32mRunning: clean\033[39m"
 
 	unlink ~/.tmux.conf
+	unlink ~/.vimrc
 	unlink ~/.bash_profile
 	touch ~/.bash_profile
 
