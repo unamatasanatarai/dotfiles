@@ -18,6 +18,9 @@ link_bash_profile:
 	$(shell mv ~/.bash_profile ~/.bash_profile.bkp)
 	ln -s $(pwd)/.bash_profile ~/.bash_profile
 
+install_brew:
+	./macos.brew.sh
+
 clean:
 	@echo -e "\n\033[32mRunning: clean\033[39m"
 	unlink ~/.bash_profile

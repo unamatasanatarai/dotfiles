@@ -1,14 +1,3 @@
-# install homebrew
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-
-brew update
-
-# install my apps
-brew cask install iterm2 brave-browser lulu sublime-text bitbar eloston-chromium tor-browser keepassxc
-
-# install my tools
-brew install vim htop curl wget git tmux ack bash type node yarn mariadb apache2
-
 # we like bash a little more than zsh
 chsh -s /bin/bash
 
@@ -23,6 +12,7 @@ defaults write -g ApplePressAndHoldEnabled -bool false
 
 # Keyboard: fast repeat
 defaults write -g KeyRepeat -int 1
+defaults write -g InitialKeyRepeat -int 15
 
 # Trash: disable warning on empty
 defaults write com.apple.finder WarnOnEmptyTrash -bool false
@@ -62,12 +52,4 @@ killall "cfprefsd" &> /dev/null
 killall "Dock" &> /dev/null
 
 
-# install some utencils
-mkdir ~/bin
-cd ~/bin
-git clone https://github.com/lavoiesl/osx-cpu-temp.git cpu-temp
-cd cpu-temp
-make
-cd ..
-mv cpu-temp/osx-cpu-temp ./
-rm -rf cpu-temp
+echo -e "\n\n\033[33m  Logout & Login for some settings to take effect\n"
