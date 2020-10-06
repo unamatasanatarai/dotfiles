@@ -14,6 +14,12 @@ echo "Keyboard: fast repeat"
 defaults write -g KeyRepeat -int 1
 defaults write -g InitialKeyRepeat -int 15
 
+echo "Finder fine tuning"
+defaults write com.apple.finder ShowHardDrivesOnDesktop -bool true
+defaults write com.apple.finder NewWindowTarget -string PfHm
+defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}"
+defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
+
 echo "Trash: disable warning on empty"
 defaults write com.apple.finder WarnOnEmptyTrash -bool false
 
