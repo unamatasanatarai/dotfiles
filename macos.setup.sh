@@ -7,7 +7,7 @@ brew update
 brew cask install iterm2 brave-browser lulu sublime-text bitbar eloston-chromium tor-browser keepassxc
 
 # install my tools
-brew install vim htop curl wget git tmux bash type node yarn mariadb
+brew install vim htop curl wget git tmux ack bash type node yarn mariadb apache2
 
 # we like bash a little more than zsh
 chsh -s /bin/bash
