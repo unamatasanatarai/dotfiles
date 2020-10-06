@@ -23,7 +23,9 @@ configure:
 
 install: unlink link
 	source ~/.bash_profile
+	@echo -e "\n\033[32mRunning: macos.install-brew.sh\033[39m"
 	./macos.install-brew.sh
+	@echo -e "\n\033[32mRunning: macos.set-settings.sh\033[39m"
 	./macos.set-settings.sh
 	@echo "Congratulations!"
 
