@@ -2,9 +2,9 @@ SHELL:=/bin/bash
 pwd := $(shell pwd)
 config_dirs:=$(shell ls $(pwd)/.config)
 
-
 install:
 	echo "I'm installing things for you $(pwd)"
+	link -s .bash_profile ~/.bash_profile
 
 link:
 	@for dir in $(config_dirs); do \
