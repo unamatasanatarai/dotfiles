@@ -4,6 +4,8 @@ config_dirs:=$(shell ls $(pwd)/.config)
 
 install:
 	echo "I'm installing things for you $(pwd)"
+	# backup existing bash profile
+	[ -f "~/.bash_profile" ] && mv ~/.bash_profile ~/.bash_profile.bkp
 	link -s .bash_profile ~/.bash_profile
 
 link:
