@@ -2,7 +2,7 @@ SHELL := /bin/bash
 pwd := $(shell pwd)
 config_dirs := $(shell ls $(pwd)/.config)
 bin_dirs := $(shell ls $(pwd)/bin)
-files := ".bash_profile" 
+files := ".bash_profile" ".vimrc" ".tmux.conf"
 
 .DEFAULT_GOAL := help
 
@@ -23,6 +23,10 @@ configure:
 
 install: unlink link
 	source ~/.bash_profile
+	@echo -e "\n\033[32mRunning: macos.install-brew.sh\033[39m"
+	./macos.install-brew.sh
+	@echo -e "\n\033[32mRunning: macos.set-settings.sh\033[39m"
+	./macos.set-settings.sh
 	@echo "Congratulations!"
 
 link:
