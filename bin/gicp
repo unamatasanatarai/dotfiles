@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+gic $1
+gip
