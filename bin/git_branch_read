@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+git_branch=$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/')
+if [ -z $0 ]; then
+  git_branch="($git_branch)"
+fi
+echo $git_branch
