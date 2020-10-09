@@ -1,6 +1,2 @@
-alias gic='git add --all && git commit -m '
-alias ginah="git reset --hard && git clean -df"
-alias gip='git push origin $(parse_git_branch)'
-alias gis='git status'
 alias gul='git pull origin $(parse_git_branch)'
 
