@@ -14,7 +14,7 @@ elif [[ $theme -eq "Dark" ]]; then
   col_danger="#f7f0202"
 fi
 
-temp=`osx-cpu-temp`
+temp=`~/bin/osx-cpu-temp`
 num=${temp:0:2}
 color=$col_normal
 if [[ $num > 60 ]]; then
