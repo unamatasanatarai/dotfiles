@@ -1,6 +1,5 @@
 " general setting {{{
-set clipboard+=unnamedplus              " Use system clipboard
-set encoding=utf-8
+set encoding=utf-8 nobomb
 set nocompatible
 set ruler
 syntax on
@@ -54,6 +53,11 @@ set updatetime=2000             " CursorHold interval
 set directory=~/.vim/tmp/swp
 " }}}
 
+" Don’t create backups when editing files in certain directories {{{
+set backupdir=~/.vim/tmp/backup
+set backupskip=/tmp/*,/private/tmp/*
+" }}}
+"
 " keybindings {{{
 let mapleader = "\<Space>"
 nnoremap <Leader>w :w<CR>
@@ -71,7 +75,7 @@ set hlsearch
 set ignorecase
 set smartcase
 highlight clear Search
-highlight       Search    guifg=#f0f0f0  guibg=#bada55
+highlight       Search    ctermfg=White  ctermbg=Gray  cterm=bold
 highlight    IncSearch    ctermfg=White  ctermbg=Red    cterm=bold
 " }}}
 
@@ -93,6 +97,8 @@ set expandtab
 " autocomplete {{{
 set wildmode=longest,list,full
 set wildmenu
+set wildignore=*.pyc,*.swp
+set wildignore+=*/.git/*,*/.DS_Store
 " }}}
 
 " start scrolling sooner {{{

@@ -9,3 +9,15 @@ function! unamatasanatarai#foldtext#foldtext() abort
   let l:dashes=substitute(v:folddashes, '-', s:middot, 'g')
   return s:raquo . s:middot . s:middot . l:lines . l:dashes . ': ' . l:first
 endfunction
+
+"au FileType javascript call JavaScriptFold()
+"function! unamatasanatarai#foldtext#JavaScriptFold()
+"    setl foldmethod=syntax
+"    setl foldlevelstart=0
+"    syn region foldBraces start=/{/ end=/}/ transparent fold keepend extend
+"
+"    function! FoldText()
+"        return substitute(getline(v:foldstart), '{.*', '{...}', '')
+"    endfunction
+"    setl foldtext=FoldText()
+"endfunction

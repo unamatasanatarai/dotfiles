@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+[ ! -d ~/bina ] && echo 'Creating bina' && mkdir ~/bina || echo "Bina exists"
+exit 0
+
