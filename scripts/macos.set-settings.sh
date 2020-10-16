@@ -1,14 +1,26 @@
+echo "close system preferences"
+osascript -e 'tell application "System Preferences" to quit'
+
 echo "we like bash a little more than zsh"
 chsh -s /bin/bash
 
 echo "Disable startup sound"
-sudo nvram SystemAudioVolume="%80"
+sudo nvram SystemAudioVolume=" "
+
+echo "Set highlight color to green"
+defaults write NSGlobalDomain AppleHighlightColor -string "0.764700 0.976500 0.568600" 
 
 echo "Prevent Time Machine from prompting to use new hard drives as backup volume"
 defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
 
 echo "Keyboard: disable letter popup on hold"
 defaults write -g ApplePressAndHoldEnabled -bool false
+
+echo "When performing a search, search the current folder by default"
+defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
+
+echo "Don’t automatically rearrange Spaces based on most recent use"
+defaults write com.apple.dock mru-spaces -bool false
 
 echo "Keyboard: fast repeat"
 defaults write -g KeyRepeat -int 1
