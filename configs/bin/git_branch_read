@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 
 [ ! -d .git ] && exit
+
 git_branch=$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/')
 
-[[ "$1" == "-wp" && ! -z $git_branch ]] && git_branch="<$git_branch>"
+[[ "$1" == "-wp" && ! -z $git_branch ]] && git_branch=" <$git_branch>"
 
-echo $git_branch
+echo "$git_branch"

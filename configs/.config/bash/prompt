@@ -20,7 +20,6 @@ PS1+="\[${white}\]@";
 PS1+="\[${hostStyle}\]\h"; # host
 PS1+="\[${white}\]:";
 PS1+="\[${green}\]\w"; # working directory full path
-#PS1+="\$(git_prompt \"\[${white}\] on \[${yellow}\]\" \"\[${yellow}\]\")"; # Git repository details
 PS1+="\$(git_branch_read -wp)";
 PS1+="\[${white}\]\$ \[${reset}\]"; # `$` (and reset color)
 export PS1;
