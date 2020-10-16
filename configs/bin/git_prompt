@@ -31,9 +31,9 @@ git_prompt(){
     if $(git rev-parse --verify refs/stash &>/dev/null); then
         s+='$';
     fi;
-    if [ -n "$(git diff origin/$branchName..HEAD)" ]; then
-        s+="^"$(git status | grep "is ahead of" | sed 's/[^0-9]*//g');
-    fi;
+    #if [ -n "$(git diff origin/$branchName..HEAD)" ]; then
+        #s+="^"$(git status | grep "is ahead of" | sed 's/[^0-9]*//g');
+    #fi;
 
     [ -n "${s}" ] && s=" [${s}]";
 

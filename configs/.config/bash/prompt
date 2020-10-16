@@ -15,12 +15,12 @@ fi;
 # Set the terminal title and prompt.
 PS1='$([ $? == 0 ] && echo 😀 || echo 😱) '
 PS1+="\[\033]0;\W\007\]"; # working directory base name
-#PS1+="\[${bold}\]\n"; # newline
 PS1+="\[${userStyle}\]\u"; # username
-PS1+="\[${white}\] at ";
+PS1+="\[${white}\]@";
 PS1+="\[${hostStyle}\]\h"; # host
-PS1+="\[${white}\] in ";
+PS1+="\[${white}\]:";
 PS1+="\[${green}\]\w"; # working directory full path
-PS1+="\$(git_prompt \"\[${white}\] on \[${yellow}\]\" \"\[${yellow}\]\")"; # Git repository details
+#PS1+="\$(git_prompt \"\[${white}\] on \[${yellow}\]\" \"\[${yellow}\]\")"; # Git repository details
+PS1+="\$(git_branch_read -wp)";
 PS1+="\[${white}\]\$ \[${reset}\]"; # `$` (and reset color)
 export PS1;
