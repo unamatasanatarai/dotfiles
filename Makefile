@@ -16,6 +16,8 @@ help:
 	@echo ""
 	@echo "Available targets:"
 	@echo "    - install		Run all installation targets"
+	@echo "    - osx		Update defaults for macos"
+	@echo "    - brew		Install brew and apps"
 	@echo "    - uninstall		Remove our dotfiles and restore backupped files"
 	@echo "    - help		Display this message"
 	@echo ""
@@ -35,6 +37,13 @@ link:
 	@for file in ${files}; do \
 		[ ! -L ~/$$file ] && ln -s ${configs_dir}/$$file ~/$$file && echo -e " ${green}Linked${reset}: $$file" || echo -e " ${red}Link skip [link-exists]${reset}: $$file"; \
 	done
+
+brew:
+	./scripts/macos.install-brew.sh
+
+osx:
+	./scripts/macos.set-settings.sh
+	@echo -e "\n\n${green} Logout & Login for some settings to take effect${reset}\n"
 
 
 uninstall: unlink restore cleanup

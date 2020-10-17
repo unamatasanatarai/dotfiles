@@ -67,4 +67,3 @@ killall "cfprefsd" &> /dev/null
 killall "Dock" &> /dev/null
 
 
-echo -e "\n\n\033[33m  Logout & Login for some settings to take effect\n"
