@@ -16,6 +16,10 @@ defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
 echo "Keyboard: disable letter popup on hold"
 defaults write -g ApplePressAndHoldEnabled -bool false
 
+echo "Disable smart quotes and dashes as they’re annoying when typing code"
+defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
+defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false
+
 echo "Disable auto-correct"
 defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
 
