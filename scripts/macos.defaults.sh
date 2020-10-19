@@ -16,6 +16,12 @@ defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
 echo "Keyboard: disable letter popup on hold"
 defaults write -g ApplePressAndHoldEnabled -bool false
 
+echo "Trackpad: enable tap to click for this user and for the login screen"
+defaults write com.apple.AppleMultitouchTrackpad Clicking -bool true
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
+defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+
 echo "Require password immediately after sleep or screen saver begins"
 defaults write com.apple.screensaver askForPassword -int 1
 defaults write com.apple.screensaver askForPasswordDelay -int 0
