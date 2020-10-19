@@ -7,6 +7,9 @@ chsh -s /bin/bash
 echo "Disable startup sound"
 sudo nvram SystemAudioVolume=" "
 
+echo "Disable Notification Center and remove the menu bar icon"
+launchctl unload -w /System/Library/LaunchAgents/com.apple.notificationcenterui.plist 2> /dev/null
+
 echo "Disable audio feedback when volume is changed"
 defaults write com.apple.sound.beep.feedback -bool false
 
