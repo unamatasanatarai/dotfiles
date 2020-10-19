@@ -7,6 +7,9 @@ chsh -s /bin/bash
 echo "Disable startup sound"
 sudo nvram SystemAudioVolume=" "
 
+echo "Disable audio feedback when volume is changed"
+defaults write com.apple.sound.beep.feedback -bool false
+
 echo "Set highlight color to green"
 defaults write NSGlobalDomain AppleHighlightColor -string "0.764700 0.976500 0.568600" 
 
