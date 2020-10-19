@@ -42,7 +42,7 @@ brew:
 	./scripts/macos.install-brew.sh
 
 osx:
-	./scripts/macos.set-settings.sh
+	./scripts/macos.defaults.sh
 	@echo -e "\n\n${green} Logout & Login for some settings to take effect${reset}\n"
 
 
