@@ -16,6 +16,9 @@ defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
 echo "Keyboard: disable letter popup on hold"
 defaults write -g ApplePressAndHoldEnabled -bool false
 
+echo "Disable auto-correct"
+defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
+
 echo "Trackpad: enable tap to click for this user and for the login screen"
 defaults write com.apple.AppleMultitouchTrackpad Clicking -bool true
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
