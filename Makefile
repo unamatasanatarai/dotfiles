@@ -17,6 +17,7 @@ help:
 	@echo "Available targets:"
 	@echo "    - install		Run all installation targets"
 	@echo "    - osx		Update defaults for macos"
+	@echo "    - osxapps		Install my utility apps"
 	@echo "    - brew		Install brew and apps"
 	@echo "    - uninstall		Remove our dotfiles and restore backupped files"
 	@echo "    - help		Display this message"
@@ -39,10 +40,14 @@ link:
 	done
 
 brew:
-	./scripts/macos.install-brew.sh
+	./scripts/osx.install-brew
+
+osxapps:
+	./scripts/osx.install-temp
+	./scripts/osx.install-keylogger
 
 osx:
-	./scripts/macos.defaults.sh
+	./scripts/osx.set-defaults
 	@echo -e "\n\n${green} Logout & Login for some settings to take effect${reset}\n"
 
 

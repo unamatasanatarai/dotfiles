@@ -1,0 +1,9 @@
+echo "Install check keylogger"
+cd ~/bin
+git clone https://github.com/unamatasanatarai/keylogger-mac.git keylogger-mac
+cd keylogger-mac
+make
+make install
+sudo make startup
+cd ..
+rm -rf keylogger-mac
