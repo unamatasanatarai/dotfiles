@@ -19,6 +19,7 @@ help:
 	@echo "    - osx		Update defaults for macos"
 	@echo "    - osxapps		Install my utility apps"
 	@echo "    - brew		Install brew and apps"
+	@echo "    - composer		Install php composer"
 	@echo "    - uninstall		Remove our dotfiles and restore backupped files"
 	@echo "    - help		Display this message"
 	@echo ""
@@ -42,14 +43,19 @@ link:
 brew:
 	./scripts/osx.install-brew
 
+composer:
+	./scripts/install-composer
+	@echo -e " ${green}Completed${reset}: composer"
+
 osxapps:
 	./scripts/osx.install-temp
+	@echo -e " ${green}Completed${reset}: temperature"
 	./scripts/osx.install-keylogger
+	@echo -e " ${green}Completed${reset}: keylogger"
 
 osx:
 	./scripts/osx.set-defaults
 	@echo -e "\n\n${green} Logout & Login for some settings to take effect${reset}\n"
-
 
 uninstall: unlink restore cleanup
 	@echo -e "\n Sorry to see you go.\n"
