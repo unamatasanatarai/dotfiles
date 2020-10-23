@@ -9,3 +9,5 @@ export FZF_DEFAULT_OPTS='
 --color=marker:#98c379,spinner:#e06c75,border:#282c34
 '
 
+export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --no-ignore-vcs'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
