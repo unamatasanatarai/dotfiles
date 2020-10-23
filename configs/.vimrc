@@ -118,10 +118,11 @@ endif
 " }}}
 
 " plugin: fzf {{{
-command! -bang -nargs=*  All
+command! -bang -nargs=*  ProjectFiles
   \ call fzf#run(fzf#wrap({'source': 'rg --files --hidden --no-ignore-vcs --glob "!{node_modules/*,.git/*,vendor/*}"', 'options': '--expect=ctrl-t,ctrl-x,ctrl-v --multi' }))
 set rtp+=/usr/local/bin/fzf
-nmap <C-P> :All<CR>
+nmap <C-P> :ProjectFiles<CR>
+nmap <C-A> :Files<CR>
 " }}}
 
 " the end {{{
