@@ -119,7 +119,7 @@ endif
 
 " plugin: fzf {{{
 " set rtp+=/usr/local/bin/fzf
-nmap <C-P> :FZF<CR>
+nmap <C-P> :GFiles<CR>
 " }}}
 
 " the end {{{
