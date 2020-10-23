@@ -1,0 +1,6 @@
+[submodule "configs/.vim/pack/vendor/start/fzf"]
+	path = configs/.vim/pack/vendor/start/fzf
+	url = https://github.com/junegunn/fzf.git
+[submodule "configs/.vim/pack/vendor/start/fzf.vim"]
+	path = configs/.vim/pack/vendor/start/fzf.vim
+	url = https://github.com/junegunn/fzf.vim.git

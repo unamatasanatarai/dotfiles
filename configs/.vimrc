@@ -117,6 +117,11 @@ if filereadable(glob(".vimrc.local"))
 endif
 " }}}
 
+" plugin: fzf {{{
+" set rtp+=/usr/local/bin/fzf
+nmap <C-P> :FZF<CR>
+" }}}
+
 " the end {{{
 filetype plugin indent on
 " }}}
