@@ -19,6 +19,7 @@ help:
 	@echo "    - osx		Update defaults for macos"
 	@echo "    - osxapps		Install my utility apps"
 	@echo "    - brew		Install brew and apps"
+	@echo "    - vim		Update Vim configs"
 	@echo "    - composer		Install php composer"
 	@echo "    - uninstall		Remove our dotfiles and restore backupped files"
 	@echo "    - help		Display this message"
@@ -42,6 +43,9 @@ link:
 
 brew:
 	./scripts/osx.install-brew
+
+vim:
+	./scripts/update-vim-configs
 
 composer:
 	./scripts/install-composer

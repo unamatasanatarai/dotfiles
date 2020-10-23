@@ -1,0 +1,4 @@
+#!/bin/sh
+
+vi "+helptags ~/.vim/pack/vendor/start/fzf/doc" +qall
+vi "+helptags ~/.vim/pack/vendor/start/fzf.vim/doc" +qall
