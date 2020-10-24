@@ -1,44 +1,8 @@
-" general setting {{{
-set encoding=utf-8 nobomb
-set nocompatible
-set ruler
-syntax on
-set autowrite
-set title
-set laststatus=2
-set listchars=tab:▹\ ,trail:·,nbsp:⚋,extends:»,precedes:«
-set list
-set lazyredraw
-set termguicolors
-call unamatasanatarai#colors#termgui()
-set background=dark
-set shortmess+=A                      " ignore annoying swapfile messages
-set shortmess+=I                      " no splash screen
-set shortmess+=O                      " file-read message overwrites previous
-set shortmess+=T                      " truncate non-file messages in middle
-set shortmess+=W                      " don't echo "[w]"/"[written]" when writing
-set shortmess+=a                      " use abbreviations in messages eg. `[RO]` instead of `[readonly]`
-set shortmess+=o                      " overwrite file-written messages
-set shortmess+=t                      " truncate file messages at start
-autocmd InsertEnter * norm zz         " Automatic vertical centering on entering insert mode
-" }}}
-
-" folding {{{
-if has('windows')
-    set fillchars=vert:┃
-    set fillchars+=fold:·
-endif
-set foldmethod=indent
-set foldlevelstart=99
-set foldtext=unamatasanatarai#foldtext#foldtext()
-" }}}
-
-" numbers {{{
-set relativenumber
-set number
-highlight clear LineNr
-highlight clear CursorLineNr
-" }}}
+source $HOME/.vim/cfg/general.vim
+source $HOME/.vim/cfg/folding.vim
+source $HOME/.vim/cfg/numbers.vim
+source $HOME/.vim/cfg/bindings.vim
+source $HOME/.vim/cfg/tmpfiles.vim
 
 " permanent undo {{{
 set history=9999
@@ -47,21 +11,6 @@ set undodir=~/.vim/tmp/undo
 set undofile
 set updatecount=60              " update swapfiles every 60 typed characters
 set updatetime=2000             " CursorHold interval
-" }}}
-
-" swapfile {{{
-set directory=~/.vim/tmp/swp
-" }}}
-
-" Don’t create backups when editing files in certain directories {{{
-set backupdir=~/.vim/tmp/backup
-set backupskip=/tmp/*,/private/tmp/*
-" }}}
-"
-" keybindings {{{
-let mapleader = "\<Space>"
-nnoremap <Leader>w :w<CR>
-inoremap jj <Esc>
 " }}}
 
 " be quiet {{{
