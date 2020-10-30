@@ -1,7 +1,7 @@
 SHELL := /bin/bash
 pwd := $(shell pwd)
 configs_dir = "${pwd}/configs"
-cache_dirs = ~/.cache ~/.cache/vim/tmp/swp ~/.cache/vim/tmp/backup
+cache_dirs = ~/.cache ~/.cache/vim/tmp/swp ~/.cache/vim/tmp/backup ~/bin
 backups_dir = ~/.dotfiles_backups
 files := $(shell ls -A ${configs_dir})
 files_backupped := $(shell [ -d ${backups_dir} ] && ls -A ${backups_dir} || echo "" )
@@ -42,8 +42,10 @@ backup:
 
 link:
 	@for file in ${files}; do \
-		[ ! -L ~/$$file ] && ln -s ${configs_dir}/$$file ~/$$file && echo -e " ${green}Linked${reset}: $$file" || echo -e " ${red}Link skip [link-exists]${reset}: $$file"; \
+		[ $$file != bin ] && [ ! -L ~/$$file ] && ln -s ${configs_dir}/$$file ~/$$file && echo -e " ${green}Linked${reset}: $$file" || echo -e " ${red}Link skip [link-exists]${reset}: $$file"; \
 	done
+	@ln -s ${configs_dir}/bin/bitbar ~/bin/bitbar && echo -e " ${green}Linked${reset}: ~/bin/bitbar" || echo -e " ${red}Link skip [link-exists]${reset}: ~/bin/bitbar"
+	@ln -s ${configs_dir}/bin/dotfiles ~/bin/dotfiles && echo -e " ${green}Linked${reset}: ~/bin/dotfiles" || echo -e " ${red}Link skip [link-exists]${reset}: ~/bin/dotfiles"
 
 brew:
 	./scripts/osx.install-brew
@@ -81,4 +83,7 @@ restore:
 
 cleanup:
 	@[ -d ${backups_dir} ] && rm -rf ${backups_dir} && echo -e " ${green}Cleanup${reset}: ${backups_dir}" || echo -e " ${red}Cleanup skip[not-a-directory]${reset}: ${backups_dir}";
+	@for cache_dir in ${cache_dirs}; do \
+		[ ! -d $$cache_dir ] && rm -rf $$cache_dir && echo -e " ${green}Cleanup${reset}: $$cache_dir" || echo -e " ${red}Cleanup skip[not-a-directory]${reset}: $$cache_dir"; \
+	done
 
