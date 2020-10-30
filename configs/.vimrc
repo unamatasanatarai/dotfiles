@@ -1,7 +1,7 @@
 source $HOME/.vim/cfg/general.vim
 source $HOME/.vim/cfg/folding.vim
 source $HOME/.vim/cfg/numbers.vim
-source $HOME/.vim/cfg/bindings.vim
+source $HOME/.vim/cfg/keyboard.vim
 source $HOME/.vim/cfg/tmpfiles.vim
 
 " permanent undo {{{
