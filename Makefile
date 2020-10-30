@@ -2,13 +2,13 @@ SHELL := /bin/bash
 pwd := $(shell pwd)
 
 configs_dir := "${pwd}/configs"
-backups_dir := ~/.dotfiles_backups
+backups_dir := ~/.cache/.dotfiles_backups
 
 required_dirs := ~/.cache ~/.cache/vim/tmp/swp ~/.cache/vim/tmp/backup ~/bin ~/.config ${backups_dir}
 cleanup_dirs := ~/.cache/vim ${backups_dir}
 files_backupped := $(shell [ -d ${backups_dir} ] && ls -A ${backups_dir} || echo "" )
 
-dotfiles := .bash_profile .tmux.conf .vim .vimrc
+dotfiles := .bash_profile .tmux.conf .vim .vimrc .config/bash .config/iterm
 
 green := \033[1;32m
 red := \033[1;31m
@@ -21,20 +21,20 @@ help:
 	@echo ""
 	@echo "Available targets:"
 	@echo "    - install		Run all installation targets"
+	@echo "    - configure		Prepare the environment"
 	@echo "    - osx		Update defaults for macos"
-	@echo "    - vim		Update Vim configs"
-	@echo "    - composer		Install php composer"
 	@echo "    - uninstall		Remove our dotfiles and restore backupped files"
 	@echo "    - help		Display this message"
 	@echo ""
 
-install: configure backup link
+install: configure backup link vim composer
 	@echo -e "\n All done.\n You may want to restart your terminal, or \`source ~/.bash_profile\`."
 
 configure:
 	@for dir in ${required_dirs}; do \
 		[ ! -d $$dir ] && mkdir -p $$dir && echo -e " ${green}Created${reset}: $$dir" || echo -e " ${red}Directory exists${reset}: $$dir"; \
 	done
+	@echo -e "\n Configured."
 
 backup:
 	@for file in ${dotfiles}; do \
@@ -66,7 +66,7 @@ osx:
 	@echo -e " ${green}Completed${reset}: keylogger"
 	@echo -e "\n\n${green} Logout & Login for some settings to take effect${reset}\n"
 
-uninstall: unlink restore cleanup
+uninstall: unlink restore clean
 	@echo -e "\n Sorry to see you go.\n"
 
 unlink:
@@ -84,6 +84,6 @@ restore:
 
 clean:
 	@for dir in ${cleanup_dirs}; do \
-		[ ! -d $$dir ] && rm -rf $$dir && echo -e " ${green}Cleanup${reset}: $$dir" || echo -e " ${red}Cleanup skip[not-a-directory]${reset}: $$dir"; \
+		[ -d $$dir ] && rm -rf $$dir && echo -e " ${green}Cleanup${reset}: $$dir" || echo -e " ${red}Cleanup skip[not-a-directory]${reset}: $$dir"; \
 	done
 
