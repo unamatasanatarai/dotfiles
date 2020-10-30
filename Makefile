@@ -27,7 +27,7 @@ help:
 	@echo "    - help		Display this message"
 	@echo ""
 
-install: configure backup link vim composer
+install: configure backup link vim composer osx
 	@echo -e "\n All done.\n You may want to restart your terminal, or \`source ~/.bash_profile\`."
 
 configure:
