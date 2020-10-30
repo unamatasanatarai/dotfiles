@@ -1,6 +1,6 @@
 
 " tmpfiles {{{
-set directory=~/.vim/tmp/swp
-set backupdir=~/.vim/tmp/backup
+set directory=~/.cache/vim/tmp/swp
+set backupdir=~/.cache/vim/tmp/backup
 set backupskip=/tmp/*,/private/tmp/*
 " }}}

@@ -1,6 +1,7 @@
 SHELL := /bin/bash
 pwd := $(shell pwd)
 configs_dir = "${pwd}/configs"
+cache_dirs = ~/.cache ~/.cache/vim/tmp/swp ~/.cache/vim/tmp/backup
 backups_dir = ~/.dotfiles_backups
 files := $(shell ls -A ${configs_dir})
 files_backupped := $(shell [ -d ${backups_dir} ] && ls -A ${backups_dir} || echo "" )
@@ -29,6 +30,9 @@ install: prepare backup link
 	@echo -e "\n All done.\n You may want to restart your terminal, or \`source ~/.bash_profile\`."
 
 prepare:
+	@for cache_dir in ${cache_dirs}; do \
+		[ ! -d $$cache_dir ] && mkdir -p $$cache_dir && echo -e " ${green}Created${reset}: $$cache_dir" || echo -e " ${red}Directory exists${reset}: $$cache_dir"; \
+	done
 	@[ ! -d ${backups_dir} ] && mkdir ${backups_dir} && echo -e " ${green}Created${reset}: ${backups_dir}" || echo -e " ${red}Directory exists${reset}: ${backups_dir}"
 
 backup:
