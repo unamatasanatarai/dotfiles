@@ -4,7 +4,7 @@ pwd := $(shell pwd)
 configs_dir := "${pwd}/configs"
 backups_dir := ~/.cache/.dotfiles_backups
 
-required_dirs := ~/.cache ~/.cache/vim/tmp/swp ~/.cache/vim/tmp/backup ~/bin ~/.config ${backups_dir}
+required_dirs := ~/.cache ~/.cache/vim/tmp/swp ~/.cache/vim/tmp/backup ~/.cache/vim/tmp/undo ~/bin ~/.config ${backups_dir}
 cleanup_dirs := ~/.cache/vim ${backups_dir}
 files_backupped := $(shell [ -d ${backups_dir} ] && ls -A ${backups_dir} || echo "" )
 

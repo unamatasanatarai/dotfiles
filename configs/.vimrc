@@ -7,7 +7,6 @@ source $HOME/.vim/cfg/tmpfiles.vim
 " permanent undo {{{
 set history=9999
 set undolevels=9999
-set undodir=~/.vim/tmp/undo
 set undofile
 set updatecount=60              " update swapfiles every 60 typed characters
 set updatetime=2000             " CursorHold interval
