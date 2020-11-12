@@ -1,16 +1,9 @@
-source $HOME/.vim/cfg/general.vim
-source $HOME/.vim/cfg/folding.vim
-source $HOME/.vim/cfg/numbers.vim
-source $HOME/.vim/cfg/keyboard.vim
-source $HOME/.vim/cfg/tmpfiles.vim
-
-" permanent undo {{{
-set history=9999
-set undolevels=9999
-set undofile
-set updatecount=60              " update swapfiles every 60 typed characters
-set updatetime=2000             " CursorHold interval
-" }}}
+source ~/.vim/cfg/general.vim
+source ~/.vim/cfg/folding.vim
+source ~/.vim/cfg/numbers.vim
+source ~/.vim/cfg/keyboard.vim
+source ~/.vim/cfg/tmpfiles.vim
+source ~/.vim/cfg/undo.vim
 
 " be quiet {{{
 set noerrorbells
