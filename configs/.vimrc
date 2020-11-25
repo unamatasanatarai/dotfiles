@@ -67,6 +67,10 @@ set rtp+=/usr/local/bin/fzf
 nmap <C-P> :ProjectFiles<CR>
 " }}}
 
+" ripgrep fzf {{{
+command! -bang -nargs=* Rg call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case " . <q-args>, 1, <bang>0)
+" }}}
+
 " the end {{{
 filetype plugin indent on
 " }}}
