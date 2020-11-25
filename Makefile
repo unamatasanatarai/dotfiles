@@ -8,7 +8,7 @@ required_dirs := ~/.cache ~/.cache/vim/tmp/swp ~/.cache/vim/tmp/backup ~/.cache/
 cleanup_dirs := ~/.cache/vim ${backups_dir}
 files_backupped := $(shell [ -d ${backups_dir} ] && ls -A ${backups_dir} || echo "" )
 
-dotfiles := .bash_profile .tmux.conf .vim .vimrc .config/bash .config/iterm
+dotfiles := .bash_profile .tmux.conf .vim .vimrc .config/bash .config/iterm bin
 
 green := \033[1;32m
 red := \033[1;31m
@@ -45,8 +45,8 @@ link:
 	@for file in ${dotfiles}; do \
 		[ $$file != bin ] && [ ! -L ~/$$file ] && ln -s ${configs_dir}/$$file ~/$$file && echo -e " ${green}Linked${reset}: $$file" || echo -e " ${red}Link skip [link-exists]${reset}: $$file"; \
 	done
-	@ln -s ${configs_dir}/bin/bitbar ~/bin/bitbar && echo -e " ${green}Linked${reset}: ~/bin/bitbar" || echo -e " ${red}Link skip [link-exists]${reset}: ~/bin/bitbar"
-	@ln -s ${configs_dir}/bin/dotfiles ~/bin/dotfiles && echo -e " ${green}Linked${reset}: ~/bin/dotfiles" || echo -e " ${red}Link skip [link-exists]${reset}: ~/bin/dotfiles"
+	@[ ! -L ~/bin/bitbar ] && ln -s ${configs_dir}/bin/bitbar ~/bin/bitbar && echo -e " ${green}Linked${reset}: ~/bin/bitbar" || echo -e " ${red}Link skip [link-exists]${reset}: ~/bin/bitbar"
+	@[ ! -L ~/bin/dotfiles ] && ln -s ${configs_dir}/bin/dotfiles ~/bin/dotfiles && echo -e " ${green}Linked${reset}: ~/bin/dotfiles" || echo -e " ${red}Link skip [link-exists]${reset}: ~/bin/dotfiles"
 
 vim:
 	./scripts/update-vim-configs
