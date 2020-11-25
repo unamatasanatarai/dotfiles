@@ -27,7 +27,7 @@ help:
 	@echo "    - help		Display this message"
 	@echo ""
 
-install: configure backup link vim composer osx
+install: backup configure link vim composer osx
 	@echo -e "\n All done.\n You may want to restart your terminal, or \`source ~/.bash_profile\`."
 
 configure:
@@ -43,7 +43,7 @@ backup:
 
 link:
 	@for file in ${dotfiles}; do \
-		[ $$file != bin ] && [ ! -L ~/$$file ] && ln -s ${configs_dir}/$$file ~/$$file && echo -e " ${green}Linked${reset}: $$file" || echo -e " ${red}Link skip [link-exists]${reset}: $$file"; \
+		[ $$file != "bin" ] && [ ! -L ~/$$file ] && ln -s ${configs_dir}/$$file ~/$$file && echo -e " ${green}Linked${reset}: $$file" || echo -e " ${red}Link skip [link-exists]${reset}: $$file"; \
 	done
 	@[ ! -L ~/bin/bitbar ] && ln -s ${configs_dir}/bin/bitbar ~/bin/bitbar && echo -e " ${green}Linked${reset}: ~/bin/bitbar" || echo -e " ${red}Link skip [link-exists]${reset}: ~/bin/bitbar"
 	@[ ! -L ~/bin/dotfiles ] && ln -s ${configs_dir}/bin/dotfiles ~/bin/dotfiles && echo -e " ${green}Linked${reset}: ~/bin/dotfiles" || echo -e " ${red}Link skip [link-exists]${reset}: ~/bin/dotfiles"
