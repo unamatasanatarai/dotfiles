@@ -60,7 +60,7 @@ endif
 
 " plugin: fzf {{{
 set rtp+=/usr/local/bin/fzf
-" plugin: fzf {{{	" plugin: fzf {{{
+" plugin: fzf {{{
 command! -bang -nargs=*  ProjectFiles
   \ call fzf#run(fzf#wrap({'source': 'rg --files --hidden --no-ignore-vcs --glob "!{node_modules/*,.git/*,vendor/*}"', 'options': '--expect=ctrl-t,ctrl-x,ctrl-v --multi' }))
 set rtp+=/usr/local/bin/fzf
@@ -68,7 +68,8 @@ nmap <C-P> :ProjectFiles<CR>
 " }}}
 
 " ripgrep fzf {{{
-command! -bang -nargs=* Rg call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case " . <q-args>, 1, <bang>0)
+command! -bang -nargs=* Rg call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case -- " . shellescape(<q-args>), 1, fzf#vim#with_preview(), <bang>0)
+command! -bang -nargs=* Rga call fzf#vim#grep("rg --column --hidden --line-number --no-heading --color=always --smart-case -- " . shellescape(<q-args>), 1, fzf#vim#with_preview(), <bang>0)
 " }}}
 
 " the end {{{
