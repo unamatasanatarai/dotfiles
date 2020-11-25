@@ -71,7 +71,7 @@ uninstall: unlink restore clean
 
 unlink:
 	@for file in ${dotfiles}; do \
-		[ -L ~/$$file ] && unlink ~/$$file && echo -e " ${green}unlink${reset}: $$file" || echo -e " ${red}Unlink skip[not-a-link]${reset}: $$file"; \
+		[ $$file != bin ] && [ -L ~/$$file ] && unlink ~/$$file && echo -e " ${green}unlink${reset}: $$file" || echo -e " ${red}Unlink skip[not-a-link]${reset}: $$file"; \
 	done
 	@[ -L ~/bin/bitbar ] && unlink ~/bin/bitbar && echo -e " ${green}unlink${reset}: bin/bitbar" || echo -e " ${red}Unlink skip[not-a-link]${reset}: bin/bitbar";
 	@[ -L ~/bin/dotfiles ] && unlink ~/bin/dotfiles && echo -e " ${green}unlink${reset}: bin/dotfiles" || echo -e " ${red}Unlink skip[not-a-link]${reset}: ~/bin/dotfiles";
