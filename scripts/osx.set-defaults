@@ -83,6 +83,11 @@ defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
 echo "Show battery percentage"
 defaults write com.apple.menuextra.battery ShowPercent -string 'YES'
 
+echo "Set sensible iterm2 settings"
+defaults write com.googlecode.iterm2 HideScrollbar -bool 1
+defaults write com.googlecode.iterm2 EnableDivisionView -bool 0
+defaults write com.googlecode.iterm2 QuitWhenAllWindowsClosed -bool 1
+
 echo "restart&reload"
 killall "SystemUIServer" &> /dev/null
 killall "Finder" &> /dev/null
