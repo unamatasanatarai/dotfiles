@@ -45,7 +45,13 @@
     "Alpha Component" : 1,
     "Green Component" : 0.77425903081893921
   },
-  "Right Option Key Sends" : 0,
+  "Ansi 5 Color" : {
+    "Red Component" : 0.79022186994552612,
+    "Color Space" : "sRGB",
+    "Blue Component" : 0.78154844045639038,
+    "Alpha Component" : 1,
+    "Green Component" : 0.18891248106956482
+  },
   "Rows" : 25,
   "Default Bookmark" : "No",
   "Cursor Guide Color" : {
@@ -91,7 +97,7 @@
   "Disable Window Resizing" : true,
   "Sync Title" : false,
   "Prompt Before Closing 2" : false,
-  "BM Growl" : true,
+  "BM Growl" : false,
   "Command" : "\/usr\/local\/bin\/bash",
   "Description" : "Default",
   "Smart Cursor Color" : true,
@@ -118,7 +124,7 @@
   "Custom Command" : "No",
   "ASCII Anti Aliased" : true,
   "Non Ascii Font" : "Monaco 12",
-  "Vertical Spacing" : 1,
+  "Vertical Spacing" : 1.0600000000000001,
   "Use Bold Font" : true,
   "Option Key Sends" : 0,
   "Selected Text Color" : {
@@ -341,6 +347,7 @@
     "Alpha Component" : 1,
     "Green Component" : 0.69019609689712524
   },
+  "Open Toolbelt" : false,
   "Shortcut" : "",
   "Cursor Color" : {
     "Red Component" : 1,
@@ -349,13 +356,7 @@
     "Alpha Component" : 1,
     "Green Component" : 1
   },
-  "Ansi 0 Color" : {
-    "Red Component" : 0,
-    "Color Space" : "sRGB",
-    "Blue Component" : 0,
-    "Alpha Component" : 1,
-    "Green Component" : 0
-  },
+  "Transparency" : 0.11396335659898478,
   "Guid" : "C93011DD-7AEE-434F-9B27-4417FEF39DD9",
   "Ansi 2 Color" : {
     "Red Component" : 0,
@@ -378,14 +379,13 @@
     "Alpha Component" : 1,
     "Green Component" : 0.35916060209274292
   },
-  "Ansi 5 Color" : {
-    "Red Component" : 0.79022186994552612,
+  "Ansi 0 Color" : {
+    "Red Component" : 0,
     "Color Space" : "sRGB",
-    "Blue Component" : 0.78154844045639038,
+    "Blue Component" : 0,
     "Alpha Component" : 1,
-    "Green Component" : 0.18891248106956482
+    "Green Component" : 0
   },
-  "Transparency" : 0.11396335659898478,
   "Ansi 1 Color" : {
     "Red Component" : 0.789775550365448,
     "Color Space" : "sRGB",
@@ -393,8 +393,8 @@
     "Alpha Component" : 1,
     "Green Component" : 0.10676553100347519
   },
-  "Normal Font" : "Monaco 12",
   "Horizontal Spacing" : 1,
+  "Normal Font" : "Monaco 12",
   "Custom Directory" : "Recycle",
   "Ansi 4 Color" : {
     "Red Component" : 0.0096152340993285179,
@@ -402,5 +402,6 @@
     "Blue Component" : 0.78216177225112915,
     "Alpha Component" : 1,
     "Green Component" : 0.14576995372772217
-  }
+  },
+  "Right Option Key Sends" : 0
 }
