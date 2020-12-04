@@ -7,5 +7,5 @@ if [ -f $filename ]; then
     count=$(wc -l $filename)
     num=$(echo $count | grep -o -E '^\s*[0-9]+')
     words=$( echo $num / 5 | bc)
-    echo "${num}c ${words}w"
+    echo "${num}c${words}w"
 fi
