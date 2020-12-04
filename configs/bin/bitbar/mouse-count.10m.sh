@@ -7,6 +7,12 @@ left=$(grep "L" $filename | wc -l | grep -o -E '[0-9]+')
 right=$(grep "R" $filename | wc -l | grep -o -E '[0-9]+')
 wheel=$(grep "W" $filename | wc -l | grep -o -E '[0-9]+')
 other=$(grep "O" $filename | wc -l | grep -o -E '[0-9]+')
+total=$(echo $left + $right + $other | bc)
 if [ -f $filename ]; then
-    echo "${left}/${other}/${right}"
+    echo "${total}m"
+    echo "---"
+    echo -e "left\t\t${left}"
+    echo -e "middle\t${other}"
+    echo -e "right\t${right}"
+    echo -e "wheel\t${wheel}"
 fi
