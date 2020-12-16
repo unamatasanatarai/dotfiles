@@ -13,6 +13,9 @@ launchctl unload -w /System/Library/LaunchAgents/com.apple.notificationcenterui.
 echo "Disable audio feedback when volume is changed"
 defaults write com.apple.sound.beep.feedback -bool false
 
+echo "Disable audio feedback beeps"
+defaults write "Apple Global Domain" "com.apple.sound.beep.volume" -float 0
+
 echo "Set highlight color to green"
 defaults write NSGlobalDomain AppleHighlightColor -string "0.764700 0.976500 0.568600" 
 
