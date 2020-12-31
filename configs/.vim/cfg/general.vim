@@ -1,4 +1,5 @@
-
+" this was causing strange errors
+let loaded_matchparen = 1
 " general setting {{{
 set encoding=utf-8 nobomb
 set nocompatible
