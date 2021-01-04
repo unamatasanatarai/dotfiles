@@ -1,2 +1,2 @@
 alias gul='git pull origin $(parse_git_branch)'
-
+alias vba='source venv/bin/activate'
