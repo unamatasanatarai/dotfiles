@@ -1,5 +1,5 @@
 " this was causing strange errors
-let loaded_matchparen = 1
+"let loaded_matchparen = 1
 " general setting {{{
 set encoding=utf-8 nobomb
 set nocompatible
@@ -24,3 +24,9 @@ set shortmess+=o                      " overwrite file-written messages
 set shortmess+=t                      " truncate file messages at start
 autocmd InsertEnter * norm zz         " Automatic vertical centering on entering insert mode
 " }}}
+
+" be quiet {{{
+set noerrorbells
+set novisualbell
+" }}}
+

@@ -4,21 +4,8 @@ source ~/.vim/cfg/numbers.vim
 source ~/.vim/cfg/keyboard.vim
 source ~/.vim/cfg/tmpfiles.vim
 source ~/.vim/cfg/undo.vim
-
-" be quiet {{{
-set noerrorbells
-set novisualbell
-" }}}
-
-" searching {{{
-set incsearch
-set hlsearch
-set ignorecase
-set smartcase
-highlight clear Search
-highlight       Search    ctermfg=White  ctermbg=Gray  cterm=bold
-highlight    IncSearch    ctermfg=White  ctermbg=Red    cterm=bold
-" }}}
+source ~/.vim/cfg/indent.vim
+source ~/.vim/cfg/search.vim
 
 " text wrapping {{{
 set nowrap
@@ -27,13 +14,6 @@ set breakindent
 set linebreak
 " }}}
 
-" intentation {{{
-set autoindent
-set smarttab
-set shiftround
-set shiftwidth=4
-set expandtab
-" }}}
 
 " autocomplete {{{
 set wildmode=longest,list,full
