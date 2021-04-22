@@ -269,9 +269,9 @@
 	<key>UseBrightBold</key>
 	<true/>
 	<key>name</key>
-	<string>Pro</string>
+	<string>Amber</string>
 	<key>shellExitAction</key>
-	<integer>2</integer>
+	<integer>1</integer>
 	<key>type</key>
 	<string>Window Settings</string>
 </dict>
