@@ -62,8 +62,8 @@ osx:
 	@echo -e " ${green}Completed${reset}: brew"
 	./scripts/osx.install-temp
 	@echo -e " ${green}Completed${reset}: temperature"
-	./scripts/osx.install-keylogger
-	@echo -e " ${green}Completed${reset}: keylogger"
+	#./scripts/osx.install-keylogger
+	#@echo -e " ${green}Completed${reset}: keylogger"
 	@echo -e "\n\n${green} Logout & Login for some settings to take effect${reset}\n"
 
 uninstall: unlink restore clean
