@@ -5,10 +5,13 @@ echo "brew update"
 brew update
 
 echo "install my apps"
-brew install --cask iterm2 alacritty brave-browser lulu sublime-text xbar eloston-chromium keepassxc kap slack vlc
+brew install --cask iterm2 alacritty brave-browser lulu sublime-text xbar eloston-chromium firefox keepassxc kap slack vlc karabiner-elements docker
 
 echo "install my tools"
-brew install vim nvim htop curl wget git watch tmux ack bash node yarn fzf rg
+brew install vim neovim htop curl wget git watch tmux ack bash node yarn fzf rg tldr expect ncdu pass koekeishiya/formulae/yabai koekeishiya/formulae/skhd stow tree gnupg
+
+brew services start yabai
+brew services start skhd
 
 brew update
 brew upgrade
