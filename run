@@ -22,7 +22,7 @@ function _remove_default_dotfiles {
     do
         [[ "$location" != "." && "$location" != ".." && "$location" != ".config" ]] && rm -rf ~/"$location"
     done
-    
+
     echo '[*] Removing default ~/.config configurations ...'
     files=$(ls -a $CONFIGS/.config)
     for location in $files
@@ -48,6 +48,14 @@ function install_dotfiles {
     _remove_default_dotfiles
     _stow_install_dotfiles
     _update_nvim_plugins
+}
+
+function fresh {
+    ## for a fresh MACOS installation, intall all the things!
+    mkdir -p ~/.cache/vim/tmp/{swp,backup,undo}
+    install_dotfiles
+    ./scripts/osx.install-brew
+    ./scripts/osx.set-defaults
 }
 
 function help {

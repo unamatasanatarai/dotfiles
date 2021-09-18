@@ -1,8 +1,0 @@
-echo "Install mouselogger"
-cd ~/bin
-git clone https://github.com/unamatasanatarai/mouseclicklogger-mac mouseclicklogger-mac
-cd mouseclicklogger-mac
-make
-make install
-cd ..
-rm -rf mouseclicklogger-mac
