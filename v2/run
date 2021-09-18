@@ -16,23 +16,24 @@ function _update_nvim_plugins {
 }
 
 function _remove_default_dotfiles {
-    echo '[*] Removing default configurations ...'
+    echo '[*] Removing default ~/ configurations ...'
     files=$(ls -a $CONFIGS)
     for location in $files
     do
-        [[ "$location" != "." && "$location" != ".." && "$location" != ".config" && -e ~/"$location" ]] && rm ~/"$location"
+        [[ "$location" != "." && "$location" != ".." && "$location" != ".config" && -e ~/"$location" ]] && rm "~/$location"
     done
     
+    echo '[*] Removing default ~/.config configurations ...'
     files=$(ls -a $CONFIGS/.config)
     for location in $files
     do
-        [[ "$location" != "." && "$location" != ".." && -e ~/.config/"$location" ]] && rm -rf ~/.config/"$location"
+        [[ "$location" != "." && "$location" != ".." && -e "~/.config/$location" ]] && rm -rf "~/.config/$location"
     done
 }
 
 function _stow_install_dotfiles {
     echo '[*] Installing our dotfiles ...'
-    stow -vRSt ~ $CONFIGS
+    stow -vRt ~ $CONFIGS
 }
 
 # -----------------------------------------------------------------------------
@@ -43,8 +44,9 @@ function cmd {
 }
 
 function install_dotfiles {
-    # remove existing files, and install our files
+    # remove existing files, and install our dotfiles
     _remove_default_dotfiles
+    echo "F"
     _stow_install_dotfiles
 }
 
