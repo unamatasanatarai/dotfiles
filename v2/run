@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+# -----------------------------------------------------------------------------
+# Global variables
+# -----------------------------------------------------------------------------
+
+CONFIGS=stow
+
+# -----------------------------------------------------------------------------
+# Helper functions start with _ and aren't listed in this script's help menu.
+# -----------------------------------------------------------------------------
+
+function _update_nvim_plugins {
+    nvim -c ':PlugInstall' -c ':UpdateRemotePlugins' -c ':qall'
+}
+
+function _remove_default_dotfiles {
+    echo '[*] Removing default configurations ...'
+    files=$(ls -a $CONFIGS)
+    for location in $files
+    do
+        [[ "$location" != "." && "$location" != ".." && "$location" != ".config" && -e ~/"$location" ]] && rm -v ~/"$location"
+    done
+    
+    files=$(ls -a $CONFIGS/.config)
+    for location in $files
+    do
+        [[ "$location" != "." && "$location" != ".." && -e ~/.config/"$location" ]] && echo rm -rf ~/.config/$location
+    done
+}
+
+function _stow_install_dotfiles {
+    echo '[*] Installing our dotfiles ...'
+    stow -vSt ~ $CONFIGS
+}
+
+# -----------------------------------------------------------------------------
+
+function cmd {
+    # run any command
+    exec "${@}"
+}
+
+function install_dotfiles {
+    # remove existing files, and install our files
+    _remove_default_dotfiles
+    _stow_install_dotfiles
+}
+
+function help {
+    printf "%s <task> [args]\n\nTasks:\n" "${0}"
+
+    compgen -A function | grep -v "^_" | cat -n
+
+    printf "\nExtended help:\n  Each task has comments for general usage\n"
+}
+
+${@:-help}
