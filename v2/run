@@ -20,19 +20,19 @@ function _remove_default_dotfiles {
     files=$(ls -a $CONFIGS)
     for location in $files
     do
-        [[ "$location" != "." && "$location" != ".." && "$location" != ".config" && -e ~/"$location" ]] && rm -v ~/"$location"
+        [[ "$location" != "." && "$location" != ".." && "$location" != ".config" && -e ~/"$location" ]] && rm ~/"$location"
     done
     
     files=$(ls -a $CONFIGS/.config)
     for location in $files
     do
-        [[ "$location" != "." && "$location" != ".." && -e ~/.config/"$location" ]] && echo rm -rf ~/.config/$location
+        [[ "$location" != "." && "$location" != ".." && -e ~/.config/"$location" ]] && rm -rf ~/.config/"$location"
     done
 }
 
 function _stow_install_dotfiles {
     echo '[*] Installing our dotfiles ...'
-    stow -vSt ~ $CONFIGS
+    stow -vRSt ~ $CONFIGS
 }
 
 # -----------------------------------------------------------------------------
