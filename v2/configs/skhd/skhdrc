@@ -1,0 +1,74 @@
+# Move focus between windows in the space
+lalt - k : yabai -m window --focus north
+lalt - l : yabai -m window --focus east
+lalt - j : yabai -m window --focus south
+lalt - h : yabai -m window --focus west
+lalt - 6 : yabai -m window --focus recent
+
+# Move focused window around in the space
+lctrl + lalt - k : yabai -m window --warp north
+lctrl + lalt - l : yabai -m window --warp east
+lctrl + lalt - j : yabai -m window --warp south
+lctrl + lalt - h : yabai -m window --warp west
+lctrl + lalt - up : yabai -m window --warp north
+lctrl + lalt - right : yabai -m window --warp east
+lctrl + lalt - down : yabai -m window --warp south
+lctrl + lalt - left : yabai -m window --warp west
+
+# Swap focused window around in the space
+lshift + lctrl + lalt - k : yabai -m window --swap north
+lshift + lctrl + lalt - l : yabai -m window --swap east
+lshift + lctrl + lalt - j : yabai -m window --swap south
+lshift + lctrl + lalt - h : yabai -m window --swap west
+lshift + lctrl + lalt - up : yabai -m window --swap north
+lshift + lctrl + lalt - right : yabai -m window --swap east
+lshift + lctrl + lalt - down : yabai -m window --swap south
+lshift + lctrl + lalt - left : yabai -m window --swap west
+
+# Send focused window to a space
+lctrl + lalt - p : yabai -m window --space prev
+lctrl + lalt - n : yabai -m window --space next
+lctrl + lalt - 1 : yabai -m window --space 1
+lctrl + lalt - 2 : yabai -m window --space 2
+lctrl + lalt - 3 : yabai -m window --space 3
+lctrl + lalt - 4 : yabai -m window --space 4
+
+# Send focused window to a space and follow to that space
+lshift + lctrl + lalt - p : yabai -m window --space prev; skhd -k "ctrl - left"
+lshift + lctrl + lalt - n : yabai -m window --space next; skhd -k "ctrl - right"
+lshift + lctrl + lalt - 1 : yabai -m window --space 1; skhd -k "alt - 1"
+lshift + lctrl + lalt - 2 : yabai -m window --space 2; skhd -k "alt - 2"
+lshift + lctrl + lalt - 3 : yabai -m window --space 3; skhd -k "alt - 3"
+lshift + lctrl + lalt - 4 : yabai -m window --space 4; skhd -k "alt - 4"
+lshift + lctrl + lalt - 5 : yabai -m window --space 5; skhd -k "alt - 5"
+
+# Resize windows
+lcmd + lalt - h : yabai -m window --resize left:-50:0; \
+                  yabai -m window --resize right:-50:0
+lcmd + lalt - j : yabai -m window --resize bottom:0:50; \
+                  yabai -m window --resize top:0:50
+lcmd + lalt - k : yabai -m window --resize top:0:-50; \
+                  yabai -m window --resize bottom:0:-50
+lcmd + lalt - l : yabai -m window --resize right:50:0; \
+                  yabai -m window --resize left:50:0
+
+# Equalize the size of windows
+lshift + lalt - e : yabai -m space --balance
+
+# Rotate windows clockwise and anticlockwise
+lalt - r         : yabai -m space --rotate 270
+lctrl + lalt - r : yabai -m space --rotate 90
+
+# Flip windows along horizontally (across the Y axis)
+lctrl + lalt - x : yabai -m space --mirror y-axis
+
+# Float / Unfloat window
+lctrl + lalt - space : \
+    yabai -m window --toggle float; \
+    yabai -m window --toggle border
+
+# Make window native fullscreen
+lalt - f         : yabai -m window --toggle zoom-fullscreen
+lcmd + lalt - f : yabai -m window --toggle native-fullscreen
+
+.load "hotkeysrc"

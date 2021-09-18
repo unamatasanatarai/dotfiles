@@ -1,0 +1,5 @@
+lalt + lctrl - t : open -na /Applications/Alacritty.app
+hyper - k : open -a /Applications/KeePassXC.app
+hyper - t : /usr/local/bin/subl ~/Desktop/Remember.todo
+hyper - p : skhd -k "alt + cmd - 5"
+hyper - y : pbcopy < ~/.config/skhd/jira.sc; skhd -k "cmd - v"
