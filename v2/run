@@ -20,14 +20,16 @@ function _remove_default_dotfiles {
     files=$(ls -a $CONFIGS)
     for location in $files
     do
-        [[ "$location" != "." && "$location" != ".." && "$location" != ".config" && -e ~/"$location" ]] && rm "~/$location"
+        [[ "$location" != "." && "$location" != ".." && "$location" != ".config" && -e ~/"$location" ]] && rm -f "~/$location"
     done
     
     echo '[*] Removing default ~/.config configurations ...'
     files=$(ls -a $CONFIGS/.config)
     for location in $files
     do
-        [[ "$location" != "." && "$location" != ".." && -e "~/.config/$location" ]] && rm -rf "~/.config/$location"
+        if [[ "$location" != "." && "$location" != ".." && -e "~/.config/$location" ]]
+            then rm -rf "~/.config/$location"
+	fi
     done
 }
 
@@ -46,8 +48,8 @@ function cmd {
 function install_dotfiles {
     # remove existing files, and install our dotfiles
     _remove_default_dotfiles
-    echo "F"
     _stow_install_dotfiles
+    _update_nvim_plugins
 }
 
 function help {
