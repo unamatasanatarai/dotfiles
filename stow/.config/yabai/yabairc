@@ -35,10 +35,13 @@ yabai -m config window_gap                   8
 
 yabai -m rule --add label="System Preferences" app="^System Preferences$" title=".*" manage=off
 yabai -m rule --add label="KeePassXC" app="^KeePassXC$" manage=off
-yabai -m rule --add label="Finder" app="^Finder$" title="Copy.*" manage=off
+yabai -m rule --add label="Finder" app="^Finder$" title="(Co(py|nnect)|Move|Info|Pref)" manage=off
 yabai -m rule --add label="Kap Exports" app="^Kap$" title="Exports" manage=off
 yabai -m rule --add label="Monosnap" app="^Monosnap$"  manage=off
 yabai -m rule --add label="Alacritty" app="^Alacritty$" space=4
+yabai -m rule --add label="Software Update" title="Software Update" manage=off
+yabai -m rule --add label="About This Mac" app="System Information" title="About This Mac" manage=off
+
 
 killall limelight &> /dev/null
 limelight &> /dev/null &
