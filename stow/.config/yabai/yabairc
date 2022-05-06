@@ -1,6 +1,6 @@
 sudo yabai --load-sa
-yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
-yabai -m signal --add event=space_changed action="open xbar://app.xbarapp.com/refreshAllPlugins; yabai -m window --focus \$(yabai -m query --windows --space | jq .[0].id)"
+#yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
+##yabai -m signal --add event=space_changed action="open xbar://app.xbarapp.com/refreshAllPlugins; yabai -m window --focus \$(yabai -m query --windows --space | jq .[0].id)"
 
 
 
@@ -43,8 +43,5 @@ yabai -m rule --add label="Alacritty" app="^Alacritty$" space=4
 yabai -m rule --add label="Software Update" title="Software Update" manage=off
 yabai -m rule --add label="About This Mac" app="System Information" title="About This Mac" manage=off
 
-
-killall limelight &> /dev/null
-limelight &> /dev/null &
 
 echo "yabai configuration loaded.."
