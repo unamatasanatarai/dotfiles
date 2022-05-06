@@ -32,6 +32,8 @@ lctrl + lalt - 1 : yabai -m window --space 1
 lctrl + lalt - 2 : yabai -m window --space 2
 lctrl + lalt - 3 : yabai -m window --space 3
 lctrl + lalt - 4 : yabai -m window --space 4
+lctrl + lalt - 5 : yabai -m window --space 5
+lctrl + lalt - 6 : yabai -m window --space 6
 
 # Send focused window to a space and follow to that space
 lshift + lctrl + lalt - p : yabai -m window --space prev; skhd -k "ctrl - left"
@@ -53,14 +55,14 @@ lcmd + lalt - l : yabai -m window --resize right:50:0; \
                   yabai -m window --resize left:50:0
 
 # Equalize the size of windows
-lshift + lalt - e : yabai -m space --balance
+lalt - e : yabai -m space --balance
 
 # Rotate windows clockwise and anticlockwise
 lalt - r         : yabai -m space --rotate 270
 lctrl + lalt - r : yabai -m space --rotate 90
 
 # Flip windows along horizontally (across the Y axis)
-lctrl + lalt - x : yabai -m space --mirror y-axis
+lalt - x : yabai -m space --mirror y-axis
 
 # Float / Unfloat window
 lctrl + lalt - space : \
