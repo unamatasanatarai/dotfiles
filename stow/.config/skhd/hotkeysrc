@@ -1,3 +1,2 @@
 lalt + lctrl - t : open -na /Applications/Alacritty.app
-lalt - space : /Users/acpg/bin/popup "/Users/acpg/bin/spotlight"
-
+lalt - space : ~/bin/popup ~/bin/spotlight
