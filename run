@@ -56,7 +56,6 @@ function fresh {
     install_dotfiles
     ./scripts/osx.install-brew
     ./scripts/osx.set-defaults
-    cp other/xbar/plugins/yabai_spaces.py ~/Library/Application\ Support/xbar/plugins/
 }
 
 function help {
