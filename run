@@ -51,7 +51,9 @@ function install_dotfiles {
 
 function fresh {
     ## for a fresh MACOS installation, intall all the things!
-    mkdir -p ~/.cache/vim/tmp/{swp,backup,undo}
+    mkdir -p ~/.cache/vim/tmp/swp
+    mkdir -p ~/.cache/vim/tmp/backup
+    mkdir -p ~/.cache/vim/tmp/undo
 
     install_dotfiles
     ./scripts/osx.install-brew
