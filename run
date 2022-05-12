@@ -47,7 +47,6 @@ function install_dotfiles {
     # remove existing files, and install our dotfiles
     _remove_default_dotfiles
     _stow_install_dotfiles
-    _update_nvim_plugins
 }
 
 function fresh {
@@ -56,6 +55,7 @@ function fresh {
     install_dotfiles
     ./scripts/osx.install-brew
     ./scripts/osx.set-defaults
+    _update_nvim_plugins
 }
 
 function help {
