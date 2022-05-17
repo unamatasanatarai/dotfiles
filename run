@@ -51,12 +51,10 @@ function install_dotfiles {
 
 function fresh {
     ## for a fresh MACOS installation, intall all the things!
-    mkdir -p ~/.cache/vim/tmp/swp
-    mkdir -p ~/.cache/vim/tmp/backup
-    mkdir -p ~/.cache/vim/tmp/undo
+    mkdir -p ~/.cache/vim/tmp/{swp,backup,undo}
 
-    install_dotfiles
     ./scripts/osx.install-brew
+    install_dotfiles
     ./scripts/osx.set-defaults
     _update_nvim_plugins
     cp ./fonts/source-code-pro/*.ttf /Library/Fonts/
