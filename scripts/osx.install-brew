@@ -5,7 +5,7 @@ echo "brew update"
 brew update
 
 echo "install my apps"
-brew install --cask alacritty brave-browser lulu sublime-text keepassxc slack vlc caffeine
+brew install --cask --no-quarantine alacritty brave-browser lulu sublime-text keepassxc slack vlc caffeine
 
 echo "install my tools"
 brew install vim neovim htop curl wget git watch tmux ack bash node yarn fzf rg tldr expect ncdu pass koekeishiya/formulae/yabai koekeishiya/formulae/skhd stow tree gnupg
@@ -13,6 +13,7 @@ brew install vim neovim htop curl wget git watch tmux ack bash node yarn fzf rg 
 brew services start yabai
 brew services start skhd
 
+open /Applications/Lulu.app
 brew update
 brew upgrade
 brew upgrade --cask
