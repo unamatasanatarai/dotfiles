@@ -1,3 +1,4 @@
 #!/usr/bin/env bash
 
-eval $( cat ~/bin/spotlight_options | fzf --prompt=":: " --layout=reverse --border )
+COMMAND=$( ls ~/bin/spotlight_commands | fzf --prompt=":: " --layout=reverse --border )
+~/bin/spotlight_commands/"$COMMAND"

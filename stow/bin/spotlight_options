@@ -1,3 +1,0 @@
-/usr/local/bin/pass yourpassword -c
-/usr/local/bin/pass otp yourOTPaccount -c
-rm -f ~/Pictures/Monosnap/*
