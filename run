@@ -11,10 +11,6 @@ CONFIGS=stow
 # Helper functions start with _ and aren't listed in this script's help menu.
 # -----------------------------------------------------------------------------
 
-function _update_nvim_plugins {
-    nvim -c ':PlugInstall' -c ':UpdateRemotePlugins' -c ':qall'
-}
-
 function _remove_default_dotfiles {
     echo '[*] Removing default ~/ configurations ...'
     files=$(ls -a $CONFIGS)
@@ -27,7 +23,7 @@ function _remove_default_dotfiles {
     files=$(ls -a $CONFIGS/.config)
     for location in $files
     do
-        [[ "$location" != "." && "$location" != ".." ]] && rm -rf "~/.config/$location"
+        [[ "$location" != "." && "$location" != ".." ]] && rm -rf "$HOME/.config/$location"
     done
 }
 
@@ -51,13 +47,13 @@ function install_dotfiles {
 
 function fresh {
     ## for a fresh MACOS installation, intall all the things!
-    mkdir -p ~/.cache/vim/tmp/{swp,backup,undo}
 
     ./scripts/osx.install-brew
     install_dotfiles
     ./scripts/osx.set-defaults
-    _update_nvim_plugins
     cp ./fonts/source-code-pro/*.ttf /Library/Fonts/
+    npm i -g bash-language-server
+    npm i -g pyright
 }
 
 function help {
@@ -68,4 +64,4 @@ function help {
     printf "\nExtended help:\n  Each task has comments for general usage\n"
 }
 
-${@:-help}
+"${@:-help}"
