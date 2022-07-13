@@ -1,5 +1,6 @@
 require "lspconfig".pyright.setup{}
 require "lspconfig".bashls.setup{}
+require "lspconfig".marksman.setup{}
 
 -- Mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
@@ -47,3 +48,9 @@ require('lspconfig')['tsserver'].setup{
     on_attach = on_attach,
     flags = lsp_flags,
 }
+require('lspconfig')['marksman'].setup{
+    on_attach = on_attach,
+    flags = lsp_flags,
+    root_dir = require"lspconfig/util".root_pattern( ".git", ".marksman.toml", "*.md" ),
+}
+
