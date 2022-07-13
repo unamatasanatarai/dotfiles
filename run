@@ -32,6 +32,12 @@ function _stow_install_dotfiles {
     stow -Rt ~ $CONFIGS
 }
 
+function _install_lsp {
+    wget -O /tmp/marksman https://github.com/artempyanykh/marksman/releases/download/2022-06-23/marksman-macos && mv /tmp/marksman /usr/local/bin/marksman && chmod +x /usr/local/bin/marksman
+    npm i -g bash-language-server
+    npm i -g pyright
+}
+
 # -----------------------------------------------------------------------------
 
 function cmd {
@@ -52,8 +58,7 @@ function fresh {
     install_dotfiles
     ./scripts/osx.set-defaults
     cp ./fonts/source-code-pro/*.ttf /Library/Fonts/
-    npm i -g bash-language-server
-    npm i -g pyright
+    _install_lsp
 }
 
 function help {
