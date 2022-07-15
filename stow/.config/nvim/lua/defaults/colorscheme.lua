@@ -1,1 +1,2 @@
-vim.cmd "colorscheme desert"
+vim.cmd 'colorscheme material'
+vim.g.material_style = "palenight"

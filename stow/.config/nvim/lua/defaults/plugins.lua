@@ -50,6 +50,7 @@ return packer.startup(function(use)
   use({ "williamboman/nvim-lsp-installer" }) -- simple to use language server installer
   --use({ "jose-elias-alvarez/null-ls.nvim", commit = "ff40739e5be6581899b43385997e39eecdbf9465" }) -- for formatters and linters
 
+  use 'marko-cerovac/material.nvim'
   use({ "nvim-telescope/telescope.nvim" })
 
   use {
