@@ -52,6 +52,14 @@ defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool
 defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 
+execute "defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadRightClick -bool true && \
+         defaults write com.apple.AppleMultitouchTrackpad TrackpadRightClick -int 1 && \
+         defaults -currentHost write -g com.apple.trackpad.enableSecondaryClick -bool true && \
+         defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadCornerSecondaryClick -int 0 && \
+         defaults write com.apple.AppleMultitouchTrackpad TrackpadCornerSecondaryClick -int 0 && \
+         defaults -currentHost write -g com.apple.trackpad.trackpadCornerClickBehavior -int 0" \
+    "Map 'click or tap with two fingers' to the secondary click"
+
 echo "Require password immediately after sleep or screen saver begins"
 defaults write com.apple.screensaver askForPassword -int 1
 defaults write com.apple.screensaver askForPasswordDelay -int 0
@@ -170,8 +178,19 @@ defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
 echo "Show battery percentage"
 defaults write com.apple.menuextra.battery ShowPercent -string 'YES'
 
+execute "defaults write com.apple.AdLib allowApplePersonalizedAdvertising -int 0" \
+    "Disable personalized ads"
+
 echo "restart&reload"
 killall "SystemUIServer" &> /dev/null
 killall "Finder" &> /dev/null
 killall "cfprefsd" &> /dev/null
 killall "Dock" &> /dev/null
+
+# Starting with Mac OS X Mavericks preferences are cached,
+# so in order for things to get properly set using `PlistBuddy`,
+# the `cfprefsd` process also needs to be killed.
+#
+# https://github.com/alrra/dotfiles/commit/035dda057ddc6013ba21db3d2c30eeb51ba8f200
+
+killall "cfprefsd" &> /dev/null
