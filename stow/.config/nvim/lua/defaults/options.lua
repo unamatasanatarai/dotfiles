@@ -89,6 +89,7 @@ opt.preserveindent = true
 opt.fileencoding = "utf-8"
 opt.conceallevel = 0                        -- so that `` is visible in markdown files
 opt.wrap = false
+vim.cmd "syntax on"
 vim.cmd "filetype plugin indent on"
 
 
