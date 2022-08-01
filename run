@@ -36,6 +36,7 @@ function _install_lsp {
     wget -O /tmp/marksman https://github.com/artempyanykh/marksman/releases/download/2022-06-23/marksman-macos && mv /tmp/marksman /usr/local/bin/marksman && chmod +x /usr/local/bin/marksman
     npm i -g bash-language-server
     npm i -g pyright
+    npm i -g typescript typescript-language-server
 }
 
 # -----------------------------------------------------------------------------

@@ -1,6 +1,7 @@
 require "lspconfig".pyright.setup{}
 require "lspconfig".bashls.setup{}
 require "lspconfig".marksman.setup{}
+require "lspconfig".tsserver.setup{}
 
 -- Mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
