@@ -15,6 +15,7 @@ configs.setup({
     "php",
     "python",
     "scss",
+    "svelte",
     "typescript",
     "yaml",
   },

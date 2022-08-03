@@ -37,6 +37,7 @@ function _install_lsp {
     npm i -g bash-language-server
     npm i -g pyright
     npm i -g typescript typescript-language-server
+    npm i -g svelte-language-server
 }
 
 # -----------------------------------------------------------------------------

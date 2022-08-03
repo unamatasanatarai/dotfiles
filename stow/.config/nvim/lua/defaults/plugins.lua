@@ -51,6 +51,7 @@ return packer.startup(function(use)
   --use({ "jose-elias-alvarez/null-ls.nvim", commit = "ff40739e5be6581899b43385997e39eecdbf9465" }) -- for formatters and linters
 
   use 'marko-cerovac/material.nvim'
+  use 'mattn/emmet-vim'
   use({ "nvim-telescope/telescope.nvim" })
 
   use {
