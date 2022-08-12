@@ -52,8 +52,9 @@ return packer.startup(function(use)
 
   use 'marko-cerovac/material.nvim'
   use 'mattn/emmet-vim'
-  use({ "nvim-telescope/telescope.nvim" })
-
+  use 'nvim-telescope/telescope.nvim'
+  use 'beautify-web/js-beautify'
+-- usage :%!js-beautify
   use {
     "nvim-treesitter/nvim-treesitter",
     run = ":TSUpdate",
