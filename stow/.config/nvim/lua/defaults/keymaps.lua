@@ -13,6 +13,7 @@ vim.g.maplocalleader = " "
 keymap("i", "jj", "<ESC>", opts)
 keymap("n", "<leader>w", ":w<cr>", opts)
 keymap("v", "p", '"_dP', opts)
+keymap("n", "<leader>bjs", ":%!js-beautify<cr>", opts)
 
 keymap("n", "<C-p>", ":Telescope find_files<cr>", opts)
 keymap("n", "<C-g>", ":Telescope live_grep<cr>", opts)
