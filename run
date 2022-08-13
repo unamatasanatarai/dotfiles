@@ -40,6 +40,7 @@ function _install_lsp {
     npm i -g svelte-language-server
     npm i -g vscode-langservers-extracted
     # and not only LSP
+    npm i -g prettier
     npm i -g js-beautify
 }
 
