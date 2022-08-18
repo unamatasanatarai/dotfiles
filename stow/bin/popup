@@ -1,13 +1,11 @@
 #!/usr/bin/env bash
 TITLE=termspotlight
 
-SCREEN_WIDTH=`yabai -m query --displays --display | jq .frame.w*2`
-SCREEN_HEIGHT=`yabai -m query --displays --display | jq .frame.h*2`
+SCREEN_WIDTH=$(yabai -m query --displays --display | jq .frame.w*2)
 
 TERM_WIDTH=1280
-TERM_HEIGHT=1260
 
-let "X=SCREEN_WIDTH/2-TERM_WIDTH/2"
+(("X=SCREEN_WIDTH/2-TERM_WIDTH/2"))
 Y=0
 
 alacritty \

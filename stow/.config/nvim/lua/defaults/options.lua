@@ -57,7 +57,7 @@ opt.backup = false
 opt.writebackup = false
 opt.showmode = false
 opt.swapfile = false
-opt.scrolloff = 5
+opt.scrolloff = 4
 opt.shortmess:append 'c'
 opt.shortmess:append 'I'
 opt.splitright = true
@@ -70,7 +70,7 @@ opt.termguicolors = true
 opt.number = true
 opt.relativenumber = true
 opt.laststatus = 2
-opt.cmdheight = 2
+opt.cmdheight = 1
 opt.history = 100
 opt.signcolumn = 'yes'
 opt.pumheight = 10
