@@ -14,5 +14,5 @@ keymap("i", "jj", "<ESC>", opts)
 keymap("n", "<leader>w", ":w<cr>", opts)
 keymap("n", "<leader>bp", ":lua vim.lsp.buf.formatting_sync()<CR>", opts)
 
-keymap("n", "<C-p>", ":Telescope find_files<cr>", opts)
+keymap("n", "<C-p>", ":Telescope find_files hidden=true<cr>", opts)
 keymap("n", "<C-g>", ":Telescope live_grep<cr>", opts)
