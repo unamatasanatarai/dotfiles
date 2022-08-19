@@ -3,4 +3,4 @@ n'joy!
 
 your own spotlight? alt+space
 
-run `run` to install
+run `install` to install
