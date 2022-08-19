@@ -52,6 +52,10 @@ function _install_lsp {
 # -----------------------------------------------------------------------------
 
 function dotfiles { # Delete current dotfiles&configs, then install brand new.
+  echo "LAST CHANCE!"
+  echo "your spotlight_commands will be deleted"
+  echo "<ctrl>+c to cancel this operation"
+  read
 	_remove_default_dotfiles
 	_stow_install_dotfiles
 }
