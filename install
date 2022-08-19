@@ -1,0 +1,90 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+# -----------------------------------------------------------------------------
+# Global variables
+# -----------------------------------------------------------------------------
+
+CONFIGS=stow
+
+# -----------------------------------------------------------------------------
+# Helper functions start with _ and aren't listed in this script's help menu.
+# -----------------------------------------------------------------------------
+
+function _remove_default_dotfiles {
+	echo '[*] Removing default ~/ configurations ...'
+	files=$(ls -a $CONFIGS)
+	for location in $files; do
+		[[ "$location" != "." && "$location" != ".." && "$location" != ".config" ]] && rm -rf ~/"$location"
+	done
+
+	echo '[*] Removing default ~/.config configurations ...'
+	files=$(ls -a $CONFIGS/.config)
+	for location in $files; do
+		[[ "$location" != "." && "$location" != ".." ]] && rm -rf "$HOME/.config/$location"
+	done
+}
+
+function _stow_install_dotfiles {
+	echo '[*] Installing our dotfiles ...'
+	stow -Rt ~ $CONFIGS
+}
+
+function _install_lsp {
+	wget -O /tmp/marksman https://github.com/artempyanykh/marksman/releases/download/2022-06-23/marksman-macos && mv /tmp/marksman /usr/local/bin/marksman && chmod +x /usr/local/bin/marksman
+	npm i -g bash-language-server \
+		pyright \
+		typescript typescript-language-server \
+		svelte-language-server \
+		vscode-langservers-extracted \
+		prettier \
+		js-beautify
+
+	cargo install stylua
+
+	brew install lua-language-server shfmt black
+
+	brew link black
+}
+
+# -----------------------------------------------------------------------------
+# Define your tasks below
+# -----------------------------------------------------------------------------
+
+function dotfiles { # Delete current dotfiles&configs, then install brand new.
+	_remove_default_dotfiles
+	_stow_install_dotfiles
+}
+
+function neovim_tools { # Install LSP servers for neovim
+  _install_lsp
+}
+
+function fresh { # Do everything at once. Please run this only once ;)
+	./scripts/osx.install-brew
+  dotfiles
+	./scripts/osx.set-defaults
+	cp ./fonts/source-code-pro/*.ttf /Library/Fonts/
+	_install_lsp
+}
+
+# -----------------------------------------------------------------------------
+
+function _help { # Display this helpful help information
+	printf "%s <task> [args]\n\nTasks:\n" "${0}"
+
+	functions=$(compgen -A function | grep -v "^_")
+	display=""
+
+	for f in $functions; do
+		display+="  $f#"
+		display+=$(grep "function $f.*" ${0} | awk -F '#' '{print $NF}')
+		display+=$'\n'
+	done
+
+	echo "$display" | column -t -s "#"
+
+	printf "\nExtended help:\n  Each task has comments for general usage\n"
+}
+
+"${@:-_help}"

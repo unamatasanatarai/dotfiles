@@ -2,5 +2,6 @@
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
 PATH="${PATH}:${HOME}/bin:${HOME}/bin/dotfiles"
+PATH="${PATH}:${HOME}/.cargo/bin"
 export VISUAL=vim
 export EDITOR="$VISUAL"

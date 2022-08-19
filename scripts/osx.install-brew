@@ -1,17 +1,57 @@
-if test ! $(which brew)
-then
-  echo "install homebrew"
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+#!/usr/bin/env bash
+
+if test ! $(which brew); then
+	echo "install homebrew"
+	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 fi
 
 echo "brew update"
 brew update
 
 echo "install my apps"
-brew install --cask --no-quarantine alacritty brave-browser lulu sublime-text keepassxc slack vlc caffeine
+
+brew install --cask --no-quarantine \
+	alacritty \
+	brave-browser \
+	caffeine \
+	firefox \
+	keepassxc \
+	keycastr \
+	losslesscut \
+	lulu \
+	openoffice \
+	slack \
+	sublime-text \
+	vlc \
+	vscodium
 
 echo "install my tools"
-brew install vim neovim htop curl wget git watch tmux ack bash node yarn fzf rg tldr expect ncdu pass koekeishiya/formulae/yabai koekeishiya/formulae/skhd stow tree gnupg jq
+brew install \
+	ack \
+	bash \
+	curl \
+	expect \
+	fzf \
+	git \
+	gnupg \
+	htop \
+	jq \
+	koekeishiya/formulae/skhd \
+	koekeishiya/formulae/yabai \
+	ncdu \
+	neovim \
+	node \
+	pass \
+	rg \
+	rust \
+	stow \
+	tldr \
+	tmux \
+	tree \
+	vim \
+	watch \
+	wget \
+	yarn
 
 brew services start yabai
 brew services start skhd

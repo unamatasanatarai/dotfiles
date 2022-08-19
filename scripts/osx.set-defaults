@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 COMPUTER_NAME="Enclave"
 
 echo "close system preferences"

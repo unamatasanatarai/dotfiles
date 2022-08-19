@@ -12,9 +12,7 @@ vim.g.maplocalleader = " "
 
 keymap("i", "jj", "<ESC>", opts)
 keymap("n", "<leader>w", ":w<cr>", opts)
-keymap("v", "p", '"_dP', opts)
---keymap("n", "<leader>bjs", ":%!js-beautify<cr>", opts)
-keymap("n", "<leader>bp", ":silent %!prettier --stdin-filepath %<CR>", opts)
+keymap("n", "<leader>bp", ":lua vim.lsp.buf.formatting_sync()<CR>", opts)
 
 keymap("n", "<C-p>", ":Telescope find_files<cr>", opts)
 keymap("n", "<C-g>", ":Telescope live_grep<cr>", opts)
