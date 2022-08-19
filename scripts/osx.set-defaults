@@ -211,6 +211,10 @@ sudo pmset -a sms 0
 # advertising
 defaults write com.apple.AdLib allowApplePersonalizedAdvertising -int 0
 
+# -------------------------------------------------------------------------------------
+# Finish up & cleanup
+# -------------------------------------------------------------------------------------
+
 # restart&reload
 killall "SystemUIServer" &> /dev/null
 killall "Finder" &> /dev/null
@@ -224,3 +228,5 @@ killall "Dock" &> /dev/null
 # https://github.com/alrra/dotfiles/commit/035dda057ddc6013ba21db3d2c30eeb51ba8f200
 
 killall "cfprefsd" &> /dev/null
+
+echo "√"
