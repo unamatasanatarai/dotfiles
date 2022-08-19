@@ -1,0 +1,7 @@
+echo "Create a bash file"
+sleep 0.5
+echo "chmod u+x the file"
+sleep 1
+echo "n'joy!"
+echo -e "\n\n\n...press any key to exit"
+read
