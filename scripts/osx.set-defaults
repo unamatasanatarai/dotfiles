@@ -171,7 +171,8 @@ defaults -currentHost write com.apple.ImageCapture disableHotPlug -bool true
 
 # Enable HiDPI display modes (requires restart)
 sudo defaults write /Library/Preferences/com.apple.windowserver DisplayResolutionEnabled -bool true
-
+# instead of sliding entire screen left/right, cross-fade... less jarring
+defaults write com.apple.universalaccess reduceMotion -bool true
 
 # -------------------------------------------------------------------------------------
 # Dock
