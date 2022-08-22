@@ -1,6 +1,10 @@
 # Dotfiles for Mac
-n'joy!
 
-your own spotlight? alt+space
+`N'joy!`
 
-run `install` to install
+dmenu for macos:
+
+`alt+space`
+
+
+read the commands in `./install` and chooose wiseeeely
