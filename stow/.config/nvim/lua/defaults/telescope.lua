@@ -6,8 +6,19 @@ end
 local actions = require "telescope.actions"
 
 telescope.setup {
-  defaults = {
 
+  pickers = {
+    live_grep = {
+      additional_args = function(opts)
+        return { "--hidden", "--no-ignore" }
+      end
+    },
+    find_files = {
+      find_command = {"rg", "--no-ignore", "--hidden", "--files", "-g", "!{**/node_modules/*,**/.git/*}"},
+    },
+  },
+
+  defaults = {
     prompt_prefix = "❯ ",
     selection_caret = "❯ ",
     path_display = { "smart" },
@@ -77,6 +88,7 @@ telescope.setup {
       },
     },
   },
+
   extensions = {
     fzf_native = {
       fuzzy = true,
