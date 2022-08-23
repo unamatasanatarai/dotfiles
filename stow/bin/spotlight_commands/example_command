@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 echo "Create a bash file"
 sleep 0.5
 echo "chmod u+x the file"
