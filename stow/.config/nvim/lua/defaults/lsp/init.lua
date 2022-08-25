@@ -68,3 +68,14 @@ require("lspconfig")["marksman"].setup({
   flags = lsp_flags,
   root_dir = require("lspconfig/util").root_pattern(".git", ".marksman.toml", "*.md"),
 })
+require("lspconfig")["sumneko_lua"].setup({
+  on_attach = on_attach,
+  flags = lsp_flags,
+  settings = {
+    Lua = {
+      diagnostics = {
+        globals = { 'vim' }
+      }
+    }
+  }
+})
