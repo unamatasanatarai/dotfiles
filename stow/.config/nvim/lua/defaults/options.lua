@@ -25,7 +25,6 @@ opt.listchars = {
 -- View
 opt.wrap = false
 opt.fileencoding = "utf-8"
-opt.conceallevel = 0                        -- so that `` is visible in markdown files
 opt.showmode = false
 
 -- Search
