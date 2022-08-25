@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 alias gul='git pull origin $(parse_git_branch)'
 alias vba='source venv/bin/activate'
 alias tree='tree -aC --dirsfirst'

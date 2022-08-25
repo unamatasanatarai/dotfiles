@@ -9,4 +9,3 @@ source "$HOME/.config/bash/fzf_config"
 source "$HOME/.config/bash/fzf_history"
 source "$HOME/.config/bash/prompt"
 source "$HOME/.config/bash/z"
-

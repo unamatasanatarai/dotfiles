@@ -3,11 +3,8 @@ local servers = {
   "eslint",
   "html",
   "marksman",
-  "pyright",
-  "stylelint_lsp",
   "sumneko_lua",
   "svelte",
-  "tsserver",
 }
 -- Mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions

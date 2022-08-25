@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # Just the Ctrl+R for history find
 # ------------
 __fzfcmd() {
@@ -6,7 +8,7 @@ __fzfcmd() {
 }
 
 __fzf_history__() {
-FZF_DEFAULT_OPTS='
+  FZF_DEFAULT_OPTS='
 --height 15
 --inline-info
 --prompt="❯ "
@@ -49,4 +51,3 @@ else
   bind -m vi-command -x '"\C-r": __fzf_history__'
   bind -m vi-insert -x '"\C-r": __fzf_history__'
 fi
-

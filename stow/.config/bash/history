@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # History settings (don't save lines beginning with space or matching the
 # previous entry)
 HISTCONTROL=ignoreboth
