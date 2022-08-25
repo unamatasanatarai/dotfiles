@@ -1,10 +1,12 @@
-source ~/.config/bash/colors
-source ~/.config/bash/functions
-source ~/.config/bash/settings
-source ~/.config/bash/aliases
-source ~/.config/bash/history
-source ~/.config/bash/fzf_config
-source ~/.config/bash/fzf_history
-source ~/.config/bash/prompt
+#!/usr/bin/env bash
 
-alias ls="ls -G"
+source "$HOME/.config/bash/colors"
+source "$HOME/.config/bash/functions"
+source "$HOME/.config/bash/settings"
+source "$HOME/.config/bash/aliases"
+source "$HOME/.config/bash/history"
+source "$HOME/.config/bash/fzf_config"
+source "$HOME/.config/bash/fzf_history"
+source "$HOME/.config/bash/prompt"
+source "$HOME/.config/bash/z"
+
