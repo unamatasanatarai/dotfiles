@@ -24,6 +24,7 @@ opt.listchars = {
 
 -- View
 opt.wrap = false
+opt.linebreak = true -- wrap should take place on space, not midword
 opt.fileencoding = "utf-8"
 opt.showmode = false
 

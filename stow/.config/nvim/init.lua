@@ -1,4 +1,4 @@
-require "defaults.options"
+require "defaults.settings"
 require "defaults.keymaps"
 require "defaults.plugins"
 require "defaults.telescope"
