@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 
-PS1=''
-PS1+='\[${white}\]\t' # current time
-PS1+=' $(s=$?; [ $s == 0 ] && echo "${reset}${s}" || echo "${red}${s}") ' # last command exit status
-PS1+="\[\033]0;\W\007\]"; # working directory base name
-#PS1+="\[${white}\]:: ";
-PS1+="\[${green}\]\w"; # working directory full path
-PS1+="\[${yellow}\]\$(git_branch_read -wp)\[${reset}\]";
-PS1+=" \[${white}\]\$ \[${reset}\]"; # `$` (and reset color)
-export PS1;
+PS1=""
+# current time
+PS1+="\[${gray}\]\t"
+# last command exit status
+PS1+=' $(s=$?; [ $s == 0 ] && echo "\[${gray}\]${s}" || echo "\[${red}\]${s}")'
+# working directory full path
+PS1+=" \[${green}\]\w"
+PS1+="\[${yellow}\]\$(git_branch_read -wp)\[${reset}\]"
+PS1+=" \[${white}\]\$ \[${reset}\]" 
+export PS1
