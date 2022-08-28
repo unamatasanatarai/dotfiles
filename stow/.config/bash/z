@@ -1,3 +1,13 @@
 #!/usr/bin/env bash
 
+_Z_DATA_DIR="$HOME/.local/share/z"
+_Z_DATA="$_Z_DATA_DIR/.z"
+[ -d "$_Z_DATA_DIR" ] || mkdir -p "$_Z_DATA_DIR"
+
 . /usr/local/etc/profile.d/z.sh
+
+function zl() {
+  local dir
+  dir=$(z -l | fzf --prompt=">> " | awk '{print $2}')
+  cd "$dir" || exit 1
+}
