@@ -10,6 +10,6 @@ wrap_git_branch() {
 
 take() {
     mkdir -p "$@"
-    cd "$_"
+    cd "$_" || exit 1
 }
 

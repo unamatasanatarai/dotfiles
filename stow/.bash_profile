@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+source "$HOME/.config/bash/xdg"
 source "$HOME/.config/bash/colors"
 source "$HOME/.config/bash/functions"
 source "$HOME/.config/bash/settings"
