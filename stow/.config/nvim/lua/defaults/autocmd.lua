@@ -11,6 +11,8 @@ autocmd("FileType", {
     opt.wrap = true
     keymap("n", "j", "gj", opts)
     keymap("n", "k", "gk", opts)
+    keymap("n", "$", "g$", opts)
+    keymap("n", "0", "g0", opts)
   end,
 })
 
