@@ -66,6 +66,7 @@ opt.lazyredraw = true
 opt.shortmess:append 'c'
 opt.shortmess:append 'I'
 opt.splitright = true
+opt.timeoutlen = 200
 
 vim.cmd "syntax on"
 vim.cmd "filetype plugin indent on"
