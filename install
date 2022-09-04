@@ -26,7 +26,7 @@ function _remove_default_dotfiles {
 }
 
 function _restow {
-  echo '[*] Installing our dotfiles ...'
+  echo '[*] Installing/updating dot files...'
   stow -Rt ~ $CONFIGS
 }
 
