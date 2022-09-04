@@ -68,8 +68,12 @@ function restow { # update configs, i.e. run stow
   _restow
 }
 
-function fresh { # Do everything at once. Please run this only once ;)
+function bi { # Install brew casks and formulas
   ./scripts/osx.install-brew
+}
+
+function fresh { # Do everything at once. Please run this only once ;)
+  bi
   dotfiles
   ./scripts/osx.set-defaults
   cp ./fonts/source-code-pro/*.ttf /Library/Fonts/

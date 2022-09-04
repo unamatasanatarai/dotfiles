@@ -1,12 +1,22 @@
 #!/usr/bin/env bash
 
+function pgb {
+  # make a copy of the previous exit status
+  local _ps=$?
+  git branch 2>/dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ <\1>/'
+  # and return it so the redness can start
+  return $_ps
+}
+
 PS1=""
 # current time
 PS1+="\[${gray}\]\t"
-# last command exit status
-PS1+=' $(s=$?; [ $s == 0 ] && echo "\[${gray}\]${s}" || echo "\[${red}\]${s}")'
 # working directory full path
 PS1+=" \[${green}\]\w"
-PS1+="\[${yellow}\]\$(git_branch_read -wp)\[${reset}\]"
-PS1+=" \[${white}\]\$ \[${reset}\]" 
+# git branch
+PS1+="\[${yellow}\]\$(pgb)\[${reset}\]"
+# the dollar will be red if exit code was baaaad
+PS1+=' $([ $? == 0 ] && echo "\[${white}\]\$ " || echo "\[${red}\]\$ ")'
+PS1+="\[${reset}\]"
+
 export PS1
