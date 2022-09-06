@@ -1,52 +1,62 @@
 #!/usr/bin/env bash
 
+set -euo pipefail
+
 # -----------------------------------------------------------------------------
 # PRIVATE
 # -----------------------------------------------------------------------------
-function _username { # Set git config username
-  git config user.name "${1}"
+function _set_username { # Set git config username
+  echo "git config user.name ""${1}"
+  git config user.name "$1"
 }
 
-function _email { # Set git config E-Mail
-  git config user.email "${1}"
+function _set_email { # Set git config E-Mail
+  echo "git config user.email ""${1}"
+  git config user.email "$1"
 }
 
 # -----------------------------------------------------------------------------
 # PUBLIC
 # -----------------------------------------------------------------------------
 
-function ue { # this is bordked now
-  if [ "$#" -ne 2 ]; then
-    echo "usage: ${0} ue 'USERNAME' 'EMAIL'"
-    exit 1
-  fi
-  _username "${1}"
-  _email "${2}"
+_username=""
+_email=""
+
+function _help() {
+  echo "usage: ${0} -u username -e email"
+  echo "OR usage: ${0} username email"
 }
 
-function e { # alias for: `git config user.email "E-MAIL@ADDRE.SS"`
-  [ -z "$1" ] && echo "usage: ${0} e \"EMAIL\"" || _email "${1}"
-}
+function _parse_args() {
+  while getopts "u:e:" opt; do
+    case $opt in
+    u)
+      _username="${OPTARG}"
+      ;;
+    e)
+      _email="${OPTARG}"
+      ;;
+    *) ;;
 
-function u { # alias for: `git config user.name "yourusername"`
-  [ -z "$1" ] && echo "usage: ${0} u \"USERNAME\"" || _username "${1}"
-}
-
-# -----------------------------------------------------------------------------
-
-function _help { # Display this helpful help information
-  printf "%s <task> [args]\n\nTasks:\n" "${0}"
-
-  functions=$(compgen -A function | grep -v "^_")
-  display=""
-
-  for f in $functions; do
-    display+="  $f#"
-    display+=$(rg "function $f .*" "${0}" | awk -F '#' '{print $NF}')
-    display+=$'\n'
+    esac
   done
 
-  echo "$display" | column -t -s "#"
+  shift $((OPTIND - 1))
+
+  if [ "$#" == 2 ] && [ -z "$_username" ] && [ -z "$_email" ]; then
+    _username="$1"
+    _email="$2"
+  fi
 }
 
-"${@:-_help}"
+function main() {
+  _parse_args "$@"
+  if [ -z "$_username" ] && [ -z "$_email" ]; then
+    _help
+  else
+    if [ -n "$_username" ]; then _set_username "$_username"; fi
+    if [ -n "$_email" ]; then _set_email "$_email"; fi
+  fi
+}
+# -----------------------------------------------------------------------------
+main "$@"
