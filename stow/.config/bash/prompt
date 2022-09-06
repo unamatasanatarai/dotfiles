@@ -3,7 +3,8 @@
 function pgb {
   # make a copy of the previous exit status
   local _ps=$?
-  git branch 2>/dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ <\1>/'
+  # git branch 2>/dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ <\1>/'
+  echo " <$(git rev-parse --abbrev-ref HEAD 2>/dev/null)>"
   # and return it so the redness can start
   return $_ps
 }
