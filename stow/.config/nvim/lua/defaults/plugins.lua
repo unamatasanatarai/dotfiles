@@ -50,7 +50,9 @@ return packer.startup(function(use)
   use({ "williamboman/nvim-lsp-installer" }) -- simple to use language server installer
   use("jose-elias-alvarez/null-ls.nvim")
 
+  -- themes
   use("EdenEast/nightfox.nvim")
+  use("hardselius/warlock")
 
   use("nvim-telescope/telescope.nvim")
 

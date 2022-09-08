@@ -15,4 +15,15 @@ autocmd("FileType", {
     keymap("n", "0", "g0", opts)
   end,
 })
-
+autocmd("FocusLost", {
+  group = augroup,
+  callback = function()
+    vim.cmd 'colorscheme warlock'
+  end,
+})
+autocmd("FocusGained", {
+  group = augroup,
+  callback = function()
+    vim.cmd 'colorscheme nordfox'
+  end,
+})
