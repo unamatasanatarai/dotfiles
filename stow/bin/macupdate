@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# -----------------------------------------------------------------------------
+# PRIVATE
+# -----------------------------------------------------------------------------
+
+function _runUpdate() {
+  softwareupdate --all --install --force
+}
+
+function _runForcedUpdate() {
+  sudo rm -rf /Library/Developer/CommandLineTools
+  sudo xcode-select --install
+}
+
+# -----------------------------------------------------------------------------
+# PUBLIC
+# -----------------------------------------------------------------------------
+
+__force=0
+
+function _help() {
+  echo -e "
+Usage: $(basename "${0}") [ -f ] [ -h ]
+
+Options:
+  -f   Remove and reinstall CommandLineTools
+  -h   Show this help
+"
+}
+
+function _parse_args() {
+  while getopts "fh" opt; do
+    case $opt in
+    f)
+      __force=1
+      ;;
+    *)
+      _help
+      exit 2
+      ;;
+
+    esac
+  done
+
+  shift $((OPTIND - 1))
+}
+
+function main() {
+  _parse_args "$@"
+  if [ $__force == 1 ]; then
+    _runForcedUpdate
+  else :
+    _runUpdate
+  fi
+}
+
+# -----------------------------------------------------------------------------
+main "$@"
