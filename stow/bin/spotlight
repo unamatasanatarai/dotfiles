@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-#COMMAND=$( ls ~/bin/spotlight_commands | fzf --prompt=":: " --layout=reverse --border )
+set -euo pipefail
 
 pwd="${HOME}/bin/spotlight_commands"
 sedpwd=$(echo "${pwd}" | sed "s/\//\\\\\//g")

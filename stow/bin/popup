@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 TITLE=termspotlight
 
 SCREEN_WIDTH=$(yabai -m query --displays --display | jq .frame.w*2)
@@ -16,5 +17,5 @@ alacritty \
     -o window.dimensions.columns=80 \
     -o window.decorations=none \
     --working-directory "$(pwd)" \
-    -e "$1"
+    -e "$@"
 
