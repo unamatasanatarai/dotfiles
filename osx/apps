@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+./install-brew
+
+brew install \
+  ack \
+  bash \
+  curl \
+  expect \
+  fzf \
+  git \
+  git-delta \
+  gnupg \
+  htop \
+  jq \
+  koekeishiya/formulae/skhd \
+  koekeishiya/formulae/yabai \
+  ncdu \
+  neovim \
+  node \
+  pass \
+  rg \
+  rust \
+  stow \
+  tldr \
+  tmux \
+  tree \
+  vim \
+  watch \
+  wget \
+  yarn \
+  z
+
+brew install --cask --no-quarantine \
+  alacritty \
+  brave-browser \
+  caffeine \
+  firefox \
+  keepassxc \
+  keycastr \
+  losslesscut \
+  lulu \
+  openoffice \
+  slack \
+  sublime-text \
+  vlc \
+  vscodium
+
+brew cleanup

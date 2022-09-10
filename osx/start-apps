@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+brew services start yabai
+brew services start skhd
+
+cd /Applications
+open -a Lulu.app
+

@@ -25,64 +25,62 @@ function _remove_default_dotfiles {
   done
 }
 
-function _restow {
-  echo '[*] Installing/updating dot files...'
-  stow -Rt ~ $CONFIGS
-}
-
-function _install_lsp {
-  wget -O /tmp/marksman https://github.com/artempyanykh/marksman/releases/download/2022-06-23/marksman-macos && mv /tmp/marksman /usr/local/bin/marksman && chmod +x /usr/local/bin/marksman
-  npm i -g bash-language-server \
-    pyright \
-    typescript typescript-language-server \
-    svelte-language-server \
-    vscode-langservers-extracted \
-    prettier \
-    js-beautify
-
-  cargo install stylua
-
-  brew install lua-language-server shfmt black
-
-  brew link black
-}
-
 # -----------------------------------------------------------------------------
 # Define your tasks below
 # -----------------------------------------------------------------------------
 
-function dotfiles { # Delete current dotfiles&configs, then install brand new.
-  echo "LAST CHANCE!"
+function dotfiles { # Purge configs and reinstall dotfiles
+  echo -e "\033[1;31mLAST CHANCE!\033[0m"
   echo "your spotlight_commands will be deleted"
   echo "<ctrl>+c to cancel this operation"
-  read -r
-  _remove_default_dotfiles
-  _restow
+  echo "or type AGREE to continue"
+  read -r agree
+  if [ "$agree" == "AGREE" ]; then
+    _remove_default_dotfiles
+    restow
+  else
+    echo "Aborting..."
+  fi
 }
 
-function neovim_tools { # Install LSP servers for neovim
-  _install_lsp
+function restow { # Update dotfiles
+  echo '[*] Installing/updating dot files...'
+  stow -Rt ~ $CONFIGS
 }
 
-function restow { # update configs, i.e. run stow
-  _restow
+function apps { # Install brew casks and formulas
+  ./osx/apps
+  ./osx/start-apps
 }
 
-function bi { # Install brew casks and formulas
-  ./scripts/osx.install-brew
+function defaults { # Set sensible macos defaults
+  ./osx/defaults
+}
+
+function fonts { # Install fonts
+  cp ./fonts/source-code-pro/*.ttf /Library/Fonts/
+}
+
+function neovim { # Install neovim tools
+  ./osx/nvim
+}
+
+function stop-processes { # Stop or `install stop-processes --unload` processes
+  ./osx/stop-processes "$@"
 }
 
 function fresh { # Do everything at once. Please run this only once ;)
-  bi
+  defaults
   dotfiles
-  ./scripts/osx.set-defaults
-  cp ./fonts/source-code-pro/*.ttf /Library/Fonts/
-  _install_lsp
+  fonts
+  neovim
+  stop-processes --unload
+  apps
 }
 
 # -----------------------------------------------------------------------------
 
-function _help { # Display this helpful help information
+function help { # Display this helpful help information
   printf "%s <task> [args]\n\nTasks:\n" "${0}"
 
   functions=$(compgen -A function | grep -v "^_")
@@ -90,13 +88,11 @@ function _help { # Display this helpful help information
 
   for f in $functions; do
     display+="  $f#"
-    display+=$(grep "function $f.*" "${0}" | awk -F '#' '{print $NF}')
+    display+=$(grep "function $f .*" "${0}" | awk -F '#' '{print $NF}')
     display+=$'\n'
   done
 
   echo "$display" | column -t -s "#"
-
-  printf "\nExtended help:\n  Each task has comments for general usage\n"
 }
 
-"${@:-_help}"
+"${@:-help}"

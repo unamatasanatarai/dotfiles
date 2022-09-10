@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+if test ! "$(which brew)"; then
+  echo -e " [\033[32m√\033[m] brew not found, installing"
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  brew update
+else
+  echo -e " [\033[32m√\033[m] brew already installed"
+fi
+

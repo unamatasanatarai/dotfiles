@@ -4,7 +4,13 @@ _Z_DATA_DIR="$XDG_DATA_HOME/z"
 _Z_DATA="$_Z_DATA_DIR/.z"
 [ -d "$_Z_DATA_DIR" ] || mkdir -p "$_Z_DATA_DIR"
 
-. /usr/local/etc/profile.d/z.sh
+intels=(i386 x86_64 x86_64h)
+
+if [[ "${intels[*]}" =~ $(uname -p) ]]; then
+  . /usr/local/etc/profile.d/z.sh
+else
+  . /opt/homebrew/etc/profile.d/z.sh
+fi
 
 function zl() {
   local dir
