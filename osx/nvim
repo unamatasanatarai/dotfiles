@@ -2,7 +2,7 @@
 
 set -eo pipefail
 
-./install_brew
+./$(dirname "$0")/install-brew
 
 wget -O /tmp/marksman https://github.com/artempyanykh/marksman/releases/download/2022-06-23/marksman-macos && mv /tmp/marksman /usr/local/bin/marksman && chmod +x /usr/local/bin/marksman
 npm i -g bash-language-server \

@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-./install-brew
+./$(dirname "$0")/install-brew
 
 brew install \
   ack \
