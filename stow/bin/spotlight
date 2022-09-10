@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
 
-COMMAND=$( ls ~/bin/spotlight_commands | fzf --prompt=":: " --layout=reverse --border )
-~/bin/spotlight_commands/"$COMMAND"
+#COMMAND=$( ls ~/bin/spotlight_commands | fzf --prompt=":: " --layout=reverse --border )
+
+pwd="${HOME}/bin/spotlight_commands"
+sedpwd=$(echo "${pwd}" | sed "s/\//\\\\\//g")
+COMMAND=$( find "$pwd" -mindepth 1 | sed "s/$sedpwd//g" | sed "s/^\///g" | uniq | sort | fzf --prompt="►▶ " --pointer="► " --no-info --layout=reverse --border --color="gutter:#2E3440,bg+:#2E3440,fg+:underline,fg+:italic,hl:#689d6a,hl+:#689d6a,hl+:underline,hl+:italic")
+./"$pwd"/"$COMMAND"
