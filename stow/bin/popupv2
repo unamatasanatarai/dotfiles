@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+W=80
+H=20
+X=-1
+Y=-1
+cmd="echo 'read help'"
+
+while getopts "w:h:x:y:c:" o; do
+  case "$o" in
+  w) W=${OPTARG} ;;
+  h) H=${OPTARG} ;;
+  x) X=${OPTARG} ;;
+  y) Y=${OPTARG} ;;
+  c) cmd=${OPTARG} ;;
+  *)
+    echo "usage "$(basename "$0")" [ -w 80 ] [ -h 20 ]
+            [ -x 0 ] [ -y 0 ]
+            [ c command ]"
+    exit 2
+    ;;
+  esac
+done
+
+TITLE=termspotlight
+
+# screen size
+SW=$(yabai -m query --displays --display | jq .frame.w*2)
+SH=$(yabai -m query --displays --display | jq .frame.h*2)
+
+# term size
+# 20 is now the padding
+# todo move the 20 into a variable (it's 20 padding top & bottom so 40 * 2, cause retina?
+TW=$((16 * W + 80))
+# see alacritty.yml font>offset>y (12?)
+# include this _line-height_ in your math
+# TH=$( echo "(32+12) * $H" | bc )
+TH=$((32 * H + 80))
+
+# term pos
+if [ "$X" == -1 ]; then
+  X=$((SW - TW >> 1))
+fi
+if [ "$Y" == -1 ]; then
+  Y=$((SH - TH >> 1))
+fi
+
+echo $H $Y $TH $SH
+
+alacritty \
+  -t "${TITLE}" \
+  -o window.position.x="${X}" \
+  -o window.position.y="${Y}" \
+  -o window.dimensions.lines="${H}" \
+  -o window.dimensions.columns="${W}" \
+  -o window.decorations=none \
+  -o window.padding.x=20 \
+  -o window.padding.y=20 \
+  -o font.offset.y=0 \
+  --working-directory "$(pwd)" \
+  -e "$cmd"
