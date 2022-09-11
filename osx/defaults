@@ -172,7 +172,7 @@ echo "SecOps"
 echo "--------------------------------------------------"
 
 echo -e " [\033[34m?\033[m] Enable FileVault"
-sudo fdesetup enable
+sudo fdesetup enable || true
 echo -e " [\033[34m√\033[m] Enable FileVault"
 
 echo -e " [\033[34m?\033[m] Enable firewall"
@@ -180,7 +180,7 @@ sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setglobalstate on
 echo -e " [\033[32m√\033[m] Enable firewall"
 
 echo -e " [\033[34m?\033[m] Disable time machine"
-sudo tmutil disable
+sudo tmutil disable || true
 echo -e " [\033[32m√\033[m] Disable time machine"
 
 defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
@@ -243,20 +243,11 @@ echo "--------------------------------------------------"
 sudo defaults write /Library/Preferences/com.apple.loginwindow LoginwindowText "I AM SERIOUS"
 echo -e " [\033[32m√\033[m] Set login screen welcome text"
 
-sudo defaults  write /Library/Preferences/com.apple.alf allowdownloadsignedenabled -bool false
+sudo defaults write /Library/Preferences/com.apple.alf allowdownloadsignedenabled -bool false || true
 echo -e " [\033[32m√\033[m] Disable automatic signed software whitelisting"
 
-sudo defaults write /Library/Preferences/com.apple.alf stealthenabled -bool true
-echo -e " [\033[32m√\033[m] Enable Stealth Mode"
-
-sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.captive.control Active -bool false
-echo -e " [\033[32m√\033[m] Disable captive portal"
-
-sudo defaults write /Library/Preferences/com.apple.alf allowsignedenabled -bool false
+sudo defaults write /Library/Preferences/com.apple.alf allowsignedenabled -bool false || true
 echo -e " [\033[32m√\033[m] Disable automatic software whitelisting"
-
-sudo systemsetup -setremoteappleevents off
-echo -e " [\033[32m√\033[m] Disable Remote Apple Events"
 
 sudo defaults write /Library/Preferences/com.apple.loginwindow DisableConsoleAccess -bool true
 echo -e " [\033[32m√\033[m] Disable console logon from the logon screen"
@@ -341,6 +332,6 @@ killall "Dock" &>/dev/null
 #
 # https://github.com/alrra/dotfiles/commit/035dda057ddc6013ba21db3d2c30eeb51ba8f200
 
-killall "cfprefsd" &>/dev/null
+killall "cfprefsd" &>/dev/null || true
 
 echo -e "\033[0;34mRestart your machine to ensure settings take effect\033[0m"
