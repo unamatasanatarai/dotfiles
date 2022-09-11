@@ -132,6 +132,18 @@ echo "--------------------------------------------------"
 echo "Trackpad"
 echo "--------------------------------------------------"
 
+defaults write com.apple.AppleMultitouchTrackpad ForceSuppressed -bool true
+echo -e " [\033[32m√\033[m] Trackpad: disable Fore Click haptic feedback"
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad DragLock -bool false
+defaults write com.apple.AppleMultitouchTrackpad DragLock -bool false
+echo -e " [\033[32m√\033[m] Trackpad: disable DragLock"
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Dragging -bool false
+defaults write com.apple.AppleMultitouchTrackpad Dragging -bool false
+echo -e " [\033[32m√\033[m] Trackpad: disable Dragging"
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadThreeFingerDrag -bool false
+defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerDrag -bool false
+echo -e " [\033[32m√\033[m] Trackpad: three finger drag"
+
 defaults write com.apple.AppleMultitouchTrackpad Clicking -bool true
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
 defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
@@ -178,6 +190,10 @@ echo "--------------------------------------------------"
 echo "Dock"
 echo "--------------------------------------------------"
 
+defaults write com.Apple.Dock showLaunchpadGestureEnabled -bool false
+echo -e " [\033[32m√\033[m] Disable launchpad finger swipes"
+defaults write com.Apple.Dock showAppExposeGestureEnabled -bool false
+echo -e " [\033[32m√\033[m] Disable expose finger swipes"
 defaults write com.Apple.Dock show-recents -bool false
 echo -e " [\033[32m√\033[m] Don't show recently used applications in the Dock"
 
@@ -279,4 +295,4 @@ killall "Dock" &>/dev/null
 
 killall "cfprefsd" &>/dev/null
 
-echo "all done."
+echo -e "\033[0;34mRestart your machine to ensure settings take effect\033[0m"
