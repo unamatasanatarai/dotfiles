@@ -85,6 +85,10 @@ echo -e " [\033[32m√\033[m] Expand save panel by default"
 defaults write com.apple.finder DisableAllAnimations -bool true
 echo -e " [\033[32m√\033[m] Finder: disable window animations and Get Info animations"
 
+defaults write NSGlobalDomain AppleShowAllExtensions -bool true; 
+defaults write -g AppleShowAllExtensions -bool true
+echo -e " [\033[32m√\033[m] Finder: how file extensions everywhere"
+
 echo "--------------------------------------------------"
 echo "Audio"
 echo "--------------------------------------------------"
@@ -283,10 +287,6 @@ echo -e " [\033[32m√\033[m] advertising"
 echo "--------------------------------------------------"
 echo "Spotlight"
 echo "--------------------------------------------------"
-
-echo -e " [\033[34m?\033[m] disable spotlight indexing"
-sudo mdutil -a -i off 
-echo -e " [\033[32m√\033[m] disable spotlight indexing"
 
 defaults write com.apple.spotlight orderedItems -array \
   '{"enabled" = 1;"name" = "APPLICATIONS";}' \
