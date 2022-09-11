@@ -94,6 +94,7 @@ echo "Audio"
 echo "--------------------------------------------------"
 
 sudo nvram SystemAudioVolume=" "
+sudo nvram StartupMute=%01
 echo -e " [\033[32m√\033[m] Disable startup sound"
 
 defaults write com.apple.sound.beep.feedback -bool false
@@ -124,6 +125,7 @@ echo -e " [\033[32m√\033[m] Disable smart quotes and dashes as they’re annoy
 defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false
 
 defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
+defaults write NSGlobalDomain WebAutomaticSpellingCorrectionEnabled -bool false
 echo -e " [\033[32m√\033[m] Disable auto-correct"
 
 defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
@@ -169,9 +171,18 @@ echo "--------------------------------------------------"
 echo "SecOps"
 echo "--------------------------------------------------"
 
+echo -e " [\033[34m?\033[m] Enable FileVault"
+sudo fdesetup enable
+echo -e " [\033[34m√\033[m] Enable FileVault"
+
+echo -e " [\033[34m?\033[m] Enable firewall"
+sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setglobalstate on
+echo -e " [\033[32m√\033[m] Enable firewall"
+
 echo -e " [\033[34m?\033[m] Disable time machine"
 sudo tmutil disable
 echo -e " [\033[32m√\033[m] Disable time machine"
+
 defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
 echo -e " [\033[32m√\033[m] Prevent Time Machine from prompting to use new hard drives as backup volume"
 
@@ -228,6 +239,9 @@ defaults write com.apple.dock show-process-indicators -bool FALSE
 echo "--------------------------------------------------"
 echo "OTHER"
 echo "--------------------------------------------------"
+
+sudo defaults write /Library/Preferences/com.apple.loginwindow LoginwindowText "I AM SERIOUS"
+echo -e " [\033[32m√\033[m] Set login screen welcome text"
 
 sudo defaults  write /Library/Preferences/com.apple.alf allowdownloadsignedenabled -bool false
 echo -e " [\033[32m√\033[m] Disable automatic signed software whitelisting"
