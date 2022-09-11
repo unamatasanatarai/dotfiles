@@ -225,6 +225,30 @@ echo "--------------------------------------------------"
 echo "OTHER"
 echo "--------------------------------------------------"
 
+sudo defaults  write /Library/Preferences/com.apple.alf allowdownloadsignedenabled -bool false
+echo -e " [\033[32m√\033[m] Disable automatic signed software whitelisting"
+
+sudo defaults write /Library/Preferences/com.apple.alf stealthenabled -bool true
+echo -e " [\033[32m√\033[m] Enable Stealth Mode"
+
+sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.captive.control Active -bool false
+echo -e " [\033[32m√\033[m] Disable captive portal"
+
+sudo defaults write /Library/Preferences/com.apple.alf allowsignedenabled -bool false
+echo -e " [\033[32m√\033[m] Disable automatic software whitelisting"
+
+sudo systemsetup -setremoteappleevents off
+echo -e " [\033[32m√\033[m] Disable Remote Apple Events"
+
+sudo defaults write /Library/Preferences/com.apple.loginwindow DisableConsoleAccess -bool true
+echo -e " [\033[32m√\033[m] Disable console logon from the logon screen"
+
+sudo /usr/libexec/PlistBuddy -c "Set 'AC Power':'Display Sleep Timer' 5" /Library/Preferences/com.apple.PowerManagement.plist
+echo -e " [\033[32m√\033[m] AC display sleep timer"
+
+sudo /usr/libexec/PlistBuddy -c "Set 'Battery Power':'Display Sleep Timer' 2" /Library/Preferences/com.apple.PowerManagement.plist
+echo -e " [\033[32m√\033[m] Battery display sleep timer"
+
 defaults write com.apple.dock mru-spaces -bool false
 echo -e " [\033[32m√\033[m] Don’t automatically rearrange Spaces based on most recent use"
 
