@@ -74,3 +74,4 @@ lalt - f         : yabai -m window --toggle zoom-fullscreen
 lcmd + lalt - f : yabai -m window --toggle native-fullscreen
 
 .load "hotkeysrc"
+.load "local"

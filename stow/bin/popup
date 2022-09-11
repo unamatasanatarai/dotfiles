@@ -6,16 +6,15 @@ SCREEN_WIDTH=$(yabai -m query --displays --display | jq .frame.w*2)
 
 TERM_WIDTH=1280
 
-(("X=SCREEN_WIDTH/2-TERM_WIDTH/2"))
+X=$((SCREEN_WIDTH - TERM_WIDTH >> 2))
 Y=0
 
 alacritty \
-    -t "${TITLE}" \
-    -o window.position.x="${X}" \
-    -o window.position.y="${Y}" \
-    -o window.dimensions.lines=20 \
-    -o window.dimensions.columns=80 \
-    -o window.decorations=none \
-    --working-directory "$(pwd)" \
-    -e "$@"
-
+  -t "$TITLE" \
+  -o window.position.x="$X" \
+  -o window.position.y="$Y" \
+  -o window.dimensions.lines=20 \
+  -o window.dimensions.columns=80 \
+  -o window.decorations=none \
+  --working-directory "$PWD" \
+  -e "$@"
