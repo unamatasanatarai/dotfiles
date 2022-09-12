@@ -38,6 +38,7 @@ brew install --cask --no-quarantine \
   alacritty \
   brave-browser \
   caffeine \
+  itsycal \
   firefox \
   keepassxc \
   keycastr \

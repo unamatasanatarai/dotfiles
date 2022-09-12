@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+input_volume=$(osascript -e "set inputVolume to input volume of (get volume settings)")
+if [ "$input_volume" -lt 20 ]; then
+  osascript -e "set volume input volume 100"
+  osascript -e 'display notification "Microphone turned on" with title "🔊"'
+else
+  osascript -e "set volume input volume 0"
+  osascript -e 'display notification "Microphone turned off" with title "🔇"'
+fi
