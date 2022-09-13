@@ -337,13 +337,19 @@ echo "--------------------------------------------------"
 
 echo -e " [\033[32m√\033[m] restart&reload"
 killall "SystemUIServer" &>/dev/null
+echo -e " [\033[32m√\033[m] SystemUiServer"
 killall "Finder" &>/dev/null
+echo -e " [\033[32m√\033[m] Finder"
 killall "Dock" &>/dev/null
-killall mds &> /dev/null
+echo -e " [\033[32m√\033[m] Dock"
+killall mds &> /dev/null || true
+echo -e " [\033[32m√\033[m] Spotlight - off"
 # Make sure indexing is enabled for the main volume
 sudo mdutil -i on / > /dev/null
+echo -e " [\033[32m√\033[m] Spotlight - on"
 # Rebuild the index from scratch
 sudo mdutil -E / > /dev/null
+echo -e " [\033[32m√\033[m] Spotlight - reindex"
 
 # Starting with Mac OS X Mavericks preferences are cached,
 # so in order for things to get properly set using `PlistBuddy`,
@@ -352,5 +358,6 @@ sudo mdutil -E / > /dev/null
 # https://github.com/alrra/dotfiles/commit/035dda057ddc6013ba21db3d2c30eeb51ba8f200
 
 killall "cfprefsd" &>/dev/null || true
+echo -e " [\033[32m√\033[m] cached preferences"
 
 echo -e "\033[0;34mRestart your machine to ensure settings take effect\033[0m"
