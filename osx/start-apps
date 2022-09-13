@@ -2,8 +2,8 @@
 
 set -euo pipefail
 
-brew services start yabai
-brew services start skhd
+[ "$(brew services info yabai 2>/dev/null)" = "" ] && brew services start yabai || brew services restart yabai
+[ "$(brew services info skhd 2>/dev/null)" = "" ] && brew services start skhd || brew services restart skhd
 
 cd /Applications
 open -a Lulu.app

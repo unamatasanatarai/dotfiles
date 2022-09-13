@@ -49,6 +49,7 @@ brew install --cask --no-quarantine \
   slack \
   sublime-text \
   vlc \
-  vscodium
+  vscodium \
+  xbar
 
 brew cleanup

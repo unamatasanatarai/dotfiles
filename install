@@ -12,15 +12,16 @@ CONFIGS=stow
 # -----------------------------------------------------------------------------
 
 function _remove_default_dotfiles {
+  stow -Dt "$CONFIGS"
   echo '[*] Removing default ~/ configurations ...'
-  files=$(ls -a $CONFIGS)
-  for location in $files; do
+  files=$(ls -a "$CONFIGS")
+  for location in "${files[@]}"; do
     [[ "$location" != "." && "$location" != ".." && "$location" != ".config" ]] && rm -rf ~/"$location"
   done
 
   echo '[*] Removing default ~/.config configurations ...'
-  files=$(ls -a $CONFIGS/.config)
-  for location in $files; do
+  files=$(ls -a "$CONFIGS"/.config)
+  for location in "${files[@]}"; do
     [[ "$location" != "." && "$location" != ".." ]] && rm -rf "$HOME/.config/$location"
   done
 }
@@ -45,7 +46,7 @@ function dotfiles { # Purge configs and reinstall dotfiles
 
 function restow { # Update dotfiles
   echo '[*] Installing/updating dot files...'
-  stow -Rt ~ $CONFIGS
+  stow -Rt ~ "$CONFIGS"
 }
 
 function apps { # Install brew casks and formulas
@@ -86,7 +87,7 @@ function help { # Display this helpful help information
   functions=$(compgen -A function | grep -v "^_")
   display=""
 
-  for f in $functions; do
+  for f in "${functions[@]}"; do
     display+="  $f#"
     display+=$(grep "function $f .*" "${0}" | awk -F '#' '{print $NF}')
     display+=$'\n'

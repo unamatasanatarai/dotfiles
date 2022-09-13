@@ -10,3 +10,5 @@ else
   osascript -e "set volume input volume 0"
   osascript -e 'display notification "Microphone turned off" with title "🔇"'
 fi
+
+open "xbar://app.xbarapp.com/refreshAllPlugins"

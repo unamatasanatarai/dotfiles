@@ -13,7 +13,7 @@ npm i -g bash-language-server \
   prettier \
   js-beautify
 
-cargo install stylua
+cargo install stylua shellharden
 
 brew install lua-language-server shfmt black
 
