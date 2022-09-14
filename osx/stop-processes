@@ -109,6 +109,7 @@ AGENTS+=('com.apple.speech.speechsynthesisd.x86_64')
 AGENTS+=('com.apple.speech.synthesisserver')
 AGENTS+=('com.apple.tipsd')
 
+saybox "Stopping ${#AGENTS[@]} processes"
 processes=$(launchctl list | awk '{ print $3 }')
 
 for agent in "${AGENTS[@]}"; do

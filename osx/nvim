@@ -2,9 +2,13 @@
 
 set -euo pipefail
 
-./$(dirname "$0")/install-brew
+. "$(dirname "$0")"/install-brew
+
+saybox "Install tools used by neovim"
 
 wget -O /tmp/marksman https://github.com/artempyanykh/marksman/releases/download/2022-06-23/marksman-macos && mv /tmp/marksman /usr/local/bin/marksman && chmod +x /usr/local/bin/marksman
+sayok "marksman"
+
 npm i -g bash-language-server \
   pyright \
   typescript typescript-language-server \
@@ -13,8 +17,22 @@ npm i -g bash-language-server \
   prettier \
   js-beautify
 
+sayok "bash-language-server"
+sayok "pyright"
+sayok "typescript typescript-language-server"
+sayok "svelte-language-server"
+sayok "vscode-langservers-extracted"
+sayok "prettier"
+sayok "js-beautify"
+
 cargo install stylua shellharden
 
-brew install lua-language-server shfmt black
+sayok "stylua"
+sayok "shellharden"
 
+brew install lua-language-server shfmt black
 brew link black
+
+sayok "lua-language-server"
+sayok "shfmt"
+sayok "black"

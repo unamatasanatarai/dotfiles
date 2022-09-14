@@ -14,17 +14,20 @@ CONFIGS=stow
 
 function _remove_default_dotfiles {
   stow -Dt "$CONFIGS"
-  echo '[*] Removing default ~/ configurations ...'
+  sayok "unstowed previous stow"
+  sayinfo 'Removing default ~/ configurations ...'
   files=$(ls -a "$CONFIGS")
   for location in "${files[@]}"; do
     [[ "$location" != "." && "$location" != ".." && "$location" != ".config" ]] && rm -rf ~/"$location"
   done
+  sayok 'done: Removing default ~/ configurations ...'
 
-  echo '[*] Removing default ~/.config configurations ...'
+  sayinfo 'Removing default ~/.config configurations ...'
   files=$(ls -a "$CONFIGS"/.config)
   for location in "${files[@]}"; do
     [[ "$location" != "." && "$location" != ".." ]] && rm -rf "$HOME/.config/$location"
   done
+  sayok 'done: Removing default ~/.config configurations ...'
 }
 
 # -----------------------------------------------------------------------------
@@ -32,7 +35,7 @@ function _remove_default_dotfiles {
 # -----------------------------------------------------------------------------
 
 function dotfiles { # Purge configs and reinstall dotfiles
-  echo -e "\033[1;31mLAST CHANCE!\033[0m"
+  saybox "!!! LAST CHANCE !!!"
   echo "your spotlight_commands will be deleted"
   echo "<ctrl>+c to cancel this operation"
   echo "or type AGREE to continue"
@@ -41,14 +44,15 @@ function dotfiles { # Purge configs and reinstall dotfiles
     _remove_default_dotfiles
     restow
   else
-    echo "Aborting..."
+    sayfail "Aborting..."
   fi
 }
 
 function restow { # Update dotfiles
   env
-  echo '[*] Installing/updating dot files...'
+  saybox "Installing dotfiles"
   stow -Rt ~ "$CONFIGS"
+  sayok 'Installed dotfiles'
 }
 
 function apps { # Install brew casks and formulas
@@ -61,6 +65,7 @@ function defaults { # Set sensible macos defaults
 }
 
 function fonts { # Install fonts
+  saybox "Install fonts"
   cp ./fonts/source-code-pro/*.ttf /Library/Fonts/
 }
 
@@ -77,6 +82,9 @@ function env { # Setup the environment, create important directories
 }
 
 function fresh { # Do everything at once. Please run this only once ;)
+  saybox "Let's setup a fresh environment, shall we!"
+
+  # the order matters
   defaults
   dotfiles
   fonts

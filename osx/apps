@@ -2,7 +2,10 @@
 
 set -euo pipefail
 
-./$(dirname "$0")/install-brew
+. "$(dirname "$0")"/_functions
+. "$(dirname "$0")"/install-brew
+
+saybox "Installing tools"
 
 brew install \
   ack \
@@ -34,6 +37,8 @@ brew install \
   yarn \
   z
 
+saybox "Installing casks"
+
 brew install --cask --no-quarantine \
   alacritty \
   brave-browser \
@@ -52,4 +57,5 @@ brew install --cask --no-quarantine \
   vscodium \
   xbar
 
+saybox "Cleanup"
 brew cleanup

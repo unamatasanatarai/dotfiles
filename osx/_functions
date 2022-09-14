@@ -44,11 +44,18 @@ function sayask {
   echo -e " [\033[34m?\033[m] $1"
 }
 
+function sayinfo {
+  echo -e " [\033[34m#\033[m] $1"
+}
+
 function saybox {
   local text="$1"
   local len=${#text}
   len=$((len + 8))
   local hl
+  # autoformatter might break the line below
+  # here's the correct one:
+  # hl=$(printf "+"; printf '=%.0s' $(seq 1 "$len"); printf "+")
   hl=$(printf "+"; printf '=%.0s' $(seq 1 "$len"); printf "+")
   echo ""
   # top line

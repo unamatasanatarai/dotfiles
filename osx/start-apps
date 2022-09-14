@@ -1,10 +1,21 @@
 #!/usr/bin/env bash
 
 set -euo pipefail
+. "$(dirname "$0")"/_functions
+. "$(dirname "$0")"/install-brew
 
+saybox "Launching appliactions"
 [ "$(brew services info yabai 2>/dev/null)" = "" ] && brew services start yabai || brew services restart yabai
+sayok "started yabai"
 [ "$(brew services info skhd 2>/dev/null)" = "" ] && brew services start skhd || brew services restart skhd
+sayok "started skhd"
 
 cd /Applications
 open -a Lulu.app
+sayok "started LuLu"
 
+open -a itsycal.app
+sayok "started itsycal"
+
+open -a xbar.app
+sayok "started xbar"

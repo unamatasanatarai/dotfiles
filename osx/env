@@ -5,14 +5,17 @@ set -euo pipefail
 . "$(dirname "$0")"/_functions
 . "$(dirname "$0")"/../stow/.config/bash/xdg
 
+saybox "Create mandatory directories"
+
+local_bin="$HOME"/.local/bin
+
 # Create directories if needed
-for var in XDG_CONFIG_HOME XDG_DATA_HOME XDG_STATE_HOME XDG_CACHE_HOME; do
+for var in XDG_CONFIG_HOME XDG_DATA_HOME XDG_STATE_HOME XDG_CACHE_HOME local_bin; do
   dir=${!var}
   if [ ! -d "$dir" ]; then
     mkdir -p "$dir"
     sayok "Created: $dir"
+  else
+    sayfail "exists, skip!: $dir"
   fi
 done
-
-mkdir -p "$HOME"/.local/bin
-sayok "Created: $HOME/.local/bin"
