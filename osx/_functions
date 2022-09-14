@@ -51,12 +51,12 @@ function sayinfo {
 function saybox {
   local text="$1"
   local len=${#text}
-  len=$((len + 8))
+  len=$((len + 6))
   local hl
   # autoformatter might break the line below
   # here's the correct one:
   # hl=$(printf "+"; printf '=%.0s' $(seq 1 "$len"); printf "+")
-  hl=$(printf "+"; printf '=%.0s' $(seq 1 "$len"); printf "+")
+  hl=$(printf "+ "; printf -- '-%.0s' $(seq 1 "$len"); printf " +")
   echo ""
   # top line
   echo "$hl"
