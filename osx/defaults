@@ -4,12 +4,14 @@ set -euo pipefail
 
 . "$(dirname "$0")"/_functions
 
+saybox "Let's go!"
+
 _COMPUTER_NAME=$(scutil --get ComputerName)
-echo -n "Set computer name [Enclave]: "
+echo -n "Set computer name [$_COMPUTER_NAME]: "
 read -r COMPUTER_NAME
 
 if [ "$COMPUTER_NAME" = "" ]; then
-  COMPUTER_NAME=_COMPUTER_NAME
+  COMPUTER_NAME=$_COMPUTER_NAME
 fi
 
 # --------------------------------------------------
@@ -17,9 +19,6 @@ saybox "Prepare env"
 
 sayok "Close preferences window"
 osascript -e 'tell application "System Preferences" to quit'
-
-sayok "Ask for the administrator password upfront"
-sudo -v
 
 # --------------------------------------------------
 saybox "Set ComputerName"
@@ -67,7 +66,7 @@ defaults write com.apple.finder ShowHardDrivesOnDesktop -bool false
 defaults write com.apple.finder NewWindowTarget -string PfHm
 defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}"
 defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
-defaults write com.apple.finder QuitMenuItem -bool true && killall Finder
+defaults write com.apple.finder QuitMenuItem -bool true
 sayok "Finder fine tuning"
 
 defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
@@ -323,20 +322,20 @@ sayok "Disable spotlight bloat"
 # --------------------------------------------------
 saybox "Finishup, cleanup and restart"
 
-killall "SystemUIServer" >/dev/null 2>&1
+killall "SystemUIServer" >/dev/null 2>&1 || true
 sayok "kill: SystemUiServer"
-killall "Finder" >/dev/null 2>&1
+killall "Finder" >/dev/null 2>&1 || true
 sayok "kill: Finder"
-killall "Dock" >/dev/null 2>&1
+killall "Dock" >/dev/null 2>&1 || true
 sayok "kill: Dock"
-killall mds >/dev/null 2>&1
-sayok "kill: Spotlight - off"
+killall mds >/dev/null 2>&1 || true
+sayok "kill: Spotlight"
 # Make sure indexing is enabled for the main volume
-sudo mdutil -i on / >/dev/null 2>&1
-sayok "kill: Spotlight - on"
+sudo mdutil -i on / >/dev/null 2>&1 || true
+sayok "revive: Spotlight"
 # Rebuild the index from scratch
-sudo mdutil -E / >/dev/null 2>&1
-sayok "kill: Spotlight - reindex"
+sudo mdutil -E / >/dev/null 2>&1 || true
+sayok "Spotlight - reindex"
 
 # Starting with Mac OS X Mavericks preferences are cached,
 # so in order for things to get properly set using `PlistBuddy`,
@@ -344,7 +343,8 @@ sayok "kill: Spotlight - reindex"
 #
 # https://github.com/alrra/dotfiles/commit/035dda057ddc6013ba21db3d2c30eeb51ba8f200
 
-killall "cfprefsd" >/dev/null 2>&1
+killall "cfprefsd" >/dev/null 2>&1 || true
 sayok "kill: cached preferences"
 
-echo -e "\033[0;34mRestart your machine to ensure settings take effect\033[0m"
+saybox "You probably want to restart your machine now...."
+sayok "all done!"

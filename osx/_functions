@@ -50,10 +50,11 @@ function saybox {
   len=$((len + 8))
   local hl
   hl=$(printf "+"; printf '=%.0s' $(seq 1 "$len"); printf "+")
+  echo ""
   # top line
   echo "$hl"
   #content line
-  echo "|    $text    |"
+  echo "|    ${cyan}$text${reset}    |"
   #bottom line
   echo "$hl"
 }
