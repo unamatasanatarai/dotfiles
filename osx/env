@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+. "$(dirname "$0")"/_functions
+. "$(dirname "$0")"/../stow/.config/bash/xdg
+
+# Create directories if needed
+for var in XDG_CONFIG_HOME XDG_DATA_HOME XDG_STATE_HOME XDG_CACHE_HOME; do
+  dir=${!var}
+  if [ ! -d "$dir" ]; then
+    mkdir -p "$dir"
+    sayok "Created: $dir"
+  fi
+done
+
+mkdir -p "$HOME"/.local/bin
+sayok "Created: $HOME/.local/bin"
