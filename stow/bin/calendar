@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+tput civis
+month=$(date "+%m" | sed -E 's/^0//')
+year=$(date "+%Y")
+
+tmonth=$month
+tyear=$year
+
+function showcal {
+  clear
+  cal "$1" "$2"
+  echo -n "?:h/l/t/q"
+}
+
+showcal "$month" "$year"
+while read -s -n1 -r key; do
+  case $key in
+    q|Q) tput cnorm; exit 0 ;;
+    h|H) 
+      month=$(( month - 1 )) 
+      [ "$month" -lt 1 ] && month=12 && year=$((year - 1))
+      showcal "$month" "$year"
+      ;;
+    l|L) 
+      month=$(( month + 1 ))
+      [ "$month" -gt 12 ] && month=1 && year=$((year + 1))
+      showcal "$month" "$year"
+      ;;
+    t|T)
+      month=$tmonth
+      year=$tyear
+      showcal "$month" "$year"
+      ;;
+    *) ;;
+  esac
+done

@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+~/bin/popup -c ~/bin/calendar -w22 -y0 -h10

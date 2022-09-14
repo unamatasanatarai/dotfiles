@@ -47,8 +47,6 @@ if [ "$Y" == -1 ]; then
   Y=$((SH - TH >> 1))
 fi
 
-echo $H $Y $TH $SH
-
 alacritty \
   -t "${TITLE}" \
   -o window.position.x="${X}" \

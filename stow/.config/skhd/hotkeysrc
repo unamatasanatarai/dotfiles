@@ -1,5 +1,5 @@
 lalt + lctrl - t : open -na /Applications/Alacritty.app
-lalt - space : ~/bin/popup -c ~/bin/spotlight -y 0
+lalt - space : ~/bin/popup -c ~/bin/spotlight -y0 -w40 -h10
 lalt + lcmd - n : ~/bin/spotlight_commands/notes
 lalt + lctrl - s : yabai -m window --focus $(yabai -m query --windows | jq -r 'map(select(.app=="Slack")) | .[0] | .id')
 lalt + lctrl - m : ~/bin/micm
