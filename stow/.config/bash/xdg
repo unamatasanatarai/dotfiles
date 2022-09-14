@@ -6,12 +6,3 @@ export XDG_DATA_HOME=${XDG_DATA_HOME:=$HOME/.local/share}
 export XDG_STATE_HOME=${XDG_STATE_HOME:=$HOME/.local/state}
 export XDG_DOWNLOAD_DIR=${XDG_DOWNLOAD_DIR:=$HOME/Downloads}
 export XDG_DESKTOP_DIR=${XDG_DESKTOP_DIR:=$HOME/Desktop}
-
-# Create directories if needed
-for var in XDG_CONFIG_HOME XDG_DATA_HOME XDG_STATE_HOME XDG_CACHE_HOME; do
-  dir=${!var}
-  if [ ! -d "${dir}" ]; then
-    mkdir -p "${dir}"
-  fi
-done
-

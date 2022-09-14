@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-set -eo pipefail
+set -euo pipefail
+
 # -----------------------------------------------------------------------------
 # Global variables
 # -----------------------------------------------------------------------------
@@ -45,6 +46,7 @@ function dotfiles { # Purge configs and reinstall dotfiles
 }
 
 function restow { # Update dotfiles
+  env
   echo '[*] Installing/updating dot files...'
   stow -Rt ~ "$CONFIGS"
 }
@@ -70,6 +72,10 @@ function stop-processes { # Stop or `install stop-processes --unload` processes
   ./osx/stop-processes "$@"
 }
 
+function env { # Setup the environment, create important directories
+  ./osx/env
+}
+
 function fresh { # Do everything at once. Please run this only once ;)
   defaults
   dotfiles
@@ -82,18 +88,13 @@ function fresh { # Do everything at once. Please run this only once ;)
 # -----------------------------------------------------------------------------
 
 function help { # Display this helpful help information
-  printf "%s <task> [args]\n\nTasks:\n" "${0}"
-
-  functions=$(compgen -A function | grep -v "^_")
-  display=""
-
-  for f in "${functions[@]}"; do
-    display+="  $f#"
-    display+=$(grep "function $f .*" "${0}" | awk -F '#' '{print $NF}')
-    display+=$'\n'
-  done
-
-  echo "$display" | column -t -s "#"
+  local functions
+  functions=$(grep -E "^function [^_]*?$" "$0" | sed -E "s/ *{ *# */#/g" | sed -E "s/^function /   /g" | sort )
+  echo "Usage: $0 <task> [args]"
+  echo ""
+  echo "Tasks:"
+  echo "$functions" | column -t -s '#'
+  echo ""
 }
 
 "${@:-help}"
