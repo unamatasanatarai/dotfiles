@@ -2,4 +2,5 @@
 
 set -euo pipefail
 
-~/bin/popup -c ~/bin/calendar -w22 -y0 -h10
+open -na ~/bin/popup --args -c ~/bin/calendar -w22 -y0 -h10
+
