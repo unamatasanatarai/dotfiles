@@ -6,7 +6,9 @@ set -euo pipefail
 
 saybox "Install tools used by neovim"
 
-wget -O /tmp/marksman https://github.com/artempyanykh/marksman/releases/download/2022-06-23/marksman-macos && mv /tmp/marksman /usr/local/bin/marksman && chmod +x /usr/local/bin/marksman
+wget -O /tmp/marksman https://github.com/artempyanykh/marksman/releases/download/2022-06-23/marksman-macos
+mv /tmp/marksman ~/.local/bin/marksman
+chmod u+x ~/.local/bin/marksman
 sayok "marksman"
 
 npm i -g bash-language-server \
