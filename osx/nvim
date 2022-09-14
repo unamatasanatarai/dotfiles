@@ -11,13 +11,14 @@ mv /tmp/marksman ~/.local/bin/marksman
 chmod u+x ~/.local/bin/marksman
 sayok "marksman"
 
-npm i -g bash-language-server \
-  pyright \
-  typescript typescript-language-server \
-  svelte-language-server \
-  vscode-langservers-extracted \
+npm i -g \
+  bash-language-server \
+  js-beautify \
   prettier \
-  js-beautify
+  pyright \
+  svelte-language-server \
+  typescript typescript-language-server \
+  vscode-langservers-extracted \
 
 sayok "bash-language-server"
 sayok "pyright"
