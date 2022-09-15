@@ -41,7 +41,7 @@ yabai -m rule --add label="Monosnap" app="^Monosnap$"  manage=off
 yabai -m rule --add label="Slack calls" app="Slack" title="Slack \| Slack call.*" manage=off
 yabai -m rule --add label="Software Update" title="Software Update" manage=off
 yabai -m rule --add label="System Preferences" app="^System Preferences$" title=".*" manage=off
-yabai -m rule --add label="Teminal Spotlight" app="^Alacritty$" title="termspotlight" manage=off
+yabai -m rule --add label="Terminal Popup" app="^Alacritty$" title="TermPopup" manage=off
 
 
 echo "yabai configuration loaded.."

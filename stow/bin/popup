@@ -2,29 +2,54 @@
 
 set -euo pipefail
 
+# I think I must double the numbers because it is retina. but I don't know
+# it works and I don't feel like googling
+# but here's a command that might become useful
+# after you connect to a non-retina display
+# system_profiler SPDisplaysDataType | rg Resolution
+
+# dictionary
+_center="center"
+_right="right"
+_bottom="bottom"
+TITLE="TermPopup"
+
+# defaults
+PADDING=20
 W=80
 H=20
-X=-1
-Y=-1
-cmd="echo 'read help'"
+X=$_center
+Y=$_center
 
-while getopts "w:h:x:y:c:" o; do
+cmd='read'
+
+function help {
+  echo "usage ""$(basename "$0") [ -w 80 ] [ -h 20 ]
+            [ -x center ] [ -y center ]
+            [ -c command ] [ -? ]
+
+Options:
+  -x    X position on screen. Possible values: center | right | number
+  -y    Y position on screen. Possible values: center | bottom | number
+  -w    Width of the popup in Characters
+  -h    Height of the popup in Characters
+  -c    Command to run in the popup
+"
+}
+
+while getopts "w:h:x:y:c:?" o; do
   case "$o" in
-  w) W=${OPTARG} ;;
-  h) H=${OPTARG} ;;
-  x) X=${OPTARG} ;;
-  y) Y=${OPTARG} ;;
-  c) cmd=${OPTARG} ;;
-  *)
-    echo "usage "$(basename "$0")" [ -w 80 ] [ -h 20 ]
-            [ -x 0 ] [ -y 0 ]
-            [ c command ]"
-    exit 2
-    ;;
+    w) W=${OPTARG} ;;
+    h) H=${OPTARG} ;;
+    x) X=${OPTARG} ;;
+    y) Y=${OPTARG} ;;
+    c) cmd=${OPTARG} ;;
+    ?) help; exit 2 ;;
+    *) help
+      exit 2
+      ;;
   esac
 done
-
-TITLE=termspotlight
 
 # screen size
 SW=$(yabai -m query --displays --display | jq .frame.w*2)
@@ -33,29 +58,40 @@ SH=$(yabai -m query --displays --display | jq .frame.h*2)
 # term size
 # 20 is now the padding
 # todo move the 20 into a variable (it's 20 padding top & bottom so 40 * 2, cause retina?
-TW=$((16 * W + 80))
+charw=16
+charh=32
+TW=$((charw * W + 4 * PADDING))
 # see alacritty.yml font>offset>y (12?)
 # include this _line-height_ in your math
 # TH=$( echo "(32+12) * $H" | bc )
-TH=$((32 * H + 80))
+TH=$((charh * H + 4 * PADDING))
 
 # term pos
-if [ "$X" == -1 ]; then
+if [ "$X" == "$_center" ]; then
   X=$((SW - TW >> 1))
+elif [ "$X" == "$_right" ]; then
+  X=$((SW - TW))
+else
+  X=$((X << 1))
 fi
-if [ "$Y" == -1 ]; then
+
+if [ "$Y" == "$_center" ]; then
   Y=$((SH - TH >> 1))
+elif [ "$Y" == "$_bottom" ]; then
+  Y=$((SH - TH))
+else
+  Y=$((Y << 1))
 fi
 
 alacritty \
-  -t "${TITLE}" \
-  -o window.position.x="${X}" \
-  -o window.position.y="${Y}" \
-  -o window.dimensions.lines="${H}" \
-  -o window.dimensions.columns="${W}" \
+  -t "$TITLE" \
+  -o window.position.x="$X" \
+  -o window.position.y="$Y" \
+  -o window.dimensions.lines="$H" \
+  -o window.dimensions.columns="$W" \
   -o window.decorations=none \
-  -o window.padding.x=20 \
-  -o window.padding.y=20 \
+  -o window.padding.x="$PADDING" \
+  -o window.padding.y="$PADDING" \
   -o font.offset.y=0 \
-  --working-directory "$(pwd)" \
+  --working-directory "$PWD" \
   -e "$cmd"
