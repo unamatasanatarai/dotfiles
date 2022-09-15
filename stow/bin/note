@@ -9,4 +9,5 @@ if [ $# -gt 0 ]; then
   echo "I added your note to ${notes_file}"
   exit 0
 fi
+cd "$(dirname "$notes_file")"
 nvim -c "norm Gzz" "$notes_file"

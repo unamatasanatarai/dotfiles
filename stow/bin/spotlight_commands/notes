@@ -2,4 +2,4 @@
 
 set -euo pipefail
 
-open -na alacritty --args -e nvim -c "norm Gzz" "$HOME/Documents/notes.md"
+open -na alacritty --args -e nvim -c "norm Gzz" "$HOME/Documents/notes.md" -c ":cd ~/Documents"
