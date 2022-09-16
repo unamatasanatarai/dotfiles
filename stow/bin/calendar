@@ -11,13 +11,13 @@ tyear=$year
 function showcal {
   clear
   cal "$1" "$2"
-  echo -n "?:h/l/t/q"
+  echo -n "?:h/l/t/q|esc"
 }
 
 showcal "$month" "$year"
 while read -s -n1 -r key; do
   case $key in
-    q|Q) tput cnorm; exit 0 ;;
+    q|Q|$'\e') tput cnorm; exit 0 ;;
     h|H) 
       month=$(( month - 1 )) 
       [ "$month" -lt 1 ] && month=12 && year=$((year - 1))
