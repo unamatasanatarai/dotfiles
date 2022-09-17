@@ -1,0 +1,116 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+BLS_CACHE_PATH="$HOME/.local/share/bls"
+BLS_CACHE_CASKS="${BLS_CACHE_PATH}/casks.json"
+BLS_CACHE_FORMULA="${BLS_CACHE_PATH}/formula.json"
+BLS_CACHE_OFFSET="7 days ago"
+
+# ------------------------------------------------------------
+# CACHING
+# ------------------------------------------------------------
+function _validateCache {
+  # check modification timestamps
+  if [ ! -f "$BLS_CACHE_CASKS" ] || [[ ! $(find "$BLS_CACHE_CASKS" -newermt "$BLS_CACHE_OFFSET") ]] 
+  then
+    echo "Cache outdated. Updating..."
+    _updateCache
+  fi
+}
+
+function _updateCache {
+  # create cache dir
+  [ -d "$BLS_CACHE_PATH" ] || mkdir -p "$BLS_CACHE_PATH"
+  # cache important files
+  curl -s https://formulae.brew.sh/api/cask.json > "$BLS_CACHE_CASKS"
+  curl -s https://formulae.brew.sh/api/formula.json > "$BLS_CACHE_FORMULA"
+}
+
+# ------------------------------------------------------------
+# PRIVATE
+# ------------------------------------------------------------
+function saybox {
+  local text="$1"
+  local len=${#text}
+  len=$((len + 6))
+  local hl
+  # autoformatter might break the line below
+  # here's the correct one:
+  # hl=$(printf "+"; printf '=%.0s' $(seq 1 "$len"); printf "+")
+  hl=$(printf "+ "; printf -- '-%.0s' $(seq 1 "$len"); printf " +")
+  # top line
+  echo "$hl"
+  #content line
+  echo -e "|    \e[1;36m$text\e[0m    |"
+  #bottom line
+  echo "$hl"
+}
+
+function _fzf_preview {
+  saybox "$1"
+  token=$(jq '.[] | select(.name[0]=="'"$1"'") | .token' <"$BLS_CACHE_CASKS" | sed -E 's/"//g')
+  brew info --cask "$token"
+  exit 0
+}
+
+function _fzf_preview_formula {
+  saybox "$1"
+  brew info "$1"
+  exit 0
+}
+
+# ------------------------------------------------------------
+# PUBLIC interfaces
+# ------------------------------------------------------------
+
+
+function _list_casks {
+  local list
+  list=$(jq '.[] | .name[0]' <"$BLS_CACHE_CASKS" | sed -E 's/"//g')
+
+  PICK=$(echo "$list" | fzf --preview="${BASH_SOURCE[0]} __preview {}")
+
+  echo "$PICK"
+}
+
+function _list_formulae {
+  local list
+  list=$(jq '.[] | .full_name' <"$BLS_CACHE_FORMULA" | sed -E 's/"//g')
+
+  PICK=$(echo "$list" | fzf --preview="${BASH_SOURCE[0]} __preview_formula {}")
+
+  echo "$PICK"
+}
+
+# ------------------------------------------------------------
+# ROUTER
+# ------------------------------------------------------------
+
+_validateCache
+
+while [[ -n ${1:-help} ]]; do
+  case ${1:-help} in
+    --update )
+      _updateCache
+      shift
+      ;;
+    __preview_formula )
+      shift
+      _fzf_preview_formula "$@"
+      ;;
+    __preview )
+      shift
+      _fzf_preview "$@"
+      ;;
+    --cask|-c )
+      _list_casks
+      shift
+      ;;
+    *)
+      _list_formulae
+      shift
+      ;;
+  esac
+  shift
+done

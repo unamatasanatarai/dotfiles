@@ -55,7 +55,7 @@ function saybox {
   local hl
   # autoformatter might break the line below
   # here's the correct one:
-  # hl=$(printf "+"; printf '=%.0s' $(seq 1 "$len"); printf "+")
+  # hl=$(printf "+ "; printf -- '-%.0s' $(seq 1 "$len"); printf " +")
   hl=$(printf "+ "; printf -- '-%.0s' $(seq 1 "$len"); printf " +")
   echo ""
   # top line
