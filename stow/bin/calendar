@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 set -euo pipefail
+
 tput civis
 month=$(date "+%m" | sed -E 's/^0//')
 year=$(date "+%Y")
