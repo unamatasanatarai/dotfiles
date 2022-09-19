@@ -67,7 +67,7 @@ isn't it d'best?
 
 ### Sensible macos defaults
 
-see most up2date information in [/blob/master/osx/defaults](/blob/master/osx/defaults)
+see most up2date information in [/osx/defaults](/osx/defaults)
 
 - Close preferences window
 - Set computer name (as done via System Preferences → Sharing)
