@@ -43,3 +43,7 @@ sayok "black"
 saybox "Force plugins installation"
 nvim +PackerSync +qall
 sayok "PackerSync has run"
+
+saybox "Force install LspServers"
+nvim +LspInstallServers
+sayok "PackeLspInstallServers has completed"
