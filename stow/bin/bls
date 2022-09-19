@@ -2,6 +2,7 @@
 
 set -euo pipefail
 
+VERSION="1.0"
 BLS_CACHE_PATH="$HOME/.local/share/bls"
 BLS_CACHE_CASKS="${BLS_CACHE_PATH}/casks.json"
 BLS_CACHE_FORMULA="${BLS_CACHE_PATH}/formula.json"
@@ -15,101 +16,163 @@ function _validateCache {
   if [ ! -f "$BLS_CACHE_CASKS" ] || [[ ! $(find "$BLS_CACHE_CASKS" -newermt "$BLS_CACHE_OFFSET") ]] 
   then
     echo "Cache outdated. Updating..."
-    _updateCache
+    updateCache
   fi
 }
 
-function _updateCache {
+function updateCache {
   # create cache dir
   [ -d "$BLS_CACHE_PATH" ] || mkdir -p "$BLS_CACHE_PATH"
   # cache important files
+  echo -en " \e[1;34m[+]\e[0m Downloading casks definitions"
   curl -s https://formulae.brew.sh/api/cask.json > "$BLS_CACHE_CASKS"
+  echo -e " \e[1;32m[√]\e[0m done"
+  echo -en " \e[1;34m[+]\e[0m Downloading formulae definitions"
   curl -s https://formulae.brew.sh/api/formula.json > "$BLS_CACHE_FORMULA"
+  echo -e " \e[1;32m[√]\e[0m done"
 }
 
 # ------------------------------------------------------------
 # PRIVATE
 # ------------------------------------------------------------
+
 function saybox {
-  local text="$1"
-  local len=${#text}
-  len=$((len + 6))
+  local text
+  local len
   local hl
-  # autoformatter might break the line below
-  # here's the correct one:
-  # hl=$(printf "+"; printf '=%.0s' $(seq 1 "$len"); printf "+")
-  hl=$(printf "+ "; printf -- '-%.0s' $(seq 1 "$len"); printf " +")
-  # top line
+  text="$1"
+  len=$((${#text} + 6))
+  seq=$(for (( i=1; i<=len; i++)); do echo -n "-"; done)
+  hl="+ $seq +"
   echo "$hl"
-  #content line
   echo -e "|    \e[1;36m$text\e[0m    |"
-  #bottom line
   echo "$hl"
 }
 
-function _fzf_preview {
-  saybox "$1"
-  token=$(jq '.[] | select(.name[0]=="'"$1"'") | .token' <"$BLS_CACHE_CASKS" | sed -E 's/"//g')
-  brew info --cask "$token"
-  exit 0
+function __is_it_cask {
+  if [[ "$1" == *" --cask"* ]]; then
+    echo "yes"
+  else
+    echo "no"
+  fi
 }
 
-function _fzf_preview_formula {
-  saybox "$1"
-  brew info "$1"
-  exit 0
+function __strip_internal_cask {
+  echo "$1" | sed -E 's/ \-\-cask//g'
+}
+
+function __name_to_token {
+  if [[ "$1" == *" --cask"* ]]; then
+    name=$(__strip_internal_cask "$1")
+    jq '.[] | select(.name[0]=="'"$name"'") | .token' <"$BLS_CACHE_CASKS" | sed -E 's/"//g'
+  else
+    echo "$1"
+  fi
+}
+
+function fzf_preview {
+  local name
+  local token
+  name="$2"
+  token=$name
+  saybox "$name"
+  if [[ "$name" == *" --cask"* ]]; then
+    token=$(__name_to_token "$name")
+    brew info --cask "$token"
+  else
+    brew info "$name"
+  fi
+}
+
+function __list_formulae {
+  jq '.[] | .full_name' <"$BLS_CACHE_FORMULA" | sed -E 's/"//g'
+}
+
+function __list_casks {
+  local marker
+  marker=${1:-""}
+  jq '.[] | .name[0]' <"$BLS_CACHE_CASKS" | sed -E 's/"//g' | sed -E "s/$/ $marker/g"
 }
 
 # ------------------------------------------------------------
 # PUBLIC interfaces
 # ------------------------------------------------------------
-
-
-function _list_casks {
+function list_all {
+  local casks
+  local formulae
   local list
-  list=$(jq '.[] | .name[0]' <"$BLS_CACHE_CASKS" | sed -E 's/"//g')
+  casks=$(__list_casks "--cask")
+  formulae=$(__list_formulae)
+  list=("${casks[@]}" "${formulae[@]}")
 
-  PICK=$(echo "$list" | fzf --preview="${BASH_SOURCE[0]} __preview {}")
+  query=${1:-""}
 
-  echo "$PICK"
+  picked=$(echo "${list[@]}" | fzf -q "$query" --preview="${BASH_SOURCE[0]} --preview {}")
+  name=$(__strip_internal_cask "$picked")
+  token=$picked
+  question="Install '$name'? "
+  if [ "$(__is_it_cask "$picked")" == "yes" ]; then
+    token=$(__name_to_token "$picked")
+    question="Install cask '$name'? "
+  fi
+  echo -n "$question [N/y] "
+  read -rsn1 resp
+  echo ""
+  if [ "$resp" == "y" ] || [ "$resp" == "Y" ]; then
+    echo "Installing '$token'"
+    brew install "$token"
+  fi
 }
 
-function _list_formulae {
-  local list
-  list=$(jq '.[] | .full_name' <"$BLS_CACHE_FORMULA" | sed -E 's/"//g')
+function help {
+  echo "$(basename "$0") <options> name
+version $VERSION
 
-  PICK=$(echo "$list" | fzf --preview="${BASH_SOURCE[0]} __preview_formula {}")
+Options:
+  --help     This help message
+  --versoin  Display the version number (it is $VERSION)
+  --update   Force update the local cask and formula repositories
 
-  echo "$PICK"
+Examples:
+  Force update and pre-fill ncd in the query
+  $(basename "$0") --update ncd
+"
 }
-
 # ------------------------------------------------------------
 # ROUTER
 # ------------------------------------------------------------
 
 _validateCache
 
-while [[ -n ${1:-help} ]]; do
-  case ${1:-help} in
+while [[ -n ${1:--help} ]]; do
+  case ${1:--help} in
     --update )
-      _updateCache
+      updateCache
       shift
+      list_all "$@"
+      exit 0
       ;;
-    __preview_formula )
+
+    --preview )
+      fzf_preview "$@"
       shift
-      _fzf_preview_formula "$@"
+      exit 0
       ;;
-    __preview )
-      shift
-      _fzf_preview "$@"
+
+    --version )
+      echo "version: $VERSION"
+      exit 0
       ;;
-    --cask|-c )
-      _list_casks
-      shift
+
+    --help )
+      help
+      exit 0
       ;;
+
     *)
-      _list_formulae
+      list_all "$@"
       shift
+      exit 0
       ;;
   esac
   shift
