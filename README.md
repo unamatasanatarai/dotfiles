@@ -17,7 +17,6 @@ You can customize available options in ~/bin/spotlight_commands/
 
 ### Productivity utilities
 
-
 - `bls` : interactive brew list all available formulae and casks
 - `buu` : brew update & upgrade
 - `calendar` : interactive _cal_ implementation
@@ -38,6 +37,33 @@ You can customize available options in ~/bin/spotlight_commands/
 ### Window management
 
 Yabai + skhd = :hear:
+
+### Firewall
+
+Lulu installed by default
+
+### Neovim
+
+isn't it d'best?
+
+### Apps
+
+- alacritty
+- brave-browser
+- caffeine
+- itsycal
+- firefox
+- keepassxc
+- keycastr
+- losslesscut
+- lulu
+- openoffice
+- shottr
+- slack
+- sublime-text
+- vlc
+- vscodium
+- xbar
 
 ### Sensible macos defaults
 
