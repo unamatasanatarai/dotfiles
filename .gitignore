@@ -1,4 +1,8 @@
+# Compiled Python files
+*.pyc
+# vim swp files
 *.swp
+
 # Created by https://www.gitignore.io/api/macos
 
 ### macOS ###
@@ -6,12 +10,14 @@
 .DS_Store
 .AppleDouble
 .LSOverride
+Desktop.ini
 
 # Icon must end with two \r
 Icon
 
 # Thumbnails
 ._*
+Thumbs.db
 
 # Files that might appear in the root of a volume
 .DocumentRevisions-V100
