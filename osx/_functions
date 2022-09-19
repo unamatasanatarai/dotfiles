@@ -49,19 +49,14 @@ function sayinfo {
 }
 
 function saybox {
-  local text="$1"
-  local len=${#text}
-  len=$((len + 6))
+  local text
+  local len
   local hl
-  # autoformatter might break the line below
-  # here's the correct one:
-  # hl=$(printf "+ "; printf -- '-%.0s' $(seq 1 "$len"); printf " +")
-  hl=$(printf "+ "; printf -- '-%.0s' $(seq 1 "$len"); printf " +")
-  echo ""
-  # top line
+  text="$1"
+  len=$((${#text} + 6))
+  seq=$(for (( i=1; i<=len; i++)); do echo -n "-"; done)
+  hl="+ $seq +"
   echo "$hl"
-  #content line
-  echo "|    ${cyan}$text${reset}    |"
-  #bottom line
+  echo -e "|    \e[1;36m$text\e[0m    |"
   echo "$hl"
 }
