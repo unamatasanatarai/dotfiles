@@ -19,3 +19,6 @@ sayok "started itsycal"
 
 open -a xbar.app
 sayok "started xbar"
+
+open -a "Hidden Bar.app"
+sayok "started hiddenbar"
