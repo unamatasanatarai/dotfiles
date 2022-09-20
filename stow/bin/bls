@@ -97,6 +97,7 @@ function __list_casks {
 # ------------------------------------------------------------
 # PUBLIC interfaces
 # ------------------------------------------------------------
+
 function list_all {
   local casks
   local formulae
@@ -107,7 +108,27 @@ function list_all {
 
   query=${1:-""}
 
-  picked=$(echo "${list[@]}" | fzf -q "$query" --preview="${BASH_SOURCE[0]} --preview {}")
+  echo "${list[@]}" | \
+    fzf -q "$query" \
+    --header "CTRL+i to install" \
+    --prompt "brew >> " \
+    --bind "ctrl-i:select+execute:bls --install {}" \
+    --preview="${BASH_SOURCE[0]} --preview {}"
+}
+
+function __install {
+  picked="$*"
+  name=$(__strip_internal_cask "$picked")
+  token=$picked
+  if [ "$(__is_it_cask "$picked")" == "yes" ]; then
+    token=$(__name_to_token "$picked")
+  fi
+  saybox "Installing '$token'"
+  brew install "$token"
+}
+
+function __install_questions {
+  picked="$*"
   name=$(__strip_internal_cask "$picked")
   token=$picked
   question="Install '$name'? "
@@ -158,6 +179,13 @@ while [[ -n ${1:--help} ]]; do
       shift
       exit 0
       ;;
+
+    --install )
+      shift
+      __install "$@"
+      exit 0
+      ;;
+
 
     --version )
       echo "version: $VERSION"
