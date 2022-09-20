@@ -17,19 +17,19 @@ CONFIGS=stow
 function _remove_default_dotfiles {
   stow -Dt "$CONFIGS"
   sayok "unstowed previous stow"
-  sayinfo 'Removing default ~/ configurations ...'
+  sayinfo "Removing default ~/ configurations ..."
   files=$(ls -a "$CONFIGS")
   for location in "${files[@]}"; do
     [[ "$location" != "." && "$location" != ".." && "$location" != ".config" ]] && rm -rf ~/"$location"
   done
-  sayok 'done: Removing default ~/ configurations ...'
+  sayok "done: Removing default ~/ configurations ..."
 
-  sayinfo 'Removing default ~/.config configurations ...'
+  sayinfo "Removing default ~/.config configurations ..."
   files=$(ls -a "$CONFIGS"/.config)
   for location in "${files[@]}"; do
     [[ "$location" != "." && "$location" != ".." ]] && rm -rf "$HOME/.config/$location"
   done
-  sayok 'done: Removing default ~/.config configurations ...'
+  sayok "done: Removing default ~/.config configurations ..."
 }
 
 # -----------------------------------------------------------------------------
@@ -54,7 +54,7 @@ function restow { # Update dotfiles
   env
   saybox "Installing dotfiles"
   stow -Rt ~ "$CONFIGS"
-  sayok 'Installed dotfiles'
+  sayok "Installed dotfiles"
 }
 
 function apps { # Install brew casks and formulas
@@ -81,6 +81,13 @@ function stop-processes { # Stop or `install stop-processes --unload` processes
 
 function env { # Setup the environment, create important directories
   ./osx/env
+}
+
+function update { # Update the important bits after git-pull
+  defaults
+  restow
+  apps
+  neovim
 }
 
 function fresh { # Do everything at once. Please run this only once ;)

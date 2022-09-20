@@ -61,6 +61,13 @@ return packer.startup(function(use)
     run = ":TSUpdate",
   })
 
+  use {
+    "folke/which-key.nvim",
+    config = function()
+      require("which-key").setup {
+      }
+    end
+  }
 
   use({
     "iamcco/markdown-preview.nvim",

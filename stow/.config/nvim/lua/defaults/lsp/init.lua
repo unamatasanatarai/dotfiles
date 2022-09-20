@@ -2,10 +2,14 @@ local servers = {
   "bashls",
   "eslint",
   "html",
+  "jsonls",
   "marksman",
+  "stylelint_lsp",
   "sumneko_lua",
   "svelte",
+  "tsserver",
 }
+
 -- Mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
 local opts = { noremap = true, silent = true }
@@ -82,3 +86,7 @@ require("lspconfig")["sumneko_lua"].setup({
     }
   }
 })
+local function lsp_install_servers()
+  vim.api.nvim_command("LspInstall " .. table.concat(servers, " "))
+end
+vim.api.nvim_create_user_command('LspInstallServers', lsp_install_servers, {})
