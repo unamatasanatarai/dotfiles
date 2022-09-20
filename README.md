@@ -2,6 +2,13 @@
 
 dotfiles for mac. `n'joy!`
 
+---
+**Table of Contents**
+
+[ToC]
+
+---
+
 ## Installation
 
 1. Clone this repository
@@ -13,6 +20,9 @@ dotfiles for mac. `n'joy!`
 - [Privacy Redirect](https://chrome.google.com/webstore/detail/privacy-redirect/pmcmeagblkinmogikoikkdjiligflglb)
 - [Vimium](https://chrome.google.com/webstore/detail/vimium/dbepggeogbaibhgnhhndojpepiihcmeb)
 - [uBlock Origin](https://chrome.google.com/webstore/detail/ublock-origin/cjpalhdlnbpafiamejdnhcphjbkeiagm)
+- [ClearURLs](https://chrome.google.com/webstore/detail/clearurls/lckanjgmijmafbedllaakclkaicjfmnk)
+- [SponsorBlock](https://chrome.google.com/webstore/detail/clearurls/mnjggcdmjocbbbhaepdhchncahnbgone)
+- [YouTube NonStop](https://chrome.google.com/webstore/detail/youtube-nonstop/nlkaejimjacpillmajjnopmpbkbnocid)
 
 #### Vimium settings
 
@@ -42,6 +52,323 @@ dotfiles for mac. `n'joy!`
   "searchEngines": "w: https://www.wikipedia.org/w/index.php?title=Special:Search&search=%s Wikipedia\n\n# More examples.\n#\n# (Vimium supports search completion Wikipedia, as\n# above, and for these.)\n#\n# g: https://www.google.com/search?q=%s Google\n# l: https://www.google.com/search?q=%s&btnI I'm feeling lucky...\n# y: https://www.youtube.com/results?search_query=%s Youtube\n# gm: https://www.google.com/maps?q=%s Google maps\n# b: https://www.bing.com/search?q=%s Bing\n# d: https://duckduckgo.com/?q=%s DuckDuckGo\n# az: https://www.amazon.com/s/?field-keywords=%s Amazon\n# qw: https://www.qwant.com/?q=%s Qwant",
   "searchUrl": "https://duckduckgo.com/?q=",
   "userDefinedLinkHintCss": "div > .vimiumHintMarker {\n/* linkhint boxes */\nbackground: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#FFF785),\n  color-stop(100%,#FFC542));\nborder: 1px solid #E3BE23;\n}\n\ndiv > .vimiumHintMarker span {\n/* linkhint text */\ncolor: black;\nfont-weight: bold;\nfont-size: 12px;\n}\n\ndiv > .vimiumHintMarker > .matchingCharacter {\n}"
+}
+```
+
+#### SponsorBlock settings
+
+```
+{
+  "autoSkipOnMusicVideosUpdate": true,
+  "categoryPillUpdate": true,
+  "categorySelections": [
+    {
+      "name": "sponsor",
+      "option": 2
+    },
+    {
+      "name": "intro",
+      "option": 2
+    },
+    {
+      "name": "outro",
+      "option": 2
+    },
+    {
+      "name": "interaction",
+      "option": 2
+    },
+    {
+      "name": "selfpromo",
+      "option": 2
+    },
+    {
+      "name": "preview",
+      "option": 1
+    },
+    {
+      "name": "poi_highlight",
+      "option": 1
+    },
+    {
+      "name": "exclusive_access",
+      "option": 0
+    }
+  ],
+  "dontShowNotice": true,
+  "exclusive_accessCategoryAdded": true,
+  "hideInfoButtonPlayerControls": true,
+  "invidiousInstances": [
+    "inv.cthd.icu",
+    "inv.riverside.rocks",
+    "invidio.xamh.de",
+    "invidious.kavin.rocks",
+    "invidious.namazso.eu",
+    "invidious.osi.kr",
+    "invidious.snopyta.org",
+    "vid.puffyan.us",
+    "yewtu.be",
+    "youtube.076.ne.jp",
+    "yt.artemislena.eu"
+  ],
+  "isVip": false,
+  "minutesSaved": 8169.081173079971,
+  "previewCategoryUpdate": true,
+  "showDonationLink": false,
+  "skipCount": 5544,
+  "sponsorTimesContributed": 6,
+  "submissionCountSinceCategories": 6,
+  "supportInvidious": true,
+  "unsubmittedSegments": {
+    "1cHXjnli2fI": [
+      {
+        "UUID": "NaXGWomyP92OtnUoX9OnVl8nC3Twl475d8Wq",
+        "actionType": "skip",
+        "category": "chooseACategory",
+        "segment": [
+          379.205,
+          379.475
+        ],
+        "source": 1
+      }
+    ],
+    "2QenOBXcb7U": [
+      {
+        "UUID": null,
+        "category": "chooseACategory",
+        "segment": [
+          47.301179,
+          47.301179
+        ]
+      }
+    ],
+    "AUSkT70aMWo": [
+      {
+        "UUID": "qQllGUdj5DMaHwTjqQ5oPtHoNL0akev7Y3K9",
+        "actionType": "skip",
+        "category": "chooseACategory",
+        "segment": [
+          31.868,
+          34.02
+        ],
+        "source": 1
+      }
+    ],
+    "EvGOlAkLSLw": [
+      {
+        "UUID": null,
+        "actionType": "skip",
+        "category": "chooseACategory",
+        "segment": [
+          4739.844179,
+          4747.577768
+        ],
+        "source": 1
+      }
+    ],
+    "HR4TU5t69oM": [
+      {
+        "UUID": null,
+        "category": "chooseACategory",
+        "segment": [
+          275.106428
+        ]
+      }
+    ],
+    "MEbu6ydfp84": [
+      {
+        "UUID": null,
+        "actionType": "skip",
+        "category": "chooseACategory",
+        "segment": [
+          941.752
+        ],
+        "source": 1
+      }
+    ],
+    "RM8kA5Q3Lyc": [],
+    "YvzEZ88x7Tc": [
+      {
+        "UUID": "nESWwWewkMHVDQGqWpo0clxh74nGlEBQH5tj",
+        "actionType": "skip",
+        "category": "chooseACategory",
+        "segment": [
+          0
+        ],
+        "source": 1
+      }
+    ],
+    "_-0J49_9lwc": [
+      {
+        "UUID": null,
+        "category": "chooseACategory",
+        "segment": [
+          1048.213983
+        ],
+        "source": 1
+      }
+    ],
+    "_KVnLdGDVBs": [
+      {
+        "UUID": null,
+        "category": "chooseACategory",
+        "segment": [
+          304.167819
+        ],
+        "source": 1
+      }
+    ],
+    "nl1tZx9knzA": [
+      {
+        "UUID": null,
+        "category": "outro",
+        "segment": [
+          376.404565,
+          384.9273
+        ]
+      }
+    ],
+    "wd4KB8htz70": [
+      {
+        "UUID": null,
+        "category": "chooseACategory",
+        "segment": [
+          38.846609
+        ]
+      }
+    ]
+  },
+  "userID": "HlTTbbXP9Z8fGbOcgxkDLAPqgBc0lrQiN3wq",
+  "defaultCategory": "chooseACategory",
+  "whitelistedChannels": [],
+  "forceChannelCheck": false,
+  "showTimeWithSkips": true,
+  "disableSkipping": false,
+  "muteSegments": true,
+  "fullVideoSegments": true,
+  "trackViewCount": true,
+  "trackViewCountInPrivate": true,
+  "trackDownvotes": true,
+  "noticeVisibilityMode": 3,
+  "hideVideoPlayerControls": false,
+  "hideDeleteButtonPlayerControls": false,
+  "hideUploadButtonPlayerControls": false,
+  "hideSkipButtonPlayerControls": false,
+  "hideDiscordLaunches": 0,
+  "hideDiscordLink": false,
+  "serverAddress": "https://sponsor.ajay.app",
+  "minDuration": 0,
+  "skipNoticeDuration": 4,
+  "audioNotificationOnSkip": false,
+  "checkForUnlistedVideos": false,
+  "testingServer": false,
+  "refetchWhenNotFound": true,
+  "ytInfoPermissionGranted": false,
+  "allowExpirements": true,
+  "showPopupDonationCount": 0,
+  "donateClicked": 0,
+  "autoHideInfoButton": true,
+  "autoSkipOnMusicVideos": false,
+  "scrollToEditTimeUpdate": false,
+  "darkMode": true,
+  "showCategoryGuidelines": true,
+  "categoryPillColors": {},
+  "skipKeybind": {
+    "key": "Enter"
+  },
+  "startSponsorKeybind": {
+    "key": ";"
+  },
+  "submitKeybind": {
+    "key": "'"
+  },
+  "colorPalette": {
+    "red": "#780303",
+    "white": "#ffffff",
+    "locked": "#ffc83d"
+  },
+  "barTypes": {
+    "preview-chooseACategory": {
+      "color": "#ffffff",
+      "opacity": "0.7"
+    },
+    "sponsor": {
+      "color": "#00d400",
+      "opacity": "0.7"
+    },
+    "preview-sponsor": {
+      "color": "#007800",
+      "opacity": "0.7"
+    },
+    "selfpromo": {
+      "color": "#ffff00",
+      "opacity": "0.7"
+    },
+    "preview-selfpromo": {
+      "color": "#bfbf35",
+      "opacity": "0.7"
+    },
+    "exclusive_access": {
+      "color": "#008a5c",
+      "opacity": "0.7"
+    },
+    "interaction": {
+      "color": "#cc00ff",
+      "opacity": "0.7"
+    },
+    "preview-interaction": {
+      "color": "#6c0087",
+      "opacity": "0.7"
+    },
+    "intro": {
+      "color": "#00ffff",
+      "opacity": "0.7"
+    },
+    "preview-intro": {
+      "color": "#008080",
+      "opacity": "0.7"
+    },
+    "outro": {
+      "color": "#0202ed",
+      "opacity": "0.7"
+    },
+    "preview-outro": {
+      "color": "#000070",
+      "opacity": "0.7"
+    },
+    "preview": {
+      "color": "#008fd6",
+      "opacity": "0.7"
+    },
+    "preview-preview": {
+      "color": "#005799",
+      "opacity": "0.7"
+    },
+    "music_offtopic": {
+      "color": "#ff9900",
+      "opacity": "0.7"
+    },
+    "preview-music_offtopic": {
+      "color": "#a6634a",
+      "opacity": "0.7"
+    },
+    "poi_highlight": {
+      "color": "#ff1684",
+      "opacity": "0.7"
+    },
+    "preview-poi_highlight": {
+      "color": "#9b044c",
+      "opacity": "0.7"
+    },
+    "filler": {
+      "color": "#7300FF",
+      "opacity": "0.9"
+    },
+    "preview-filler": {
+      "color": "#2E0066",
+      "opacity": "0.7"
+    }
+  }
 }
 ```
 
