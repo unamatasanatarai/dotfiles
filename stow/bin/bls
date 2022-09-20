@@ -151,7 +151,7 @@ version $VERSION
 
 Options:
   --help     This help message
-  --versoin  Display the version number (it is $VERSION)
+  --version  Display the version number (it is $VERSION)
   --update   Force update the local cask and formula repositories
 
 Examples:
