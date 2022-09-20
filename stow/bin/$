@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+. "$(dirname "$0")"/.lib
+
+saybox "Never paste directly from the internet"
+echo "I'll help you this time: "
+"$@"

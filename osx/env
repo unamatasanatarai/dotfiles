@@ -7,6 +7,7 @@ set -euo pipefail
 
 saybox "Create mandatory directories"
 
+# shellcheck disable=2034
 local_bin="$HOME"/.local/bin
 
 # Create directories if needed

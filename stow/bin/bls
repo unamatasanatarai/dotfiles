@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+. "$(dirname "$0")"/.lib
+
 VERSION="1.0"
 BLS_CACHE_PATH="$HOME/.local/share/bls"
 BLS_CACHE_CASKS="${BLS_CACHE_PATH}/casks.json"
@@ -35,19 +37,6 @@ function updateCache {
 # ------------------------------------------------------------
 # PRIVATE
 # ------------------------------------------------------------
-
-function saybox {
-  local text
-  local len
-  local hl
-  text="$1"
-  len=$((${#text} + 6))
-  seq=$(for (( i=1; i<=len; i++)); do echo -n "-"; done)
-  hl="+ $seq +"
-  echo "$hl"
-  echo -e "|    \e[1;36m$text\e[0m    |"
-  echo "$hl"
-}
 
 function __is_it_cask {
   if [[ "$1" == *" --cask"* ]]; then
