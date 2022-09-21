@@ -5,7 +5,7 @@ set -euo pipefail
 . "$(dirname "$0")"/_functions
 . "$(dirname "$0")"/install-brew
 
-saybox "Installing tools"
+ebox "Installing tools"
 
 brew install \
   ack \
@@ -37,7 +37,7 @@ brew install \
   yarn \
   z
 
-saybox "Installing casks"
+ebox "Installing casks"
 
 brew install --cask --no-quarantine \
   alacritty \
@@ -58,5 +58,5 @@ brew install --cask --no-quarantine \
   vscodium \
   xbar
 
-saybox "Cleanup"
+ebox "Cleanup"
 brew cleanup
