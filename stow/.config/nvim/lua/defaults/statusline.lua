@@ -4,9 +4,10 @@ function StatusLine()
     " %m",
     "%=",
     "%l:%-6c",
-    " %y ",
+    vim.api.nvim_buf_get_option(0, 'filetype'),
+    " ",
     vim.api.nvim_get_mode().mode,
-    " "
+    " ",
   }
 end
 
