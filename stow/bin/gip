@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-git push origin $(git_branch_read)
+git push origin "$(git_branch_read)"

@@ -1,11 +1,15 @@
 #!/usr/bin/env bash
+# shellcheck disable=2154
 
-function pgb {
+function extract_git_branch_name {
   # make a copy of the previous exit status
-  local _ps=$?
-  git rev-parse --abbrev-ref HEAD 2>/dev/null | sed -e 's/\(.*\)/ <\1>/'
+  local ps=$?
+  local branch
+  branch=$(git_branch_read)
+  [ "$branch" != "" ] && branch="<${branch}>"
+  echo " $branch"
   # and return it so the redness can start
-  return $_ps
+  return "$ps"
 }
 
 PS1=""
@@ -14,7 +18,7 @@ PS1+="\[${gray}\]\t"
 # working directory full path
 PS1+=" \[${green}\]\w"
 # git branch
-PS1+="\[${yellow}\]\$(pgb)\[${reset}\]"
+PS1+="\[${yellow}\]\$(extract_git_branch_name)\[${reset}\]"
 # the dollar will be red if exit code was baaaad
 PS1+=' $([ $? == 0 ] && echo "\[${white}\]\$ " || echo "\[${red}\]\$ ")'
 PS1+="\[${reset}\]"
