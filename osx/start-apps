@@ -7,7 +7,9 @@ set -euo pipefail
 ebox "Launching appliactions"
 
 eask "Changing bash to brew bash (v5)"
-chsh -s /usr/local/bin/bash
+chsh -s "$(brew --prefix)/bin/bash"
+echo "$(brew --prefix)"/bin/bash | sudo tee -a /private/etc/shells
+sudo chpass -s "$(brew --prefix)/bin/bash"
 eok "bash is better than ZSH"
 
 [ "$(brew services info yabai 2>/dev/null)" = "" ] && brew services start yabai || brew services restart yabai

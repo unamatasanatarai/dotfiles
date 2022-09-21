@@ -7,7 +7,7 @@ PATH="${PATH}:${HOME}/bin:${HOME}/.cargo/bin:${HOME}/.local/bin"
 export VISUAL=nvim
 export EDITOR="$VISUAL"
 export SYSTEMD_EDITOR="$VISUAL"
-
+export SHELL="$(brew --prefix)/bin/bash"
 
 # Highlight section titles in manual pages.
-export LESS_TERMCAP_md="${yellow}";
+export LESS_TERMCAP_md="$yellow"
