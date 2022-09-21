@@ -1,4 +1,5 @@
 require "defaults.settings"
+require "defaults.statusline"
 require "defaults.keymaps"
 require "defaults.plugins"
 require "defaults.telescope"
