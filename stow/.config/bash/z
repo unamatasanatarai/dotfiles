@@ -14,6 +14,6 @@ _Z_DATA="$_Z_DATA_DIR/.z"
 
 function zls() {
   local dir
-  dir=$(z -l | sort --reverse --numeric-sort | fzf --no-sort --scroll-off 4 --prompt=">> " | awk '{print $2}')
+  dir=$(z -l | sort --reverse --numeric-sort | fzf --no-sort --scroll-off 2 --prompt=">> " | awk '{print $2}')
   cd "$dir" || exit 1
 }

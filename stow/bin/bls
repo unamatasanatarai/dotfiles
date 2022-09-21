@@ -106,6 +106,7 @@ function list_all {
   echo "${list[@]}" | \
     fzf -q "$query" \
     --header "CTRL+i : install; updated: ${BLS_CACHE_LAST_MODIFIED}" \
+    --scroll-off 2 \
     --prompt "brew >> " \
     --bind "ctrl-i:select+preview(bls --install {})" \
     --preview-window "right,70%" \
