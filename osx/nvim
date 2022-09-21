@@ -4,12 +4,12 @@ set -euo pipefail
 
 . "$(dirname "$0")"/install-brew
 
-saybox "Install tools used by neovim"
+ebox "Install tools used by neovim"
 
 wget -O /tmp/marksman https://github.com/artempyanykh/marksman/releases/download/2022-06-23/marksman-macos
 mv /tmp/marksman ~/.local/bin/marksman
 chmod u+x ~/.local/bin/marksman
-sayok "marksman"
+eok "marksman"
 
 npm i -g \
   bash-language-server \
@@ -20,30 +20,30 @@ npm i -g \
   typescript typescript-language-server \
   vscode-langservers-extracted \
 
-sayok "bash-language-server"
-sayok "pyright"
-sayok "typescript typescript-language-server"
-sayok "svelte-language-server"
-sayok "vscode-langservers-extracted"
-sayok "prettier"
-sayok "js-beautify"
+eok "bash-language-server"
+eok "pyright"
+eok "typescript typescript-language-server"
+eok "svelte-language-server"
+eok "vscode-langservers-extracted"
+eok "prettier"
+eok "js-beautify"
 
 cargo install stylua shellharden
 
-sayok "stylua"
-sayok "shellharden"
+eok "stylua"
+eok "shellharden"
 
 brew install lua-language-server shfmt black
 brew link black
 
-sayok "lua-language-server"
-sayok "shfmt"
-sayok "black"
+eok "lua-language-server"
+eok "shfmt"
+eok "black"
 
-saybox "Force plugins installation"
+ebox "Force plugins installation"
 nvim +PackerSync +qall
-sayok "PackerSync has run"
+eok "PackerSync has run"
 
-saybox "Force install LspServers"
+ebox "Force install LspServers"
 nvim +LspInstallServers
-sayok "PackeLspInstallServers has completed"
+eok "PackeLspInstallServers has completed"

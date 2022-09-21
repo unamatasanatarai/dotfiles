@@ -4,12 +4,12 @@ set -euo pipefail
 
 . "$(dirname "$0")"/_functions
 
-saybox "Install homebrew"
+ebox "Install homebrew"
 
 if test ! "$(which brew)"; then
-  sayok "brew not found, installing..."
+  eok "brew not found, installing..."
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   brew update
 else
-  sayfail "brew already installed. skip!"
+  efail "brew already installed. skip!"
 fi

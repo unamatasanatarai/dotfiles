@@ -109,13 +109,13 @@ AGENTS+=('com.apple.speech.speechsynthesisd.x86_64')
 AGENTS+=('com.apple.speech.synthesisserver')
 AGENTS+=('com.apple.tipsd')
 
-saybox "Stopping ${#AGENTS[@]} processes"
+ebox "Stopping ${#AGENTS[@]} processes"
 processes=$(launchctl list | awk '{ print $3 }')
 
 for agent in "${AGENTS[@]}"; do
   if [ "$unload" == 1 ]; then
     sudo launchctl unload -w "/System/Library/LaunchAgents/${agent}.plist" >/dev/null 2>/dev/null
-    sayok "Unloaded: (${agent})"
+    eok "Unloaded: (${agent})"
     continue
   fi
 
@@ -123,8 +123,8 @@ for agent in "${AGENTS[@]}"; do
   if [[ "${processes[*]}" =~ "$agent" ]]; then
     # hack to not break if exit code is not zero
     launchctl stop "$agent" || true
-    sayok "Stopping: (${agent})"
+    eok "Stopping: (${agent})"
   else
-    sayfail "Not found: (${agent})"
+    efail "Not found: (${agent})"
   fi
 done

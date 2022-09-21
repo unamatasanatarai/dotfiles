@@ -4,21 +4,21 @@ set -euo pipefail
 . "$(dirname "$0")"/_functions
 . "$(dirname "$0")"/install-brew
 
-saybox "Launching appliactions"
+ebox "Launching appliactions"
 [ "$(brew services info yabai 2>/dev/null)" = "" ] && brew services start yabai || brew services restart yabai
-sayok "started yabai"
+eok "started yabai"
 [ "$(brew services info skhd 2>/dev/null)" = "" ] && brew services start skhd || brew services restart skhd
-sayok "started skhd"
+eok "started skhd"
 
 cd /Applications
 open -a Lulu.app
-sayok "started LuLu"
+eok "started LuLu"
 
 open -a itsycal.app
-sayok "started itsycal"
+eok "started itsycal"
 
 open -a xbar.app
-sayok "started xbar"
+eok "started xbar"
 
 open -a "Hidden Bar.app"
-sayok "started hiddenbar"
+eok "started hiddenbar"
