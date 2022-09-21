@@ -9,7 +9,8 @@ BLS_CACHE_PATH="$HOME/.local/share/bls"
 BLS_CACHE_CASKS="${BLS_CACHE_PATH}/casks.json"
 BLS_CACHE_FORMULA="${BLS_CACHE_PATH}/formula.json"
 BLS_CACHE_OFFSET="7 days ago"
-BLS_CACHE_LAST_MODIFIED=$(date -r "$BLS_CACHE_CASKS")
+BLS_CACHE_LAST_MODIFIED="just now"
+_skip_update=0
 
 # ------------------------------------------------------------
 # CACHING
@@ -18,12 +19,18 @@ function _validateCache {
   # check modification timestamps
   if [ ! -f "$BLS_CACHE_CASKS" ] || [[ ! $(find "$BLS_CACHE_CASKS" -newermt "$BLS_CACHE_OFFSET") ]] 
   then
-    echo "Cache outdated. Updating..."
+    ealert "Cache outdated. Updating..."
     updateCache
   fi
+  BLS_CACHE_LAST_MODIFIED=$(date -r "$BLS_CACHE_CASKS" -u "+%Y-%m-%d %H:%M")
+}
+
+function deleteCache {
+  [ -d "$BLS_CACHE_PATH" ] && rm -rf "$BLS_CACHE_PATH"
 }
 
 function updateCache {
+  if [ "$_skip_update" == 1 ]; then return 0; fi
   # create cache dir
   [ -d "$BLS_CACHE_PATH" ] || mkdir -p "$BLS_CACHE_PATH"
   # cache important files
@@ -33,6 +40,7 @@ function updateCache {
   einfo -n "Downloading formulae definitions"
   curl -s https://formulae.brew.sh/api/formula.json > "$BLS_CACHE_FORMULA"
   eok "done"
+  _skip_update=1
 }
 
 # ------------------------------------------------------------
@@ -143,6 +151,7 @@ Options:
   --help     This help message
   --version  Display the version number (it is $VERSION)
   --update   Force update the local cask and formula repositories
+  --clean    Purge any cached files
 
 Examples:
   Force update and pre-fill ncd in the query
@@ -164,6 +173,12 @@ while [[ -n ${1:--help} ]]; do
       exit 0
       ;;
 
+    --clean )
+      deleteCache
+      eok "purged"
+      exit 1
+      ;;
+
     --preview )
       fzf_preview "$@"
       shift
@@ -175,7 +190,6 @@ while [[ -n ${1:--help} ]]; do
       __install "$@"
       exit 0
       ;;
-
 
     --version )
       echo "version: $VERSION"

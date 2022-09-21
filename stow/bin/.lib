@@ -38,5 +38,5 @@ function ebox {
 }
 
 # for testing
-# eok "ok"; efail "fail"; einfo "info"; eask "question"; ealert "hey"; ebox "in a box"
+# eok "eok"; efail "efail"; einfo "einfo"; eask "eask"; ealert "ealert"; ebox "ebox"
 # eok -n "ok"; efail -n "fail"; einfo -n "info"; eask -n "question"; ealert -n "hey"; echo""; ebox "in a box"
