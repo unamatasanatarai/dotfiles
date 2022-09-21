@@ -16,20 +16,20 @@ CONFIGS=stow
 
 function _remove_default_dotfiles {
   stow -Dt "$CONFIGS"
-  sayok "unstowed previous stow"
-  sayinfo "Removing default ~/ configurations ..."
+  eok "unstowed previous stow"
+  einfo "Removing default ~/ configurations ..."
   files=$(ls -a "$CONFIGS")
   for location in "${files[@]}"; do
     [[ "$location" != "." && "$location" != ".." && "$location" != ".config" ]] && rm -rf ~/"$location"
   done
-  sayok "done: Removing default ~/ configurations ..."
+  eok "done: Removing default ~/ configurations ..."
 
-  sayinfo "Removing default ~/.config configurations ..."
+  einfo "Removing default ~/.config configurations ..."
   files=$(ls -a "$CONFIGS"/.config)
   for location in "${files[@]}"; do
     [[ "$location" != "." && "$location" != ".." ]] && rm -rf "$HOME/.config/$location"
   done
-  sayok "done: Removing default ~/.config configurations ..."
+  eok "done: Removing default ~/.config configurations ..."
 }
 
 # -----------------------------------------------------------------------------
@@ -37,7 +37,7 @@ function _remove_default_dotfiles {
 # -----------------------------------------------------------------------------
 
 function dotfiles { # Purge configs and reinstall dotfiles
-  saybox "!!! LAST CHANCE !!!"
+  ebox "!!! LAST CHANCE !!!"
   echo "your spotlight_commands will be deleted"
   echo "<ctrl>+c to cancel this operation"
   echo "or type AGREE to continue"
@@ -46,15 +46,15 @@ function dotfiles { # Purge configs and reinstall dotfiles
     _remove_default_dotfiles
     restow
   else
-    sayfail "Aborting..."
+    efail "Aborting..."
   fi
 }
 
 function restow { # Update dotfiles
   env
-  saybox "Installing dotfiles"
+  ebox "Installing dotfiles"
   stow -Rt ~ "$CONFIGS"
-  sayok "Installed dotfiles"
+  eok "Installed dotfiles"
 }
 
 function apps { # Install brew casks and formulas
@@ -67,7 +67,7 @@ function defaults { # Set sensible macos defaults
 }
 
 function fonts { # Install fonts
-  saybox "Install fonts"
+  ebox "Install fonts"
   cp ./fonts/source-code-pro/*.ttf /Library/Fonts/
 }
 
@@ -91,7 +91,7 @@ function update { # Update the important bits after git-pull
 }
 
 function fresh { # Do everything at once. Please run this only once ;)
-  saybox "Let's setup a fresh environment, shall we!"
+  ebox "Let's setup a fresh environment, shall we!"
 
   # the order matters
   defaults
