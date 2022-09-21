@@ -1,23 +1,29 @@
 #!/usr/bin/env bash
 
+eol="\n"
 function eok {
-  printf " \e[1m\e[38;5;46m✔\e[0m %s\n" "$*"
+  local eol=$eol;if [ "$1" == "-n" ]; then eol="";shift; fi
+  printf " \e[1m\e[38;5;46m✔\e[0m %s${eol}" "$*"
 }
 
 function efail {
-  printf " \e[1m\e[38;5;196m✗\e[0m %s\n" "$*"
+  local eol=$eol;if [ "$1" == "-n" ]; then eol="";shift; fi
+  printf " \e[1m\e[38;5;196m✗\e[0m %s${eol}" "$*"
 }
 
 function eask {
-  printf " \e[1m\e[38;5;117m؟\e[0m %s\n" "$*"
+  local eol=$eol;if [ "$1" == "-n" ]; then eol="";shift; fi
+  printf " \e[1m\e[38;5;117m؟\e[0m %s${eol}" "$*"
 }
 
 function einfo {
-  printf " \e[1m\e[38;5;208m➜\e[0m %s\n" "$*"
+  local eol=$eol;if [ "$1" == "-n" ]; then eol="";shift; fi
+  printf " \e[1m\e[38;5;208m➜\e[0m %s${eol}" "$*"
 }
 
 function ealert {
-  printf " \e[1m\e[38;5;220m‼\e[0m %s\n" "$*"
+  local eol=$eol;if [ "$1" == "-n" ]; then eol="";shift; fi
+  printf " \e[1m\e[38;5;220m‼\e[0m %s${eol}" "$*"
 }
 
 function ebox {
@@ -33,3 +39,4 @@ function ebox {
 
 # for testing
 # eok "ok"; efail "fail"; einfo "info"; eask "question"; ealert "hey"; ebox "in a box"
+# eok -n "ok"; efail -n "fail"; einfo -n "info"; eask -n "question"; ealert -n "hey"; echo""; ebox "in a box"

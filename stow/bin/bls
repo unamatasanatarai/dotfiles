@@ -9,6 +9,7 @@ BLS_CACHE_PATH="$HOME/.local/share/bls"
 BLS_CACHE_CASKS="${BLS_CACHE_PATH}/casks.json"
 BLS_CACHE_FORMULA="${BLS_CACHE_PATH}/formula.json"
 BLS_CACHE_OFFSET="7 days ago"
+BLS_CACHE_LAST_MODIFIED=$(date -r "$BLS_CACHE_CASKS")
 
 # ------------------------------------------------------------
 # CACHING
@@ -26,12 +27,12 @@ function updateCache {
   # create cache dir
   [ -d "$BLS_CACHE_PATH" ] || mkdir -p "$BLS_CACHE_PATH"
   # cache important files
-  echo -en " \e[1;34m[+]\e[0m Downloading casks definitions"
+  einfo -n "Downloading casks definitions"
   curl -s https://formulae.brew.sh/api/cask.json > "$BLS_CACHE_CASKS"
-  echo -e " \e[1;32m[√]\e[0m done"
-  echo -en " \e[1;34m[+]\e[0m Downloading formulae definitions"
+  eok "done"
+  einfo -n "Downloading formulae definitions"
   curl -s https://formulae.brew.sh/api/formula.json > "$BLS_CACHE_FORMULA"
-  echo -e " \e[1;32m[√]\e[0m done"
+  eok "done"
 }
 
 # ------------------------------------------------------------
@@ -60,11 +61,10 @@ function __name_to_token {
 }
 
 function fzf_preview {
-  local name
-  local token
+  local name token
   name="$2"
   token=$name
-  saybox "$name"
+  ebox "$name"
   if [[ "$name" == *" --cask"* ]]; then
     token=$(__name_to_token "$name")
     brew info --cask "$token"
@@ -88,9 +88,7 @@ function __list_casks {
 # ------------------------------------------------------------
 
 function list_all {
-  local casks
-  local formulae
-  local list
+  local casks formulae list
   casks=$(__list_casks "--cask")
   formulae=$(__list_formulae)
   list=("${casks[@]}" "${formulae[@]}")
@@ -99,9 +97,10 @@ function list_all {
 
   echo "${list[@]}" | \
     fzf -q "$query" \
-    --header "CTRL+i to install" \
+    --header "CTRL+i : install; updated: ${BLS_CACHE_LAST_MODIFIED}" \
     --prompt "brew >> " \
-    --bind "ctrl-i:select+execute:bls --install {}" \
+    --bind "ctrl-i:select+preview(bls --install {})" \
+    --preview-window "right,70%" \
     --preview="${BASH_SOURCE[0]} --preview {}"
 }
 
@@ -112,8 +111,10 @@ function __install {
   if [ "$(__is_it_cask "$picked")" == "yes" ]; then
     token=$(__name_to_token "$picked")
   fi
-  saybox "Installing '$token'"
+  ebox "Installing '$token'"
   brew install "$token"
+  eok ""
+  eok "done"
 }
 
 function __install_questions {
