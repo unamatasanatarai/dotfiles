@@ -4,6 +4,19 @@ set -euo pipefail
 
 . "$(dirname "$0")"/.lib
 
-saybox "Never paste directly from the internet"
-echo "I'll help you this time: "
-"$@"
+if [ "$*" == "" ]; then
+  einfo "I'm here waiting... I'll help if you miss-paste..."
+  ealert "DO NOT paste anything from the internet"
+  exit 0
+fi
+
+ebox "Never paste directly from the internet"
+echo -n "run: "'`'"$*"'`? [N/y] '
+read -r -n1 ans
+if [ "$ans" == "Y" ] || [ "$ans" == "y" ]; then
+  echo ""
+  "$@"
+else
+  echo ""
+  echo "aborted."
+fi
