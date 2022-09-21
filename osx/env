@@ -15,8 +15,8 @@ for var in XDG_CONFIG_HOME XDG_DATA_HOME XDG_STATE_HOME XDG_CACHE_HOME local_bin
   dir=${!var}
   if [ ! -d "$dir" ]; then
     mkdir -p "$dir"
-    eok "Created: $dir"
+    eok "$dir created"
   else
-    efail "exists, skip!: $dir"
+    einfo "$dir skipped (exists)"
   fi
 done
