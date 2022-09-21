@@ -120,9 +120,15 @@ function __install {
     token=$(__name_to_token "$picked")
   fi
   ebox "Installing '$token'"
-  brew install "$token"
-  eok ""
-  eok "done"
+  ec=0
+  brew install "$token" || ec=$?
+  if [ "$ec" -eq 0 ]; then
+    echo ""
+    eok "done"
+  else
+    echo ""
+    efail "nope, sorry. ↑ exited with: $ec"
+  fi
 }
 
 function __install_questions {

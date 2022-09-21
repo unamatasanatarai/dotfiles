@@ -24,6 +24,7 @@ brew install \
   ncdu \
   neovim \
   node \
+  osx-cpu-temp \
   pass \
   rg \
   rust \
