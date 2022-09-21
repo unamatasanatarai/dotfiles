@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-. "$(dirname "$0")"/_functions
+. "$(dirname "$0")"/../stow/bin/.lib
 . "$(dirname "$0")"/install-brew
 
 ebox "Installing tools"

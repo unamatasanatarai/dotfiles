@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-. "$(dirname "$0")"/_functions
+. "$(dirname "$0")"/../stow/bin/.lib
 
 bn=$(basename "$0")
 unload=0
