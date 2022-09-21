@@ -5,6 +5,11 @@ set -euo pipefail
 . "$(dirname "$0")"/install-brew
 
 ebox "Launching appliactions"
+
+eask "Changing bash to brew bash (v5)"
+chsh -s /usr/local/bin/bash
+eok "bash is better than ZSH"
+
 [ "$(brew services info yabai 2>/dev/null)" = "" ] && brew services start yabai || brew services restart yabai
 eok "started yabai"
 [ "$(brew services info skhd 2>/dev/null)" = "" ] && brew services start skhd || brew services restart skhd

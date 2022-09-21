@@ -32,9 +32,6 @@ eok "Set computer name (as done via System Preferences → Sharing)"
 # --------------------------------------------------
 ebox "Tools and Look"
 
-chsh -s /bin/bash
-eok "bash is better than ZSH"
-
 defaults write NSGlobalDomain AppleHighlightColor -string "0.764700 0.976500 0.568600"
 eok "Set highlight color to green"
 
