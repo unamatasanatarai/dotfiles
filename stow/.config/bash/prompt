@@ -6,8 +6,9 @@ function extract_git_branch_name {
   local ps=$?
   local branch
   branch=$(git_branch_read)
-  [ "$branch" != "" ] && branch="<${branch}>"
-  echo " $branch"
+  if [ "$branch" != "" ]; then
+    echo " <${branch}>"
+  fi
   # and return it so the redness can start
   return "$ps"
 }
