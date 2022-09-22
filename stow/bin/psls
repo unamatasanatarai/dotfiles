@@ -1,0 +1,80 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+. "$(dirname "$0")"/.lib
+
+VERSION="1.0"
+
+# ------------------------------------------------------------
+# PRIVATE
+# ------------------------------------------------------------
+
+function dokill {
+  local ps
+  ps=$(echo "$*" | awk '{print $1}')
+  kill "$ps"
+  ealert "killed"
+}
+
+function dokill9 {
+  local ps
+  ps=$(echo "$*" | awk '{print $1}')
+  kill -9 "$ps"
+  ealert "Kill-9ed"
+}
+
+export -f dokill
+export -f dokill9
+
+# ------------------------------------------------------------
+# PUBLIC interfaces
+# ------------------------------------------------------------
+
+function list_all {
+  local list
+  list=$(ps -e)
+
+  echo "${list[@]}" | \
+    fzf \
+    --header "CTRL+x: kill; CTRL+X: kill -9" \
+    --scroll-off 2 \
+    --prompt "ps -e >> " \
+    --bind "ctrl-x:select+preview(dokill {})" \
+    --bind "ctrl-X:select+preview(dokill9 {})" \
+    --preview-window "right,30%"
+}
+
+function help {
+  echo "$(basename "$0") <options>
+version $VERSION
+
+Options:
+  --help     This help message
+  --version  Display the version number (it is $VERSION)
+"
+}
+# ------------------------------------------------------------
+# ROUTER
+# ------------------------------------------------------------
+
+while [[ -n ${1:--help} ]]; do
+  case ${1:--help} in
+    --version )
+      echo "version: $VERSION"
+      exit 0
+      ;;
+
+    --help )
+      help
+      exit 0
+      ;;
+
+    *)
+      list_all "$@"
+      shift
+      exit 0
+      ;;
+  esac
+  shift
+done

@@ -37,6 +37,8 @@ function ebox {
   echo "$hl"
 }
 
+export -f  ebox eok efail einfo eask ealert
+
 # for testing
 # eok "eok"; efail "efail"; einfo "einfo"; eask "eask"; ealert "ealert"; ebox "ebox"
 # eok -n "ok"; efail -n "fail"; einfo -n "info"; eask -n "question"; ealert -n "hey"; echo""; ebox "in a box"
