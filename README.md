@@ -2,13 +2,6 @@
 
 dotfiles for mac. `n'joy!`
 
----
-**Table of Contents**
-
-[ToC]
-
----
-
 ## Installation
 
 1. Clone this repository
@@ -16,6 +9,7 @@ dotfiles for mac. `n'joy!`
 
 ### Brave plugins worth your time
 
+- [Go Invidious](https://unamatasanatarai.github.io/watch-on-invidious-bookmarklet/)
 - [I don't care about cookies](https://chrome.google.com/webstore/detail/i-dont-care-about-cookies/fihnjjcciajhdojfnbdddfaoknhalnja)
 - [Privacy Redirect](https://chrome.google.com/webstore/detail/privacy-redirect/pmcmeagblkinmogikoikkdjiligflglb)
 - [Vimium](https://chrome.google.com/webstore/detail/vimium/dbepggeogbaibhgnhhndojpepiihcmeb)
