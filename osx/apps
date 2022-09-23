@@ -33,6 +33,7 @@ brew install \
   pass \
   rg \
   rust \
+  shellharden \
   stow \
   tldr \
   tmux \
