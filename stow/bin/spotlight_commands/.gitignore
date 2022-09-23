@@ -1,4 +1,5 @@
 *
 !.gitignore
-!.empty_trash
-!.calendar
+!empty_trash
+!calendar
+!purge_screenshots
