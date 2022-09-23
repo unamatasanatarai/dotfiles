@@ -1,15 +1,5 @@
 #!/usr/bin/env bash
 
-parse_git_branch() {
-    git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'
+function take {
+  mkdir -p "$*" && cd "$_" || return 1
 }
-
-wrap_git_branch() {
-    git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ <\1>/'
-}
-
-take() {
-    mkdir -p "$@"
-    cd "$_" || exit 1
-}
-
