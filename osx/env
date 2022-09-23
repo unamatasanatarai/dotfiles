@@ -9,9 +9,10 @@ ebox "Create mandatory directories"
 
 # shellcheck disable=2034
 LOCAL_BIN="$HOME"/.local/bin
+BASH_DATA_HOME="${XDG_DATA_HOME}/bash/"
 
 # Create directories if needed
-for var in XDG_CONFIG_HOME XDG_DATA_HOME XDG_STATE_HOME XDG_CACHE_HOME LOCAL_BIN; do
+for var in XDG_CONFIG_HOME XDG_DATA_HOME XDG_STATE_HOME XDG_CACHE_HOME LOCAL_BIN BASH_DATA_HOME; do
   dir=${!var}
   if [ ! -d "$dir" ]; then
     mkdir -p "$dir"
