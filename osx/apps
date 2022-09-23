@@ -61,7 +61,6 @@ brew install --cask --no-quarantine \
   slack \
   sublime-text \
   vlc \
-  vscodium \
   xbar
 
 ebox "Cleanup"

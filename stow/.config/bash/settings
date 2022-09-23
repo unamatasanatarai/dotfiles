@@ -9,6 +9,7 @@ export EDITOR="$VISUAL"
 export SYSTEMD_EDITOR="$VISUAL"
 # shellcheck disable=2155
 export SHELL="$(brew --prefix)/bin/bash"
+export CARGO_HOME="$XDG_DATA_HOME"/cargo
 
 # Highlight section titles in manual pages.
 # shellcheck disable=2154
