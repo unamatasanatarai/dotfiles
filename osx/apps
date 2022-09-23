@@ -7,6 +7,10 @@ set -euo pipefail
 
 ebox "Installing tools"
 
+# todo: reimplement with brew bundle
+# brew bundle dump --force --all --verbose
+# brew bundle --verbose --file $(pwd)/Brewfile
+
 brew install \
   ack \
   bash \
