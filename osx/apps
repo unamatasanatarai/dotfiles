@@ -25,6 +25,7 @@ brew install \
   koekeishiya/formulae/skhd \
   koekeishiya/formulae/yabai \
   lazygit \
+  less \
   ncdu \
   neovim \
   node \
