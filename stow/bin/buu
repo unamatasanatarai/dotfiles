@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-. "$PWD"/.lib
+. "$(dirname "$0")"/.lib
 
 ebox "Update & Upgrade brew"
 
