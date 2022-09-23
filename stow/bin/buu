@@ -1,7 +1,21 @@
 #!/usr/bin/env bash
 
-brew update
-brew upgrade
-brew upgrade --no-quarantine $(brew list --cask)
-brew cleanup
+. "$PWD"/.lib
+
+ebox "Update & Upgrade brew"
+
+einfo "Clearing cache"
 bls --clean
+brew cleanup --prune=all -s
+rm -rf "$(brew --cache)"
+
+einfo "Update"
+brew update
+
+einfo "Upgrade"
+brew upgrade --no-quarantine --cask --greedy --no-quarantine
+
+einfo "Cleanup"
+brew cleanup --prune=all -s
+
+eok "all done!"
