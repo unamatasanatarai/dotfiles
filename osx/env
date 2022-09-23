@@ -8,15 +8,15 @@ set -euo pipefail
 ebox "Create mandatory directories"
 
 # shellcheck disable=2034
-local_bin="$HOME"/.local/bin
+LOCAL_BIN="$HOME"/.local/bin
 
 # Create directories if needed
-for var in XDG_CONFIG_HOME XDG_DATA_HOME XDG_STATE_HOME XDG_CACHE_HOME local_bin; do
+for var in XDG_CONFIG_HOME XDG_DATA_HOME XDG_STATE_HOME XDG_CACHE_HOME LOCAL_BIN; do
   dir=${!var}
   if [ ! -d "$dir" ]; then
     mkdir -p "$dir"
     eok "$dir created"
   else
-    einfo "$dir skipped (exists)"
+    ealert "$dir skipped (exists)"
   fi
 done
