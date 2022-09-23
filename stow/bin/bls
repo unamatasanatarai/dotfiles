@@ -26,13 +26,19 @@ function _validateCache {
 }
 
 function deleteCache {
-  [ -d "$BLS_CACHE_PATH" ] && rm -rf "$BLS_CACHE_PATH"
+  if [ -d "$BLS_CACHE_PATH" ]
+  then
+    rm -rf "$BLS_CACHE_PATH"
+  fi
 }
 
 function updateCache {
   if [ "$_skip_update" == 1 ]; then return 0; fi
   # create cache dir
-  [ -d "$BLS_CACHE_PATH" ] || mkdir -p "$BLS_CACHE_PATH"
+  if [ ! -d "$BLS_CACHE_PATH" ]
+  then
+    mkdir -p "$BLS_CACHE_PATH"
+  fi
   # cache important files
   einfo -n "Downloading casks definitions"
   curl -s https://formulae.brew.sh/api/cask.json > "$BLS_CACHE_CASKS"
@@ -169,8 +175,6 @@ Examples:
 # ROUTER
 # ------------------------------------------------------------
 
-_validateCache
-
 while [[ -n ${1:--help} ]]; do
   case ${1:--help} in
     --update )
@@ -181,9 +185,10 @@ while [[ -n ${1:--help} ]]; do
       ;;
 
     --clean )
+      einfo "Clearning bls databases"
       deleteCache
-      eok "purged"
-      exit 1
+      eok "done"
+      exit 0
       ;;
 
     --preview )
@@ -209,6 +214,7 @@ while [[ -n ${1:--help} ]]; do
       ;;
 
     *)
+      _validateCache
       list_all "$@"
       shift
       exit 0

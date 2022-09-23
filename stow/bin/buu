@@ -4,3 +4,4 @@ brew update
 brew upgrade
 brew upgrade --no-quarantine $(brew list --cask)
 brew cleanup
+bls --clean
