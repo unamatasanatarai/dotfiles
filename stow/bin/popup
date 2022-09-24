@@ -3,21 +3,27 @@
 set -euo pipefail
 
 # I think I must double the numbers because it is retina. but I don't know
-# it works and I don't feel like googling
+# it works and I don't feel like duckduckgo'ing or startpage'ing
 # but here's a command that might become useful
 # after you connect to a non-retina display
 # system_profiler SPDisplaysDataType | rg Resolution
 
 # dictionary
 _center="center"
+_left="left"
 _right="right"
 _bottom="bottom"
+_top="top"
 TITLE="TermPopup"
 
 # defaults
 PADDING=20
+# text line height
+LH=36
+# term width and height in chars
 W=80
 H=20
+# window x and y
 X=$_center
 Y=$_center
 
@@ -29,8 +35,8 @@ function help {
             [ -c command ] [ -? ]
 
 Options:
-  -x    X position on screen. Possible values: center | right | number
-  -y    Y position on screen. Possible values: center | bottom | number
+  -x    X position on screen. Possible values: center | right | left | number
+  -y    Y position on screen. Possible values: center | bottom | top | number
   -w    Width of the popup in Characters
   -h    Height of the popup in Characters
   -c    Command to run in the popup
@@ -56,15 +62,11 @@ SW=$(yabai -m query --displays --display | jq .frame.w*2)
 SH=$(yabai -m query --displays --display | jq .frame.h*2)
 
 # term size
-# 20 is now the padding
-# todo move the 20 into a variable (it's 20 padding top & bottom so 40 * 2, cause retina?
 charw=16
 charh=32
 TW=$((charw * W + 4 * PADDING))
-# see alacritty.yml font>offset>y (12?)
-# include this _line-height_ in your math
-# TH=$( echo "(32+12) * $H" | bc )
-TH=$((charh * H + 4 * PADDING))
+# the last + LH fixes vertical placement.... only a little. Not sure why it's not workign properly
+TH=$(( ((LH + charh) * H) + (4 * PADDING) + LH ))
 
 # term pos
 if [ "$X" == "$_center" ]; then
@@ -72,6 +74,7 @@ if [ "$X" == "$_center" ]; then
 elif [ "$X" == "$_right" ]; then
   X=$((SW - TW))
 else
+  if [ "$X" == "$_left" ]; then X=0; fi
   X=$((X << 1))
 fi
 
@@ -80,6 +83,7 @@ if [ "$Y" == "$_center" ]; then
 elif [ "$Y" == "$_bottom" ]; then
   Y=$((SH - TH))
 else
+  if [ "$Y" == $_top ]; then Y=0; fi
   Y=$((Y << 1))
 fi
 
@@ -92,6 +96,6 @@ alacritty \
   -o window.decorations=none \
   -o window.padding.x="$PADDING" \
   -o window.padding.y="$PADDING" \
-  -o font.offset.y=0 \
+  -o font.offset.y="$LH" \
   --working-directory "$PWD" \
   -e "$cmd"
