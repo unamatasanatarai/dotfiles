@@ -6,6 +6,7 @@ end
 configs.setup({
   ensure_installed = {
     "bash",
+    "css",
     "html",
     "javascript",
     "json",
@@ -19,6 +20,7 @@ configs.setup({
     "typescript",
     "yaml",
   },
+  auto_install = true,
   highlight = {
     enable = true,
     additional_vim_regex_highlighting = false,
@@ -32,5 +34,7 @@ configs.setup({
   endwise = {
     enable = true,
   },
-  indent = { enable = true, disable = { } },
+  indent = {
+    enable = true
+  },
 })
