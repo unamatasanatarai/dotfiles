@@ -4,49 +4,56 @@ set -euo pipefail
 
 . "$(dirname "$0")"/.lib
 
-VERSION="1.0"
-BLS_CACHE_PATH="$HOME/.local/share/bls"
-BLS_CACHE_CASKS="${BLS_CACHE_PATH}/casks.json"
-BLS_CACHE_FORMULA="${BLS_CACHE_PATH}/formula.json"
-BLS_CACHE_OFFSET="7 days ago"
-BLS_CACHE_LAST_MODIFIED="just now"
-_skip_update=0
+VERSION="1.1"
+CACHE_PATH="$HOME/.local/share/bls"
+CACHE_CASKS="${CACHE_PATH}/casks.json"
+CACHE_FORMULA="${CACHE_PATH}/formula.json"
+CACHE_TIMESTAMP="${CACHE_PATH}/date"
+CACHE_TTL="+4d"
+CACHE_LAST_MODIFIED="just now"
 
 # ------------------------------------------------------------
 # CACHING
 # ------------------------------------------------------------
+
+function _cacheNeedsRefersh {
+  local last_updated next_update
+  # if file does not exist, cache assumed outdated
+  if [ ! -f "$CACHE_TIMESTAMP" ]; then
+    return 1
+  fi
+  # compare dates
+  last_updated=$(cat "$CACHE_TIMESTAMP")
+  next_update=$(date -j -f %s -v "$CACHE_TTL" "$last_updated" +%s)
+  return $(( next_update < $(date +%s) ))
+}
+
 function _validateCache {
-  # check modification timestamps
-  if [ ! -f "$BLS_CACHE_CASKS" ] || [[ ! $(find "$BLS_CACHE_CASKS" -newermt "$BLS_CACHE_OFFSET") ]] 
-  then
+  if ! _cacheNeedsRefersh; then
     ealert "Cache outdated. Updating..."
     updateCache
   fi
-  BLS_CACHE_LAST_MODIFIED=$(date -r "$BLS_CACHE_CASKS" -u "+%Y-%m-%d %H:%M")
+  CACHE_LAST_MODIFIED=$(date -r "$CACHE_TIMESTAMP" "+%Y-%m-%d %H:%M")
 }
 
 function deleteCache {
-  if [ -d "$BLS_CACHE_PATH" ]
-  then
-    rm -rf "$BLS_CACHE_PATH"
-  fi
+  rm -rfv "$CACHE_PATH"
 }
 
 function updateCache {
-  if [ "$_skip_update" == 1 ]; then return 0; fi
   # create cache dir
-  if [ ! -d "$BLS_CACHE_PATH" ]
+  if [ ! -d "$CACHE_PATH" ]
   then
-    mkdir -p "$BLS_CACHE_PATH"
+    mkdir -p "$CACHE_PATH"
   fi
   # cache important files
   einfo -n "Downloading casks definitions"
-  curl -s https://formulae.brew.sh/api/cask.json > "$BLS_CACHE_CASKS"
+  curl -s https://formulae.brew.sh/api/cask.json > "$CACHE_CASKS"
   eok "done"
   einfo -n "Downloading formulae definitions"
-  curl -s https://formulae.brew.sh/api/formula.json > "$BLS_CACHE_FORMULA"
+  curl -s https://formulae.brew.sh/api/formula.json > "$CACHE_FORMULA"
   eok "done"
-  _skip_update=1
+  date +%s > "$CACHE_TIMESTAMP"
 }
 
 # ------------------------------------------------------------
@@ -68,7 +75,7 @@ function __strip_internal_cask {
 function __name_to_token {
   if [[ "$1" == *" --cask"* ]]; then
     name=$(__strip_internal_cask "$1")
-    jq '.[] | select(.name[0]=="'"$name"'") | .token' <"$BLS_CACHE_CASKS" | sed -E 's/"//g'
+    jq '.[] | select(.name[0]=="'"$name"'") | .token' <"$CACHE_CASKS" | sed -E 's/"//g'
   else
     echo "$1"
   fi
@@ -88,13 +95,13 @@ function fzf_preview {
 }
 
 function __list_formulae {
-  jq '.[] | .full_name' <"$BLS_CACHE_FORMULA" | sed -E 's/"//g'
+  jq '.[] | .full_name' <"$CACHE_FORMULA" | sed -E 's/"//g'
 }
 
 function __list_casks {
   local marker
   marker=${1:-""}
-  jq '.[] | .name[0]' <"$BLS_CACHE_CASKS" | sed -E 's/"//g' | sed -E "s/$/ $marker/g"
+  jq '.[] | .name[0]' <"$CACHE_CASKS" | sed -E 's/"//g' | sed -E "s/$/ $marker/g"
 }
 
 # ------------------------------------------------------------
@@ -111,9 +118,11 @@ function list_all {
 
   echo "${list[@]}" | \
     fzf -q "$query" \
-    --header "CTRL+i : install; updated: ${BLS_CACHE_LAST_MODIFIED}" \
+    --header "CTRL+i : install; updated: ${CACHE_LAST_MODIFIED}" \
     --scroll-off 2 \
-    --prompt "brew >> " \
+    --prompt "🍺 ➤ " \
+    --pointer "➤" \
+    --marker "➤" \
     --bind "ctrl-i:select+preview(bls --install {})" \
     --preview-window "right,70%" \
     --preview="${BASH_SOURCE[0]} --preview {}"
@@ -158,18 +167,18 @@ function __install_questions {
 
 function help {
   echo "$(basename "$0") <options> name
-version $VERSION
+  version $VERSION
 
-Options:
+  Options:
   --help     This help message
   --version  Display the version number (it is $VERSION)
   --update   Force update the local cask and formula repositories
   --clean    Purge any cached files
 
-Examples:
+  Examples:
   Force update and pre-fill ncd in the query
   $(basename "$0") --update ncd
-"
+  "
 }
 # ------------------------------------------------------------
 # ROUTER
