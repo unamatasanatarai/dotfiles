@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+. "$(dirname "$0")"/.lib
+
+filename="TODO.md"
+header="TODO
+====
+"
+
+if ! project_root=$(git rev-parse --show-toplevel 2>/dev/null); then
+  efail "not a git repo. stopping."
+  exit 1
+fi
+
+filepath="${project_root}/${filename}"
+if [ ! -f "$filepath" ]; then
+  echo "$header" >"$filepath"
+fi
+
+if [ "" == "$*" ]; then
+  nvim "$filepath"
+  exit 0
+fi
+
+echo "- [ ] $*" >>"$filepath"
