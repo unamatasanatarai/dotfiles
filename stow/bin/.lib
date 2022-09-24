@@ -26,6 +26,10 @@ function ealert {
   printf " \e[1m\e[38;5;220m‼\e[0m %s${eol}" "$*"
 }
 
+function ewarn {
+  ealert "$@"
+}
+
 function ebox {
   local text len hl
   text="$*"

@@ -4,24 +4,119 @@ set -euo pipefail
 
 . "$(dirname "$0")"/.lib
 
+# --------------------
+# config
+# --------------------
 filename="TODO.md"
 header="TODO
 ====
 "
 
+# --------------------
+# private
+# --------------------
+
+function makeHeader {
+  local path
+  path=$1
+  if [ ! -f "$path" ]; then
+    mkdir -p "$(dirname "$path")"
+    echo "$header" >"$path"
+  fi
+}
+
+function append {
+  local msg path
+  path="$1"
+  shift
+  msg="$*"
+  makeHeader "$path"
+  echo "- [ ] $msg" >>"$path"
+  eok "Added to $filepath"
+}
+
+function help {
+  echo "usage: todo [--file=path_to_todo_file] [text ...]
+
+  options:
+    --file          the path to the todo file
+    --help          what you are reading now
+
+EXAMPLES
+
+  Git project
+  -----------
+
+  If you run the command inside a git project folder tree,
+  it will be assumed you want to append to project_root/TODO.md
+
+  Open TODO.md
+
+      $ todo
+
+  Add a todo
+
+      $ todo Lorem ipsum dolor sit amet
+      $ todo \"Lorem ipsum dolor sit amet\"
+
+  Global todo
+  -----------
+
+  If you specify options, the todo will work on the specified filepath.
+
+  Open the todo
+
+      $ todo --file ~/Documents/project/todo.md
+
+  Append a todo
+
+      $ todo --file ~/Documents/project/todo.md Lorem ipsum dolor sit amet
+      $ todo --file ~/Documents/project/todo.md \"Lorem ipsum dolor sit amet \$(date)\"
+  "
+  exit 2
+}
+
+
+# --------------------
+# router
+# --------------------
+if [ "${1:-}" == "--help" ]; then
+  help
+fi
+
+if [ "${1:-}" == "--file" ]; then
+  # validate
+  if [ $# -eq 1 ]; then
+    help
+    exit 1
+  fi
+
+  if [ $# -eq 2 ]; then
+    # open the todo
+    nvim "$2"
+    exit 0
+  fi
+
+  if [ $# -ge 2 ]; then
+    shift
+    filepath="$1"
+    shift
+  fi
+  append "$filepath" "$1"
+  exit 0
+fi
+
 if ! project_root=$(git rev-parse --show-toplevel 2>/dev/null); then
-  efail "not a git repo. stopping."
-  exit 1
+  help
 fi
 
 filepath="${project_root}/${filename}"
-if [ ! -f "$filepath" ]; then
-  echo "$header" >"$filepath"
-fi
 
+# if no message, then open the file
 if [ "" == "$*" ]; then
   nvim "$filepath"
   exit 0
 fi
 
-echo "- [ ] $*" >>"$filepath"
+# otherwise, append to file
+append "$filepath" "$*"
