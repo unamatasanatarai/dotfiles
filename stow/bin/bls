@@ -165,20 +165,21 @@ function __install_questions {
 }
 
 function help {
-  echo "$(basename "$0") <options> name
-  version $VERSION
+  echo "usage: $(basename "$0") <options> name
+version $VERSION
 
   Options:
-  --help     This help message
-  --version  Display the version number (it is $VERSION)
-  --update   Force update the local cask and formula repositories
-  --clean    Purge any cached files
+    --help     This help message
+    --version  Display the version number (it is $VERSION)
+    --update   Force update the local cask and formula repositories
+    --clean    Purge any cached files
 
   Examples:
-  Force update and pre-fill ncd in the query
-  $(basename "$0") --update ncd
+    Force update and pre-fill ncd in the query
+    $(basename "$0") --update ncd
   "
 }
+
 # ------------------------------------------------------------
 # ROUTER
 # ------------------------------------------------------------
