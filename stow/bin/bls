@@ -25,7 +25,7 @@ function _cacheNeedsRefersh {
   # compare dates
   last_updated=$(cat "$CACHE_TIMESTAMP")
   next_update=$(date -j -f %s -v "$CACHE_TTL" "$last_updated" +%s)
-  return $(( next_update < $(date +%s) ))
+  return $((next_update < $(date +%s)))
 }
 
 function _validateCache {
@@ -42,8 +42,7 @@ function deleteCache {
 
 function updateCache {
   # create cache dir
-  if [ ! -d "$CACHE_PATH" ]
-  then
+  if [ ! -d "$CACHE_PATH" ]; then
     mkdir -p "$CACHE_PATH"
   fi
   # cache important files
@@ -75,7 +74,7 @@ function __strip_internal_cask {
 function __name_to_token {
   if [[ "$1" == *" --cask"* ]]; then
     name=$(__strip_internal_cask "$1")
-    jq '.[] | select(.name[0]=="'"$name"'") | .token' <"$CACHE_CASKS" | sed -E 's/"//g'
+    jq '.[] | select(.name[0]=="'"$name"'") | .token' < "$CACHE_CASKS" | sed -E 's/"//g'
   else
     echo "$1"
   fi
@@ -95,13 +94,13 @@ function fzf_preview {
 }
 
 function __list_formulae {
-  jq '.[] | .full_name' <"$CACHE_FORMULA" | sed -E 's/"//g'
+  jq '.[] | .full_name' < "$CACHE_FORMULA" | sed -E 's/"//g'
 }
 
 function __list_casks {
   local marker
   marker=${1:-""}
-  jq '.[] | .name[0]' <"$CACHE_CASKS" | sed -E 's/"//g' | sed -E "s/$/ $marker/g"
+  jq '.[] | .name[0]' < "$CACHE_CASKS" | sed -E 's/"//g' | sed -E "s/$/ $marker/g"
 }
 
 # ------------------------------------------------------------
@@ -116,16 +115,16 @@ function list_all {
 
   query=${1:-""}
 
-  echo "${list[@]}" | \
-    fzf -q "$query" \
-    --header "CTRL+i : install; updated: ${CACHE_LAST_MODIFIED}" \
-    --scroll-off 2 \
-    --prompt "🍺 ➤ " \
-    --pointer "➤" \
-    --marker "➤" \
-    --bind "ctrl-i:select+preview(bls --install {})" \
-    --preview-window "right,70%" \
-    --preview="${BASH_SOURCE[0]} --preview {}"
+  echo "${list[@]}" \
+    | fzf -q "$query" \
+      --header "CTRL+i : install; updated: ${CACHE_LAST_MODIFIED}" \
+      --scroll-off 2 \
+      --prompt "🍺 ➤ " \
+      --pointer "➤" \
+      --marker "➤" \
+      --bind "ctrl-i:select+preview(bls --install {})" \
+      --preview-window "right,70%" \
+      --preview="${BASH_SOURCE[0]} --preview {}"
 }
 
 function __install {
@@ -186,38 +185,38 @@ function help {
 
 while [[ -n ${1:--help} ]]; do
   case ${1:--help} in
-    --update )
+    --update)
       updateCache
       shift
       list_all "$@"
       exit 0
       ;;
 
-    --clean )
+    --clean)
       einfo "Clearning bls databases"
       deleteCache
       eok "done"
       exit 0
       ;;
 
-    --preview )
+    --preview)
       fzf_preview "$@"
       shift
       exit 0
       ;;
 
-    --install )
+    --install)
       shift
       __install "$@"
       exit 0
       ;;
 
-    --version )
+    --version)
       echo "version: $VERSION"
       exit 0
       ;;
 
-    --help )
+    --help)
       help
       exit 0
       ;;

@@ -12,7 +12,6 @@ ebox "Neovim setup"
 #eok "marksman"
 
 einfo "BASH support"
-pip install beautysh
 npm i -g bash-language-server
 brew install shellharden
 eok "BASH support added"

@@ -6,17 +6,20 @@ local code_actions = null_ls.builtins.code_actions
 
 local sources = {
   -- BASH
-  diagnostics.shellcheck,
   code_actions.shellcheck,
   formatting.shellharden.with({
     filetypes = { 'sh' }
   }),
-  formatting.beautysh.with({
-    extra_args = {
+  formatting.shfmt.with({
+    extra_args ={
       "-i",
       "2",
-      "-s",
-      "fnonly"
+      "-ci",
+      "-sr",
+      "-ln",
+      "bash",
+      "-bn",
+      "-sr",
     }
   }),
 }
