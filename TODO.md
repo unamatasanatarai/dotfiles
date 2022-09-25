@@ -1,5 +1,6 @@
 TODO
 ====
 
-- [ ] bash:settings refactor aliases and xdg directories
-- [ ] Update todo's help readability
+- [ ] bash: settings refactor aliases and xdg directories
+- [ ] todo: Update help readability
+- [ ] nt: chmod +x should be a lookup table, not literal comparison
