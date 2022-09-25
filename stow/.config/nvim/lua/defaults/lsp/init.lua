@@ -1,15 +1,45 @@
 local servers = {
-  "bashls",
+  ["bashls"] = {},
   --  "eslint",
-  "html",
+  ["html"] = {
+    settings = {
+      html = {
+        format = {
+          templating = true,
+          wrapLineLength = 120,
+          wrapAttributes = 'auto',
+        },
+        hover = {
+          documentation = true,
+          references = true,
+        },
+      },
+    },
+  },
   --  "jsonls",
   --  "marksman",
   --  "stylelint_lsp",
-  "sumneko_lua",
+  ["sumneko_lua"] = {
+    settings = {
+      Lua = {
+        diagnostics = {
+          globals = { 'vim' }
+        },
+        telemetry = {
+          enable = false
+        }
+      }
+    }
+  },
   --  "svelte",
   --  "tsserver",
 }
 
+--require("lspconfig")["marksman"].setup({
+--  on_attach = on_attach,
+--  flags = lsp_flags,
+--  root_dir = require("lspconfig/util").root_pattern(".git", ".marksman.toml", "*.md"),
+--})
 local opts = { noremap = true, silent = true }
 vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, opts)
 vim.keymap.set('n', '<space>et', "<cmd>Telescope diagnostics<cr>", opts)
@@ -46,6 +76,7 @@ local lsp_flags = {
   debounce_text_changes = 150,
 }
 
+-- todo: do we really need this? does this not slow down the bootup?
 local lsp_installer = require("nvim-lsp-installer")
 for _, name in pairs(servers) do
   local server_is_found, server = lsp_installer.get_server(name)
@@ -57,51 +88,13 @@ for _, name in pairs(servers) do
   end
 end
 
-for _, name in pairs(servers) do
-  require("lspconfig")[name].setup({
-    on_attach = on_attach,
-    flags = lsp_flags,
-  })
+
+for name, options in pairs(servers) do
+  options.on_attach = on_attach
+  options.flags = lsp_flags
+  require("lspconfig")[name].setup(options)
 end
 
---require("lspconfig")["marksman"].setup({
---  on_attach = on_attach,
---  flags = lsp_flags,
---  root_dir = require("lspconfig/util").root_pattern(".git", ".marksman.toml", "*.md"),
---})
-
-require("lspconfig")["sumneko_lua"].setup({
-  on_attach = on_attach,
-  flags = lsp_flags,
-  settings = {
-    Lua = {
-      diagnostics = {
-        globals = { 'vim' }
-      },
-      telemetry = {
-        enable = false
-      }
-    }
-  }
-})
-
-require("lspconfig")["html"].setup({
-  on_attach = on_attach,
-  flags = lsp_flags,
-  settings = {
-    html = {
-      format = {
-        templating = true,
-        wrapLineLength = 120,
-        wrapAttributes = 'auto',
-      },
-      hover = {
-        documentation = true,
-        references = true,
-      },
-    },
-  },
-})
 
 -- todo: refactor, move to another location possibly
 local function lsp_install_servers()

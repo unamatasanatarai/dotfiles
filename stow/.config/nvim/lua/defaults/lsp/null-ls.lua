@@ -11,7 +11,7 @@ local sources = {
     filetypes = { 'sh' }
   }),
   formatting.shfmt.with({
-    extra_args ={
+    extra_args = {
       "-i",
       "2",
       "-ci",
