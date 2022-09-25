@@ -1,7 +1,7 @@
 local servers = {
   "bashls",
   --  "eslint",
-  --  "html",
+  "html",
   --  "jsonls",
   --  "marksman",
   --  "stylelint_lsp",
@@ -83,6 +83,24 @@ require("lspconfig")["sumneko_lua"].setup({
       }
     }
   }
+})
+
+require("lspconfig")["html"].setup({
+  on_attach = on_attach,
+  flags = lsp_flags,
+  settings = {
+    html = {
+      format = {
+        templating = true,
+        wrapLineLength = 120,
+        wrapAttributes = 'auto',
+      },
+      hover = {
+        documentation = true,
+        references = true,
+      },
+    },
+  },
 })
 
 -- todo: refactor, move to another location possibly

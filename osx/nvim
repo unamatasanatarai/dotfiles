@@ -16,12 +16,15 @@ npm i -g bash-language-server
 brew install shellharden
 eok "BASH support added"
 
+einfo "HTML support"
+npm i -g vscode-langservers-extracted
+eok "HTML support added"
+
 #  js-beautify \
 #  prettier \
 #  pyright \
 #  svelte-language-server \
 #  typescript typescript-language-server \
-#  vscode-langservers-extracted
 #
 #eok "pyright"
 #eok "typescript typescript-language-server"
