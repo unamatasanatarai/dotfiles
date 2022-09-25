@@ -1,0 +1,79 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+VERSION="0.1"
+__FILE=$(basename "$0")
+
+# ------------------------------------------------------------
+# DEFAULTS
+# ------------------------------------------------------------
+
+o_flag=1
+
+# ------------------------------------------------------------
+# PUBLIC INTERFACES
+# ------------------------------------------------------------
+
+function main {
+  parseOptions "$@"
+  echo "o_flag is set to: ${o_flag}"
+}
+
+function parseOptions {
+  while [[ "$#" -ge 1 ]]; do
+    case $1 in
+
+      -h | --help)
+        help
+        exit 2
+        ;;
+
+      -V | --version)
+        _version
+        exit
+        ;;
+
+      -f | --flag)
+        shift
+        o_flag="$1"
+        ;;
+
+    esac
+    shift
+  done
+}
+
+# ------------------------------------------------------------
+# INTERNALS
+# ------------------------------------------------------------
+
+function _helpOptions {
+  # use `#` to separate arg from descriptin
+  local options
+  options="
+  -f, --flag        # change the flag from 1 (default) to something else
+  "
+  echo "$options" | column -s "#" -t | sed 's/^ */    /'
+}
+
+function _version {
+  echo "${__FILE}, version ${VERSION}"
+}
+
+function help {
+  _version
+  echo "Usage: $__FILE template filename [options]
+
+Options:
+$(_helpOptions)
+
+Examples:
+    $__FILE -f 'arg modified flag'"
+}
+
+# ------------------------------------------------------------
+# MAIN
+# ------------------------------------------------------------
+
+main "$@"

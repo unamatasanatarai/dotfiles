@@ -1,0 +1,96 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+. "$(dirname "$0")"/.lib
+
+VERSION="0.1"
+
+# ------------------------------------------------------------
+# DEFAULTS
+# ------------------------------------------------------------
+
+o_open_after_create=1
+
+# ------------------------------------------------------------
+# PUBLIC INTERFACES
+# ------------------------------------------------------------
+
+function main {
+  local template filepath
+
+  # there must be at least 2 params to the command
+  # the first params cannot be starting with dash and doubledash (-, --)
+  # this is regex cmp
+  if [ $# -lt 2 ] || [[ "$1" =~ ^--? ]] || [[ "$2" =~ ^--? ]]; then
+    help
+    exit 1
+  fi
+
+  template="$1"
+  filepath="$2"
+  shift
+  shift
+
+  parseOptions "$@"
+
+  mkdir -p "$(dirname "$filepath")"
+  cat "$(dirname "$0")/new_templates/$template" > "$filepath"
+
+  eok "Created a new $template file in $filepath"
+
+  [ "$template" == "bash" ] && chmod +x "$filepath"
+  [ "$o_open_after_create" -eq 1 ] && nvim "$filepath"
+
+}
+
+function parseOptions {
+  while [[ "$#" -ge 1 ]]; do
+    case $1 in
+
+      -h | --help)
+        help
+        exit 2
+        ;;
+
+      -V | --version)
+        echo "$VERSION"
+        exit
+        ;;
+
+      -o | --only-ceate)
+        o_open_after_create=0
+        ;;
+
+    esac
+    shift
+  done
+}
+
+# ------------------------------------------------------------
+# INTERNALS
+# ------------------------------------------------------------
+
+function _helpOptions {
+  # use `#` to separate arg from descriptin
+  local options
+  options="
+    -h, --help        # Display this help message
+    -V, --version     # Display the script version
+    -o, --only-create # Create file and do not enter edit.
+  "
+  echo "$options" | column -s "#" -t | sed 's/^ */    /'
+}
+
+function help {
+  echo "$(basename "$0"), version ${VERSION}"
+  echo "Usage: $(basename "$0") template filename [options]
+
+Options:
+$(_helpOptions)"
+}
+
+# ------------------------------------------------------------
+# MAIN
+# ------------------------------------------------------------
+
+main "$@"
