@@ -13,7 +13,7 @@ ebox "Neovim setup"
 
 einfo "BASH support"
 npm i -g bash-language-server
-brew install shellharden
+brew install shellharden shfmt
 eok "BASH support added"
 
 einfo "HTML support"
