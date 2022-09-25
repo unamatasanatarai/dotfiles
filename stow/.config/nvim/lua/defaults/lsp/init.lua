@@ -5,7 +5,7 @@ local servers = {
   --  "jsonls",
   --  "marksman",
   --  "stylelint_lsp",
-  --  "sumneko_lua",
+  "sumneko_lua",
   --  "svelte",
   --  "tsserver",
 }
@@ -64,11 +64,11 @@ for _, name in pairs(servers) do
   })
 end
 
-require("lspconfig")["marksman"].setup({
-  on_attach = on_attach,
-  flags = lsp_flags,
-  root_dir = require("lspconfig/util").root_pattern(".git", ".marksman.toml", "*.md"),
-})
+--require("lspconfig")["marksman"].setup({
+--  on_attach = on_attach,
+--  flags = lsp_flags,
+--  root_dir = require("lspconfig/util").root_pattern(".git", ".marksman.toml", "*.md"),
+--})
 
 require("lspconfig")["sumneko_lua"].setup({
   on_attach = on_attach,
@@ -85,6 +85,7 @@ require("lspconfig")["sumneko_lua"].setup({
   }
 })
 
+-- todo: refactor, move to another location possibly
 local function lsp_install_servers()
   vim.api.nvim_command("LspInstall " .. table.concat(servers, " "))
 end

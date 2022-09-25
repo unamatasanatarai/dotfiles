@@ -4,41 +4,42 @@ set -euo pipefail
 
 . "$(dirname "$0")"/install-brew
 
-ebox "Install tools used by neovim"
+ebox "Neovim setup"
 
-wget -O /tmp/marksman https://github.com/artempyanykh/marksman/releases/download/2022-06-23/marksman-macos
-mv /tmp/marksman ~/.local/bin/marksman
-chmod u+x ~/.local/bin/marksman
-eok "marksman"
+#wget -O /tmp/marksman https://github.com/artempyanykh/marksman/releases/download/2022-06-23/marksman-macos
+#mv /tmp/marksman ~/.local/bin/marksman
+#chmod u+x ~/.local/bin/marksman
+#eok "marksman"
 
-npm i -g \
-  bash-language-server \
-  js-beautify \
-  prettier \
-  pyright \
-  svelte-language-server \
-  typescript typescript-language-server \
-  vscode-langservers-extracted \
+einfo "BASH support"
+pip install beautysh
+npm i -g bash-language-server
+brew install shellharden
+eok "BASH support added"
 
-eok "bash-language-server"
-eok "pyright"
-eok "typescript typescript-language-server"
-eok "svelte-language-server"
-eok "vscode-langservers-extracted"
-eok "prettier"
-eok "js-beautify"
-
-cargo install stylua shellharden
-
-eok "stylua"
-eok "shellharden"
-
-brew install lua-language-server shfmt black
-brew link black
-
+#  js-beautify \
+#  prettier \
+#  pyright \
+#  svelte-language-server \
+#  typescript typescript-language-server \
+#  vscode-langservers-extracted
+#
+#eok "pyright"
+#eok "typescript typescript-language-server"
+#eok "svelte-language-server"
+#eok "vscode-langservers-extracted"
+#eok "prettier"
+#eok "js-beautify"
+#
+#cargo install stylua shellharden
+#
+#eok "stylua"
+#eok "shellharden"
+#
+brew install lua-language-server
 eok "lua-language-server"
-eok "shfmt"
-eok "black"
+#
+#
 
 ebox "Force plugins installation"
 nvim +PackerSync +qall
