@@ -40,15 +40,17 @@ Options:
   -w    Width of the popup in Characters
   -h    Height of the popup in Characters
   -c    Command to run in the popup
+  -l    Line height (default: 36)
 "
 }
 
-while getopts "w:h:x:y:c:?" o; do
+while getopts "w:h:x:y:c:l:?" o; do
   case "$o" in
     w) W=${OPTARG} ;;
     h) H=${OPTARG} ;;
     x) X=${OPTARG} ;;
     y) Y=${OPTARG} ;;
+    l) LH=${OPTARG} ;;
     c) cmd=${OPTARG} ;;
     ?) help; exit 2 ;;
     *) help
