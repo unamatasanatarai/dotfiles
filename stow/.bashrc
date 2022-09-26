@@ -1,1 +1,3 @@
-#[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+#!/usr/bin/env bash
+
+source "$HOME/.config/bash/init"
