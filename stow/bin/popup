@@ -19,7 +19,7 @@ TITLE="TermPopup"
 # defaults
 PADDING=20
 # text line height
-LH=36
+LH=24
 # term width and height in chars
 W=80
 H=20

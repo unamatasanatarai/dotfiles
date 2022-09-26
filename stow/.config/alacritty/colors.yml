@@ -4,6 +4,7 @@ colors:
   primary:
     # hard contrast: background = '#1d2021'
     background: '#2E3440'
+    background: '#24272E'
     # soft contrast: background = '#32302f'
     foreground: '#ffb000'
 

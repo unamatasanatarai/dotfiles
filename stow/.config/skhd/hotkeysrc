@@ -1,3 +1,3 @@
 lalt + lctrl - t : open -na /Applications/Alacritty.app
-lalt - space : bash -l -c "$HOME/bin/popup -c $HOME/bin/spotlight -y0 -w40 -h10"
+lalt - space : bash -l -c "$HOME/bin/popup -c $HOME/bin/spotlight -y0 -w40 -h12"
 lalt + lctrl - m : ~/bin/micm

@@ -3,6 +3,20 @@
 set -euo pipefail
 
 pwd="${HOME}/bin/spotlight_commands"
-sedpwd=$(echo "${pwd}" | sed "s/\//\\\\\//g")
-COMMAND=$( find "$pwd" -type f ! -iname ".*" | sed "s/$sedpwd//g" | sed "s/^\///g" | uniq | sort | fzf --prompt="►▶ " --pointer="► " --no-info --layout=reverse --border --color="gutter:#2E3440,bg+:#2E3440,fg+:underline,fg+:italic,hl:#689d6a,hl+:#689d6a,hl+:underline,hl+:italic")
+sedpwd=$(echo "$pwd" | sed "s/\//\\\\\//g")
+COMMAND=$(
+  find "$pwd" -type f ! -iname ".*" \
+    | sed "s/$sedpwd//g" \
+    | sed "s/^\///g" \
+    | uniq \
+    | sort \
+    | fzf \
+      --prompt="►▶ " \
+      --pointer="► " \
+      --no-info \
+      --layout=reverse \
+      --border \
+      --color="gutter:#24272E,bg+:#24272E,bg:#24272E,fg:#ffb000,fg+:italic,fg+:#ffb000,hl:#689d6a,hl+:#ffffff,hl+:underline,hl+:italic"
+)
+
 ./"$pwd"/"$COMMAND"
