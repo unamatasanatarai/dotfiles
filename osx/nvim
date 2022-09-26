@@ -40,8 +40,6 @@ eok "HTML support added"
 #
 brew install lua-language-server
 eok "lua-language-server"
-#
-#
 
 ebox "Force plugins installation"
 nvim +PackerSync +qall
@@ -49,4 +47,4 @@ eok "PackerSync has run"
 
 ebox "Force install LspServers"
 nvim +LspInstallServers
-eok "PackeLspInstallServers has completed"
+eok "LspInstallServers has completed"
