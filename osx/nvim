@@ -6,10 +6,12 @@ set -euo pipefail
 
 ebox "Neovim setup"
 
-#wget -O /tmp/marksman https://github.com/artempyanykh/marksman/releases/download/2022-06-23/marksman-macos
-#mv /tmp/marksman ~/.local/bin/marksman
-#chmod u+x ~/.local/bin/marksman
-#eok "marksman"
+einfo "Marksman"
+asset=$(curl https://api.github.com/repos/artempyanykh/marksman/releases | jq -r '.[0].assets[] | select(.name=="marksman-macos") | .browser_download_url')
+curl -o /tmp/marksman -OL "$asset"
+mv /tmp/marksman ~/.local/bin/marksman
+chmod +x ~/.local/bin/marksman
+eok "Marksman"
 
 einfo "BASH support"
 npm i -g bash-language-server

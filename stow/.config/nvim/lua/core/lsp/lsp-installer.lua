@@ -27,13 +27,11 @@ local servers = {
       }
     }
   },
+  ["marksman"] = {
+    root_dir = require("lspconfig/util").root_pattern(".git", ".marksman.toml", "*.md"),
+  },
 }
 
---require("lspconfig")["marksman"].setup({
---  on_attach = on_attach,
---  flags = lsp_flags,
---  root_dir = require("lspconfig/util").root_pattern(".git", ".marksman.toml", "*.md"),
---})
 local opts = { noremap = true, silent = true }
 vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, opts)
 vim.keymap.set('n', '<space>et', "<cmd>Telescope diagnostics<cr>", opts)
