@@ -1,6 +1,5 @@
 local servers = {
   ["bashls"] = {},
-  --  "eslint",
   ["html"] = {
     settings = {
       html = {
@@ -16,9 +15,6 @@ local servers = {
       },
     },
   },
-  --  "jsonls",
-  --  "marksman",
-  --  "stylelint_lsp",
   ["sumneko_lua"] = {
     settings = {
       Lua = {
@@ -31,8 +27,6 @@ local servers = {
       }
     }
   },
-  --  "svelte",
-  --  "tsserver",
 }
 
 --require("lspconfig")["marksman"].setup({
@@ -76,29 +70,21 @@ local lsp_flags = {
   debounce_text_changes = 150,
 }
 
--- todo: do we really need this? does this not slow down the bootup?
-local lsp_installer = require("nvim-lsp-installer")
-for _, name in pairs(servers) do
-  local server_is_found, server = lsp_installer.get_server(name)
-  if server_is_found then
-    if not server:is_installed() then
-      print("Installing " .. name)
-      server:install()
-    end
-  end
-end
-
+-- setup
+require("mason").setup()
+require("mason-lspconfig").setup({
+  automatic_installation = true,
+  ui = {
+    icons = {
+      server_installed = "✓",
+      server_pending = "➜",
+      server_uninstalled = "✗",
+    },
+  },
+})
 
 for name, options in pairs(servers) do
   options.on_attach = on_attach
   options.flags = lsp_flags
   require("lspconfig")[name].setup(options)
 end
-
-
--- todo: refactor, move to another location possibly
-local function lsp_install_servers()
-  vim.api.nvim_command("LspInstall " .. table.concat(servers, " "))
-end
-
-vim.api.nvim_create_user_command('LspInstallServers', lsp_install_servers, {})

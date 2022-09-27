@@ -42,9 +42,5 @@ brew install lua-language-server
 eok "lua-language-server"
 
 ebox "Force plugins installation"
-nvim +PackerSync +qall
+nvim +PackerSync
 eok "PackerSync has run"
-
-ebox "Force install LspServers"
-nvim +LspInstallServers
-eok "LspInstallServers has completed"

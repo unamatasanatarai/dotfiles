@@ -38,17 +38,17 @@ packer.init({
   },
 })
 
--- Install your plugins here
 return packer.startup(function(use)
-  -- My plugins here
-
-  use({ "wbthomason/packer.nvim" }) -- Have packer manage itself
-  use({ "nvim-lua/plenary.nvim" }) -- Useful lua functions used by lots of plugins
+  use { "wbthomason/packer.nvim" }
+  use { "nvim-lua/plenary.nvim" }
 
   -- LSP
-  use({ "neovim/nvim-lspconfig" }) -- enable LSP
-  use({ "williamboman/nvim-lsp-installer" }) -- simple to use language server installer
-  use("jose-elias-alvarez/null-ls.nvim")
+  use {
+    "neovim/nvim-lspconfig",
+    "williamboman/mason.nvim",
+    "williamboman/mason-lspconfig.nvim",
+    "jose-elias-alvarez/null-ls.nvim",
+  }
 
   -- themes
   use("EdenEast/nightfox.nvim")
