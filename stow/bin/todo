@@ -21,7 +21,7 @@ function makeHeader {
   path=$1
   if [ ! -f "$path" ]; then
     mkdir -p "$(dirname "$path")"
-    echo "$header" >"$path"
+    echo "$header" > "$path"
   fi
 }
 
@@ -31,7 +31,7 @@ function append {
   shift
   msg="$*"
   makeHeader "$path"
-  echo "- [ ] $msg" >>"$path"
+  echo "- [ ] $msg" >> "$path"
   eok "Added to $filepath"
 }
 
@@ -40,6 +40,7 @@ function help {
 
   options:
     --file          the path to the todo file
+    --list          list out all the todo's in directory
     --help          what you are reading now
 
 EXAMPLES
@@ -76,12 +77,20 @@ EXAMPLES
   exit 2
 }
 
-
 # --------------------
 # router
 # --------------------
 if [ "${1:-}" == "--help" ]; then
   help
+fi
+
+if [ "${1:-}" == "--list" ]; then
+  todos=$(rg -g'!.git' -g'!TODO.md' "#\s*todo:")
+
+  for todo in "${todos[@]}"; do
+    echo "$todo"
+  done
+  exti 0
 fi
 
 if [ "${1:-}" == "--file" ]; then
@@ -106,7 +115,7 @@ if [ "${1:-}" == "--file" ]; then
   exit 0
 fi
 
-if ! project_root=$(git rev-parse --show-toplevel 2>/dev/null); then
+if ! project_root=$(git rev-parse --show-toplevel 2> /dev/null); then
   help
 fi
 
