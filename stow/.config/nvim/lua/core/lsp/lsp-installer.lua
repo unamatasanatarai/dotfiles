@@ -1,5 +1,6 @@
 local servers = {
   ["bashls"] = {},
+  ["rust_analyzer"] = {},
   ["html"] = {
     settings = {
       html = {

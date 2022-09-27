@@ -59,3 +59,25 @@ telescope.setup {
     },
   },
 }
+
+-- IFF in Rust project (Cargo.toml exists in root)
+-- do not search through "target" dir
+vim.api.nvim_create_autocmd("BufEnter", {
+  group = vim.api.nvim_create_augroup("rustripgrep", { clear = true }),
+  callback = function()
+    local Path = require("plenary.path")
+    local cargo_toml = Path:new(vim.fn.getcwd() .. "/Cargo.toml")
+
+    if cargo_toml:exists() and cargo_toml:is_file() then
+      print("yea, rust")
+      telescope.setup {
+        pickers = {
+          find_files = {
+            find_command = { "rg", "--no-ignore", "--hidden", "--files", "-g",
+              "!{**/node_modules/*,**/.git/*,**/target/*}" },
+          },
+        },
+      }
+    end
+  end
+})

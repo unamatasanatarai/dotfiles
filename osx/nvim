@@ -22,6 +22,10 @@ einfo "HTML support"
 npm i -g vscode-langservers-extracted
 eok "HTML support added"
 
+einfo "RUST support"
+brew install rustfmt rust-analyzer
+eok "RUST support added"
+
 #  js-beautify \
 #  prettier \
 #  pyright \
