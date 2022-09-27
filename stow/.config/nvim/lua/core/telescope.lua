@@ -69,7 +69,6 @@ vim.api.nvim_create_autocmd("BufEnter", {
     local cargo_toml = Path:new(vim.fn.getcwd() .. "/Cargo.toml")
 
     if cargo_toml:exists() and cargo_toml:is_file() then
-      print("yea, rust")
       telescope.setup {
         pickers = {
           find_files = {
