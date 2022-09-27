@@ -26,6 +26,10 @@ einfo "RUST support"
 brew install rustfmt rust-analyzer
 eok "RUST support added"
 
+einfo "MAKEFILE support"
+brew install checkmake
+eok "MAKEFILE support added"
+
 #  js-beautify \
 #  prettier \
 #  pyright \
