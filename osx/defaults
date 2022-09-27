@@ -251,8 +251,8 @@ eok "Disable console logon from the logon screen"
 sudo /usr/libexec/PlistBuddy -c "Set 'AC Power':'Display Sleep Timer' 5" /Library/Preferences/com.apple.PowerManagement.plist
 eok "AC display sleep timer"
 
-sudo /usr/libexec/PlistBuddy -c "Set 'Battery Power':'Display Sleep Timer' 2" /Library/Preferences/com.apple.PowerManagement.plist
-eok "Battery display sleep timer"
+#sudo /usr/libexec/PlistBuddy -c "Set 'Battery Power':'Display Sleep Timer' 2" /Library/Preferences/com.apple.PowerManagement.plist
+#eok "Battery display sleep timer"
 
 defaults write com.apple.dock mru-spaces -bool false
 eok "Don’t automatically rearrange Spaces based on most recent use"
