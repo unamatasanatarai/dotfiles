@@ -50,6 +50,9 @@ return packer.startup(function(use)
     "jose-elias-alvarez/null-ls.nvim",
   }
 
+  -- nvim todo
+  use { "unamatasanatarai/nvim-md-todo-toggle" }
+
   -- themes
   use("EdenEast/nightfox.nvim")
   use("hardselius/warlock")
