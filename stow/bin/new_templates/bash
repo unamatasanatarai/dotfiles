@@ -16,6 +16,7 @@ o_flag=1
 # ------------------------------------------------------------
 
 function main {
+  ##cursor##
   parseOptions "$@"
   echo "o_flag is set to: ${o_flag}"
 }
