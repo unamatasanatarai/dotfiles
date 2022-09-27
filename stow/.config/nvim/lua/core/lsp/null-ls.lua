@@ -22,6 +22,8 @@ local sources = {
       "-sr",
     }
   }),
+  -- Makefile
+  diagnostics.checkmake,
 }
 
 null_ls.setup({
