@@ -6,11 +6,17 @@ set -euo pipefail
 
 ebox "Launching appliactions"
 
-eask "Changing bash to brew bash (v5)"
-echo "$(brew --prefix)"/bin/bash | sudo tee -a /private/etc/shells
-chsh -s "$(brew --prefix)/bin/bash"
-sudo chpass -s "$(brew --prefix)/bin/bash"
-eok "bash is better than ZSH"
+# todo: rethink the location of this configuration. Maybe in env?
+bpshell=$(brew --prefix)/bin/bash
+shells="/private/etc/shells"
+# do not append if already added
+if ! grep -s "$bpshell" "$shells"; then
+  eask "Changing bash to brew bash (v5)"
+  echo "$(brew --prefix)"/bin/bash | sudo tee -a "$shells"
+  chsh -s "$bpshell"
+  sudo chsh -s "$bpshell"
+  eok "We like Bash."
+fi
 
 [ "$(brew services info yabai 2> /dev/null)" = "" ] && brew services start yabai || brew services restart yabai
 eok "started yabai"
