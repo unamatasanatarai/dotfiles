@@ -12,9 +12,9 @@ chsh -s "$(brew --prefix)/bin/bash"
 sudo chpass -s "$(brew --prefix)/bin/bash"
 eok "bash is better than ZSH"
 
-[ "$(brew services info yabai 2>/dev/null)" = "" ] && brew services start yabai || brew services restart yabai
+[ "$(brew services info yabai 2> /dev/null)" = "" ] && brew services start yabai || brew services restart yabai
 eok "started yabai"
-[ "$(brew services info skhd 2>/dev/null)" = "" ] && brew services start skhd || brew services restart skhd
+[ "$(brew services info skhd 2> /dev/null)" = "" ] && brew services start skhd || brew services restart skhd
 eok "started skhd"
 
 cd /Applications
@@ -26,6 +26,3 @@ eok "started itsycal"
 
 open -a xbar.app
 eok "started xbar"
-
-open -a "Hidden Bar.app"
-eok "started hiddenbar"

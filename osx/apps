@@ -52,7 +52,6 @@ brew install --cask --no-quarantine \
   caffeine \
   itsycal \
   firefox \
-  hiddenbar \
   keepassxc \
   keycastr \
   losslesscut \
