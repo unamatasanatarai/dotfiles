@@ -2,19 +2,147 @@
 
 set -euo pipefail
 
-. "$(dirname "$0")"/.lib
+VERSION="0.2"
+__FILE=$(basename "$0")
+__DIR=$(dirname "$0")
 
-# --------------------
-# config
-# --------------------
+. "$__DIR"/.lib
+
+# ------------------------------------------------------------
+# DEFAULTS
+# ------------------------------------------------------------
+
+o_action="append"
 filename="TODO.md"
 header="TODO
 ====
 "
+project_root=$(git rev-parse --show-toplevel 2> /dev/null)
+filepath="${project_root}/${filename}"
 
-# --------------------
-# private
-# --------------------
+# ------------------------------------------------------------
+# PUBLIC INTERFACES
+# ------------------------------------------------------------
+
+function main {
+  parseOptions "$@"
+
+  case $o_action in
+
+    "find")
+      findTodos
+      exit
+      ;;
+
+    "collect")
+      collectTodos
+      exit
+      ;;
+
+    "open")
+      nvim "$filepath"
+      exit
+      ;;
+
+    "append")
+      # todo: this checks for whether the --file path was specified. This is flaky, extract to somewhere else
+      if [[ "$1" =~ ^--? ]]; then
+        shift
+        shift
+      fi
+      append "$filepath" "$*"
+      exit
+      ;;
+
+    *)
+      help
+      ;;
+
+  esac
+}
+
+function parseOptions {
+  while [[ "$#" -ge 1 ]]; do
+    case $1 in
+
+      -h | --help)
+        help
+        exit 2
+        ;;
+
+      -V | --version)
+        _version
+        exit
+        ;;
+
+      --collect)
+        o_action="collect"
+        ;;
+
+      --find)
+        o_action="find"
+        ;;
+
+      --file)
+        shift
+        if [ $# -eq 0 ]; then
+          help
+          exit 2
+        fi
+        filepath="$1"
+        if [ $# -eq 1 ]; then
+          o_action="open"
+        fi
+        ;;
+
+    esac
+
+    shift
+  done
+}
+
+function findTodos {
+  todos=$(rg -g'!.git' -g"!$filename" "#\s*todo:")
+
+  for todo in "${todos[@]}"; do
+    echo "$todo"
+  done
+}
+
+function collectTodos {
+  local total
+  total=0
+  mapfile -t list < <(findTodos)
+  for t in "${list[@]}"; do
+    if ! grep -s "$t" "$filepath" 1> /dev/null; then
+      _append "$filepath" "$t"
+      total=$((total + 1))
+    fi
+  done
+  eok "Added $total todos to $filepath"
+}
+
+function append {
+  local path duplicate msg
+  duplicate=""
+  path="$1"
+  shift
+  msg="$*"
+  if grep -sq "$msg" "$filepath" 1> /dev/null; then
+    duplicate="duplicate task "
+  fi
+  _append "$path" "$msg"
+  eok "Added ${duplicate}to $path"
+}
+
+function _append {
+  local msg path
+  path="$1"
+  shift
+  msg="$*"
+  makeHeader "$path"
+  echo "- [ ] $msg" >> "$path"
+}
 
 function makeHeader {
   local path
@@ -24,34 +152,42 @@ function makeHeader {
     echo "$header" > "$path"
   fi
 }
+# ------------------------------------------------------------
+# INTERNALS
+# ------------------------------------------------------------
 
-function append {
-  local msg path
-  path="$1"
-  shift
-  msg="$*"
-  makeHeader "$path"
-  echo "- [ ] $msg" >> "$path"
-  eok "Added to $filepath"
+function _helpOptions {
+  # use `#` to separate arg from descriptin
+  local options
+  options="
+    --file         # the path to the todo file
+    --find         # list out all the todo's in directory
+    --collect      # put found todo's (--find) into $filename
+    --help         # what you are reading now
+  "
+  echo "$options" | column -s "#" -t | sed 's/^ */    /'
+}
+
+function _version {
+  echo "${__FILE}, version ${VERSION}"
 }
 
 function help {
-  echo "usage: todo [--file=path_to_todo_file] [text ...]
+  _version
+  echo "Usage: $__FILE [--file=path_to_todo_file] [text ...]
 
-  options:
-    --file          the path to the todo file
-    --list          list out all the todo's in directory
-    --help          what you are reading now
+Options:
+$(_helpOptions)
 
-EXAMPLES
+Examples:
 
   Git project
   -----------
 
   If you run the command inside a git project folder tree,
-  it will be assumed you want to append to project_root/TODO.md
+  it will be assumed you want to append to project_root/$filename
 
-  Open TODO.md
+  Open $filename
 
       $ todo
 
@@ -73,59 +209,11 @@ EXAMPLES
 
       $ todo --file ~/Documents/project/todo.md Lorem ipsum dolor sit amet
       $ todo --file ~/Documents/project/todo.md \"Lorem ipsum dolor sit amet \$(date)\"
-  "
-  exit 2
+"
 }
 
-# --------------------
-# router
-# --------------------
-if [ "${1:-}" == "--help" ]; then
-  help
-fi
+# ------------------------------------------------------------
+# MAIN
+# ------------------------------------------------------------
 
-if [ "${1:-}" == "--list" ]; then
-  todos=$(rg -g'!.git' -g'!TODO.md' "#\s*todo:")
-
-  for todo in "${todos[@]}"; do
-    echo "$todo"
-  done
-  exti 0
-fi
-
-if [ "${1:-}" == "--file" ]; then
-  # validate
-  if [ $# -eq 1 ]; then
-    help
-    exit 1
-  fi
-
-  if [ $# -eq 2 ]; then
-    # open the todo
-    nvim "$2"
-    exit 0
-  fi
-
-  if [ $# -ge 2 ]; then
-    shift
-    filepath="$1"
-    shift
-  fi
-  append "$filepath" "$1"
-  exit 0
-fi
-
-if ! project_root=$(git rev-parse --show-toplevel 2> /dev/null); then
-  help
-fi
-
-filepath="${project_root}/${filename}"
-
-# if no message, then open the file
-if [ "" == "$*" ]; then
-  nvim "$filepath"
-  exit 0
-fi
-
-# otherwise, append to file
-append "$filepath" "$*"
+main "$@"
