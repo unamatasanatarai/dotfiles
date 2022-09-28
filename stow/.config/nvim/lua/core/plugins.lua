@@ -50,19 +50,21 @@ return packer.startup(function(use)
     "jose-elias-alvarez/null-ls.nvim",
   }
 
-  -- nvim todo
-  use { "unamatasanatarai/nvim-md-todo-toggle" }
+  -- IDE
+  use { "nvim-telescope/telescope.nvim" }
 
-  -- themes
-  use("EdenEast/nightfox.nvim")
-  use("hardselius/warlock")
-
-  use("nvim-telescope/telescope.nvim")
-
-  use({
+  use {
     "nvim-treesitter/nvim-treesitter",
     run = ":TSUpdate",
-  })
+  }
+
+  -- themes
+  use { "EdenEast/nightfox.nvim" }
+  use { "hardselius/warlock" }
+
+
+  -- productivity
+  use { "unamatasanatarai/nvim-md-todo-toggle" }
 
   use {
     "folke/which-key.nvim",
@@ -72,10 +74,10 @@ return packer.startup(function(use)
     end
   }
 
-  use({
+  use {
     "iamcco/markdown-preview.nvim",
     run = function() vim.fn["mkdp#util#install"]() end,
-  })
+  }
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
