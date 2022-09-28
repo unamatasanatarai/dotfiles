@@ -10,6 +10,7 @@ export SYSTEMD_EDITOR="$VISUAL"
 # shellcheck disable=2155
 export SHELL="$(brew --prefix)/bin/bash"
 
+# todo: these exports probably should be placed in another file
 export CARGO_HOME="$XDG_DATA_HOME"/cargo
 export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME"/npm/npmrc
 export MYSQL_HISTFILE="$XDG_DATA_HOME"/mysql_history

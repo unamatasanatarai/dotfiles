@@ -50,6 +50,7 @@ function main {
 
   eok "Created a new $template file in $filepath"
 
+  # todo: chmod+x should be a lookup table, and not if+if+if
   [ "$template" == "bash" ] && chmod +x "$filepath"
   [ "$template" == "shell" ] && chmod +x "$filepath"
   [ "$o_open_after_create" -eq 1 ] && nvim "$filepath" "+/##cursor##" "+noh"
