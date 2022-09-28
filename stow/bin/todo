@@ -62,6 +62,9 @@ function main {
 }
 
 function parseOptions {
+  if [ $# = "" ]; then
+    o_action="open"
+  fi
   while [[ "$#" -ge 1 ]]; do
     case $1 in
 
@@ -101,6 +104,7 @@ function parseOptions {
   done
 }
 
+# it will exit 1 if nothing found. it is good
 function findTodos {
   todos=$(rg -g'!.git' -g"!$filename" "#\s*todo:")
 
