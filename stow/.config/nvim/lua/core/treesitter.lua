@@ -9,10 +9,12 @@ configs.setup({
     "cmake",
     "help",
     "lua",
+    "markdown",
+    "markdown_inline",
     "rust",
     "vim",
   },
---  auto_install = true,
+  auto_install = false,
   highlight = {
     enable = true,
     additional_vim_regex_highlighting = false,
