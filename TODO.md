@@ -1,6 +1,7 @@
 TODO
 ====
 
-- [ ] bash: settings refactor aliases and xdg directories
-- [ ] todo: Update help readability
-- [ ] nt: chmod +x should be a lookup table, not literal comparison
+- [ ] stow/bin/todo:      # todo: this checks for whether the --file path was specified. This is flaky, extract to somewhere else
+- [ ] stow/bin/nt:  # todo: chmod+x should be a lookup table, and not if+if+if
+- [ ] osx/start-apps:# todo: rethink the location of this configuration. Maybe in env?
+- [ ] osx/apps:# todo: reimplement with brew bundle
