@@ -4,103 +4,47 @@ set -euo pipefail
 
 . "$(dirname "$0")"/.lib
 
-VERSION="1.1"
-CACHE_PATH="$HOME/.local/share/bls"
-CACHE_CASKS="${CACHE_PATH}/casks.json"
-CACHE_FORMULA="${CACHE_PATH}/formula.json"
-CACHE_TIMESTAMP="${CACHE_PATH}/date"
-CACHE_TTL="+4d"
-CACHE_LAST_MODIFIED="just now"
-
-# ------------------------------------------------------------
-# CACHING
-# ------------------------------------------------------------
-
-function _cacheNeedsRefersh {
-  local last_updated next_update
-  # if file does not exist, cache assumed outdated
-  if [ ! -f "$CACHE_TIMESTAMP" ]; then
-    return 1
-  fi
-  # compare dates
-  last_updated=$(cat "$CACHE_TIMESTAMP")
-  next_update=$(date -j -f %s -v "$CACHE_TTL" "$last_updated" +%s)
-  return $((next_update < $(date +%s)))
-}
-
-function _validateCache {
-  if ! _cacheNeedsRefersh; then
-    ealert "Cache outdated. Updating..."
-    updateCache
-  fi
-  CACHE_LAST_MODIFIED=$(date -r "$CACHE_TIMESTAMP" "+%Y-%m-%d %H:%M")
-}
-
-function deleteCache {
-  rm -rfv "$CACHE_PATH"
-}
-
-function updateCache {
-  # create cache dir
-  if [ ! -d "$CACHE_PATH" ]; then
-    mkdir -p "$CACHE_PATH"
-  fi
-  # cache important files
-  einfo -n "Downloading casks definitions"
-  curl -s https://formulae.brew.sh/api/cask.json > "$CACHE_CASKS"
-  eok "done"
-  einfo -n "Downloading formulae definitions"
-  curl -s https://formulae.brew.sh/api/formula.json > "$CACHE_FORMULA"
-  eok "done"
-  date +%s > "$CACHE_TIMESTAMP"
-}
+VERSION="1.3"
+cask_marker="--cask"
 
 # ------------------------------------------------------------
 # PRIVATE
 # ------------------------------------------------------------
 
 function __is_it_cask {
-  if [[ "$1" == *" --cask"* ]]; then
-    echo "yes"
-  else
-    echo "no"
-  fi
+  [[ "$1" == *" $cask_marker"* ]]
 }
 
 function __strip_internal_cask {
-  echo "$1" | sed -E 's/ \-\-cask//g'
-}
-
-function __name_to_token {
-  if [[ "$1" == *" --cask"* ]]; then
-    name=$(__strip_internal_cask "$1")
-    jq '.[] | select(.name[0]=="'"$name"'") | .token' < "$CACHE_CASKS" | sed -E 's/"//g'
-  else
-    echo "$1"
-  fi
+  echo "$1" | sed -E 's/ '"$cask_marker"'//g'
 }
 
 function fzf_preview {
-  local name token
-  name="$2"
-  token=$name
-  ebox "$name"
-  if [[ "$name" == *" --cask"* ]]; then
-    token=$(__name_to_token "$name")
-    brew info --cask "$token"
+  local token
+  token="$2"
+  ebox "$token"
+  # todo: taking json and parsing its contents would be more readable and _better_
+  if __is_it_cask "$token"; then
+    brew info --cask "$(__strip_internal_cask "$token")"
   else
-    brew info "$name"
+    brew info "$token"
   fi
 }
 
 function __list_formulae {
-  jq '.[] | .full_name' < "$CACHE_FORMULA" | sed -E 's/"//g'
+  brew formulae
 }
 
 function __list_casks {
-  local marker
-  marker=${1:-""}
-  jq '.[] | .name[0]' < "$CACHE_CASKS" | sed -E 's/"//g' | sed -E "s/$/ $marker/g"
+  brew casks | sed -E "s/$/ $cask_marker/g"
+}
+
+function fzf_help {
+  ebox "    bls v. $VERSION    "
+  echo "                                        🍺"
+  echo " CTRL+i      Install the selected element"
+  echo " CTRL+h      Display this help"
+  echo " CTRL+o      Open cask/formulae home page"
 }
 
 # ------------------------------------------------------------
@@ -109,7 +53,7 @@ function __list_casks {
 
 function list_all {
   local casks formulae list
-  casks=$(__list_casks "--cask")
+  casks=$(__list_casks)
   formulae=$(__list_formulae)
   list=("${casks[@]}" "${formulae[@]}")
 
@@ -117,51 +61,34 @@ function list_all {
 
   echo "${list[@]}" \
     | fzf -q "$query" \
-      --header "CTRL+i : install; updated: ${CACHE_LAST_MODIFIED}" \
+      --header "C+i: install; C+h: help" \
       --scroll-off 2 \
       --prompt "🍺 ➤ " \
       --pointer "➤" \
       --marker "➤" \
+      --ansi \
       --bind "ctrl-i:select+preview(bls --install {})" \
+      --bind "ctrl-h:preview(bls --fzf_help)" \
+      --bind "ctrl-o:preview(bls --openhp {})" \
       --preview-window "right,70%" \
       --preview="${BASH_SOURCE[0]} --preview {}"
 }
 
 function __install {
-  picked="$*"
-  name=$(__strip_internal_cask "$picked")
-  token=$picked
-  if [ "$(__is_it_cask "$picked")" == "yes" ]; then
-    token=$(__name_to_token "$picked")
-  fi
-  ebox "Installing '$token'"
-  ec=0
-  brew install "$token" || ec=$?
-  if [ "$ec" -eq 0 ]; then
-    echo ""
-    eok "done"
-  else
-    echo ""
-    efail "nope, sorry. ↑ exited with: $ec"
-  fi
-}
+  local token name
+  token="$*"
+  name=$(__strip_internal_cask "$token")
+  ebox "Installing '$name'"
 
-function __install_questions {
-  picked="$*"
-  name=$(__strip_internal_cask "$picked")
-  token=$picked
-  question="Install '$name'? "
-  if [ "$(__is_it_cask "$picked")" == "yes" ]; then
-    token=$(__name_to_token "$picked")
-    question="Install cask '$name'? "
-  fi
-  echo -n "$question [N/y] "
-  read -rsn1 resp
-  echo ""
-  if [ "$resp" == "y" ] || [ "$resp" == "Y" ]; then
-    echo "Installing '$token'"
+  if __is_it_cask "$token"; then
+    token=$(__strip_internal_cask "$token")
+    brew install --cask "$token"
+  else
     brew install "$token"
   fi
+
+  echo ""
+  eok "I'm done"
 }
 
 function help {
@@ -171,12 +98,10 @@ version $VERSION
   Options:
     --help     This help message
     --version  Display the version number (it is $VERSION)
-    --update   Force update the local cask and formula repositories
-    --clean    Purge any cached files
 
   Examples:
-    Force update and pre-fill ncd in the query
-    $(basename "$0") --update ncd
+    List out all formulae and casks, prefilter by 'ncd'
+    $(basename "$0") ncd
   "
 }
 
@@ -186,19 +111,6 @@ version $VERSION
 
 while [[ -n ${1:--help} ]]; do
   case ${1:--help} in
-    --update)
-      updateCache
-      shift
-      list_all "$@"
-      exit 0
-      ;;
-
-    --clean)
-      einfo "Clearning bls databases"
-      deleteCache
-      eok "done"
-      exit 0
-      ;;
 
     --preview)
       fzf_preview "$@"
@@ -212,8 +124,23 @@ while [[ -n ${1:--help} ]]; do
       exit 0
       ;;
 
+    --fzf_help)
+      fzf_help
+      exit 0
+      ;;
+
     --version)
       echo "version: $VERSION"
+      exit 0
+      ;;
+
+    --openhp)
+      shift
+      if __is_it_cask "$1"; then
+        ebox "$(brew home --cask "$(__strip_internal_cask "$1")")"
+      else
+        ebox "$(brew home "$1")"
+      fi
       exit 0
       ;;
 
@@ -223,7 +150,6 @@ while [[ -n ${1:--help} ]]; do
       ;;
 
     *)
-      _validateCache
       list_all "$@"
       shift
       exit 0
