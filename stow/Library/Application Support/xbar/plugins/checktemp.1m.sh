@@ -2,10 +2,8 @@
 
 set -euo pipefail
 
-if [ -f /usr/local/bin/osx-cpu-temp ]; then
-  /usr/local/bin/osx-cpu-temp
-fi
-
-if [ -f /opt/homebrew/bin/osx-cpu-temp ]; then
-  /opt/homebrew/bin/osx-cpu-temp
+if [[ "$(uname -m)" = "arm*" ]]; then
+  "$(brew --prefix)"/bin/osx-cpu-temp
+else
+  echo "?°C"
 fi
