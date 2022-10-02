@@ -41,7 +41,48 @@ function ebox {
   echo "$hl"
 }
 
-export -f  ebox eok efail einfo eask ealert
+## =======
+## SPINNER
+
+_spin_pid=false
+
+_spin_tmpl=()
+_spin_tmpl[0]='⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏'
+_spin_tmpl[1]='⣷⣯⣟⡿⢿⣻⣽⣾'
+_spin_tmpl[2]='←↖↑↗→↘↓↙'
+_spin_tmpl[3]='◰◳◲◱'
+_spin_tmpl[4]='◴◷◶◵'
+_spin_tmpl[5]="▁▂▃▄▅▆▇█▇▆▅▄▃▂▁"
+_spin_tmpl[6]='◐◓◑◒'
+
+function _spin {
+  local i sp
+  i=1
+  sp=${_spin_tmpl[${1:-0}]}
+  while true; do
+    tput civis
+    echo -en "${sp:i++%${#sp}:1}\b"
+    sleep .05
+  done
+}
+
+function spin_start {
+  _spin "$@" &
+  _spin_pid=$!
+  # shellcheck disable=2064
+  trap "kill -9 $_spin_pid 2> /dev/null; tput cnorm" {1..15}
+}
+
+function spin_stop {
+  trap - EXIT
+  kill -9 "$_spin_pid"
+  tput cnorm
+}
+
+## =======
+## EXPORTS
+
+export -f  ebox eok efail einfo eask ealert spin_start spin_stop
 
 # for testing
 # eok "eok"; efail "efail"; einfo "einfo"; eask "eask"; ealert "ealert"; ebox "ebox"
