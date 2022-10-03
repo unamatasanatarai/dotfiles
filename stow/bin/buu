@@ -10,8 +10,11 @@ rm -rf "$(brew --cache)"
 einfo "Update"
 brew update
 
-einfo "Upgrade"
-brew upgrade --no-quarantine --cask --greedy --no-quarantine
+einfo "Upgrade casks"
+brew upgrade --no-quarantine --cask --greedy
+
+einfo "Upgrade formulae"
+brew upgrade --no-quarantine --greedy
 
 einfo "Cleanup"
 brew cleanup --prune=all -s
