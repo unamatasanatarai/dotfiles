@@ -39,6 +39,7 @@ packer.init({
 })
 
 return packer.startup(function(use)
+
   use { "wbthomason/packer.nvim" }
   use { "nvim-lua/plenary.nvim" }
 
@@ -62,7 +63,6 @@ return packer.startup(function(use)
   use { "EdenEast/nightfox.nvim" }
   use { "hardselius/warlock" }
 
-
   -- productivity
   use { "unamatasanatarai/nvim-md-todo-toggle" }
 
@@ -73,6 +73,7 @@ return packer.startup(function(use)
       }
     end
   }
+  use {"mbbill/undotree"}
 
   use {
     "iamcco/markdown-preview.nvim",
