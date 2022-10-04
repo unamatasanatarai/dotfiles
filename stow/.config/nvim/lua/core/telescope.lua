@@ -9,7 +9,7 @@ telescope.setup {
 
   pickers = {
     live_grep = {
-      additional_args = function(opts)
+      additional_args = function(_)
         return { "--hidden", "--no-ignore" }
       end
     },
@@ -22,6 +22,55 @@ telescope.setup {
     prompt_prefix = "❯ ",
     selection_caret = "❯ ",
     path_display = { "smart" },
+    file_ignore_patterns = {
+      ".git/",
+      "docs/",
+      "vendor/*",
+      "%.lock",
+      "__pycache__/*",
+      "%.sqlite3",
+      "%.ipynb",
+      "node_modules/*",
+      "%.svg",
+      "%.otf",
+      "%.ttf",
+      "%.webp",
+      ".dart_tool/",
+      ".github/",
+      ".gradle/",
+      ".idea/",
+      ".settings/",
+      ".vscode/",
+      "__pycache__/",
+      "build/",
+      "env/",
+      "gradle/",
+      "node_modules/",
+      "%.pdb",
+      "%.dll",
+      "%.class",
+      "%.exe",
+      "%.cache",
+      "%.ico",
+      "%.pdf",
+      "%.dylib",
+      "%.jar",
+      "%.docx",
+      "%.met",
+      "smalljre_*/*",
+      ".vale/",
+      "%.burp",
+      "%.mp4",
+      "%.mkv",
+      "%.rar",
+      "%.zip",
+      "%.7z",
+      "%.tar",
+      "%.bz2",
+      "%.epub",
+      "%.flac",
+      "%.tar.gz",
+    },
 
     mappings = {
       i = {
