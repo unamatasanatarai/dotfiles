@@ -5,7 +5,7 @@
 ebox "Update & Upgrade brew"
 
 einfo "Clearing cache"
-rm -rf "$(brew --cache)"
+rm -rvf "$(brew --cache)"
 
 einfo "Update"
 brew update
