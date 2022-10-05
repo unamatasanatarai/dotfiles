@@ -24,6 +24,7 @@ filepath="${project_root}/${filename}"
 # PUBLIC INTERFACES
 # ------------------------------------------------------------
 
+__args=()
 function main {
   parseOptions "$@"
 
@@ -45,12 +46,7 @@ function main {
       ;;
 
     "append")
-      # todo: this checks for whether the --file path was specified. This is flaky, extract to somewhere else
-      if [[ "$1" =~ ^--? ]]; then
-        shift
-        shift
-      fi
-      append "$filepath" "$*"
+      append "$filepath" "${__args[*]}"
       exit
       ;;
 
@@ -62,10 +58,11 @@ function main {
 }
 
 function parseOptions {
-  if [ $# = "" ]; then
+  if [[ $# -eq 0 ]]; then
     o_action="open"
   fi
-  while [[ "$#" -ge 1 ]]; do
+
+  while [[ $# -ge 1 ]]; do
     case $1 in
 
       -h | --help)
@@ -80,10 +77,14 @@ function parseOptions {
 
       --collect)
         o_action="collect"
+        shift
+        continue
         ;;
 
       --find)
         o_action="find"
+        shift
+        continue
         ;;
 
       --file)
@@ -96,11 +97,17 @@ function parseOptions {
         if [ $# -eq 1 ]; then
           o_action="open"
         fi
+        shift
+        continue
         ;;
 
     esac
 
-    shift
+    # throws exit 1 if trying to shift non existing crap
+    if [[ $# -gt 0 ]]; then
+      __args+=("$1")
+      shift
+    fi
   done
 }
 
@@ -123,7 +130,7 @@ function collectTodos {
       total=$((total + 1))
     fi
   done
-  eok "Added $total todos to $filepath"
+  eok "Added $total new todos to $filepath"
 }
 
 function append {

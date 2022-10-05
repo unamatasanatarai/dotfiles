@@ -67,6 +67,8 @@ opt.shortmess:append 'c'
 opt.shortmess:append 'I'
 opt.splitright = true
 opt.timeoutlen = 200
+-- I do not like mouse
+opt.mouse=
 
 vim.cmd "syntax on"
 vim.cmd "filetype plugin indent on"
