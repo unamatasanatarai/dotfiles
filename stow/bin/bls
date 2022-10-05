@@ -23,12 +23,44 @@ function fzf_preview {
   local token
   token="$2"
   ebox "$token"
-  # todo: taking json and parsing its contents would be more readable and _better_
+
   if __is_it_cask "$token"; then
-    brew info --cask "$(__strip_internal_cask "$token")"
+    cask2readme "$(brew info --json=v2 --cask "$(__strip_internal_cask "$token")")"
   else
-    brew info "$token"
+    formulae2readme "$(brew info --json=v2 "$token")"
   fi
+}
+
+function cask2readme {
+  local json readme
+  readme=""
+  json="$*"
+  readme+="\n"
+  readme+=$(echo "$json" | jq -r '.casks[] | .name[0] + " [" + .full_token + " v." + .version +"]\n" + .homepage')
+  readme+="\n"
+  readme+="$(echo "$json" | jq -r ".casks[].desc")\n"
+  readme+="\n"
+  readme+=$(echo "$json" | jq -r 'if .casks[].installed != null then "✅ installed" else "✗ not installed" end')
+  readme+="\n"
+  echo -e "$readme"
+  echo -e "\e[3m---"
+  echo "$json" | jq ".casks[0]"
+}
+
+function formulae2readme {
+  local json readme
+  readme=""
+  json="$*"
+  readme+="\n"
+  readme+=$(echo "$json" | jq -r '.formulae[] | .full_name + " [" + .full_token + " v." + .version +"]\n" + .homepage')
+  readme+="\n"
+  readme+="$(echo "$json" | jq -r ".formulae[].desc")\n"
+  readme+="\n"
+  readme+=$(echo "$json" | jq -r 'if .formulae[].installed != [] then "✅ installed" else "✗ not installed" end')
+  readme+="\n"
+  echo -e "$readme"
+  echo -e "\e[3m---"
+  echo "$json" | jq ".formulae[0]"
 }
 
 function __list_formulae {
