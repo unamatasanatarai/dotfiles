@@ -15,14 +15,16 @@ o_flag=1
 # PUBLIC INTERFACES
 # ------------------------------------------------------------
 
+__args=() # hold all args which are not an `/-{1,2}\w+/` option
 function main {
   ##cursor##
   parseOptions "$@"
   echo "o_flag is set to: ${o_flag}"
+  echo "${__args[*]}"
 }
 
 function parseOptions {
-  while [[ "$#" -ge 1 ]]; do
+  while [[ $# -ge 1 ]]; do
     case $1 in
 
       -h | --help)
@@ -38,10 +40,17 @@ function parseOptions {
       -f | --flag)
         shift
         o_flag="$1"
+        shift
+        continue
         ;;
 
     esac
-    shift
+
+    # throws exit 1 if trying to shift non existing crap
+    if [[ $# -gt 0 ]]; then
+      __args+=("$1")
+      shift
+    fi
   done
 }
 
