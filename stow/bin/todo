@@ -113,7 +113,7 @@ function parseOptions {
 
 # it will exit 1 if nothing found. it is good
 function findTodos {
-  todos=$(rg -g'!.git' -g"!$filename" "#\s*todo:")
+  todos=$(rg -i --line-number --no-heading -g'!.git' -g"!$filename" "#\s*todo:")
 
   for todo in "${todos[@]}"; do
     echo "$todo"
