@@ -73,13 +73,18 @@ return packer.startup(function(use)
       }
     end
   }
-  use {"mbbill/undotree"}
+  use { "mbbill/undotree" }
 
   use {
     "iamcco/markdown-preview.nvim",
     run = function() vim.fn["mkdp#util#install"]() end,
   }
 
+  use {
+    "Saecki/crates.nvim", config = function()
+      require('crates').setup()
+    end,
+  }
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
   if PACKER_BOOTSTRAP then

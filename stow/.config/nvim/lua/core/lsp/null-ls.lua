@@ -31,6 +31,7 @@ local sources = {
   MAKEFILE
   --]]
   diagnostics.checkmake,
+  formatting.taplo,
 }
 
 null_ls.setup({
