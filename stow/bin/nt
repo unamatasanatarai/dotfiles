@@ -10,6 +10,7 @@ VERSION="0.1"
 # ------------------------------------------------------------
 
 o_open_after_create=1
+o_executables=("shell" "bash")
 
 # ------------------------------------------------------------
 # PUBLIC INTERFACES
@@ -50,9 +51,11 @@ function main {
 
   eok "Created a new $template file in $filepath"
 
-  # todo: chmod+x should be a lookup table, and not if+if+if
-  [ "$template" == "bash" ] && chmod +x "$filepath"
-  [ "$template" == "shell" ] && chmod +x "$filepath"
+  # shellcheck disable=2076
+  if [[ "${o_executables[*]} " =~ "$template" ]]; then
+    chmod +x "$filepath"
+  fi
+
   [ "$o_open_after_create" -eq 1 ] && nvim "$filepath" "+/##cursor##" "+noh"
 
 }
