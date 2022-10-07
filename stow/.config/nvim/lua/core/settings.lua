@@ -71,5 +71,7 @@ opt.timeoutlen = 200
 opt.mouse=
 
 vim.cmd "syntax on"
+-- well, off + on is a stupid hack. But it WORKS.
+vim.cmd "filetype off"
 vim.cmd "filetype plugin indent on"
 
