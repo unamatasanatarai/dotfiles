@@ -3,14 +3,14 @@
 set -euo pipefail
 . "$(dirname "$0")"/.lib
 
-VERSION="0.1"
+VERSION="0.2"
 
 # ------------------------------------------------------------
 # DEFAULTS
 # ------------------------------------------------------------
 
 o_open_after_create=1
-o_executables=("shell" "bash")
+o_executables=("shell" "bash" "bashapp")
 
 # ------------------------------------------------------------
 # PUBLIC INTERFACES
@@ -19,6 +19,7 @@ o_executables=("shell" "bash")
 function main {
   local template filepath
 
+  parseOptions "$@"
   # there must be at least 2 params to the command
   # the first params cannot be starting with dash and doubledash (-, --)
   # this is regex cmp
@@ -31,8 +32,6 @@ function main {
   filepath="$2"
   shift
   shift
-
-  parseOptions "$@"
 
   # prevent override
   if [ -f "$filepath" ]; then
@@ -70,7 +69,14 @@ function parseOptions {
         ;;
 
       -V | --version)
-        echo "$VERSION"
+        ebox "version $VERSION"
+        exit
+        ;;
+
+      -l | --list-templates)
+        ebox "Available scripts"
+        s=$(ls "$(dirname "$0")"/new_templates)
+        echo "$s" | sed 's/^/ \- /g'
         exit
         ;;
 
@@ -91,9 +97,10 @@ function _helpOptions {
   # use `#` to separate arg from descriptin
   local options
   options="
-    -h, --help        # Display this help message
-    -V, --version     # Display the script version
-    -o, --only-create # Create file and do not enter edit.
+    -h, --help            # Display this help message
+    -l, --list-templates  # Display the script version
+    -V, --version         # Display the script version
+    -o, --only-create     # Create file and do not enter edit
   "
   echo "$options" | column -s "#" -t | sed 's/^ */    /'
 }
