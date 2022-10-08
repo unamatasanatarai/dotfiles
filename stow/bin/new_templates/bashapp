@@ -24,6 +24,7 @@ function _display-hello {
 
 function prepend-hello { # Prepend Hello to what you type, ex: `prepend-hello John`
   _display-hello "$@"
+  ##cursor##
 }
 # -----------------------------------------------------------------------------
 
