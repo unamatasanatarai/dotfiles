@@ -8,3 +8,4 @@ todo.setup {
 }
 
 vim.keymap.set("n", "<leader>t", todo.toggle, { desc = "Toggle a readme marker", noremap = true, silent = true })
+vim.keymap.set("n", "<leader>tn", todo.add, { desc = "Add a todo marker", noremap = true, silent = true })
