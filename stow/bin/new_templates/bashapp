@@ -31,12 +31,12 @@ function prepend-hello { # Prepend Hello to what you type, ex: `prepend-hello Jo
 
 function help { # Display this helpful help information
   local functions
-  functions=$(grep -E "^function [^_]*?$" "$0" | sed -E "s/ *{ *# */#/g" | sed -E "s/^function /   /g" | sort)
+  functions=$(grep -E "^function [^_]*?$" "$0" | sed -E "s/ *{ *# */#/g" | column -t -s '#' | sed -E "s/^function /   /g" | sort)
   echo "$__NAME v $__VERSION"
   echo "Usage: $__FILE <task> [args]"
   echo ""
   echo "Tasks:"
-  echo "$functions" | column -t -s '#'
+  echo "$functions"
   echo ""
 }
 
