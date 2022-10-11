@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-VERSION="0.1"
+__VERSION="0.1"
 __FILE=$(basename "$0")
 
 # ------------------------------------------------------------
@@ -68,7 +68,7 @@ function _helpOptions {
 }
 
 function _version {
-  echo "${__FILE}, version ${VERSION}"
+  echo "${__FILE}, version ${__VERSION}"
 }
 
 function help {

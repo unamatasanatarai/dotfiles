@@ -9,6 +9,7 @@ set -euo pipefail
 __VERSION="0.1"
 __NAME="Template App"
 __FILE=$(basename "$0")
+readonly __VERSION __FILE __NAME
 
 # -----------------------------------------------------------------------------
 # PRIVATE interfaces
