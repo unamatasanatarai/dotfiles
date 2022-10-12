@@ -216,14 +216,17 @@ defaults write com.apple.dock showhidden -bool true
 defaults write com.apple.dock tilesize -int 22
 eok "Dock: hidden icons are transparent and small"
 
-eok "Dock: position right"
 defaults write com.apple.dock orientation -string 'right'
+eok "Dock: position right"
 
-eok "Do not show app indicators in Dock"
 defaults write com.apple.dock show-process-indicators -bool FALSE
+eok "Do not show app indicators in Dock"
 
 # --------------------------------------------------
 ebox "In's and Out's"
+
+eok "Hammerspoon XDG Location"
+defaults write org.hammerspoon.Hammerspoon MJConfigFile -string "~/.config/.hammerspoon/init.lua"
 
 defaults write -g NSAutomaticCapitalizationEnabled -bool false
 defaults write -g NSAutomaticDashSubstitutionEnabled -bool false
