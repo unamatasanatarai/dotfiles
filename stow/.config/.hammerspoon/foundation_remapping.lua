@@ -1,4 +1,3 @@
-
 --  foundation_remapping.lua
 -- https://github.com/hetima/hammerspoon-foundation_remapping
 
