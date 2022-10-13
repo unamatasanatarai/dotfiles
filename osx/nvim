@@ -4,14 +4,24 @@ set -euo pipefail
 
 . "$(dirname "$0")"/install-brew
 
+statedir=$XDG_STATE_HOME/dotfiles
+mkdir -p "$statedir"
+
 ebox "Neovim setup"
 
 einfo "Marksman"
-asset=$(curl https://api.github.com/repos/artempyanykh/marksman/releases | jq -r '.[0].assets[] | select(.name=="marksman-macos") | .browser_download_url')
-curl -o /tmp/marksman -OL "$asset"
-mv /tmp/marksman ~/.local/bin/marksman
-chmod +x ~/.local/bin/marksman
-eok "Marksman"
+json=$(curl -s https://api.github.com/repos/artempyanykh/marksman/releases | jq -r '.[0].assets[] | select(.name=="marksman-macos")')
+id=$(echo "$json" | jq -r '.id')
+if [ ! -f "$statedir"/marksman.version ] || [ "$(cat "$statedir"/marksman.version)" != "$id" ]; then
+  echo "$id" > "$statedir"/marksman.version
+  asset=$(echo "$json" | jq -r '.browser_download_url')
+  curl -so /tmp/marksman -OL "$asset"
+  mv /tmp/marksman ~/.local/bin/marksman
+  chmod +x ~/.local/bin/marksman
+  eok "Marksman"
+else
+  eok "Already at latest version"
+fi
 
 einfo "BASH support"
 npm i -g bash-language-server
