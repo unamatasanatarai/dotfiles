@@ -32,4 +32,13 @@ hs.alert.show(
   .3
 )
 
-hs.hotkey.bind({ "alt", "shift" }, "[", hs.reload)
+-- reload config on non blocking shortcut
+local function catcher(event)
+  local flags = event:getFlags()
+
+  if flags["alt"] and flags["shift"] and "p" == hs.keycodes.map[event:getKeyCode()] then
+    hs.reload()
+  end
+end
+
+hs.eventtap.new({ hs.eventtap.event.types.keyDown }, catcher):start()
