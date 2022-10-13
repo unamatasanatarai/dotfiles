@@ -36,7 +36,7 @@ hs.alert.show(
 local function catcher(event)
   local flags = event:getFlags()
 
-  if flags["alt"] and flags["shift"] and "p" == hs.keycodes.map[event:getKeyCode()] then
+  if flags["ctrl"] and "§" == hs.keycodes.map[event:getKeyCode()] then
     hs.reload()
   end
 end
