@@ -1,61 +1,78 @@
 #!/usr/bin/env bash
 
-# todo - backup hosts file before overwritting. Display where you put it.
-
 set -euo pipefail
 
-if [ "$(id -u)" != "0" ]
-then
-  echo "Only root can do this"
-  exit 1
-fi
+echo ""
+echo "Only root can do this. I will ask you to put in your password."
+echo ""
 
+backup_dir=${XDG_STATE_HOME:-$HOME/.local/state}/hosts-adblocks
+mkdir -vp "$backup_dir"
 
-surl="https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts"
-hosts="/tmp/the-hosts"
-downloaded="/tmp/hosts.downloaded"
+hosts_url="https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts"
+hosts_file="/etc/hosts"
+downloaded_hosts_file="/tmp/hosts.downloaded"
 tmp="/tmp/hosts.tmp"
+
 mark_begin="# adblocking begin #"
 mark_end="# adblocking end #"
+readonly mark_begin mark_end hosts_url
 
-echo "still WIP. run: cp /etc/hosts ${hosts}; sudo $(basename $0)"
-exit 3
+echo "This will modify your /etc/hosts file. Are you sure? [No/yes]"
+read -r answer
+if [ "${answer,,}" != "yes" ]; then
+  echo "Aborted"
+  exit 0
+fi
 
 function truncateHosts {
   local lb le
-  if ! grep -q "$mark_begin" "$hosts"
-  then
+  if ! grep -q "$mark_begin" "$hosts_file"; then
     return 0
   fi
-  lb=$(grep -ne "$mark_begin" "$hosts" | head -n 1 | awk -F: '{print $1}')
-  le=$(grep -ne "$mark_end" "$hosts" | head -n 1 | awk -F: '{print $1}')
-  sed "$lb,$le d" "$hosts" > "$tmp"
-  tee "$hosts" < "$tmp"
+  lb=$(grep -ne "$mark_begin" "$hosts_file" | head -n 1 | awk -F: '{print $1}')
+  le=$(grep -ne "$mark_end" "$hosts_file" | head -n 1 | awk -F: '{print $1}')
+  sed "$lb,$le d" "$hosts_file" > "$tmp"
+  sudo tee "$hosts_file" < "$tmp" &> /dev/null
 
   return 0
 }
 
 function markStart {
-  echo "$mark_begin" | tee -a "$hosts"
+  echo "$mark_begin" | sudo tee -a "$hosts_file" &> /dev/null
 }
 
 function markEnd {
-  echo "$mark_end" | tee -a "$hosts"
+  echo "$mark_end" | sudo tee -a "$hosts_file" &> /dev/null
 }
 
-function downloadHosts {
-  rm -f "$downloaded"
-  curl -o "$downloaded" "$surl"
+function downloadHostsFile {
+  rm -vf "$downloaded_hosts_file"
+  curl -so "$downloaded_hosts_file" "$hosts_url"
 }
 
-function insertHosts {
- tee -a "$hosts" < "$downloaded"
+function updateHostsFile {
+  sudo tee -a "$hosts_file" < "$downloaded_hosts_file" &> /dev/null
 }
 
-downloadHosts
+function backupHostsFile {
+  local filename
+  filename="$backup_dir/hosts-$(date +"%Y-%m-%d-%H-%M-%s")-$RANDOM"
+  cp "$hosts_file" "$filename"
+  echo "hosts backed up to:"
+  echo "  $filename"
+}
+
+echo "downloading..."
+downloadHostsFile
+echo "backup up..."
+backupHostsFile
+echo "updating entries..."
 truncateHosts
 markStart
-insertHosts
+updateHostsFile
 markEnd
+
+sudo -k
 
 echo "I'm done"
