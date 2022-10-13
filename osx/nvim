@@ -40,26 +40,10 @@ einfo "MAKEFILE support"
 brew install checkmake
 eok "MAKEFILE support added"
 
-#  js-beautify \
-#  prettier \
-#  pyright \
-#  svelte-language-server \
-#  typescript typescript-language-server \
-#
-#eok "pyright"
-#eok "typescript typescript-language-server"
-#eok "svelte-language-server"
-#eok "vscode-langservers-extracted"
-#eok "prettier"
-#eok "js-beautify"
-#
-#cargo install stylua shellharden
-#
-#eok "stylua"
-#eok "shellharden"
-#
+einfo "LUA support"
+cargo install stylua
 brew install lua-language-server
-eok "lua-language-server"
+eok "LUA support added"
 
 ebox "Force plugins installation"
 nvim +PackerSync
