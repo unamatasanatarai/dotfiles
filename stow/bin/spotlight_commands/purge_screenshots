@@ -4,18 +4,11 @@ set -euo pipefail
 
 . "$(dirname "$0")"/../.lib
 
-mdir="${HOME}/Pictures/Monosnap"
 sdir="${HOME}/Pictures/screenshots"
 
-mdu=$(du -h "$mdir")
 sdu=$(du -h "$sdir")
-mls=$(( "$(find "$mdir" | wc -l)" -1 ))
-sls=$(( "$(find "$sdir" | wc -l)" -1 ))
-
-einfo -n "purging ${mls} files ${mdu}"
-rm -rf "${mdir:?}"/*
-eok ""
+sls=$(("$(find "$sdir" | wc -l)" - 1))
 
 einfo -n "purging ${sls} files ${sdu}"
-rm -rf "${sdir:?}"/*
+rm -rvf "${sdir:?}"/*
 eok ""
