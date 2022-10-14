@@ -3,6 +3,7 @@
 --]]
 local servers = {
   ["bashls"] = {},
+  ["jsonls"] = {},
   ["rust_analyzer"] = {},
   ["html"] = {
     settings = {

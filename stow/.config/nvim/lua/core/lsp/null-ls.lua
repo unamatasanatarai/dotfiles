@@ -45,7 +45,8 @@ local sources = {
   }),
   formatting.pint.with({
     command = "pint"
-  })
+  }),
+  formatting.jq,
 }
 
 null_ls.setup({
