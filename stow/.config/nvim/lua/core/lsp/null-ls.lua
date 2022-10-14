@@ -38,6 +38,11 @@ local sources = {
   --[[
   PHP
   --]]
+  diagnostics.phpcs.with({
+    extra_args = {
+      "--standard=PSR12",
+    },
+  }),
   formatting.pint.with({
     command = "pint"
   })

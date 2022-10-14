@@ -16,6 +16,16 @@ autocmd("FileType", {
   end,
 })
 
+autocmd("FileType", {
+  group = augroup,
+  pattern = { 'php' },
+  callback = function()
+    vim.opt.shiftwidth = 4
+    vim.opt.softtabstop = 4
+    vim.opt.tabstop = 4
+  end,
+})
+
 autocmd("FocusLost", {
   group = augroup,
   callback = function()
