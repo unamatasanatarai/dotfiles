@@ -36,6 +36,10 @@ local sources = {
   --]]
   formatting.taplo,
   --[[
+  JSON
+  --]]
+  formatting.jq,
+  --[[
   PHP
   --]]
   diagnostics.phpcs.with({
@@ -43,10 +47,11 @@ local sources = {
       "--standard=PSR12",
     },
   }),
-  formatting.pint.with({
-    command = "pint"
+  formatting.phpcbf.with({
+    extra_args = {
+      "--standard=PSR12",
+    },
   }),
-  formatting.jq,
 }
 
 null_ls.setup({
