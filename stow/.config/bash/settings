@@ -4,6 +4,8 @@
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
 PATH="${PATH}:${HOME}/bin:${HOME}/.cargo/bin:${HOME}/.local/bin:/opt/homebrew/bin"
+PATH="/usr/local/sbin:$PATH"
+
 export VISUAL=nvim
 export EDITOR="$VISUAL"
 export SYSTEMD_EDITOR="$VISUAL"
