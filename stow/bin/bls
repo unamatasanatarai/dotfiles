@@ -4,7 +4,7 @@ set -euo pipefail
 
 . "$(dirname "$0")"/.lib
 
-VERSION="1.3"
+VERSION="1.4"
 cask_marker="--cask"
 
 # ------------------------------------------------------------
@@ -22,7 +22,7 @@ function __strip_internal_cask {
 function fzf_preview {
   local token
   token="$2"
-  ebox "$token"
+  #ebox "$token"
 
   if __is_it_cask "$token"; then
     cask2readme "$(brew info --json=v2 --cask "$(__strip_internal_cask "$token")")"
@@ -35,10 +35,12 @@ function cask2readme {
   local json readme
   readme=""
   json="$*"
-  readme+="\n"
-  readme+=$(echo "$json" | jq -r '.casks[] | .name[0] + " [" + .full_token + " v." + .version +"]\n" + .homepage')
+
+  ebox "$(echo "$json" | jq -r '.casks[] | .name[0] + " [" + .full_token + " v." + .version +"]"')"
   readme+="\n"
   readme+="$(echo "$json" | jq -r ".casks[].desc")\n"
+  readme+="\n"
+  readme+=$(echo "$json" | jq -r '.casks[].homepage')
   readme+="\n"
   readme+=$(echo "$json" | jq -r 'if .casks[].installed != null then "✅ installed" else "✗ not installed" end')
   readme+="\n"
@@ -51,10 +53,14 @@ function formulae2readme {
   local json readme
   readme=""
   json="$*"
-  readme+="\n"
-  readme+=$(echo "$json" | jq -r '.formulae[] | .full_name + " [" + .full_token + " v." + .version +"]\n" + .homepage')
+
+  app=$(echo "$json" | jq -r '.formulae[] | .full_name')
+  v=$(echo "$json" | jq -r '.formulae[] | .versions.stable')
+  ebox "$app :: v.$v"
   readme+="\n"
   readme+="$(echo "$json" | jq -r ".formulae[].desc")\n"
+  readme+="\n"
+  readme+=$(echo "$json" | jq -r '.formulae[] | .homepage')
   readme+="\n"
   readme+=$(echo "$json" | jq -r 'if .formulae[].installed != [] then "✅ installed" else "✗ not installed" end')
   readme+="\n"
@@ -114,9 +120,9 @@ function __install {
 
   if __is_it_cask "$token"; then
     token=$(__strip_internal_cask "$token")
-    brew install --cask "$token"
+    brew install --cask --no-quarantine "$token"
   else
-    brew install "$token"
+    brew install --no-quarantine "$token"
   fi
 
   echo ""
