@@ -11,6 +11,7 @@ configs.setup({
     "lua",
     "markdown",
     "markdown_inline",
+    "php",
     "rust",
     "vim",
   },

@@ -31,7 +31,16 @@ local sources = {
   MAKEFILE
   --]]
   diagnostics.checkmake,
+  --[[
+  TOML
+  --]]
   formatting.taplo,
+  --[[
+  PHP
+  --]]
+  formatting.pint.with({
+    command = "pint"
+  })
 }
 
 null_ls.setup({

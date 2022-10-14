@@ -45,6 +45,10 @@ cargo install stylua
 brew install lua-language-server
 eok "LUA support added"
 
+einfo "PHP support"
+composer global require laravel/pint phan/phan
+eok "PHP support added"
+
 ebox "Force plugins installation"
 nvim +PackerSync
 eok "PackerSync has run"

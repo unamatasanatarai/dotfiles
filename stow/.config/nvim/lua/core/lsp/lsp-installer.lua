@@ -34,6 +34,7 @@ local servers = {
   ["marksman"] = {
     root_dir = require("lspconfig/util").root_pattern(".git", ".marksman.toml", "*.md"),
   },
+  ["phan"] = {},
 }
 
 local opts = { noremap = true, silent = true }
@@ -43,7 +44,7 @@ vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, opts)
 
-local on_attach = function(client, bufnr)
+local on_attach = function(_, bufnr)
   -- Enable completion triggered by <c-x><c-o>
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
