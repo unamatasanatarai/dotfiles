@@ -46,7 +46,7 @@ brew install lua-language-server
 eok "LUA support added"
 
 einfo "PHP support"
-composer global require laravel/pint
+composer global require laravel/pint phan/phan
 composer --dev global require "squizlabs/php_codesniffer"
 eok "PHP support added"
 

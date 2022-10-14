@@ -34,6 +34,7 @@ local servers = {
   ["marksman"] = {
     root_dir = require("lspconfig/util").root_pattern(".git", ".marksman.toml", "*.md"),
   },
+  ["phan"] = {},
 }
 
 local opts = { noremap = true, silent = true }
