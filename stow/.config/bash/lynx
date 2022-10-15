@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+export LYNX_CFG="$HOME/.config/lynx/lynx.cfg"
+export LYNX_LSS="$HOME/.config/lynx/lynx.lss"
+
+function lynx {
+  exec "$HOME/bin/lynx" "$@"
+}
