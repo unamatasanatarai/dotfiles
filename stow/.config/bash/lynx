@@ -6,3 +6,7 @@ export LYNX_LSS="$HOME/.config/lynx/lynx.lss"
 function lynx {
   exec "$HOME/bin/lynx" "$@"
 }
+
+function ? {
+  search-duck "$@"
+}
