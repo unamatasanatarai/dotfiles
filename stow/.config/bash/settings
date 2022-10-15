@@ -3,10 +3,6 @@
 # Hide the deprecation warning (zsh) macos
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
-PATH="${PATH}:${HOME}/bin:${HOME}/.cargo/bin:${HOME}/.local/bin:/opt/homebrew/bin"
-PATH="/usr/local/sbin:$PATH"
-PATH="${HOME}/.config/composer/vendor/bin:$PATH"
-
 export VISUAL=nvim
 export EDITOR="$VISUAL"
 export SYSTEMD_EDITOR="$VISUAL"
