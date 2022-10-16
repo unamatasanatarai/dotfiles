@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+if [ "$1" = "" ] || [ "${1:0:1}" != "v" ]; then
+  echo "usage: $(basename "$0") v1.2.3"
+  exit 1
+fi
+
+git tag "${1}"
+git push --tags -u origin "$(git_branch_read)"
