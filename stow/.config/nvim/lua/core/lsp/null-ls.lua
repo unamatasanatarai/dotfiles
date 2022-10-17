@@ -44,13 +44,13 @@ local sources = {
   --]]
   diagnostics.phpcs.with({
     extra_args = {
-      "--standard=PSR12",
+      "--standard=~/.config/phpcs/phpruleset.xml",
     },
   }),
   formatting.phpcbf.with({
     extra_args = {
-      "--standard=PSR12",
-    },
+      "--standard=~/.config/phpcs/phpruleset.xml",
+    }
   }),
 }
 
