@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<ruleset name="Laravel Standards">
-    <description>PSR-2 The Laravel conventions</description>
+<ruleset name="Opinionated PHP setup">
+    <description>A little from everything</description>
     <rule ref="Generic.Classes.DuplicateClassName">
         <exclude name="Generic.CodeAnalysis.EmptyStatement.DetectedIf"/>
     </rule>
@@ -25,6 +25,7 @@
     <rule ref="Generic.Functions.CallTimePassByReference"/>
     <rule ref="Generic.Functions.FunctionCallArgumentSpacing"/>
     <rule ref="Generic.Functions.OpeningFunctionBraceBsdAllman"/>
+    <rule ref="Generic.Strings.UnnecessaryStringConcat"/>
     <rule ref="Generic.Metrics.CyclomaticComplexity">
         <properties>
             <property name="complexity" value="20"/>
@@ -121,9 +122,8 @@
     <rule ref="Squiz.WhiteSpace.ScopeKeywordSpacing"/>
     <rule ref="Squiz.WhiteSpace.SemicolonSpacing"/>
     <rule ref="Zend.Files.ClosingTag"/>
+    <rule ref="PSR12"/>
 
-    <exclude-pattern>*/*.blade.php</exclude-pattern>
-    <exclude-pattern>*/storage/*</exclude-pattern>
     <exclude-pattern>*/vendor/*</exclude-pattern>
 
     <arg name="colors"/>
