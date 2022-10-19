@@ -3,13 +3,20 @@
 set -euo pipefail
 
 # -----------------------------------------------------------------------------
-# CONFIG
+# SETUP
 # -----------------------------------------------------------------------------
 
 __VERSION="0.1"
 __NAME="Template App"
 __FILE=$(basename "$0")
-readonly __VERSION __FILE __NAME
+__DIR=$(dirname "$0")
+readonly __VERSION __FILE __NAME __DIR
+
+# -----------------------------------------------------------------------------
+# CONFIG
+# -----------------------------------------------------------------------------
+
+o_flag=1
 
 # -----------------------------------------------------------------------------
 # PRIVATE interfaces
@@ -29,6 +36,25 @@ function prepend-hello { # Prepend Hello to what you type, ex: `prepend-hello Jo
 }
 # -----------------------------------------------------------------------------
 
+function _parseOptions {
+  while [[ $# -ge 1 ]]; do
+    case $1 in
+
+      --flag)
+        shift
+        o_flag=$1
+        shift
+        continue
+        ;;
+
+    esac
+
+    if [[ $# -gt 0 ]]; then
+      shift
+    fi
+  done
+}
+
 function help { # Display this helpful help information
   local functions
   functions=$(grep -E "^function [^_]*?$" "$0" | sed -E "s/ *{ *# */#/g" | column -t -s '#' | sed -E "s/^function /   /g" | sort)
@@ -38,6 +64,11 @@ function help { # Display this helpful help information
   echo "Tasks:"
   echo "$functions"
   echo ""
+  echo "Options"
+  echo "   --flag   on"
+  echo ""
 }
+
+_parseOptions "$@"
 
 "${@:-help}"

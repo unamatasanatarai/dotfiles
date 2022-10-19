@@ -4,6 +4,7 @@ set -euo pipefail
 
 __VERSION="0.1"
 __FILE=$(basename "$0")
+__DIR=$(dirname "$0")
 
 # ------------------------------------------------------------
 # DEFAULTS

@@ -1,16 +1,17 @@
 #!/usr/bin/env bash
 
 set -euo pipefail
+
 . "$(dirname "$0")"/.lib
 
-VERSION="0.2"
+VERSION="0.3"
 
 # ------------------------------------------------------------
 # DEFAULTS
 # ------------------------------------------------------------
 
 o_open_after_create=1
-o_executables=("shell" "bash" "bashapp")
+o_executables=("sh" "bash" "bashapp")
 
 # ------------------------------------------------------------
 # PUBLIC INTERFACES
@@ -33,16 +34,15 @@ function main {
   shift
   shift
 
+  if [[ ! -f "$(dirname "$0")/new_templates/$template" ]]; then
+    ewarn "Template: \`$template\` not found. aborted."
+    exit 1
+  fi
+
   # prevent override
   if [ -f "$filepath" ]; then
-    local answer
-    ewarn -n "$filepath already exists. Should I overwrite? [No/yes] "
-    read -r answer
-    # tolowercase
-    if [ "${answer,,}" != "yes" ]; then
-      einfo "Aborted"
-      exit 0
-    fi
+    ewarn "File: \`$filepath\` already exists. aborted."
+    exit 1
   fi
 
   mkdir -p "$(dirname "$filepath")"
