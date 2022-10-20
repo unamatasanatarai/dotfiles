@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+help() {
+  echo "usage: watch \$command"
+  exit 1
+}
+
+while true; do
+  clear
+  "$@"
+  sleep 1
+done
