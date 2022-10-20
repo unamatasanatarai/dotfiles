@@ -1,9 +1,32 @@
 #!/usr/bin/env bash
 
-if [ "$1" = "" ] || [ "${1:0:1}" != "v" ]; then
-  echo "usage: $(basename "$0") v1.2.3"
+cmd=${1:-noop}
+# hack, but I'm tired
+set -eo pipefail
+tag=$(git tag --sort=committerdate | tail -1)
+set +eo pipefail
+
+if [[ $cmd == "bump" ]]; then
+  if [[ "${tag:0:1}" == "v" ]]; then
+    IFS=$'\n' read -d "" -ra els <<< "${tag//./$'\n'}"
+    bump=$((els[2] + 1))
+    tag="${els[0]}.${els[1]}.$bump"
+  fi
+fi
+
+if [[ $cmd == "noop" ]]; then
+  echo "usage: gitag [bump] [v0.1.2]"
+  echo "latest tag: $tag"
   exit 1
 fi
 
-git tag "${1}"
+if [[ "${cmd:0:1}" == "v" ]]; then
+  tag="$cmd"
+fi
+
+if [[ $tag == "" ]]; then
+  tag="v0.0.1"
+fi
+
+git tag "$tag"
 git push --tags -u origin "$(git_branch_read)"
