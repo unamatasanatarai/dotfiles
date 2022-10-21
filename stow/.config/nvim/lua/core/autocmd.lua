@@ -30,6 +30,7 @@ autocmd("FocusLost", {
   group = augroup,
   callback = function()
     vim.cmd 'colorscheme warlock'
+    vim.cmd 'hi Normal guibg=NONE ctermbg=NONE'
   end,
 })
 
@@ -37,5 +38,6 @@ autocmd("FocusGained", {
   group = augroup,
   callback = function()
     vim.cmd 'colorscheme nordfox'
+    vim.cmd 'hi Normal guibg=NONE ctermbg=NONE'
   end,
 })
