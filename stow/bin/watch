@@ -8,5 +8,5 @@ help() {
 while true; do
   clear
   "$@"
-  sleep 1
+  sleep 2
 done

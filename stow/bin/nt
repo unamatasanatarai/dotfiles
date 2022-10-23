@@ -2,61 +2,73 @@
 
 set -euo pipefail
 
-. "$(dirname "$0")"/.lib
+__DIR="$(dirname -- "$0")"
+__FILE="$(basename -- "$0")"
+declare -r __DIR __FILE
+declare -r TMPLS="$__DIR"/new_templates
 
-VERSION="0.3"
+. "$__DIR"/.lib
+
+VERSION="0.5"
 
 # ------------------------------------------------------------
 # DEFAULTS
 # ------------------------------------------------------------
 
-o_open_after_create=1
 o_executables=("sh" "bash" "bashapp")
 
 # ------------------------------------------------------------
 # PUBLIC INTERFACES
 # ------------------------------------------------------------
 
-function main {
-  local template filepath
-
-  parseOptions "$@"
-  # there must be at least 2 params to the command
-  # the first params cannot be starting with dash and doubledash (-, --)
-  # this is regex cmp
-  if [ $# -lt 2 ] || [[ "$1" =~ ^--? ]] || [[ "$2" =~ ^--? ]]; then
-    help
-    exit 1
+load_template() {
+  local -r template="$TMPLS/$1"
+  if [[ ! -f "$template" ]]; then
+    ewarn "Template: \`$1\` not found. aborted."
+    return 1
   fi
+  local -r c="$(< "$template")"
+  echo "$c"
+}
 
-  template="$1"
-  filepath="$2"
-  shift
-  shift
-
-  if [[ ! -f "$(dirname "$0")/new_templates/$template" ]]; then
-    ewarn "Template: \`$template\` not found. aborted."
-    exit 1
-  fi
-
+save_to_file() {
+  local -r contents="$1"
+  local -r filepath="$2"
   # prevent override
   if [ -f "$filepath" ]; then
     ewarn "File: \`$filepath\` already exists. aborted."
-    exit 1
+    return 1
   fi
 
   mkdir -p "$(dirname "$filepath")"
-  cat "$(dirname "$0")/new_templates/$template" > "$filepath"
+  echo "$contents" > "$filepath"
+}
 
-  eok "Created a new $template file in $filepath"
+function main {
+  parseOptions "$@"
 
-  # shellcheck disable=2076
-  if [[ "${o_executables[*]} " =~ "$template" ]]; then
-    chmod +x "$filepath"
+  # if the first param starts with a `-`, we stop
+  if [[ $# -lt 1 ]] || [[ ${1:0:1} == "-" ]]; then
+    help
+    return 1
   fi
 
-  [ "$o_open_after_create" -eq 1 ] && nvim "$filepath" "+/##cursor##" "+noh"
+  local -r contents="$(load_template "$1")"
 
+  if [[ -z ${2:-} ]]; then
+    echo "$contents"
+    return
+  fi
+  save_to_file "$contents" "$2"
+
+  for t in "${o_executables[@]}"; do
+    if [[ $t == "$1" ]]; then
+      chmod +x "$2"
+      break
+    fi
+  done
+
+  vi "$2" "+/##cursor##" "+noh"
 }
 
 function parseOptions {
@@ -73,15 +85,12 @@ function parseOptions {
         exit
         ;;
 
-      -l | --list-templates)
-        ebox "Available scripts"
-        s=$(ls "$(dirname "$0")"/new_templates)
-        echo "$s" | sed 's/^/ \- /g'
+      -l | -ls | --list-templates)
+        ebox "Available templates"
+        for file in "$TMPLS"/*; do
+          echo " - ${file#"$TMPLS/"}"
+        done
         exit
-        ;;
-
-      -o | --only-ceate)
-        o_open_after_create=0
         ;;
 
     esac
@@ -97,17 +106,16 @@ function _helpOptions {
   # use `#` to separate arg from descriptin
   local options
   options="
-    -h, --help            # Display this help message
-    -l, --list-templates  # Display the script version
-    -V, --version         # Display the script version
-    -o, --only-create     # Create file and do not enter edit
+    -h, --help                 # Display this help message
+    -l, -ls, --list-templates  # Display the script version
+    -V, --version              # Display the script version
   "
   echo "$options" | column -s "#" -t | sed 's/^ */    /'
 }
 
 function help {
   echo "$(basename "$0"), version ${VERSION}"
-  echo "Usage: $(basename "$0") template filename [options]
+  echo "Usage: $(basename "$0") template [filename] [options]
 
 Options:
 $(_helpOptions)"

@@ -2,9 +2,9 @@
 
 set -euo pipefail
 
-__VERSION="0.1"
-__FILE=$(basename "$0")
-__DIR=$(dirname "$0")
+declare -r __VERSION="0.0.1"
+declare -r __FILE="$(basename -- "$0")"
+declare -r __DIR="$(dirname -- "$0")"
 
 # ------------------------------------------------------------
 # DEFAULTS
@@ -17,14 +17,14 @@ o_flag=1
 # ------------------------------------------------------------
 
 __args=() # hold all args which are not an `/-{1,2}\w+/` option
-function main {
+main() {
   ##cursor##
-  parseOptions "$@"
+  parse_options "$@"
   echo "o_flag is set to: ${o_flag}"
   echo "${__args[*]}"
 }
 
-function parseOptions {
+parse_options() {
   while [[ $# -ge 1 ]]; do
     case $1 in
 
@@ -59,7 +59,7 @@ function parseOptions {
 # INTERNALS
 # ------------------------------------------------------------
 
-function _helpOptions {
+_help_options() {
   # use `#` to separate arg from descriptin
   local options
   options="
@@ -68,16 +68,16 @@ function _helpOptions {
   echo "$options" | column -s "#" -t | sed 's/^ */    /'
 }
 
-function _version {
+_version() {
   echo "${__FILE}, version ${__VERSION}"
 }
 
-function help {
+help() {
   _version
   echo "Usage: $__FILE template filename [options]
 
 Options:
-$(_helpOptions)
+$(_help_options)
 
 Examples:
     $__FILE -f 'arg modified flag'"

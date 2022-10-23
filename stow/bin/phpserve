@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+declare -i port="${1:-8181}"
+
+php -S localhost:"${port}"
