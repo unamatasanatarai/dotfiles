@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
-function take {
+take() {
   mkdir -p "$*" && cd "$_" || return 1
+}
+
+wcd() {
+  cd "$(dirname "$(which "$1")")" || return 1
 }

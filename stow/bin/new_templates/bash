@@ -3,8 +3,9 @@
 set -euo pipefail
 
 declare -r __VERSION="0.0.1"
-declare -r __FILE="$(basename -- "$0")"
-declare -r __DIR="$(dirname -- "$0")"
+__FILE="$(basename -- "$0")"
+__DIR="$(dirname -- "$0")"
+declare -r __FILE __DIR
 
 # ------------------------------------------------------------
 # DEFAULTS

@@ -6,11 +6,11 @@ set -euo pipefail
 # SETUP
 # -----------------------------------------------------------------------------
 
-__VERSION="0.1"
-__NAME="Template App"
-__FILE=$(basename "$0")
-__DIR=$(dirname "$0")
-readonly __VERSION __FILE __NAME __DIR
+declare -r __VERSION="0.0.1"
+__FILE="$(basename -- "$0")"
+__DIR="$(dirname -- "$0")"
+declare -r __FILE __DIR
+declare -r __NAME="$__FILE"
 
 # -----------------------------------------------------------------------------
 # CONFIG
@@ -22,7 +22,7 @@ o_flag=1
 # PRIVATE interfaces
 # -----------------------------------------------------------------------------
 
-function _display-hello {
+_display-hello() {
   echo "Hello, $*!"
 }
 
@@ -30,13 +30,14 @@ function _display-hello {
 # PUBLIC interfaces
 # -----------------------------------------------------------------------------
 
-function prepend-hello { # Prepend Hello to what you type, ex: `prepend-hello John`
+prepend-hello() { # Prepend Hello to what you type, ex: `prepend-hello John`
   _display-hello "$@"
   ##cursor##
 }
+
 # -----------------------------------------------------------------------------
 
-function _parseOptions {
+_parse_options() {
   while [[ $# -ge 1 ]]; do
     case $1 in
 
@@ -55,20 +56,26 @@ function _parseOptions {
   done
 }
 
-function help { # Display this helpful help information
-  local functions
-  functions=$(grep -E "^function [^_]*?$" "$0" | sed -E "s/ *{ *# */#/g" | column -t -s '#' | sed -E "s/^function /   /g" | sort)
-  echo "$__NAME v $__VERSION"
-  echo "Usage: $__FILE <task> [args]"
+help() { # Display this helpful help information
+  local functions=""
+  while IFS= read -r f; do
+    if [[ $f =~ ([a-zA-Z][a-zA-Z0-9_-]*)[[:space:]]*\(\)[[:space:]]*{([[:space:]]*#[[:space:]]*)?(.*) ]]; then
+      local sub="${BASH_REMATCH[1]}"
+      local hel=${BASH_REMATCH[3]}
+      functions+="   ${sub}#${hel}"$'\n'
+    fi
+  done < <(grep -E "^[a-zA-Z][a-zA-Z0-9_-]*?\s*\(\)\s*\{" "$0")
+  echo "$__NAME v$__VERSION"
+  echo "Usage: $__FILE <task> [options]"
   echo ""
-  echo "Tasks:"
-  echo "$functions"
+  echo "Tasks"
+  column -t -s '#' <<< "$functions"
   echo ""
   echo "Options"
   echo "   --flag   on"
   echo ""
 }
 
-_parseOptions "$@"
+_parse_options "$@"
 
 "${@:-help}"

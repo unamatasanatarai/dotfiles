@@ -68,7 +68,7 @@ function main {
     fi
   done
 
-  vi "$2" "+/##cursor##" "+noh"
+  $EDITOR "$2" "+/##cursor##" "+noh"
 }
 
 function parseOptions {
