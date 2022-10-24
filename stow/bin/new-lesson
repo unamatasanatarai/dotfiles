@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -euo pipefail
+
 if [ "$1" = "" ]; then
   echo "usage: $(basename "$0") title-of-the-lesson"
   exit 1
@@ -12,4 +14,4 @@ f=${f^^}
 r=${1:1}
 r=${r//-/ }
 echo "# $f$r"$'\n\n' > "$path"
-vi "$path" -c "norm G"
+vi "$path" -c "norm: cd ~/dev/lessons/journal" -c "norm G"
