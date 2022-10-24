@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# toggle comments in a bash/python file
+# if the first character sent to script starts with comment - remove comments + whitespace
+# if it doesn't - add comment
+#
+# works with VIM
+
+while IFS= read -r line; do
+  if [[ -z $append ]]; then
+    [[ "${line:0:1}" == "#" ]] && append=false || append=true
+  fi
+  "$append" && echo "# $line" || echo "${line#\#[[:space:]]}"
+done < "${1:-/dev/stdin}"
