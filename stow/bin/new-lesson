@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+if [ "$1" = "" ]; then
+  echo "usage: $(basename "$0") title-of-the-lesson"
+  exit 1
+fi
+
+path="$HOME/dev/lessons/journal/$1".md
+touch "$path"
+f=${1:0:1}
+f=${f^^}
+r=${1:1}
+r=${r//-/ }
+echo "# $f$r"$'\n\n' > "$path"
+vi "$path" -c "norm G"
