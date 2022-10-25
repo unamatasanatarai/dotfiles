@@ -2,16 +2,15 @@
 
 set -euo pipefail
 
-if [ "$1" = "" ]; then
-  echo "usage: $(basename "$0") title-of-the-lesson"
+if [ "${1:-}" = "" ]; then
+  echo "usage: $(basename "$0") Title of the lesson learnt"
   exit 1
 fi
 
-path="$HOME/dev/lessons/journal/$1".md
+title=$*
+file=${title,,}
+file=${file// /-}-$(date +"%Y%m%d-%H%M").md
+path="$HOME/dev/lessons/journal/$file"
 touch "$path"
-f=${1:0:1}
-f=${f^^}
-r=${1:1}
-r=${r//-/ }
-echo "# $f$r"$'\n\n' > "$path"
+echo "# $title"$'\n\n' > "$path"
 vi "$path" -c "norm: cd ~/dev/lessons/journal" -c "norm G"
