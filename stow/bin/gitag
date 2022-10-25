@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
 cmd=${1:-noop}
+push=true
+[[ ${2:-noop} == "nopush" ]] && push=false
+#
 # hack, but I'm tired
 set -eo pipefail
 tag=$(git tag --sort=committerdate | tail -1)
@@ -15,8 +18,13 @@ if [[ $cmd == "bump" ]]; then
 fi
 
 if [[ $cmd == "noop" ]]; then
-  echo "usage: gitag [bump] [v0.1.2]"
+  echo "usage: gitag bump|v0.0.1 [nopush]"
   echo "latest tag: $tag"
+  echo ""
+  echo "Options:"
+  echo "  bump   Create vM.m.r tag or bumpt r++"
+  echo "  v0.0.1 Specify the exact version to set"
+  echo "  nopush do not push tags, only create. You will need to push them yourself."
   exit 1
 fi
 
@@ -29,4 +37,4 @@ if [[ $tag == "" ]]; then
 fi
 
 git tag "$tag"
-git push --tags -u origin "$(git_branch_read)"
+[[ $push == true ]] && git push --tags -u origin "$(git_branch_read)" || exit 0
