@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# todo: make this into a snippet
 
 set -euo pipefail
 
