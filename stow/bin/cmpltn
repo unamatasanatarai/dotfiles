@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+#   + ------------------------------- +
+#   |    complete -C cmpltn cmpltn    |
+#   + ------------------------------- +
+
+mmain() {
+  :
+}
+main() {
+  :
+}
+help() {
+  :
+}
+# this will be excluded from the suggestions
+_help() {
+  :
+}
+
+# ------------------------------- THE COMPLETION --------------------------------
+declare -a functions=()
+while IFS= read -r f; do
+  [[ ${f:0:1} != "_" ]] && functions+=("$f")
+done < <(compgen -A function)
+if [[ -n ${COMP_LINE:-} ]]; then
+  for cmd in "${functions[@]}"; do
+    [[ ${cmd:0:${#2}} == "$2" ]] && echo "$cmd"
+  done
+fi
