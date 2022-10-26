@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+#   + --------------------------------------- +
+#   |    Record and upload title asciinema    |
+#   + --------------------------------------- +
+
+_help() {
+  echo "usage: $(basename "$0") The title for your asciiart"
+}
+
+[[ -z ${1:-} ]] && _help && exit 1
+title="$*"
+filename=${title,,}
+filename=${filename// /-}-$(date +"%Y%m%d-%H%M").cast
+
+echo -e "title:     $title\nfilename:  $filename"
+
+asciinema rec -t "$title" "$filename"
+
+echo "Do we want to upload?"
+read -p "Should I upload it for you as well? [N/y] " -r ans
+
+[[ ${ans:0:1} =~ [yY] ]] && asciinema upload "${filename}"
