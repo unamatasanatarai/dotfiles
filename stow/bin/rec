@@ -26,5 +26,7 @@ if [[ ${ans:0:1} =~ [yY] ]]; then
   # asciinema shows the url in stderr, so catch it!
   response=$(asciinema upload "$filename" 2>&1)
   url="$(echo "$response" | grep "https")"
-  open "${url// /}"
+  url="${url// /}"
+  open "$url"
+  echo "Uploaded to: $url"
 fi
