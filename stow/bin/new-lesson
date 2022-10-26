@@ -13,4 +13,4 @@ file=${file// /-}-$(date +"%Y%m%d-%H%M").md
 path="$HOME/dev/lessons/journal/$file"
 touch "$path"
 echo "# $title"$'\n\n' > "$path"
-vi "$path" -c "norm: cd ~/dev/lessons/journal" -c "norm G"
+$EDITOR "$path" -c "norm: cd ~/dev/lessons/journal" -c "norm G"
