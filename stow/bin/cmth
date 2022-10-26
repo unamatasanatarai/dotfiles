@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# todo: used mostly for vim, sooo... a new folder maybe?
+# todo: change the table layout. this one is not that nice
 
 set -euo pipefail
 

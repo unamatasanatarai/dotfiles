@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# used mostly for vim, sooo... a new folder maybe?
+#
 # toggle comments in a bash/python file
 # if the first character sent to script starts with comment - remove comments + whitespace
 # if it doesn't - add comment

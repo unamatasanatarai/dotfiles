@@ -41,7 +41,7 @@ function main {
       ;;
 
     "open")
-      nvim "$filepath"
+      $EDITOR "$filepath"
       exit
       ;;
 
