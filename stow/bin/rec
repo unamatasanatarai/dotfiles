@@ -13,9 +13,9 @@ _help() {
 [[ -z ${1:-} ]] && _help && exit 1
 title="$*"
 filename=${title,,}
-filename=${filename// /-}-$(date +"%Y%m%d-%H%M").cast
-
-echo -e "title:     $title\nfilename:  $filename"
+shopt -s extglob
+filename=${filename//+([^a-z0-9_-])/-}-$(date +"%Y%m%d-%H%M").cast
+shopt -u extglob
 
 asciinema rec -t "$title" "$filename"
 
