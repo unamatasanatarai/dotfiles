@@ -6,7 +6,10 @@ help() {
 }
 
 while true; do
+  tput civis
   clear
   "$@"
   sleep 2
 done
+
+tput cnorm
