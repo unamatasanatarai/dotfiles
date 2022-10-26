@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+__help() {
+  echo "usage:"
+  echo "   $(basename "$0") text"
+  echo "   $(basename "$0") stdinput"
+  exit 1
+}
+
+text=$*
+if [[ -z $text ]]; then
+  while IFS= read -r line; do
+    text=$line
+  done < /dev/stdin
+fi
+
+[[ -z $text ]] && __help && exit $?
+
+len=$((${#text} + 6))
+seq=$(for ((i = 1; i <= len; i++)); do echo -n "-"; done)
+hl="#   + $seq +"
+echo "$hl"
+echo -e "#   |    $text    |"
+echo "$hl"
