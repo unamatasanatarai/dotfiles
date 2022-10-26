@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+__help() {
+  echo "usage:"
+  echo "   $(basename "$0") text"
+  echo "   $(basename "$0") stdinput"
+  exit 1
+}
+
+text=$*
+if [[ -z $text ]]; then
+  while IFS= read -r line; do
+    text=$line
+  done < /dev/stdin
+fi
+
+[[ -z $text ]] && __help && exit $?
+
+len=${#text}
+max=76
+pref_b=$(((max - len) / 2 - 1))
+pref_b=${pref_b%%.[[:digit:]]}
+
+msg="# "
+for ((i = 0; i <= pref_b; i++)); do
+  msg+="-"
+done
+msg+=" $text "
+i=$((i + len))
+for (( ; i <= max; i++)); do
+  msg+="-"
+done
+echo "${msg}"
