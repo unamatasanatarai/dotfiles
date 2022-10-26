@@ -22,4 +22,9 @@ asciinema rec -t "$title" "$filename"
 echo "Do we want to upload?"
 read -p "Should I upload it for you as well? [N/y] " -r ans
 
-[[ ${ans:0:1} =~ [yY] ]] && asciinema upload "${filename}"
+if [[ ${ans:0:1} =~ [yY] ]]; then
+  # asciinema shows the url in stderr, so catch it!
+  response=$(asciinema upload "$filename" 2>&1)
+  url="$(echo "$response" | grep "https")"
+  open "${url// /}"
+fi
