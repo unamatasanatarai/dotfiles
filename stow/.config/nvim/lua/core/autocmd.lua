@@ -29,9 +29,9 @@ autocmd("FileType", {
 autocmd("BufWritePre", {
   group = augroup,
   callback = function()
-    vim.cmd ":norm mm"
+    vim.cmd "let winview = winsaveview()"
     vim.cmd ":%!ttw"
-    vim.cmd ":norm `m"
+    vim.cmd "call winrestview(winview)"
   end
 })
 
