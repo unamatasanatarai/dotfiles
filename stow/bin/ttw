@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+trim_trailing_whitespace() {
+  echo "${1%"${1##*[![:space:]]}"}"
+}
+
+trim_leading_whitespace() {
+  echo "${1#"${1%%[![:space:]]*}"}"
+}
+
+trim_whitespace() {
+  : "${1#"${1%%[![:space:]]*}"}"
+  echo "${_%"${_##*[![:space:]]}"}"
+}
+
+while IFS= read -r line; do
+  trim_trailing_whitespace "${line%"${line##*[![:space:]]}"}"
+done < "${1:-/dev/stdin}"
