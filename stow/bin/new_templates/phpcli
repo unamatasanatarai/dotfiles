@@ -1,0 +1,27 @@
+#!/usr/bin/php
+<?php
+
+if (php_sapi_name() !== 'cli') {
+    exit;
+}
+
+#   + --------------------- +
+#   |    DEFINE COMMANDS    |
+#   + --------------------- +
+
+##cursor##
+function user_create($user, $pass){
+    $options = [
+        'cost' => 12,
+    ];
+    $hash password_hash($pass, PASSWORD_BCRYPT, $options);
+    echo "created $user with $pass hashed to $hash";
+}
+
+#   + ---------- +
+#   |    MAIN    |
+#   + ---------- +
+
+array_shift($argv);
+$cmd = str_replace(":", "_", array_shift($argv));
+call_user_func_array($cmd, $argv);
