@@ -11,3 +11,5 @@ keymap("n", "<leader>w", ":w<cr>", opts)
 
 keymap("n", "<C-p>", ":Telescope find_files<cr>", opts)
 keymap("n", "<C-g>", ":Telescope live_grep<cr>", opts)
+
+keymap("n", "<leader>ss", ":norm mm<cr> | :execute '%!ttw'<cr> | :norm `m<cr>", opts)

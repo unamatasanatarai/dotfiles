@@ -26,6 +26,15 @@ autocmd("FileType", {
   end,
 })
 
+autocmd("BufWritePre", {
+  group = augroup,
+  callback = function()
+    vim.cmd ":norm mm"
+    vim.cmd ":%!ttw"
+    vim.cmd ":norm `m"
+  end
+})
+
 autocmd("FocusLost", {
   group = augroup,
   callback = function()
