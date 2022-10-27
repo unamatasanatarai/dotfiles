@@ -22,6 +22,7 @@ function user_create($user, $pass){
 #   |    MAIN    |
 #   + ---------- +
 
+# todo: magic help maker please
 array_shift($argv);
 $cmd = str_replace(":", "_", array_shift($argv));
 call_user_func_array($cmd, $argv);
