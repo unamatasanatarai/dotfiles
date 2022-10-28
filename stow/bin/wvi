@@ -1,5 +1,3 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
-
-$EDITOR "$(which "${1:-}")"
+exec $EDITOR "$(command -v "${1:-}")"
