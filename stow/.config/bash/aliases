@@ -4,6 +4,6 @@ alias vba='source venv/bin/activate'
 alias tree='tree -aC --dirsfirst'
 alias ls="ls -G"
 alias vi="nvim"
-alias nv="nvim"
 alias :q="exit"
+# bre's less is more up to date
 alias less="$(brew --prefix)/bin/less"
