@@ -25,14 +25,14 @@ autocmd("FileType", {
   end,
 })
 
-autocmd("BufWritePre", {
-  group = augroup,
-  callback = function()
-    vim.cmd "let winview = winsaveview()"
-    vim.cmd ":%!ttw"
-    vim.cmd "call winrestview(winview)"
-  end
-})
+-- autocmd("BufWritePre", {
+--   group = augroup,
+--   callback = function()
+--     vim.cmd "let winview = winsaveview()"
+--     vim.cmd ":%!ttw"
+--     vim.cmd "call winrestview(winview)"
+--   end
+-- })
 
 autocmd("FocusLost", {
   group = augroup,
