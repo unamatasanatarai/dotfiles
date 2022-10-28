@@ -15,7 +15,6 @@ export XDG_STATE_HOME=${XDG_STATE_HOME:=$HOME/.local/state}
 
 # ----- ./src/colors
 
-#!/usr/bin/env bash
 # shellcheck disable=2034
 
 if tput setaf 1 &> /dev/null; then
@@ -76,8 +75,6 @@ wcd() {
 }
 
 # ----- ./src/fzf_config
-
-#!/usr/bin/env bash
 
 bg="#2D3441"
 export FZF_DEFAULT_OPTS="
@@ -188,8 +185,6 @@ shopt -s lithist
 
 # ----- ./src/lynx
 
-#!/usr/bin/env bash
-
 export LYNX_CFG="$HOME/.config/lynx/lynx.cfg"
 export LYNX_LSS="$HOME/.config/lynx/lynx.lss"
 
@@ -233,8 +228,6 @@ PS1+="\[${reset}\]"
 export PS1
 
 # ----- ./src/settings
-
-#!/usr/bin/env bash
 
 # Hide the deprecation warning (zsh) macos
 export BASH_SILENCE_DEPRECATION_WARNING=1
