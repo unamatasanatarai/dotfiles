@@ -15,32 +15,41 @@ function _runForcedUpdate() {
   sudo xcode-select --install
 }
 
+function _rebuild() {
+  sudo xcodebuild -license
+}
+
 # -----------------------------------------------------------------------------
 # PUBLIC
 # -----------------------------------------------------------------------------
 
 __force=0
+__rebuild=0
 
 function _help() {
   echo -e "
 Usage: $(basename "${0}") [ -f ] [ -h ]
 
 Options:
+  -r   rebuild license
   -f   Remove and reinstall CommandLineTools
   -h   Show this help
 "
 }
 
 function _parse_args() {
-  while getopts "fh" opt; do
+  while getopts "fhr" opt; do
     case $opt in
-    f)
-      __force=1
-      ;;
-    *)
-      _help
-      exit 2
-      ;;
+      f)
+        __force=1
+        ;;
+      r)
+        __rebuild=1
+        ;;
+      *)
+        _help
+        exit 2
+        ;;
 
     esac
   done
@@ -50,9 +59,14 @@ function _parse_args() {
 
 function main() {
   _parse_args "$@"
-  if [ $__force == 1 ]; then
+  if [[ $__rebuild == 1 ]]; then
+    _rebuild
+    exit
+  fi
+  if [ "$__force" == 1 ]; then
     _runForcedUpdate
-  else :
+  else
+    :
     _runUpdate
   fi
 }
