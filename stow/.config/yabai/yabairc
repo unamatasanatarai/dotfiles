@@ -40,6 +40,7 @@ yabai -m rule --add label="KeePassXC" app="^KeePassXC$" manage=off
 yabai -m rule --add label="Monosnap" app="^Monosnap$"  manage=off
 yabai -m rule --add label="Slack calls" app="Slack" title="Slack \| Slack call.*" manage=off
 yabai -m rule --add label="Software Update" title="Software Update" manage=off
+# on ventura it's called System Settings and it works fine as a normal window
 yabai -m rule --add label="System Preferences" app="^System Preferences$" title=".*" manage=off
 yabai -m rule --add label="Terminal Popup" app="^Alacritty$" title="TermPopup" manage=off
 
