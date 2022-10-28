@@ -1,11 +1,6 @@
 #!/bin/bash
 
-trap x INT
-
-x() {
-  tput cnorm
-  exit
-}
+trap "tput cnorm; exit" INT
 
 tput civis
 while true; do
