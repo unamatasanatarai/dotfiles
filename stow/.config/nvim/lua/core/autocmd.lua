@@ -1,4 +1,3 @@
-local opt = vim.opt
 local opts = { noremap = true, silent = true }
 local keymap = vim.api.nvim_set_keymap
 local augroup = vim.api.nvim_create_augroup("general", { clear = true })
@@ -8,7 +7,7 @@ autocmd("FileType", {
   group = augroup,
   pattern = { 'markdown' },
   callback = function()
-    opt.wrap = true
+    vim.opt.wrap = true
     keymap("n", "j", "gj", opts)
     keymap("n", "k", "gk", opts)
     keymap("n", "$", "g$", opts)
@@ -40,6 +39,11 @@ autocmd("FocusLost", {
   callback = function()
     vim.cmd 'colorscheme warlock'
     vim.cmd 'hi Normal guibg=NONE ctermbg=NONE'
+    vim.cmd "hi StatusLine guibg=NONE ctermbg=NONE"
+    vim.cmd "hi CursorLine guibg=NONE ctermbg=NONE"
+    vim.cmd "hi SignColumn guibg=NONE ctermbg=NONE"
+    vim.cmd "hi LineNr guibg=NONE ctermbg=NONE"
+    vim.cmd "hi CursorLineNr guibg=NONE ctermbg=NONE"
   end,
 })
 
@@ -48,5 +52,6 @@ autocmd("FocusGained", {
   callback = function()
     vim.cmd 'colorscheme nordfox'
     vim.cmd 'hi Normal guibg=NONE ctermbg=NONE'
+    vim.cmd "hi StatusLine guibg=NONE ctermbg=NONE"
   end,
 })
