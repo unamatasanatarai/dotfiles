@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+dir=$(dirname "$0")
+readonly dir
+readonly result="$dir/bashrc"
+declare -a firstfiles=(xdg colors path)
+
+is_firstfile() {
+  for i in "${firstfiles[@]}"; do
+    [[ $i == "$1" ]] && return 0
+  done
+  return 1
+}
+
+echo "#!/usr/bin/env bash" > "$result"
+{
+  echo "#"
+  echo "# run rebuild, do not modify manually"
+  echo "#"
+} >> "$result"
+
+append() {
+  {
+    echo ""
+    echo "# ----- $1"
+    echo ""
+    cat "$1"
+  } >> "$result"
+}
+append "$dir/src/xdg"
+append "$dir/src/colors"
+append "$dir/src/path"
+
+main() {
+  while IFS= read -r file; do
+    local fn=${file:6}
+    is_firstfile "$fn" && continue
+    append "$file"
+  done < <(ls "$dir"/src/*)
+}
+
+main "$@"

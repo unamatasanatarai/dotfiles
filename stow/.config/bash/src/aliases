@@ -1,5 +1,3 @@
-#!/usr/bin/env bash
-
 alias vba='source venv/bin/activate'
 alias tree='tree -aC --dirsfirst'
 alias ls="ls -G"

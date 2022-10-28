@@ -1,5 +1,3 @@
-#!/usr/bin/env bash
-
 take() {
   mkdir -p "$*" && cd "$_" || return 1
 }
