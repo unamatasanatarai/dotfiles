@@ -1,15 +1,17 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
-help() {
-  echo "usage: watch \$command"
-  exit 1
+trap x INT
+
+x() {
+  tput cnorm
+  exit
 }
 
+tput civis
 while true; do
-  tput civis
   clear
   "$@"
   sleep 2
 done
 
-tput cnorm
+x
