@@ -1,4 +1,5 @@
-# shellcheck disable=2034
+BREW_PREFIX="$(brew --prefix)"
+declare -r BREW_PREFIX
 
 if tput setaf 1 &> /dev/null; then
     tput sgr0; # reset colors

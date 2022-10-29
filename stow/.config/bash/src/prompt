@@ -1,10 +1,8 @@
-# shellcheck disable=2154
-
 function extract_git_branch_name {
   # make a copy of the previous exit status
   local ps=$?
   local branch
-  branch=$(git_branch_read)
+  branch=$(git rev-parse --abbrev-ref HEAD 2> /dev/null)
   if [ "$branch" != "" ]; then
     echo " <${branch}>"
   fi
@@ -13,14 +11,11 @@ function extract_git_branch_name {
 }
 
 PS1=""
-# current time
-# PS1+="\[${gray}\]\t "
 # working directory full path
 PS1+="\[${green}\]\w"
 # git branch
 PS1+="\[${yellow}\]\$(extract_git_branch_name)\[${reset}\]"
 # the dollar will be red if exit code was baaaad
-PS1+=' $([ $? == 0 ] && echo "\[${white}\]\$ " || echo "\[${red}\]\$ ")'
-PS1+="\[${reset}\]"
+PS1+=' $([ $? == 0 ] && echo "\[${white}\]\$ " || echo "\[${red}\]\$ ")\[${reset}\]'
 
 export PS1

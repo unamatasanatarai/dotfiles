@@ -2,7 +2,7 @@ _Z_DATA_DIR="$XDG_DATA_HOME/z"
 _Z_DATA="$_Z_DATA_DIR/.z"
 [ -d "$_Z_DATA_DIR" ] || mkdir -p "$_Z_DATA_DIR"
 
-. "$(brew --prefix)"/etc/profile.d/z.sh
+. "$BREW_PREFIX"/etc/profile.d/z.sh
 
 function zls() {
   local dir

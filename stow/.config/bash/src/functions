@@ -3,5 +3,5 @@ take() {
 }
 
 wcd() {
-  cd "$(dirname "$(which "$1")")" || return 1
+  cd "$(dirname "$(command -v "$1")")" || return 1
 }

@@ -5,7 +5,7 @@ set -euo pipefail
 dir=$(dirname "$0")
 readonly dir
 readonly result="$dir/bashrc"
-declare -a firstfiles=(xdg colors path)
+declare -a firstfiles=(_vars xdg path)
 
 is_firstfile() {
   for i in "${firstfiles[@]}"; do
@@ -29,9 +29,10 @@ append() {
     cat "$1"
   } >> "$result"
 }
-append "$dir/src/xdg"
-append "$dir/src/colors"
-append "$dir/src/path"
+
+for f in "${firstfiles[@]}"; do
+  append "$dir/src/$f"
+done
 
 main() {
   while IFS= read -r file; do
