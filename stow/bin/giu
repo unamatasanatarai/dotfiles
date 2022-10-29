@@ -6,12 +6,12 @@ set -euo pipefail
 # PRIVATE
 # -----------------------------------------------------------------------------
 function _set_username { # Set git config username
-  echo "git config user.name ""${1}"
+  echo "git config user.name '$1'"
   git config user.name "$1"
 }
 
 function _set_email { # Set git config E-Mail
-  echo "git config user.email ""${1}"
+  echo "git config user.email '$1'"
   git config user.email "$1"
 }
 
@@ -23,27 +23,22 @@ _username=""
 _email=""
 
 function _help() {
-  echo "usage: ${0} -u username -e email"
-  echo "OR usage: ${0} username email"
+  echo "usage: $(basename "$0") -u username -e email"
+  echo "OR usage: $(basename "$0") username email"
 }
 
 function _parse_args() {
   while getopts "u:e:" opt; do
     case $opt in
-    u)
-      _username="${OPTARG}"
-      ;;
-    e)
-      _email="${OPTARG}"
-      ;;
-    *) ;;
-
+      u) _username="$OPTARG" ;;
+      e) _email="$OPTARG" ;;
+      *) ;;
     esac
   done
 
   shift $((OPTIND - 1))
 
-  if [ "$#" == 2 ] && [ -z "$_username" ] && [ -z "$_email" ]; then
+  if [[ "$#" == 2 ]] && [[ "$_username" = "" ]] && [[ "$_email" = "" ]]; then
     _username="$1"
     _email="$2"
   fi
@@ -51,11 +46,11 @@ function _parse_args() {
 
 function main() {
   _parse_args "$@"
-  if [ -z "$_username" ] && [ -z "$_email" ]; then
+  if [[ "$_username" = "" ]] && [[ "$_email" = "" ]]; then
     _help
   else
-    if [ -n "$_username" ]; then _set_username "$_username"; fi
-    if [ -n "$_email" ]; then _set_email "$_email"; fi
+    if [[ "$_username" != "" ]]; then _set_username "$_username"; fi
+    if [[ "$_email" != "" ]]; then _set_email "$_email"; fi
   fi
 }
 # -----------------------------------------------------------------------------
