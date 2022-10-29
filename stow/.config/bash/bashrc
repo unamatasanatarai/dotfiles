@@ -5,7 +5,13 @@
 
 # ----- ./src/_vars
 
-BREW_PREFIX="$(brew --prefix)"
+if [[ "$(uname -m)" = "x86_64" ]]; then
+  BREW_PREFIX="/usr/local"
+else
+  BREW_PREFIX="/usr/homebrew"
+fi
+# ^^ is faster than ,,
+#     BREW_PREFIX="$(brew --prefix)"
 declare -r BREW_PREFIX
 
 if tput setaf 1 &> /dev/null; then
@@ -213,7 +219,6 @@ extract_git_branch_name() {
   # and return it so the redness can start
   return "$ps"
 }
-export -f extract_git_branch_name
 
 PS1=""
 # working directory full path

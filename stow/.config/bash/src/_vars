@@ -1,4 +1,10 @@
-BREW_PREFIX="$(brew --prefix)"
+if [[ "$(uname -m)" = "x86_64" ]]; then
+  BREW_PREFIX="/usr/local"
+else
+  BREW_PREFIX="/usr/homebrew"
+fi
+# ^^ is faster than ,,
+#     BREW_PREFIX="$(brew --prefix)"
 declare -r BREW_PREFIX
 
 if tput setaf 1 &> /dev/null; then
