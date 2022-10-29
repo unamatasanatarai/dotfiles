@@ -5,7 +5,7 @@ if [ "$1" = "" ] || [ "${1:0:4}" != "git@" ]; then
   exit 1
 fi
 
-[ ! -f README.md ] && echo "# Readme" > README.md
+[[ ! -f README.md ]] && echo "# Readme" > README.md
 git init
 giume
 git remote add origin "$1"

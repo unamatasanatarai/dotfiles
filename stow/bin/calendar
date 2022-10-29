@@ -3,7 +3,8 @@
 set -euo pipefail
 
 tput civis
-month=$(date "+%m" | sed -E 's/^0//')
+month=$(date "+%m")
+month=${month#0}
 year=$(date "+%Y")
 
 tmonth=$month
@@ -21,12 +22,12 @@ while read -s -n1 -r key; do
     q|Q|$'\e') tput cnorm; exit 0 ;;
     h|H) 
       month=$(( month - 1 )) 
-      [ "$month" -lt 1 ] && month=12 && year=$((year - 1))
+      [[ "$month" -lt 1 ]] && month=12 && year=$((year - 1))
       showcal "$month" "$year"
       ;;
     l|L) 
       month=$(( month + 1 ))
-      [ "$month" -gt 12 ] && month=1 && year=$((year + 1))
+      [[ "$month" -gt 12 ]] && month=1 && year=$((year + 1))
       showcal "$month" "$year"
       ;;
     t|T)

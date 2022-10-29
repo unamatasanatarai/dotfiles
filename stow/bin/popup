@@ -52,40 +52,45 @@ while getopts "w:h:x:y:c:l:?" o; do
     y) Y=${OPTARG} ;;
     l) LH=${OPTARG} ;;
     c) cmd=${OPTARG} ;;
-    ?) help; exit 2 ;;
-    *) help
+    ?)
+      help
+      exit 2
+      ;;
+    *)
+      help
       exit 2
       ;;
   esac
 done
 
 # screen size
-SW=$(yabai -m query --displays --display | jq .frame.w*2)
-SH=$(yabai -m query --displays --display | jq .frame.h*2)
+readarray -t ybi <<< "$(yabai -m query --displays --display | jq '.frame.w*2, .frame.h*2')"
+SW=${ybi[0]}
+SH=${ybi[1]}
 
 # term size
 charw=16
 charh=32
 TW=$((charw * W + 4 * PADDING))
 # the last + LH fixes vertical placement.... only a little. Not sure why it's not workign properly
-TH=$(( ((LH + charh) * H) + (4 * PADDING) + LH ))
+TH=$((((LH + charh) * H) + (4 * PADDING) + LH))
 
 # term pos
-if [ "$X" == "$_center" ]; then
+if [[ "$X" == "$_center" ]]; then
   X=$((SW - TW >> 1))
-elif [ "$X" == "$_right" ]; then
+elif [[ "$X" == "$_right" ]]; then
   X=$((SW - TW))
 else
-  if [ "$X" == "$_left" ]; then X=0; fi
+  if [[ "$X" == "$_left" ]]; then X=0; fi
   X=$((X << 1))
 fi
 
-if [ "$Y" == "$_center" ]; then
+if [[ "$Y" == "$_center" ]]; then
   Y=$((SH - TH >> 1))
-elif [ "$Y" == "$_bottom" ]; then
+elif [[ "$Y" == "$_bottom" ]]; then
   Y=$((SH - TH))
 else
-  if [ "$Y" == $_top ]; then Y=0; fi
+  if [[ "$Y" == "$_top" ]]; then Y=0; fi
   Y=$((Y << 1))
 fi
 

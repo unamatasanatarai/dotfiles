@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-if [ "${1:-}" = "" ]; then
+if [[ -z "${1:-}" ]]; then
   echo "usage: $(basename "$0") Title of the lesson learnt"
   exit 1
 fi

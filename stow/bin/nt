@@ -35,7 +35,7 @@ save_to_file() {
   local -r contents="$1"
   local -r filepath="$2"
   # prevent override
-  if [ -f "$filepath" ]; then
+  if [[ -f "$filepath" ]]; then
     ewarn "File: \`$filepath\` already exists. aborted."
     return 1
   fi
