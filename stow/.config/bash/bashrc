@@ -202,7 +202,7 @@ function ? {
 
 # ----- ./src/prompt
 
-function extract_git_branch_name {
+extract_git_branch_name() {
   # make a copy of the previous exit status
   local ps=$?
   local branch
@@ -213,6 +213,7 @@ function extract_git_branch_name {
   # and return it so the redness can start
   return "$ps"
 }
+export -f extract_git_branch_name
 
 PS1=""
 # working directory full path

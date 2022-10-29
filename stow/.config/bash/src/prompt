@@ -1,4 +1,4 @@
-function extract_git_branch_name {
+extract_git_branch_name() {
   # make a copy of the previous exit status
   local ps=$?
   local branch
