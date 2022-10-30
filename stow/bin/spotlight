@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 
 set -euo pipefail
+# load global config, the look got unified
+source "$HOME"/.config/bash/src/fzf_config
 
-pwd="${HOME}/bin/spotlight_commands"
+pwd="$HOME/bin/spotlight_commands"
 files=""
 while IFS= read -r file; do
   files+="${file//$pwd\//}"$'\n'
