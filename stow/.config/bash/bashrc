@@ -70,8 +70,14 @@ export XDG_STATE_HOME=${XDG_STATE_HOME:=$HOME/.local/state}
 
 # ----- ./src/path
 
-PATH="${PATH}:${HOME}/bin:${HOME}/.cargo/bin:${HOME}/.local/bin:/opt/homebrew/bin"
-PATH="/usr/local/sbin:${HOME}/.config/composer/vendor/bin:$PATH"
+p="${HOME}/bin"
+p+=":${HOME}/.local/bin"
+p+=":${HOME}/.cargo/bin"
+p+=":/opt/homebrew/bin"
+p+=":/usr/local/sbin"
+p+=":${HOME}/.config/composer/vendor/bin"
+export PATH="$p:$PATH"
+echo $PATH
 
 # ----- ./src/aliases
 
