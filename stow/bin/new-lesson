@@ -1,18 +1,3 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
-
-if [[ -z "${1:-}" ]]; then
-  echo "usage: $(basename "$0") Title of the lesson learnt"
-  exit 1
-fi
-
-title="$*"
-filename=${title,,}
-shopt -s extglob
-filename=${filename//+([^a-z0-9_-])/-}-$(date +"%Y%m%d-%H%M").md
-shopt -u extglob
-path="$HOME/dev/lessons/journal/$filename"
-touch "$path"
-echo "# $title"$'\n\n' > "$path"
-"$EDITOR" "$path" -c "norm: cd ~/dev/lessons/journal" -c "norm G"
+../../../lessons/new-lesson "$@"
