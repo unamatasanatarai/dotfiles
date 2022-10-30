@@ -2,18 +2,30 @@
 
 set -euo pipefail
 
+# -------------------------------- Fonts I Like ---------------------------------
+declare -a fonts=(
+  "ANSI Regular"
+  "Bloody"
+  "Calvin S"
+  "Cybermedium"
+  "DOS Rebel"
+  "Delta Corps Priest 1"
+  "Future"
+  "Lean"
+  "Stick Letters"
+)
+
 font_dir=$HOME/.local/share/figlet
 [[ ! -d $font_dir ]] && echo "Download fonts into $font_dir from https://github.com/xero/figlet-fonts" && exit 1
 
-[[ -z ${1:-} ]] && echo "usage title 'Title to display'" && exit 1
+[[ -z ${1:-} ]] && echo "usage: title 'Title to display'" && exit 1
 
-declare -a fonts=()
-while IFS= read -r font; do
-  font="${font%.flf}"
-  font="${font#"$font_dir"/}"
-  fonts+=("$font")
-done < <(ls "$font_dir"/*.flf)
+if [[ -n ${TITLE_FONT:-} ]]; then
+  font=$TITLE_FONT
+else
+  tot=${#fonts[@]}
+  num=$((RANDOM % (tot - 1)))
+  font=${fonts[$num]}
+fi
 
-tot=${#fonts[@]}
-num=$((RANDOM % (tot - 1)))
-figlet -f "${fonts[$num]}" -d "$font_dir" "$*" | lolcat
+figlet -f "$font" -w "$(tput cols)" -c -d "$font_dir" "$*" | lolcat
