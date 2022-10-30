@@ -197,13 +197,15 @@ export LYNX_CFG="$HOME/.config/lynx/lynx.cfg"
 export LYNX_LSS="$HOME/.config/lynx/lynx.lss"
 
 function lynx {
-  useragent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:105.0) Gecko/20100101 Firefox/105.0"
+  #useragent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:105.0) Gecko/20100101 Firefox/105.0"
+  #let's attempt to be always mobile
+  useragent="Mozilla/5.0 (Android 13; Mobile; rv:68.0) Gecko/68.0 Firefox/106.0"
 
   "$BREW_PREFIX"/bin/lynx -useragent="$useragent" "$@"
 }
 
 function ? {
-  sduck "$@"
+  lynx "https://lite.duckduckgo.com/lite?kd=-1&kp=-1&q=$*"
 }
 
 # ----- ./src/prompt
