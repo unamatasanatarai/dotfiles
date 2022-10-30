@@ -5,7 +5,7 @@ set -euo pipefail
 dir=$(dirname "$0")
 readonly dir
 readonly result="$dir/bashrc"
-declare -a firstfiles=(_vars xdg path)
+declare -a firstfiles=(_top _vars xdg path)
 
 is_firstfile() {
   for i in "${firstfiles[@]}"; do
@@ -14,12 +14,7 @@ is_firstfile() {
   return 1
 }
 
-echo "#!/usr/bin/env bash" > "$result"
-{
-  echo "#"
-  echo "# run rebuild, do not modify manually"
-  echo "#"
-} >> "$result"
+: > "$result"
 
 append() {
   {
