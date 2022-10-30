@@ -15,7 +15,7 @@ export PYTHONUSERBASE="$XDG_DATA_HOME"/python
 export TERMINFO="$XDG_DATA_HOME"/terminfo
 export TERMINFO_DIRS="$XDG_DATA_HOME"/terminfo:/usr/share/terminfo
 export WGETRC="$XDG_CONFIG_HOME/wgetrc"
-alias wget="wget --hsts-file='$XDG_CACHE_HOME'/wget-hsts"
+alias wget="wget --hsts-file=$XDG_CACHE_HOME/wget-hsts"
 # dangerous - first move your existing passwords,
 # see supported apps https://wiki.archlinux.org/title/XDG_Base_Directory
 #export GNUPGHOME="$XDG_DATA_HOME"/gnupg,

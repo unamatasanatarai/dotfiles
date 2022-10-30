@@ -3,6 +3,6 @@ alias tree='tree -aC --dirsfirst'
 alias ls="ls -G"
 alias vi="nvim"
 alias :q="exit"
-# bre's less is more up to date
+# brew's less is more up to date
 alias less="$BREW_PREFIX/bin/less"
 alias yarn='yarn --use-yarnrc "$XDG_CONFIG_HOME/yarn/config"'
