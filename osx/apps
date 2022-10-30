@@ -28,6 +28,7 @@ brew install \
   lazygit \
   less \
   lynx \
+  mpv \
   ncdu \
   neovim \
   node \

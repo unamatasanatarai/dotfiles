@@ -3,7 +3,7 @@
 set -euo pipefail
 
 . "$(dirname "$0")"/../stow/bin/.lib
-. "$(dirname "$0")"/../stow/.config/bash/xdg
+. "$(dirname "$0")"/../stow/.config/bash/src/xdg
 
 ebox "Create mandatory directories"
 
