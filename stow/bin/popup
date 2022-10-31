@@ -94,7 +94,7 @@ else
   Y=$((Y << 1))
 fi
 
-alacritty \
+exec alacritty \
   -t "$TITLE" \
   -o window.position.x="$X" \
   -o window.position.y="$Y" \

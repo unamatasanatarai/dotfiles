@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+exec "$HOME"/bin/popup -c "$HOME"/bin/spotlight -y0 -w40 -h12
