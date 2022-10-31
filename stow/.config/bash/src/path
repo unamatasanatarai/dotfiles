@@ -5,4 +5,3 @@ p+=":/opt/homebrew/bin"
 p+=":/usr/local/sbin"
 p+=":${HOME}/.config/composer/vendor/bin"
 export PATH="$p:$PATH"
-echo $PATH

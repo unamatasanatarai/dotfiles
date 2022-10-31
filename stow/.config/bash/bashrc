@@ -18,7 +18,7 @@ esac
 if [[ "$(uname -m)" = "x86_64" ]]; then
   BREW_PREFIX="/usr/local"
 else
-  BREW_PREFIX="/usr/homebrew"
+  BREW_PREFIX="/opt/homebrew"
 fi
 # ^^ is faster than ,,
 #     BREW_PREFIX="$(brew --prefix)"
@@ -77,7 +77,6 @@ p+=":/opt/homebrew/bin"
 p+=":/usr/local/sbin"
 p+=":${HOME}/.config/composer/vendor/bin"
 export PATH="$p:$PATH"
-echo $PATH
 
 # ----- ./src/aliases
 
