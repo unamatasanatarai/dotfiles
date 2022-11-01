@@ -14,7 +14,7 @@ _help() {
 title="$*"
 filename=${title,,}
 shopt -s extglob
-filename=${filename//+([^a-z0-9_-])/-}-$(date +"%Y%m%d-%H%M").cast
+filename=${filename//+([^a-z0-9_-])/-}-$(date +"%Y%m%d%H%M").cast
 shopt -u extglob
 
 asciinema rec -t "$title" "$filename"
