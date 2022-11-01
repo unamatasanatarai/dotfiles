@@ -14,7 +14,8 @@ case $- in
   *) return ;; #non-interactive shell, non-login shell, skip rc
 esac
 
-command -v ~/bin/title && ~/bin/title $'I am\nserious'
+# wow, this got annoying extremely fast!
+#command -v ~/bin/title && ~/bin/title $'I am\nserious'
 # ----- ./src/_vars
 
 if [[ "$(uname -m)" = "x86_64" ]]; then
