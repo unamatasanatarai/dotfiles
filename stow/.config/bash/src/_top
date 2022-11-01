@@ -10,3 +10,5 @@ case $- in
   *i*) ;;      # interactive shell, load the configs
   *) return ;; #non-interactive shell, non-login shell, skip rc
 esac
+
+command -v ~/bin/title && ~/bin/title $'I am\nserious'
