@@ -16,7 +16,18 @@ declare -a fonts=(
 )
 
 font_dir=$HOME/.local/share/figlet
-[[ ! -d $font_dir ]] && echo "Download fonts into $font_dir from https://github.com/xero/figlet-fonts" && exit 1
+_help() {
+  echo "Missing fonts!
+Download from:  https://github.com/xero/figlet-fonts.git
+to:             $font_dir
+
+mkdir -p $font_dir
+cd $font_dir
+git clone https://github.com/xero/figlet-fonts.git .
+"
+  exit 1
+}
+[[ ! -d $font_dir ]] && _help
 
 [[ -z ${1:-} ]] && echo "usage: title 'Title to display'" && exit 1
 
