@@ -37,4 +37,4 @@ if [[ $tag == "" ]]; then
 fi
 
 git tag "$tag"
-[[ $push == true ]] && git push --tags -u origin "$(git_branch_read)" || exit 0
+[[ $push == true ]] && git push --tags -u origin "$(git-branch-read)" || exit 0

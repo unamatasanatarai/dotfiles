@@ -427,11 +427,11 @@ You can customize available options in ~/bin/spotlight_commands/
 - `buu` : brew update & upgrade
 - `calendar` : interactive _cal_ implementation
 - `gic` : git add && git commit -m "WIP|your message"
-- `gip` : git push orignn $(git_branch_read)
+- `gip` : git push orign $(git-branch-read)
 - `gicp` : gic + gip
 - `ginah` : git reset haaaard
 - `gis` : git status
-- `git_branch_read` : find out the name of the current branch in the current directory
+- `git-branch-read` : find out the name of the current branch in the current directory
 - `giu` : git config user.name|email setting with one-line
 - `macupdate` : force macupdates from the command line
 - `micm` : toggle microphone input volume

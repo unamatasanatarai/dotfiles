@@ -39,4 +39,4 @@ else
   font=${fonts[$num]}
 fi
 
-figlet -f "$font" -w "$(tput cols)" -c -d "$font_dir" "$*" | lolcat
+exec figlet -f "$font" -w "$(tput cols)" -c -d "$font_dir" "$*" | lolcat
