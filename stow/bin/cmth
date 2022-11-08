@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 # todo: used mostly for vim, sooo... a new folder maybe?
-# todo: change the table layout. this one is not that nice
 
 set -euo pipefail
 
@@ -20,9 +19,26 @@ fi
 
 [[ -z $text ]] && __help && exit $?
 
-len=$((${#text} + 6))
-seq=$(for ((i = 1; i <= len; i++)); do echo -n "-"; done)
-hl="#   + $seq +"
-echo "$hl"
-echo -e "#   |    $text    |"
-echo "$hl"
+len=${#text}
+max=72
+pref_b=$(((max - len) / 2 - 1))
+pref_b=${pref_b%%.[[:digit:]]}
+
+msg="# "
+for ((i = 0; i <= max+2; i++)); do
+  msg+="-"
+done
+msg+=$'\n'"# "
+for ((i = 0; i <= pref_b; i++)); do
+  msg+="-"
+done
+msg+=" $text "
+i=$((i + len))
+for (( ; i <= max; i++)); do
+  msg+="-"
+done
+msg+=$'\n'"# "
+for ((i = 0; i <= max+2; i++)); do
+  msg+="-"
+done
+echo "${msg}"
