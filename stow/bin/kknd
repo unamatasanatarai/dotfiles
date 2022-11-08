@@ -15,45 +15,32 @@ declare -r __FILE __DIR
 # CONFIG
 # -----------------------------------------------------------------------------
 
-o_flag=1
-
-# -----------------------------------------------------------------------------
-# PRIVATE interfaces
-# -----------------------------------------------------------------------------
-
-_display-hello() {
-  echo "Hello, $*!"
-}
-
 # -----------------------------------------------------------------------------
 # PUBLIC interfaces
 # -----------------------------------------------------------------------------
 
-prepend-hello() { # Prepend Hello to what you type, ex: `prepend-hello John`
-  _display-hello "$@"
-  ##cursor##
+trash() { # Empty the trash
+  sudo rm -rfv /Volumes/*/.Trashes
+  sudo rm -rfv ~/.Trash
+  sudo rm -rfv /private/var/log/asl/*.asl
+  sqlite3 ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV* 'delete from LSQuarantineEvent'
+}
+
+printer-history() { # Forget the printer queue from /var/spool/cups
+  cancel -x -a
+}
+
+screenshots() { # Empty the ~/Picutres/screenshots folder
+  local sdir
+  sdir="${HOME}/Pictures/screenshots"
+  rm -rvf "${sdir:?}"/*
+}
+
+dstore() { # Remove .DS_Store files, recursively
+  find . -name '.DS_Store' -type f -delete -print
 }
 
 # -----------------------------------------------------------------------------
-
-_parse_options() {
-  while [[ $# -ge 1 ]]; do
-    case $1 in
-
-      --flag)
-        shift
-        o_flag=$1
-        shift
-        continue
-        ;;
-
-    esac
-
-    if [[ $# -gt 0 ]]; then
-      shift
-    fi
-  done
-}
 
 help() { # Display this helpful help information
   local functions=""
@@ -65,16 +52,11 @@ help() { # Display this helpful help information
     fi
   done < <(grep -E "^[a-zA-Z][a-zA-Z0-9_-]*?\s*\(\)\s*\{" "$0")
   echo "$__FILE v$__VERSION"
-  echo "Usage: $__FILE <task> [options]"
+  echo "Usage: $__FILE <task>"
   echo ""
   echo "Tasks"
   column -t -s '#' <<< "$functions"
   echo ""
-  echo "Options"
-  echo "   --flag   on"
-  echo ""
 }
-
-_parse_options "$@"
 
 "${@:-help}"
