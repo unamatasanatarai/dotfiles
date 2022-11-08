@@ -28,6 +28,7 @@ trash() { # Empty the trash
 
 printer-history() { # Forget the printer queue from /var/spool/cups
   cancel -x -a
+  echo "purged /var/spool/cups"
 }
 
 screenshots() { # Empty the ~/Picutres/screenshots folder

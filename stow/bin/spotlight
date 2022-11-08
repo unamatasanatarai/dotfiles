@@ -20,7 +20,4 @@ cmd=$(
 )
 # force removal of the last enter --> hack `${files:0:-1}`
 
-echo $pwd/$cmd
-read
-"$pwd"/"$cmd"
-read
+exec "$pwd"/"$cmd"
