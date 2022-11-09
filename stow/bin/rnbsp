@@ -1,12 +1,11 @@
-#!/usr/bin/env perl
+#!/usr/bin/env bash
 # used mostly for vim, sooo... a new folder maybe?
 #
-# replace ` ` (nbsp, alt+space) character with a normal space ` `
+# replace ` ` character with a normal space
 #
 # works with VIM
-# Written in perl, because bash expansion deletes last line in file if `\n` is not present
 
-while (<>){
- $_=~s/ / /g;
- print $_;
-}
+# a bit intrusive maybe.. but the hack "adds newline" to the last line if no such newline character exists
+while IFS= read -r line || [[ -n "$line" ]]; do
+  echo "${line// / }"
+done < "${1:-/dev/stdin}"
