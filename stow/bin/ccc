@@ -78,7 +78,7 @@ help() { # Display this helpful help information
 }
 
 # ------------------------------- THE COMPLETION --------------------------------
-# remember to .bashrc: `complete -C $__FILE $__FILE`
+# remember to bashrc: `complete -C $__FILE $__FILE`
 declare -a functions=()
 while IFS= read -r f; do
   [[ ${f:0:1} != "_" ]] && functions+=("$f")
@@ -89,6 +89,7 @@ if [[ -n ${COMP_LINE:-} ]]; then
   done
   exit
 fi
+
 
 # ---------------------------------------------------------------------------
 # ---------------------------------- MAIN -----------------------------------

@@ -30,4 +30,5 @@ if [[ -n ${COMP_LINE:-} ]]; then
   for cmd in "${functions[@]}"; do
     [[ ${cmd:0:${#2}} == "$2" ]] && echo "$cmd"
   done
+  exit
 fi
