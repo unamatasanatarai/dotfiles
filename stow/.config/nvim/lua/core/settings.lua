@@ -74,5 +74,5 @@ vim.cmd "syntax on"
 -- well, off + on is a stupid hack. But it WORKS.
 vim.cmd "filetype off"
 vim.cmd "filetype plugin indent on"
-vim.cmd "set nofixendofline"
-vim.cmd "set noeol"
+-- vim.cmd "set nofixendofline"
+-- vim.cmd "set noeol"
