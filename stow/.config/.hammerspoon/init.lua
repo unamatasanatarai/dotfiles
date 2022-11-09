@@ -12,7 +12,7 @@ logiremap:remap("rcmd", "ralt")
 logiremap:register()
 
 
-hs.pathwatcher.new(os.getenv("HOME") .. "/.config/.hammerspoon/", hs.reload):start()
+-- hs.pathwatcher.new(os.getenv("HOME") .. "/.config/.hammerspoon/", hs.reload):start()
 hs.alert.show(
   "HS CONFIG RELOADED",
   {
