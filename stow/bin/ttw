@@ -16,5 +16,5 @@ trim_whitespace() {
 }
 
 while IFS= read -r line; do
-  trim_trailing_whitespace "${line%"${line##*[![:space:]]}"}"
+  trim_trailing_whitespace "$line"
 done < "${1:-/dev/stdin}"

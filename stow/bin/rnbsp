@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# used mostly for vim, sooo... a new folder maybe?
+#
+# replace ` ` character with a normal space
+#
+# works with VIM
+
+while IFS= read -r line; do
+  echo "${line// / }"
+done < "${1:-/dev/stdin}"
