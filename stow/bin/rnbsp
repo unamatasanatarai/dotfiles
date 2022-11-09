@@ -4,6 +4,7 @@
 # replace ` ` (nbsp, alt+space) character with a normal space ` `
 #
 # works with VIM
+# Written in perl, because bash expansion deletes last line in file if `\n` is not present
 
 while (<>){
  $_=~s/ / /g;
