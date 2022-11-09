@@ -33,12 +33,12 @@ hs.alert.show(
 )
 
 -- reload config on non blocking shortcut
-local function catcher(event)
-  local flags = event:getFlags()
+-- local function catcher(event)
+--   local flags = event:getFlags()
+-- 
+--   if flags["ctrl"] and "§" == hs.keycodes.map[event:getKeyCode()] then
+--     hs.reload()
+--   end
+-- end
 
-  if flags["ctrl"] and "§" == hs.keycodes.map[event:getKeyCode()] then
-    hs.reload()
-  end
-end
-
-hs.eventtap.new({ hs.eventtap.event.types.keyDown }, catcher):start()
+-- hs.eventtap.new({ hs.eventtap.event.types.keyDown }, catcher):start()
