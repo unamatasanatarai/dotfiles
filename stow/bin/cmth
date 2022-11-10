@@ -5,8 +5,8 @@ set -euo pipefail
 
 __help() {
   echo "usage:"
-  echo "   ${0##/*} text"
-  echo "   $(basename "$0") stdinput"
+  echo "   ${0##*/} text"
+  echo "   ${0##*/} STDIN (ctrl+d to commit)"
   exit 1
 }
 
