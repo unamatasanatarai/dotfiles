@@ -5,12 +5,12 @@ set -euo pipefail
 
 __help() {
   echo "usage:"
-  echo "   $(basename "$0") text"
+  echo "   ${0##/*} text"
   echo "   $(basename "$0") stdinput"
   exit 1
 }
 
-text=$*
+text="$*"
 if [[ -z $text ]]; then
   while IFS= read -r line; do
     text=$line
