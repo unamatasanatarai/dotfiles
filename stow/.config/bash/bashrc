@@ -91,6 +91,7 @@ alias :q="exit"
 # brew's less is more up to date
 alias less="$BREW_PREFIX/bin/less"
 alias yarn='yarn --use-yarnrc "$XDG_CONFIG_HOME/yarn/config"'
+alias tldr="tldr --osx"
 
 # ----- ./src/functions
 
