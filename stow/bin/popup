@@ -105,4 +105,4 @@ exec alacritty \
   -o window.padding.y="$PADDING" \
   -o font.offset.y="$LH" \
   --working-directory "$PWD" \
-  -e "$cmd"
+  -e bash -c "$cmd"

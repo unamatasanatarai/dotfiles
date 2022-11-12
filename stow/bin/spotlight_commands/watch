@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+url=$(pbpaste)
+#url="https://www.youtube.com/watch?v=2sjJTJdjBGw"
+if [[ ${url:0:8} == "https://" ]]; then
+  open -na "$HOME"/bin/popup --args -w12 -ybottom -h4 -xright -c "mpv $url"
+fi
