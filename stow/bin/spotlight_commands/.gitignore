@@ -1,6 +1,8 @@
 *
 !.gitignore
-!empty_trash
 !calendar
-!purge_screenshots
 !watch
+!purge-dstore
+!purge-printer
+!purge-screenshots
+!purge-trash
