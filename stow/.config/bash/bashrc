@@ -76,6 +76,7 @@ export XDG_STATE_HOME=${XDG_STATE_HOME:=$HOME/.local/state}
 p="${HOME}/bin"
 p+=":${HOME}/.local/bin"
 p+=":${HOME}/.cargo/bin"
+p+=":${HOME}/.local/share/cargo/bin"
 p+=":/opt/homebrew/bin"
 p+=":/usr/local/sbin"
 p+=":${HOME}/.config/composer/vendor/bin"
