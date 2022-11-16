@@ -9,6 +9,10 @@
 local FR = require('foundation_remapping')
 local logiremap = FR.new({ vendorID = 0x046D, productID = 0xB359 })
 logiremap:remap("rcmd", "ralt")
+-- hack for the other computer. The keyboard is acting up on it.
+if hs.host.localizedName() == "Decrypted" then
+  logiremap:remap("lcmd", "lalt"):remap("lalt", "lcmd")
+end
 logiremap:register()
 
 
@@ -35,7 +39,7 @@ hs.alert.show(
 -- reload config on non blocking shortcut
 -- local function catcher(event)
 --   local flags = event:getFlags()
--- 
+--
 --   if flags["ctrl"] and "§" == hs.keycodes.map[event:getKeyCode()] then
 --     hs.reload()
 --   end
