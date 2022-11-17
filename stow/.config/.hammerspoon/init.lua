@@ -10,9 +10,11 @@ local FR = require('foundation_remapping')
 local logiremap = FR.new({ vendorID = 0x046D, productID = 0xB359 })
 logiremap:remap("rcmd", "ralt")
 -- hack for the other computer. The keyboard is acting up on it.
-if hs.host.localizedName() == "Decrypted" then
-  logiremap:remap("lcmd", "lalt"):remap("lalt", "lcmd")
-end
+-- on the other hand:
+-- -- LONG PRESS fn+o (or fn+p) -> fixes it
+-- if hs.host.localizedName() == "Decrypted" then
+--   logiremap:remap("lcmd", "lalt"):remap("lalt", "lcmd")
+-- end
 logiremap:register()
 
 
