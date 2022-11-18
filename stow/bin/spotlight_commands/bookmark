@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+# spotlight command shortcut for https://github.com/unamatasanatarai/bookmarks/blob/main/add-bookmark
+set -euo pipefail
+
+url=$(pbpaste)
+~/dev/bookmarks/add-bookmark "$url"
