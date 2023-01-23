@@ -9,7 +9,9 @@ ebox "Install homebrew"
 if test ! "$(which brew)"; then
   eok "brew not found, installing..."
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  brew update
+  echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> "$HOME/.zprofile"
+  /opt/homebrew/bin/brew shellenv || true
+  /opt/homebrew/bin/brew update
 else
   efail "brew already installed. skip!"
 fi
