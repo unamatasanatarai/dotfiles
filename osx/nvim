@@ -3,6 +3,7 @@
 set -euo pipefail
 
 . "$(dirname "$0")"/install-brew
+. "$(dirname "$0")"/env
 
 statedir=$XDG_STATE_HOME/dotfiles
 mkdir -p "$statedir"
