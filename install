@@ -95,11 +95,11 @@ function fresh { # Do everything at once. Please run this only once ;)
 
   # the order matters
   defaults
+  apps
   dotfiles
   fonts
   neovim
   stop-processes --unload
-  apps
 }
 
 # -----------------------------------------------------------------------------
