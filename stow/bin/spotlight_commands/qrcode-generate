@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+text=$(pbpaste)
+file=/tmp/qrcode.png
+qrencode -o "$file" "$text"
+open "$file"
