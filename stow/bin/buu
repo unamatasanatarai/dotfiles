@@ -19,7 +19,4 @@ brew upgrade --no-quarantine --greedy
 einfo "Cleanup"
 brew cleanup --prune=all -s
 
-einfo "Update tldr"
-tldr --update
-
 eok "all done!"

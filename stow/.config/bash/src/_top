@@ -1,15 +1,15 @@
-#
-# DO NOT MODIFY directly
-#
-# run ./rebuild
-#
+# ------------------------------------------------------------------------------
+# !!  This file is auto-generated.
+#     Do NOT modify it directly — your changes will be overwritten.
+#     To update or customize, run: ./rebuild
+# ------------------------------------------------------------------------------
 
-# if this is NOT an interactive shell
-# do not load any of the other crap
-case $- in
-  *i*) ;;      # interactive shell, load the configs
-  *) return ;; #non-interactive shell, non-login shell, skip rc
-esac
+# Skip if this is not an interactive shell.
+# Avoid loading interactive-only configurations in non-interactive contexts.
+[[ $- != *i* ]] && return
 
-# wow, this got annoying extremely fast!
-#command -v ~/bin/title && ~/bin/title $'I am\nserious'
+# Optional fun title script — uncomment if needed.
+# if command -v ~/bin/title &> /dev/null; then
+#   ~/bin/title $'I am\nserious'
+# fi
+#
