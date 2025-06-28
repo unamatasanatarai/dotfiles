@@ -2,39 +2,55 @@
 
 set -euo pipefail
 
-dir=$(dirname "$0")
+# Define working directories
+dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 readonly dir
-readonly result="$dir/bashrc"
-declare -a firstfiles=(_top _vars xdg path)
+readonly result="${dir}/bashrc"
 
+# Files that must be processed first
+readonly firstfiles=(_top _vars xdg path)
+
+# Helper: Check if a file is in the firstfiles list
 is_firstfile() {
+  local name="$1"
   for i in "${firstfiles[@]}"; do
-    [[ $i == "$1" ]] && return 0
+    [[ "$i" == "$name" ]] && return 0
   done
   return 1
 }
 
+# Empty the result file
 : > "$result"
 
-append() {
+# Append a file with a header
+append_file() {
+  local filepath="$1"
+  local filename
+  filename="$(basename "$filepath")"
+
   {
     echo ""
-    echo "# ----- $1"
+    echo "# ----- ${filename}"
     echo ""
-    cat "$1"
+    cat "$filepath"
   } >> "$result"
 }
 
+# Append firstfiles in order
 for f in "${firstfiles[@]}"; do
-  append "$dir/src/$f"
+  append_file "${dir}/src/${f}"
 done
 
+# Main processing: Append remaining files
 main() {
-  while IFS= read -r file; do
-    local fn=${file:6}
+  local filepath fn
+
+  while IFS= read -r -d '' filepath; do
+    fn="$(basename "$filepath")"
     is_firstfile "$fn" && continue
-    append "$file"
-  done < <(ls "$dir"/src/*)
+    append_file "$filepath"
+  done < <(find "${dir}/src" -type f -print0 | sort -z)
 }
 
 main "$@"
+

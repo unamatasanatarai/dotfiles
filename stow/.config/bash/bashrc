@@ -1,5 +1,5 @@
 
-# ----- ./src/_top
+# ----- _top
 
 # ------------------------------------------------------------------------------
 # !!  This file is auto-generated.
@@ -17,7 +17,7 @@
 # fi
 #
 
-# ----- ./src/_vars
+# ----- _vars
 
 # ------------------------------------------------------------------------------
 # Environment & Terminal Colors
@@ -73,7 +73,7 @@ else
 fi
 
 
-# ----- ./src/xdg
+# ----- xdg
 
 source "$HOME/.config/user-dirs.dirs" || true
 export XDG_CACHE_HOME=${XDG_CACHE_HOME:=$HOME/.cache}
@@ -83,7 +83,7 @@ export XDG_DESKTOP_DIR=${XDG_DESKTOP_DIR:=$HOME/Desktop}
 export XDG_DOWNLOAD_DIR=${XDG_DOWNLOAD_DIR:=$HOME/Downloads}
 export XDG_STATE_HOME=${XDG_STATE_HOME:=$HOME/.local/state}
 
-# ----- ./src/path
+# ----- path
 
 p="${HOME}/bin"
 p+=":${HOME}/.local/bin"
@@ -94,7 +94,7 @@ p+=":/usr/local/sbin"
 p+=":${HOME}/.config/composer/vendor/bin"
 export PATH="$p:$PATH"
 
-# ----- ./src/aliases
+# ----- aliases
 
 alias vba='source venv/bin/activate'
 alias tree='tree -aC --dirsfirst'
@@ -106,7 +106,7 @@ alias less="$BREW_PREFIX/bin/less"
 alias yarn='yarn --use-yarnrc "$XDG_CONFIG_HOME/yarn/config"'
 alias tldr="tldr --osx"
 
-# ----- ./src/functions
+# ----- functions
 
 take() {
   mkdir -p "$*" && cd "$_" || return 1
@@ -116,7 +116,7 @@ wcd() {
   cd "$(dirname "$(command -v "$1")")" || return 1
 }
 
-# ----- ./src/fzf_config
+# ----- fzf_config
 
 bg="#2D3441"
 export FZF_DEFAULT_OPTS="
@@ -133,7 +133,7 @@ export FZF_DEFAULT_OPTS="
 export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --no-ignore-vcs'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
-# ----- ./src/fzf_history
+# ----- fzf_history
 
 __fzf_select__() {
   local cmd opts
@@ -210,7 +210,7 @@ if [[ $- =~ i ]]; then
 
 fi
 
-# ----- ./src/history
+# ----- history
 
 # History settings (don't save lines beginning with space or matching the
 # previous entry)
@@ -225,7 +225,7 @@ shopt -s histappend # append to history i.e don't overwrite it
 shopt -s cmdhist
 shopt -s lithist
 
-# ----- ./src/lynx
+# ----- lynx
 
 export LYNX_CFG="$HOME/.config/lynx/lynx.cfg"
 export LYNX_LSS="$HOME/.config/lynx/lynx.lss"
@@ -242,7 +242,7 @@ function ? {
   exec lynx "https://lite.duckduckgo.com/lite?kd=-1&kp=-1&q=$*"
 }
 
-# ----- ./src/prompt
+# ----- prompt
 
 extract_git_branch_name() {
   # make a copy of the previous exit status
@@ -266,7 +266,7 @@ PS1+=' $([ $? == 0 ] && echo "\[${white}\]\$ " || echo "\[${red}\]\$ ")\[${reset
 
 export PS1
 
-# ----- ./src/settings
+# ----- settings
 
 # Hide the deprecation warning (zsh) macos
 export BASH_SILENCE_DEPRECATION_WARNING=1
@@ -293,17 +293,3 @@ alias wget="wget --hsts-file=$XDG_CACHE_HOME/wget-hsts"
 
 # Highlight section titles in manual pages.
 export LESS_TERMCAP_md="$yellow"
-
-# ----- ./src/z
-
-_Z_DATA_DIR="$XDG_DATA_HOME/z"
-_Z_DATA="$_Z_DATA_DIR/.z"
-[ -d "$_Z_DATA_DIR" ] || mkdir -p "$_Z_DATA_DIR"
-
-. "$BREW_PREFIX"/etc/profile.d/z.sh
-
-function zls() {
-  local dir
-  dir=$(z -l | sort --reverse --numeric-sort | fzf --no-sort --scroll-off 2 --prompt=">> " | awk '{print $2}')
-  cd "$dir" || exit 1
-}
