@@ -1,9 +1,26 @@
+# Activate virtual environment quickly
 alias vba='source venv/bin/activate'
+
+# Enhanced directory tree view
 alias tree='tree -aC --dirsfirst'
-alias ls="ls -G"
-alias vi="nvim"
-alias :q="exit"
-# brew's less is more up to date
-alias less="$BREW_PREFIX/bin/less"
+
+# Enable colorized output for ls (macOS/BSD-style)
+alias ls='ls -G'
+
+# Use Neovim as the default editor
+alias vi='nvim'
+
+# Mimic exiting Vim
+alias :q='exit'
+
+# Use Homebrew's version of 'less' (more up-to-date)
+if [[ -n "${BREW_PREFIX:-}" && -x "$BREW_PREFIX/bin/less" ]]; then
+  alias less="$BREW_PREFIX/bin/less"
+fi
+
+# Ensure consistent Yarn config location
 alias yarn='yarn --use-yarnrc "$XDG_CONFIG_HOME/yarn/config"'
-alias tldr="tldr --osx"
+
+# Prefer macOS-specific tldr pages
+alias tldr='tldr --osx'
+
