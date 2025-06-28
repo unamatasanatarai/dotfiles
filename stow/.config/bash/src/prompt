@@ -1,21 +1,21 @@
+# Function to extract Git branch name
 extract_git_branch_name() {
-  # make a copy of the previous exit status
-  local ps=$?
+  local ps=$?  # Preserve previous exit status
   local branch
-  branch=$(git rev-parse --abbrev-ref HEAD 2> /dev/null)
-  if [ "$branch" != "" ]; then
-    echo " <${branch}>"
+
+  # Try to get symbolic branch name, fallback to short commit hash
+  branch=$(git symbolic-ref --short HEAD 2>/dev/null || git rev-parse --short HEAD 2>/dev/null)
+
+  if [ -n "$branch" ]; then
+    echo " <$branch>"
   fi
-  # and return it so the redness can start
-  return "$ps"
+
+  return "$ps"  # Restore previous exit status
 }
 
+# Prompt definition
 PS1=""
-# working directory full path
-PS1+="\[${green}\]\w"
-# git branch
-PS1+="\[${yellow}\]\$(extract_git_branch_name)\[${reset}\]"
-# the dollar will be red if exit code was baaaad
-PS1+=' $([ $? == 0 ] && echo "\[${white}\]\$ " || echo "\[${red}\]\$ ")\[${reset}\]'
+PS1+="${green}\w"                       # Working directory
+PS1+="${yellow}\$(extract_git_branch_name)"  # Git branch info
+PS1+="${reset} \$( [ \$? -eq 0 ] && echo \"${white}\\$ \" || echo \"${red}\\$ \" )${reset}"
 
-export PS1

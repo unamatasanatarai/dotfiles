@@ -96,25 +96,59 @@ export PATH="$p:$PATH"
 
 # ----- aliases
 
+# Activate virtual environment quickly
 alias vba='source venv/bin/activate'
+
+# Enhanced directory tree view
 alias tree='tree -aC --dirsfirst'
-alias ls="ls -G"
-alias vi="nvim"
-alias :q="exit"
-# brew's less is more up to date
-alias less="$BREW_PREFIX/bin/less"
+
+# Enable colorized output for ls (macOS/BSD-style)
+alias ls='ls -G'
+
+# Use Neovim as the default editor
+alias vi='nvim'
+
+# Mimic exiting Vim
+alias :q='exit'
+
+# Use Homebrew's version of 'less' (more up-to-date)
+if [[ -n "${BREW_PREFIX:-}" && -x "$BREW_PREFIX/bin/less" ]]; then
+  alias less="$BREW_PREFIX/bin/less"
+fi
+
+# Ensure consistent Yarn config location
 alias yarn='yarn --use-yarnrc "$XDG_CONFIG_HOME/yarn/config"'
-alias tldr="tldr --osx"
+
+# Prefer macOS-specific tldr pages
+alias tldr='tldr --osx'
+
 
 # ----- functions
 
-take() {
-  mkdir -p "$*" && cd "$_" || return 1
+wcd() {
+  if [ -z "$1" ]; then
+    echo "Usage: wcd <command>"
+    return 1
+  fi
+
+  local cmd_path
+  cmd_path="$(command -v "$1")" || {
+    echo "Command '$1' not found"
+    return 1
+  }
+
+  cd -- "$(dirname "$cmd_path")" || return 1
 }
 
-wcd() {
-  cd "$(dirname "$(command -v "$1")")" || return 1
+take() {
+  if [ -z "$1" ]; then
+    echo "Usage: take <directory_path>"
+    return 1
+  fi
+
+  mkdir -p -- "$1" && cd -- "$1" || return 1
 }
+
 
 # ----- fzf_config
 
@@ -244,52 +278,71 @@ function ? {
 
 # ----- prompt
 
+# Function to extract Git branch name
 extract_git_branch_name() {
-  # make a copy of the previous exit status
-  local ps=$?
+  local ps=$?  # Preserve previous exit status
   local branch
-  branch=$(git rev-parse --abbrev-ref HEAD 2> /dev/null)
-  if [ "$branch" != "" ]; then
-    echo " <${branch}>"
+
+  # Try to get symbolic branch name, fallback to short commit hash
+  branch=$(git symbolic-ref --short HEAD 2>/dev/null || git rev-parse --short HEAD 2>/dev/null)
+
+  if [ -n "$branch" ]; then
+    echo " <$branch>"
   fi
-  # and return it so the redness can start
-  return "$ps"
+
+  return "$ps"  # Restore previous exit status
 }
 
+# Prompt definition
 PS1=""
-# working directory full path
-PS1+="\[${green}\]\w"
-# git branch
-PS1+="\[${yellow}\]\$(extract_git_branch_name)\[${reset}\]"
-# the dollar will be red if exit code was baaaad
-PS1+=' $([ $? == 0 ] && echo "\[${white}\]\$ " || echo "\[${red}\]\$ ")\[${reset}\]'
+PS1+="${green}\w"                       # Working directory
+PS1+="${yellow}\$(extract_git_branch_name)"  # Git branch info
+PS1+="${reset} \$( [ \$? -eq 0 ] && echo \"${white}\\$ \" || echo \"${red}\\$ \" )${reset}"
 
-export PS1
 
 # ----- settings
 
-# Hide the deprecation warning (zsh) macos
+#!/usr/bin/env bash
+# env_setup.sh - environment variables and aliases setup
+
+# --- Silence macOS bash deprecation warning for zsh users ---
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
+# --- Editor settings ---
 export VISUAL=nvim
 export EDITOR="$VISUAL"
 export SYSTEMD_EDITOR="$VISUAL"
+
+# --- Set SHELL environment (adjust BREW_PREFIX if needed) ---
+# Make sure BREW_PREFIX is defined; otherwise set a fallback:
+BREW_PREFIX="${BREW_PREFIX:-/usr/local}"
 export SHELL="$BREW_PREFIX/bin/bash"
 
-# todo: these exports probably should be placed in another file
-export CARGO_HOME="$XDG_DATA_HOME"/cargo
-export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME"/npm/npmrc
-export MYSQL_HISTFILE="$XDG_DATA_HOME"/mysql_history
-export PYTHONPYCACHEPREFIX="$XDG_CACHE_HOME"/python
-export PYTHONUSERBASE="$XDG_DATA_HOME"/python
-export TERMINFO="$XDG_DATA_HOME"/terminfo
-export TERMINFO_DIRS="$XDG_DATA_HOME"/terminfo:/usr/share/terminfo
-export WGETRC="$XDG_CONFIG_HOME/wgetrc"
-alias wget="wget --hsts-file=$XDG_CACHE_HOME/wget-hsts"
-# dangerous - first move your existing passwords,
-# see supported apps https://wiki.archlinux.org/title/XDG_Base_Directory
-#export GNUPGHOME="$XDG_DATA_HOME"/gnupg,
-#export PASSWORD_STORE_DIR="$XDG_DATA_HOME"/pass
+# --- XDG Base Directory environment variables ---
 
-# Highlight section titles in manual pages.
-export LESS_TERMCAP_md="$yellow"
+# Make sure XDG variables are defined or set defaults:
+export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
+export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
+
+export CARGO_HOME="$XDG_DATA_HOME/cargo"
+export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/npmrc"
+export MYSQL_HISTFILE="$XDG_DATA_HOME/mysql_history"
+export PYTHONPYCACHEPREFIX="$XDG_CACHE_HOME/python"
+export PYTHONUSERBASE="$XDG_DATA_HOME/python"
+export TERMINFO="$XDG_DATA_HOME/terminfo"
+export TERMINFO_DIRS="$XDG_DATA_HOME/terminfo:/usr/share/terminfo"
+export WGETRC="$XDG_CONFIG_HOME/wgetrc"
+
+# --- Aliases ---
+alias wget="wget --hsts-file=$XDG_CACHE_HOME/wget-hsts"
+
+# --- WARNING: Uncomment only after migrating passwords and data ---
+# see supported apps https://wiki.archlinux.org/title/XDG_Base_Directory
+# export GNUPGHOME="$XDG_DATA_HOME/gnupg"
+# export PASSWORD_STORE_DIR="$XDG_DATA_HOME/pass"
+
+# --- Color for manual page section titles ---
+# Define yellow color escape sequence for LESS_TERMCAP_md
+export LESS_TERMCAP_md="${yellow}"
+
