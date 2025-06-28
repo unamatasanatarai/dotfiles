@@ -11,7 +11,6 @@ export SYSTEMD_EDITOR="$VISUAL"
 
 # --- Set SHELL environment (adjust BREW_PREFIX if needed) ---
 # Make sure BREW_PREFIX is defined; otherwise set a fallback:
-BREW_PREFIX="${BREW_PREFIX:-/usr/local}"
 export SHELL="$BREW_PREFIX/bin/bash"
 
 # --- XDG Base Directory environment variables ---

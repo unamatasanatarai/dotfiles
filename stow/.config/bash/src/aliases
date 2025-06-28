@@ -7,9 +7,6 @@ alias tree='tree -aC --dirsfirst'
 # Enable colorized output for ls (macOS/BSD-style)
 alias ls='ls -G'
 
-# Use Neovim as the default editor
-alias vi='nvim'
-
 # Mimic exiting Vim
 alias :q='exit'
 

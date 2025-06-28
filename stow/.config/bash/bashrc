@@ -105,9 +105,6 @@ alias tree='tree -aC --dirsfirst'
 # Enable colorized output for ls (macOS/BSD-style)
 alias ls='ls -G'
 
-# Use Neovim as the default editor
-alias vi='nvim'
-
 # Mimic exiting Vim
 alias :q='exit'
 
@@ -315,7 +312,6 @@ export SYSTEMD_EDITOR="$VISUAL"
 
 # --- Set SHELL environment (adjust BREW_PREFIX if needed) ---
 # Make sure BREW_PREFIX is defined; otherwise set a fallback:
-BREW_PREFIX="${BREW_PREFIX:-/usr/local}"
 export SHELL="$BREW_PREFIX/bin/bash"
 
 # --- XDG Base Directory environment variables ---
