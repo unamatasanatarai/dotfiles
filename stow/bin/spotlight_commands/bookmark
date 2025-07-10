@@ -1,7 +1,16 @@
 #!/usr/bin/env bash
-
-# spotlight command shortcut for https://github.com/unamatasanatarai/bookmarks/blob/main/add-bookmark
+# spotlight: adds clipboard URL to bookmarks
 set -euo pipefail
 
 url=$(pbpaste)
+
+if ! [[ "$url" =~ ^https?:// ]]; then
+  echo "❌ Clipboard does not contain a valid URL: $url" >&2
+  read -n1 -rsp $'Press any key to continue...\n'
+  exit 1
+fi
+
 ~/dev/bookmarks/add-bookmark "$url"
+echo "✅ Bookmark added: $url"
+
+read -n1 -rsp $'Press any key to continue...\n'
