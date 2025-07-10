@@ -18,7 +18,7 @@
 #
 ###############################################################################
 
-message=${1:-"WIP"}
+message=${*:-"WIP"}
 
 # Stage all changes (new, modified, deleted files)
 git add --all
