@@ -2,7 +2,7 @@
 
 . "$(dirname "$0")/.lib"
 
-einfo "Force mode enabled: resetting and cleaning..."
+einfo "resetting and cleaning..."
 
 # Run Git commands
 git reset --hard
