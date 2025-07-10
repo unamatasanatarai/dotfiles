@@ -1,24 +1,35 @@
 #!/usr/bin/env bash
-
 set -euo pipefail
 
+# Load utility functions and XDG base directory variables
 . "$(dirname "$0")"/../stow/bin/.lib
 . "$(dirname "$0")"/../stow/.config/bash/src/xdg
 
 ebox "Create mandatory directories"
 
-# shellcheck disable=2034
-LOCAL_BIN="$HOME"/.local/bin
-BASH_DATA_HOME="${XDG_DATA_HOME}/bash/"
-LYNX_DATA_HOME="${XDG_DATA_HOME}/lynx/"
+# Define directories to create
+LOCAL_BIN="$HOME/.local/bin"
+BASH_DATA_HOME="${XDG_DATA_HOME}/bash"
+LYNX_DATA_HOME="${XDG_DATA_HOME}/lynx"
 
-# Create directories if needed
-for var in XDG_CONFIG_HOME XDG_DATA_HOME XDG_STATE_HOME XDG_CACHE_HOME LOCAL_BIN BASH_DATA_HOME LYNX_DATA_HOME; do
-  dir=${!var}
-  if [ ! -d "$dir" ]; then
+# List of directory variables to check and create
+dir_vars=(
+  XDG_CONFIG_HOME
+  XDG_DATA_HOME
+  XDG_STATE_HOME
+  XDG_CACHE_HOME
+  LOCAL_BIN
+  BASH_DATA_HOME
+  LYNX_DATA_HOME
+)
+
+# Create directories if they don't exist
+for var in "${dir_vars[@]}"; do
+  dir="${!var}"
+  if [[ -d "$dir" ]]; then
+    ealert "$dir skipped (already exists)"
+  else
     mkdir -p "$dir"
     eok "$dir created"
-  else
-    ealert "$dir skipped (exists)"
   fi
 done

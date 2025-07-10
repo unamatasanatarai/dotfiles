@@ -4,127 +4,149 @@ set -euo pipefail
 
 . "$(dirname "$0")"/../stow/bin/.lib
 
-bn=$(basename "$0")
+usage() {
+  local bn
+  bn=$(basename "$0")
+  echo "Usage: $bn [--help|-h] [--unload]"
+  exit 2
+}
+
+# Parse arguments
 unload=0
 if [ $# -gt 0 ]; then
-  if [ "$1" == "--help" ] || [ "$1" == "-h" ]; then
-    echo "usage: ${bn} [--help|-h] [--unload]"
-    exit 2
-  fi
-  if [ "$1" == "--unload" ]; then
-    unload=1
-  fi
+  case "$1" in
+    --help|-h) usage ;;
+    --unload) unload=1 ;;
+    *) echo "Unknown argument: $1"; usage ;;
+  esac
 fi
-AGENTS=()
 
-AGENTS+=('com.apple.AMPArtworkAgent')
-AGENTS+=('com.apple.AMPLibraryAgent')
-AGENTS+=('com.apple.AOSNotificationOSX') #Notifications
-AGENTS+=('com.apple.AOSPushRelay')       # Related to iCloud https://github.com/fix-macosx/yosemite-phone-home/blob/master/icloud-user-r0/System/Library/PrivateFrameworks/AOSKit.framework/Versions/A/Helpers/AOSPushRelay.app/Contents/MacOS/AOSPushRelay/20141019T072634Z-auser-%5B172.16.174.146%5D:49560-%5B17.110.240.83%5D:443.log
-AGENTS+=('com.apple.AddressBook.AssistantService')
-AGENTS+=('com.apple.AddressBook.SourceSync')
-AGENTS+=('com.apple.AddressBook.abd')
-AGENTS+=('com.apple.AirPlayUIAgent')                    #Related Airport
-AGENTS+=('com.apple.AirPlayXPCHelper')                  #Airplay daemon
-AGENTS+=('com.apple.AirPortBaseStationAgent')           #Related Airport
-AGENTS+=('com.apple.CalendarAgent')                     #Calendar events related to iCloud
-AGENTS+=('com.apple.CallHistoryPluginHelper')           #Related to call history (iCloud)
-AGENTS+=('com.apple.CallHistorySyncHelper')             #Related to call history syncing (iCloud)
-AGENTS+=('com.apple.CrashReporterSupportHelper')        #Crash reporter
-AGENTS+=('com.apple.DictationIM')                       #Dictation
-AGENTS+=('com.apple.ManagedClient.cloudconfigurationd') #Related to manage current macOS user iCloud
-AGENTS+=('com.apple.Maps.mapspushd')
-AGENTS+=('com.apple.Safari.History')
-AGENTS+=('com.apple.Safari.PasswordBreachAgent')
-AGENTS+=('com.apple.Safari.SafeBrowsing.Service')
-AGENTS+=('com.apple.SafariBookmarksSyncAgent')
-AGENTS+=('com.apple.SafariCloudHistoryPushAgent') #Good one, sending out your browsing history... :)
-AGENTS+=('com.apple.SafariHistoryServiceAgent')
-AGENTS+=('com.apple.SafariLaunchAgent')
-AGENTS+=('com.apple.SafariNotificationAgent') #Notifications in Safari
-AGENTS+=('com.apple.ScreenTimeAgent')
-AGENTS+=('com.apple.SubmitDiagInfo') #Feedback - most likely it submits your computer data when click 'About this mac'
-AGENTS+=('com.apple.UsageTrackingAgent')
-AGENTS+=('com.apple.appleseed.fbahelperd') #Related to feedback
-AGENTS+=('com.apple.appleseed.seedusaged') #Feedback assistant
-AGENTS+=('com.apple.applespell')
-AGENTS+=('com.apple.apsd')                         #Apple Push Notification Service (apsd) - it's calling home quite often + used by Facetime and Messages
-AGENTS+=('com.apple.assistant_service')            #Siri
-AGENTS+=('com.apple.awacsd')                       #Apple Wide Area Connectivity Service daemon - Back to My Mac Feature
-AGENTS+=('com.apple.awdd')                         #Sending out diagnostics & usage
-AGENTS+=('com.apple.bird')                         #Part of iCloud
-AGENTS+=('com.apple.cloudd')                       #Related to sync data to iCloud, most likely used by iMessage,Mail,iCloud drive, etc...
-AGENTS+=('com.apple.cloudfamilyrestrictionsd-mac') #iCloud Family restrictions
-AGENTS+=('com.apple.cloudpaird')                   #Related to iCloud
-AGENTS+=('com.apple.cloudphotod')
-AGENTS+=('com.apple.cloudphotosd') #Propably syncing your photos to icloud
-AGENTS+=('com.apple.commerce')
-AGENTS+=('com.apple.contacts.donation-agent')
-AGENTS+=('com.apple.contactsd')
-AGENTS+=('com.apple.familycircled')            #Family notifications, like reminders
-AGENTS+=('com.apple.familycontrols')           #Parent control
-AGENTS+=('com.apple.familycontrols.useragent') #Family notifications, like reminders
-AGENTS+=('com.apple.familynotificationd')      #Family notifications, like reminders
-AGENTS+=('com.apple.findmymac')                #Find my mac daemon
-AGENTS+=('com.apple.findmymacmessenger')       #Related to find my mac daemon, propably act on commands sent through FindMyDevice in iCloud
-AGENTS+=('com.apple.gamed')                    #GameCenter
-AGENTS+=('com.apple.geod')
-AGENTS+=('com.apple.geodMachServiceBridge') #Located in GeoServices.framework, related to locations maybe used for maps, maybe as well for things like find my mac, or just syping
-AGENTS+=('com.apple.helpd')
-AGENTS+=('com.apple.iCloudHelper')
-AGENTS+=('com.apple.iCloudNotificationAgent')
-AGENTS+=('com.apple.iCloudStats')             #Related to iCloud
-AGENTS+=('com.apple.iCloudUserNotifications') #iCloud notifications, like reminders
-AGENTS+=('com.apple.iCloudUserNotificationsd')
-AGENTS+=('com.apple.icloud.findmydeviced')                         #Related to find my mac
-AGENTS+=('com.apple.icloud.findmydeviced.findmydevice-user-agent') #Find my device ?
-AGENTS+=('com.apple.icloud.fmfd')                                  #Find my device ?
-AGENTS+=('com.apple.icloud.searchpartyuseragent')
-AGENTS+=('com.apple.imagent') #Facetime & Messages
-AGENTS+=('com.apple.itunescloudd')
-AGENTS+=('com.apple.locationd') #Propably reading current location
-AGENTS+=('com.apple.maps.destinationd')
-AGENTS+=('com.apple.mbicloudsetupd')         #iCloud Settings
-AGENTS+=('com.apple.netbiosd')               #Netbiosd is microsoft's networking service. used to share files between mac and windows
-AGENTS+=('com.apple.parentalcontrols.check') #Related to parental control
-AGENTS+=('com.apple.parsecd')                #Used by spotlight and/or siri, propably some suggestions - CoreParsec.framework
-AGENTS+=('com.apple.photoanalysisd')         #Apple AI to analyse photos stored in Photos.app, most likely to match faces and scenery but it happens to make requests to Apple during process, i have not checked what are those requestes i have just blocked it with Little Snitch
-AGENTS+=('com.apple.photolibraryd')
-AGENTS+=('com.apple.podcasts.PodcastContentService')
-AGENTS+=('com.apple.remotepairtool')                        #Pairing devices remotely
-AGENTS+=('com.apple.rpmuxd')                                #daemon for remote debugging of mobile devices.
-AGENTS+=('com.apple.rtcreportingd')                         #Related to Home Sharing, most likely it checks if device is auth for home sharing + Facetime
-AGENTS+=('com.apple.safaridavclient')                       #Sending bookmarks to iCloud, even if you disable it may send your bookmarks to Apple
-AGENTS+=('com.apple.screensharing')                         #Screensharing daemon
-AGENTS+=('com.apple.security.cloudkeychainproxy3')          #Propably related to syncing keychain to icloud
-AGENTS+=('com.apple.security.idskeychainsyncingproxy')      #Most likely also related to keychain - IDSKeychainSyncingProxy.bundle
-AGENTS+=('com.apple.security.keychain-circle-notification') #Related to keychain
-AGENTS+=('com.apple.siri-distributed-evaluation')
-AGENTS+=('com.apple.siri.context.service')
-AGENTS+=('com.apple.siriactionsd')
-AGENTS+=('com.apple.siriknowledged')
-AGENTS+=('com.apple.speech.speechdatainstallerd')
-AGENTS+=('com.apple.speech.speechsynthesisd.arm64')
-AGENTS+=('com.apple.speech.speechsynthesisd.x86_64')
-AGENTS+=('com.apple.speech.synthesisserver')
-AGENTS+=('com.apple.tipsd')
+# List of agents to stop/unload
+AGENTS=(
+  com.apple.AMPArtworkAgent
+  com.apple.AMPLibraryAgent
+  com.apple.AOSNotificationOSX
+  com.apple.AOSPushRelay
+  com.apple.AddressBook.AssistantService
+  com.apple.AddressBook.SourceSync
+  com.apple.AddressBook.abd
+  com.apple.AirPlayUIAgent
+  com.apple.AirPlayXPCHelper
+  com.apple.AirPortBaseStationAgent
+  com.apple.CalendarAgent
+  com.apple.CallHistoryPluginHelper
+  com.apple.CallHistorySyncHelper
+  com.apple.CrashReporterSupportHelper
+  com.apple.DictationIM
+  com.apple.ManagedClient.cloudconfigurationd
+  com.apple.Maps.mapspushd
+  com.apple.Safari.History
+  com.apple.Safari.PasswordBreachAgent
+  com.apple.Safari.SafeBrowsing.Service
+  com.apple.SafariBookmarksSyncAgent
+  com.apple.SafariCloudHistoryPushAgent
+  com.apple.SafariHistoryServiceAgent
+  com.apple.SafariLaunchAgent
+  com.apple.SafariNotificationAgent
+  com.apple.ScreenTimeAgent
+  com.apple.SubmitDiagInfo
+  com.apple.UsageTrackingAgent
+  com.apple.appleseed.fbahelperd
+  com.apple.appleseed.seedusaged
+  com.apple.applespell
+  com.apple.apsd
+  com.apple.assistant_service
+  com.apple.awacsd
+  com.apple.awdd
+  com.apple.bird
+  com.apple.cloudd
+  com.apple.cloudfamilyrestrictionsd-mac
+  com.apple.cloudpaird
+  com.apple.cloudphotod
+  com.apple.cloudphotosd
+  com.apple.commerce
+  com.apple.contacts.donation-agent
+  com.apple.contactsd
+  com.apple.familycircled
+  com.apple.familycontrols
+  com.apple.familycontrols.useragent
+  com.apple.familynotificationd
+  com.apple.findmymac
+  com.apple.findmymacmessenger
+  com.apple.gamed
+  com.apple.geod
+  com.apple.geodMachServiceBridge
+  com.apple.helpd
+  com.apple.iCloudHelper
+  com.apple.iCloudNotificationAgent
+  com.apple.iCloudStats
+  com.apple.iCloudUserNotifications
+  com.apple.iCloudUserNotificationsd
+  com.apple.icloud.findmydeviced
+  com.apple.icloud.findmydeviced.findmydevice-user-agent
+  com.apple.icloud.fmfd
+  com.apple.icloud.searchpartyuseragent
+  com.apple.imagent
+  com.apple.itunescloudd
+  com.apple.locationd
+  com.apple.maps.destinationd
+  com.apple.mbicloudsetupd
+  com.apple.netbiosd
+  com.apple.parentalcontrols.check
+  com.apple.parsecd
+  com.apple.photoanalysisd
+  com.apple.photolibraryd
+  com.apple.podcasts.PodcastContentService
+  com.apple.remotepairtool
+  com.apple.rpmuxd
+  com.apple.rtcreportingd
+  com.apple.safaridavclient
+  com.apple.screensharing
+  com.apple.security.cloudkeychainproxy3
+  com.apple.security.idskeychainsyncingproxy
+  com.apple.security.keychain-circle-notification
+  com.apple.siri-distributed-evaluation
+  com.apple.siri.context.service
+  com.apple.siriactionsd
+  com.apple.siriknowledged
+  com.apple.speech.speechdatainstallerd
+  com.apple.speech.speechsynthesisd.arm64
+  com.apple.speech.speechsynthesisd.x86_64
+  com.apple.speech.synthesisserver
+  com.apple.tipsd
+)
 
 ebox "Stopping ${#AGENTS[@]} processes"
-processes=$(launchctl list | awk '{ print $3 }')
+
+# Cache current launchctl list of running services
+mapfile -t processes < <(launchctl list | awk '{print $3}' | grep -v '^-$')
+
+# Convert to associative array for faster lookup
+declare -A running
+for p in "${processes[@]}"; do
+  running["$p"]=1
+done
 
 for agent in "${AGENTS[@]}"; do
-  if [ "$unload" == 1 ]; then
-    sudo launchctl unload -w "/System/Library/LaunchAgents/${agent}.plist" >/dev/null 2>/dev/null
-    eok "Unloaded: (${agent})"
+  plist_path="/System/Library/LaunchAgents/${agent}.plist"
+
+  if (( unload == 1 )); then
+    if sudo launchctl unload -w "$plist_path" >/dev/null 2>&1; then
+      eok "Unloaded: (${agent})"
+    else
+      efail "Failed to unload: (${agent})"
+    fi
     continue
   fi
 
-  # shellcheck disable=SC2076
-  if [[ "${processes[*]}" =~ "$agent" ]]; then
-    # hack to not break if exit code is not zero
-    launchctl stop "$agent" || true
-    eok "Stopping: (${agent})"
+  if [[ -n "${running[$agent]:-}" ]]; then
+    # Stop may fail if already stopped, ignore errors
+    if launchctl stop "$agent" >/dev/null 2>&1; then
+      eok "Stopped: (${agent})"
+    else
+      ealert "Failed to stop: (${agent})"
+    fi
   else
-    efail "Not found: (${agent})"
+    efail "Not found (not running): (${agent})"
   fi
 done

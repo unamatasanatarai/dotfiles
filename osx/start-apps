@@ -1,34 +1,59 @@
 #!/usr/bin/env bash
 
 set -euo pipefail
+
 . "$(dirname "$0")"/../stow/bin/.lib
 . "$(dirname "$0")"/install-brew
 
-ebox "Launching appliactions"
+ebox "Launching applications"
 
-# todo: rethink the location of this configuration. Maybe in env?
-bpshell=$(brew --prefix)/bin/bash
-shells="/private/etc/shells"
-# do not append if already added
-if ! grep -qs "$bpshell" "$shells"; then
-  eask "Changing bash to brew bash (v5)"
-  echo "$(brew --prefix)"/bin/bash | sudo tee -a "$shells"
+# Location of brew-installed bash and shells file
+bpshell="$(brew --prefix)/bin/bash"
+shells_file="/private/etc/shells"
+
+# Add brew bash to allowed shells if not already present
+if ! grep -qsF "$bpshell" "$shells_file"; then
+  eask "Adding Homebrew Bash to allowed shells and changing default shell"
+
+  # Append brew bash path to shells file with sudo
+  echo "$bpshell" | sudo tee -a "$shells_file" > /dev/null
+
+  # Change shell for current user and root
   chsh -s "$bpshell"
   sudo chsh -s "$bpshell"
-  eok "We like Bash."
+
+  eok "Default shell changed to Homebrew Bash ($bpshell)"
+else
+  eok "Homebrew Bash is already listed in $shells_file"
 fi
 
-[ "$(brew services info yabai 2> /dev/null)" = "" ] && brew services start yabai || brew services restart yabai
-eok "started yabai"
-[ "$(brew services info skhd 2> /dev/null)" = "" ] && brew services start skhd || brew services restart skhd
-eok "started skhd"
+# Helper function to start or restart brew services cleanly
+start_or_restart_service() {
+  local service_name=$1
+  if brew services info "$service_name" &>/dev/null; then
+    brew services restart "$service_name"
+    eok "Restarted $service_name service"
+  else
+    brew services start "$service_name"
+    eok "Started $service_name service"
+  fi
+}
 
-cd /Applications
-open -a Lulu.app
-eok "started LuLu"
+# Start or restart services
+start_or_restart_service yabai
+start_or_restart_service skhd
 
-open -a itsycal.app
-eok "started itsycal"
+# Open applications by name in /Applications
+open_app() {
+  local app_name=$1
+  if open -a "$app_name" 2>/dev/null; then
+    eok "Started $app_name"
+  else
+    ealert "Failed to start $app_name"
+  fi
+}
 
-open -a xbar.app
-eok "started xbar"
+cd /Applications || { efail "Failed to cd to /Applications"; exit 1; }
+
+open_app "LuLu.app"
+open_app "xbar.app"
