@@ -1,4 +1,11 @@
 #!/usr/bin/env bash
 
+. "$(dirname "$0")/.lib"
+
+einfo "Force mode enabled: resetting and cleaning..."
+
+# Run Git commands
 git reset --hard
 git clean -df
+
+eok "Repository reset and cleaned."
