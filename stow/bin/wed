@@ -1,3 +1,24 @@
 #!/usr/bin/env bash
 
-exec $EDITOR "$(command -v "${1:-}")"
+set -euo pipefail
+
+# Default to 'vi' if $EDITOR is not set
+EDITOR="${EDITOR:-vi}"
+
+# Check for input
+if [[ $# -lt 1 ]]; then
+  echo "Usage: $(basename "$0") <command>" >&2
+  exit 1
+fi
+
+# Resolve command path
+cmd_path=$(command -v "$1" || true)
+
+if [[ -z "$cmd_path" ]]; then
+  echo "Error: Command '$1' not found in PATH." >&2
+  exit 1
+fi
+
+# Open in editor
+exec "$EDITOR" "$cmd_path"
+
