@@ -1,0 +1,38 @@
+
+[font]
+size = 14.0
+
+[font.bold]
+family = "Source Code Pro"
+style = "Bold"
+
+[font.bold_italic]
+style = "Bold Italic"
+
+[font.italic]
+style = "Italic"
+
+[font.normal]
+family = "Source Code Pro"
+style = "Regular"
+
+[font.offset]
+y = 12
+
+[scrolling]
+history = 30000
+
+[window]
+decorations = "none"
+dynamic_padding = true
+opacity = 0.9
+
+[window.padding]
+x = 4
+y = 4
+
+[colors]
+draw_bold_text_with_bright_colors = true
+
+[general]
+import = ["/Users/citizen/.config/alacritty/colors.toml"]
