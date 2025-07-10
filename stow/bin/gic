@@ -1,9 +1,62 @@
 #!/usr/bin/env bash
 
-message="WIP"
-if [ "$*" != "" ]; then
-  message="$*"
+###############################################################################
+# gitwip.sh
+#
+# Description:
+#   A simple Git helper script that stages all changes and commits them
+#   with a message. If no message is provided, it defaults to "WIP".
+#
+#   Supports:
+#     - Custom commit messages via arguments
+#     - Multiple -m flags for multiline commits
+#     - Detection of empty staged changes (prevents empty commits)
+#
+# Usage:
+#   ./gitwip.sh                        # Commits all changes with message "WIP"
+#   ./gitwip.sh -m "Message here"     # Commits with a custom message
+#   ./gitwip.sh -m "Line 1" -m "Line 2"  # Multiline commit message
+#
+###############################################################################
+
+# Default commit message
+default_message="WIP"
+message=()
+
+# Parse arguments: collect messages after -m flags
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -m)
+      shift
+      if [[ -n "$1" ]]; then
+        message+=("$1")
+        shift
+      else
+        echo "Error: -m requires a message."
+        exit 1
+      fi
+      ;;
+    *)
+      message+=("$1")
+      shift
+      ;;
+  esac
+done
+
+# If no message was provided, use the default
+if [[ ${#message[@]} -eq 0 ]]; then
+  message=("$default_message")
 fi
 
+# Stage all changes (new, modified, deleted files)
 git add --all
-git commit -m "$message"
+
+# Check if there are staged changes; exit if there's nothing to commit
+if git diff --cached --quiet; then
+  echo "No changes to commit."
+  exit 0
+fi
+
+# Commit the staged changes with the constructed message
+git commit -m "${message[*]}"
+
