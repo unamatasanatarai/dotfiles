@@ -1,23 +1,31 @@
 #!/usr/bin/env bash
 
 set -euo pipefail
-# load global config, the look got unified
+
+# Load FZF style config
 source "$HOME"/.config/bash/src/fzf_config
 
-pwd="$HOME/bin/spotlight_commands"
-files=""
-while IFS= read -r file; do
-  files+="${file//$pwd\//}"$'\n'
-done < <(find "$pwd" -type f ! -iname ".*")
+CMD_DIR="$HOME/bin/spotlight_commands"
+mapfile -t file_list < <(find "$CMD_DIR" -type f ! -iname ".*")
 
-cmd=$(
-  fzf \
-    --prompt="►▶ " \
-    --pointer="► " \
-    --no-info \
-    --layout=reverse \
-    --border=sharp <<< "${files:0:-1}"
+# Strip base path
+choices=()
+for file in "${file_list[@]}"; do
+  choices+=( "${file#$CMD_DIR/}" )
+done
+
+# Present FZF selector
+cmd=$(printf "%s\n" "${choices[@]}" | fzf \
+  --prompt="►▶ " \
+  --pointer="► " \
+  --no-info \
+  --layout=reverse \
+  --border=sharp
 )
-# force removal of the last enter --> hack `${files:0:-1}`
 
-exec "$pwd"/"$cmd"
+# Exit if nothing selected (ESC or Ctrl-C)
+[[ -z "$cmd" ]] && exit 1
+
+# Execute the selected command
+exec "$CMD_DIR/$cmd"
+
