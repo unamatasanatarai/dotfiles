@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-__DIR="$(dirname -- "$0")"
+__DIR="$(cd -- "$(dirname -- "$0")" && pwd)"
 __FILE="$(basename -- "$0")"
 declare -r __DIR __FILE
 declare -r TMPLS="$__DIR"/new_templates
@@ -16,6 +16,7 @@ VERSION="0.5"
 # ------------------------------------------------------------
 
 o_executables=("sh" "bash" "bashapp")
+overwrite=false
 
 # ------------------------------------------------------------
 # PUBLIC INTERFACES
@@ -24,7 +25,7 @@ o_executables=("sh" "bash" "bashapp")
 load_template() {
   local -r template="$TMPLS/$1"
   if [[ ! -f "$template" ]]; then
-    ewarn "Template: \`$1\` not found. aborted."
+    ewarn "Template: \`$1\` not found. Aborted."
     return 1
   fi
   local -r c="$(< "$template")"
@@ -34,65 +35,67 @@ load_template() {
 save_to_file() {
   local -r contents="$1"
   local -r filepath="$2"
-  # prevent override
-  if [[ -f "$filepath" ]]; then
-    ewarn "File: \`$filepath\` already exists. aborted."
+
+  if [[ -f "$filepath" && $overwrite == false ]]; then
+    ewarn "File: \`$filepath\` already exists. Use --force to overwrite. Aborted."
     return 1
   fi
 
   mkdir -p "$(dirname "$filepath")"
   echo "$contents" > "$filepath"
+  ebox "Created: $filepath"
+  ls -l "$filepath"
 }
 
 function main {
   parseOptions "$@"
 
-  # if the first param starts with a `-`, we stop
-  if [[ $# -lt 1 ]] || [[ ${1:0:1} == "-" ]]; then
-    help
+  if [[ $# -lt 1 ]] || [[ $1 == -* ]]; then
+    help >&2
     return 1
   fi
 
-  local -r contents="$(load_template "$1")"
+  local -r template="$1"
+  local -r contents="$(load_template "$template")"
 
   if [[ -z ${2:-} ]]; then
     echo "$contents"
     return
   fi
-  save_to_file "$contents" "$2"
 
-  for t in "${o_executables[@]}"; do
-    if [[ $t == "$1" ]]; then
-      chmod +x "$2"
-      break
-    fi
-  done
+  local -r filepath="$2"
+  save_to_file "$contents" "$filepath"
 
-  $EDITOR "$2" "+/##cursor##" "+noh"
+  if [[ " ${o_executables[*]} " == *" $template "* ]]; then
+    chmod +x "$filepath"
+  fi
+
+  : "${EDITOR:=vi}"
+  $EDITOR "$filepath" "+/##cursor##" "+noh"
 }
 
 function parseOptions {
   while [[ "$#" -ge 1 ]]; do
     case $1 in
-
       -h | --help)
         help
-        exit 2
+        exit 0
         ;;
-
       -V | --version)
         ebox "version $VERSION"
-        exit
+        exit 0
         ;;
-
       -l | -ls | --list-templates)
-        ebox "Available templates"
-        for file in "$TMPLS"/*; do
-          echo " - ${file#"$TMPLS/"}"
-        done
-        exit
+        list_templates
+        exit 0
         ;;
-
+      --list-json)
+        list_templates_json
+        exit 0
+        ;;
+      --force)
+        overwrite=true
+        ;;
     esac
     shift
   done
@@ -102,13 +105,66 @@ function parseOptions {
 # INTERNALS
 # ------------------------------------------------------------
 
+function list_templates {
+  if [[ ! -d "$TMPLS" ]]; then
+    ewarn "Templates directory \`$TMPLS\` not found."
+    exit 1
+  fi
+
+  shopt -s nullglob
+  local templates=("$TMPLS"/*)
+  shopt -u nullglob
+
+  if [[ ${#templates[@]} -eq 0 ]]; then
+    ewarn "No templates found in \`$TMPLS\`."
+    exit 1
+  fi
+
+  ebox "Available templates:"
+  for file in "${templates[@]}"; do
+    local name="${file##*/}"
+    local desc
+    desc=$(grep -m1 '^# Description:' "$file" | sed 's/^# Description: *//')
+    printf " - %-20s %s\n" "$name" "$desc"
+  done
+}
+
+function list_templates_json {
+  if [[ ! -d "$TMPLS" ]]; then
+    ewarn "Templates directory \`$TMPLS\` not found."
+    exit 1
+  fi
+
+  shopt -s nullglob
+  local templates=("$TMPLS"/*)
+  shopt -u nullglob
+
+  if [[ ${#templates[@]} -eq 0 ]]; then
+    ewarn "No templates found in \`$TMPLS\`."
+    exit 1
+  fi
+
+  echo "["
+  local first=true
+  for file in "${templates[@]}"; do
+    $first || echo ","
+    local name="${file##*/}"
+    local desc
+    desc=$(grep -m1 '^# Description:' "$file" | sed 's/^# Description: *//' | tr -d '\n' | jq -Rs .)
+    echo "  { \"name\": \"$name\", \"description\": $desc }"
+    first=false
+  done
+  echo "]"
+}
+
 function _helpOptions {
-  # use `#` to separate arg from descriptin
   local options
   options="
     -h, --help                 # Display this help message
-    -l, -ls, --list-templates  # Display the script version
+    -l, -ls, --list-templates  # List available templates
+        --list-json           # Output template list in JSON
     -V, --version              # Display the script version
+        --force               # Overwrite existing files
   "
   echo "$options" | column -s "#" -t | sed 's/^ */    /'
 }
@@ -126,3 +182,4 @@ $(_helpOptions)"
 # ------------------------------------------------------------
 
 main "$@"
+

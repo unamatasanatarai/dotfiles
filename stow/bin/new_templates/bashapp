@@ -1,3 +1,4 @@
+# Description: Bash Application
 #!/usr/bin/env bash
 
 set -euo pipefail

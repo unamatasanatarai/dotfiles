@@ -1,3 +1,4 @@
+# Description: Robust bash script
 #!/usr/bin/env bash
 
 set -euo pipefail

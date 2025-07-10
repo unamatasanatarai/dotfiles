@@ -306,7 +306,7 @@ PS1+="${reset} \$( [ \$? -eq 0 ] && echo \"${white}\\$ \" || echo \"${red}\\$ \"
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
 # --- Editor settings ---
-export VISUAL=nvim
+export VISUAL=vi
 export EDITOR="$VISUAL"
 export SYSTEMD_EDITOR="$VISUAL"
 
