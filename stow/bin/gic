@@ -18,11 +18,7 @@
 #
 ###############################################################################
 
-if [ $# -eq 0 ]; then
-  message="WIP"
-else
-  message="$*"
-fi
+message=${1:-"WIP"}
 
 # Stage all changes (new, modified, deleted files)
 git add --all
@@ -34,5 +30,5 @@ if git diff --cached --quiet; then
 fi
 
 # Commit the staged changes with the constructed message
-git commit -m "${message[*]}"
+git commit -m "$message"
 

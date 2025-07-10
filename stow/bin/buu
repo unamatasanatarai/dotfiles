@@ -2,21 +2,60 @@
 
 . "$(dirname "$0")"/.lib
 
+# Default options
+CLEAR_CACHE=0
+DRY_RUN=0
+
+# Print usage/help
+usage() {
+  cat <<EOF
+Usage: $(basename "$0") [options]
+
+Options:
+  -c      Clear brew cache
+  -d      Dry run (show what would be done)
+  -h      Show this help message
+EOF
+  exit 0
+}
+
+# Parse options
+while getopts "cdh" opt; do
+  case ${opt} in
+    c) CLEAR_CACHE=1 ;;
+    d) DRY_RUN=1 ;;
+    h) usage ;;
+    *) usage ;;
+  esac
+done
+
+# Function to execute or echo command
+run() {
+  if [ "$DRY_RUN" -eq 1 ]; then
+    echo "[dry-run] $*"
+  else
+    eval "$@"
+  fi
+}
+
 ebox "Update & Upgrade brew"
 
-einfo "Clearing cache"
-rm -rvf "$(brew --cache)"
+if [ "$CLEAR_CACHE" -eq 1 ]; then
+  einfo "Clearing cache"
+  run rm -rvf "$(brew --cache)" || ealert "Failed to clear cache"
+fi
 
-einfo "Update"
-brew update
+einfo "Updating Homebrew"
+run brew update || ealert "brew update failed"
 
-einfo "Upgrade casks"
-brew upgrade --no-quarantine --cask --greedy
+einfo "Upgrading casks"
+run brew upgrade --no-quarantine --cask --greedy || ealert "cask upgrade failed"
 
-einfo "Upgrade formulae"
-brew upgrade --no-quarantine --greedy
+einfo "Upgrading formulae"
+run brew upgrade --no-quarantine --greedy || ealert "formula upgrade failed"
 
-einfo "Cleanup"
-brew cleanup --prune=all -s
+einfo "Cleaning up"
+run brew cleanup --prune=all -s || ealert "cleanup failed"
 
-eok "all done!"
+eok "All done!"
+
