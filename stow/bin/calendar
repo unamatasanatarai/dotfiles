@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 
 set -euo pipefail
+trap 'tput cnorm; clear; exit' INT TERM EXIT
 
 tput civis
+
 month=$(date "+%m")
 month=${month#0}
 year=$(date "+%Y")
@@ -13,21 +15,33 @@ tyear=$year
 function showcal {
   clear
   cal "$1" "$2"
-  echo -n "?:h/l/t/q|esc"
+  echo
+  echo -n "Controls: h/l = prev/next month | t = today | q/esc = quit"
 }
 
 showcal "$month" "$year"
-while read -s -n1 -r key; do
+
+while read -rsn1 key; do
   case $key in
-    q|Q|$'\e') tput cnorm; exit 0 ;;
+    q|Q|$'\e') 
+      tput cnorm
+      clear
+      exit 0
+      ;;
     h|H) 
       month=$(( month - 1 )) 
-      [[ "$month" -lt 1 ]] && month=12 && year=$((year - 1))
+      if (( month < 1 )); then
+        month=12
+        year=$(( year - 1 ))
+      fi
       showcal "$month" "$year"
       ;;
     l|L) 
       month=$(( month + 1 ))
-      [[ "$month" -gt 12 ]] && month=1 && year=$((year + 1))
+      if (( month > 12 )); then
+        month=1
+        year=$(( year + 1 ))
+      fi
       showcal "$month" "$year"
       ;;
     t|T)
@@ -35,6 +49,7 @@ while read -s -n1 -r key; do
       year=$tyear
       showcal "$month" "$year"
       ;;
-    *) ;;
+    *) tput bel ;;  # beep on invalid key
   esac
 done
+

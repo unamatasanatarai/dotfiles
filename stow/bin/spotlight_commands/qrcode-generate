@@ -2,7 +2,32 @@
 
 set -euo pipefail
 
-text=$(pbpaste)
-file=/tmp/qrcode.png
-qrencode -o "$file" "$text"
-open "$file"
+wait_keypress() {
+  read -n1 -rsp $'Press any key to exit...\n'
+}
+
+if ! command -v qrencode &>/dev/null; then
+  echo "Please install qrencode first (brew install qrencode)"
+  wait_keypress
+  exit 1
+fi
+
+if [[ $# -gt 0 ]]; then
+  text="$*"
+else
+  text=$(pbpaste)
+fi
+
+if [[ -z "$text" ]]; then
+  echo "No input text or clipboard content found."
+  wait_keypress
+  exit 1
+fi
+
+outfile="/tmp/qr.png"
+
+qrencode -o "$outfile" "$text"
+echo "QR code saved to $outfile"
+
+open -a Preview "$outfile"
+
