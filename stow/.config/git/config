@@ -24,3 +24,6 @@
     colorMoved = default
 [init]
 	defaultBranch = main
+[user]
+	name = Unamata Sanatarai
+	email = unamatasanatarai@gmail.com

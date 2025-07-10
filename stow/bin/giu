@@ -3,42 +3,50 @@
 set -euo pipefail
 
 # -----------------------------------------------------------------------------
-# PRIVATE
+# PRIVATE FUNCTIONS
 # -----------------------------------------------------------------------------
-function _set_username { # Set git config username
-  echo "git config user.name '$1'"
-  git config user.name "$1"
+
+function _set_username {
+  echo "🔧 Setting git user.name to '$1'"
+  git config --global user.name "$1"
 }
 
-function _set_email { # Set git config E-Mail
-  echo "git config user.email '$1'"
-  git config user.email "$1"
+function _set_email {
+  echo "🔧 Setting git user.email to '$1'"
+  git config --global user.email "$1"
 }
 
 # -----------------------------------------------------------------------------
-# PUBLIC
+# PUBLIC INTERFACE
 # -----------------------------------------------------------------------------
 
 _username=""
 _email=""
 
 function _help() {
-  echo "usage: $(basename "$0") -u username -e email"
-  echo "OR usage: $(basename "$0") username email"
+  cat <<EOF
+Usage:
+  $(basename "$0") -u "Your Name" -e "you@example.com"
+  OR
+  $(basename "$0") "Your Name" "you@example.com"
+
+This sets the global Git author configuration.
+EOF
 }
 
 function _parse_args() {
-  while getopts "u:e:" opt; do
+  while getopts "u:e:h" opt; do
     case $opt in
       u) _username="$OPTARG" ;;
       e) _email="$OPTARG" ;;
-      *) ;;
+      h) _help; exit 0 ;;
+      *) _help; exit 1 ;;
     esac
   done
 
   shift $((OPTIND - 1))
 
-  if [[ "$#" == 2 ]] && [[ "$_username" = "" ]] && [[ "$_email" = "" ]]; then
+  if [[ "$#" == 2 ]] && [[ -z "$_username" && -z "$_email" ]]; then
     _username="$1"
     _email="$2"
   fi
@@ -46,12 +54,15 @@ function _parse_args() {
 
 function main() {
   _parse_args "$@"
-  if [[ "$_username" = "" ]] && [[ "$_email" = "" ]]; then
+
+  if [[ -z "$_username" && -z "$_email" ]]; then
     _help
-  else
-    if [[ "$_username" != "" ]]; then _set_username "$_username"; fi
-    if [[ "$_email" != "" ]]; then _set_email "$_email"; fi
+    exit 1
   fi
+
+  [[ -n "$_username" ]] && _set_username "$_username"
+  [[ -n "$_email" ]] && _set_email "$_email"
 }
 # -----------------------------------------------------------------------------
 main "$@"
+
