@@ -79,7 +79,7 @@ function apps { # Install brew casks and formulas
 }
 
 function defaults { # Set sensible macos defaults
-  ./osx/defaults
+  ./osx/defaults all
 }
 
 function fonts { # Install fonts with sudo prompt
@@ -91,10 +91,6 @@ function fonts { # Install fonts with sudo prompt
     cp ./fonts/source-code-pro/*.ttf /Library/Fonts/
   fi
   eok "Fonts installed"
-}
-
-function neovim { # Install neovim tools
-  ./osx/nvim
 }
 
 function stop-processes { # Stop or `install stop-processes --unload` processes
