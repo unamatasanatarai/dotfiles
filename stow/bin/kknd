@@ -8,8 +8,24 @@ set -euo pipefail
 
 declare -r __VERSION="0.0.1"
 __FILE="${0##*/}"
-__DIR="${0%%/*}"
+__DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 declare -r __FILE __DIR
+
+# -----------------------------------------------------------------------------
+# HELPERS
+# -----------------------------------------------------------------------------
+
+require() {
+  local cmd="$1"
+  command -v "$cmd" >/dev/null || {
+    echo "Error: '$cmd' command not found. Please install it first." >&2
+    exit 1
+  }
+}
+
+log() {
+  echo "[INFO] $*"
+}
 
 # -----------------------------------------------------------------------------
 # CONFIG
@@ -20,24 +36,40 @@ declare -r __FILE __DIR
 # -----------------------------------------------------------------------------
 
 trash() { # Empty the trash
-  sudo rm -rfv /Volumes/*/.Trashes
-  sudo rm -rfv ~/.Trash
-  sudo rm -rfv /private/var/log/asl/*.asl
+  require sqlite3
+
+  log "Removing Trash directories..."
+  sudo rm -rfv /Volumes/*/.Trashes || true
+  sudo rm -rfv ~/.Trash || true
+  sudo rm -rfv /private/var/log/asl/*.asl || true
+
+  log "Clearing quarantine events..."
   sqlite3 ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV* 'delete from LSQuarantineEvent'
+  log "Trash and quarantine cleared."
 }
 
 printer-history() { # Forget the printer queue from /var/spool/cups
+  require cancel
+
+  log "Canceling all print jobs..."
   cancel -x -a
-  echo "purged /var/spool/cups"
+  log "Purged /var/spool/cups"
 }
 
-screenshots() { # Empty the ~/Picutres/screenshots folder
-  local sdir
-  sdir="${HOME}/Pictures/screenshots"
-  rm -rvf "${sdir:?}"/*
+screenshots() { # Empty the ~/Pictures/screenshots folder
+  local sdir="${HOME}/Pictures/screenshots"
+  if [[ -d "$sdir" ]]; then
+    log "Removing all files from ${sdir}..."
+    rm -rvf "${sdir:?}"/*
+  else
+    log "Screenshots directory not found: ${sdir}"
+  fi
 }
 
 dstore() { # Remove .DS_Store files, recursively
+  require find
+
+  log "Finding and deleting .DS_Store files..."
   find . -name '.DS_Store' -type f -delete -print
 }
 
@@ -61,3 +93,4 @@ help() { # Display this helpful help information
 }
 
 "${@:-help}"
+

@@ -1,5 +1,37 @@
 #!/usr/bin/env bash
 
-declare -i port="${1:-8181}"
+set -euo pipefail
 
-exec php -S localhost:"${port}"
+# -----------------------------------------------------------------------------
+# USAGE
+# -----------------------------------------------------------------------------
+usage() {
+  echo "Usage: $(basename "$0") [port]"
+  echo "Starts a PHP built-in server on the specified port (default: 8181)."
+}
+
+# -----------------------------------------------------------------------------
+# SETUP
+# -----------------------------------------------------------------------------
+
+# Check for PHP
+if ! command -v php >/dev/null 2>&1; then
+  echo "Error: PHP is not installed or not in PATH." >&2
+  exit 1
+fi
+
+# Parse port argument
+port="${1:-8181}"
+if ! [[ "$port" =~ ^[0-9]+$ ]] || (( port < 1 || port > 65535 )); then
+  echo "Error: Invalid port number '$port'" >&2
+  usage
+  exit 1
+fi
+
+# -----------------------------------------------------------------------------
+# START SERVER
+# -----------------------------------------------------------------------------
+
+echo "Starting PHP server at http://localhost:${port}"
+exec php -S "localhost:${port}"
+
