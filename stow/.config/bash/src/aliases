@@ -6,18 +6,3 @@ alias tree='tree -aC --dirsfirst'
 
 # Enable colorized output for ls (macOS/BSD-style)
 alias ls='ls -G'
-
-# Mimic exiting Vim
-alias :q='exit'
-
-# Use Homebrew's version of 'less' (more up-to-date)
-if [[ -n "${BREW_PREFIX:-}" && -x "$BREW_PREFIX/bin/less" ]]; then
-  alias less="$BREW_PREFIX/bin/less"
-fi
-
-# Ensure consistent Yarn config location
-alias yarn='yarn --use-yarnrc "$XDG_CONFIG_HOME/yarn/config"'
-
-# Prefer macOS-specific tldr pages
-alias tldr='tldr --osx'
-
