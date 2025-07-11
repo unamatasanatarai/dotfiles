@@ -1,4 +1,0 @@
-lalt + lctrl - t : open -na /Applications/Alacritty.app
-lalt - space : ~/bin/open-spotlight
-#lalt + lctrl - m : ~/bin/micm
-#lcmd + lctrl - a : killall Hammerspoon ; open /Applications/Hammerspoon.app

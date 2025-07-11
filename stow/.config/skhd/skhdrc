@@ -1,63 +1,45 @@
 # Move focus between windows in the space
-lalt - k : yabai -m window --focus north
-lalt - l : yabai -m window --focus east
-lalt - j : yabai -m window --focus south
-lalt - h : yabai -m window --focus west
+lalt - k : /usr/local/bin/yabai -m window --focus north
+lalt - l : /usr/local/bin/yabai -m window --focus east
+lalt - j : /usr/local/bin/yabai -m window --focus south
+lalt - h : /usr/local/bin/yabai -m window --focus west
 
 # Swap focused window around in the space
-lcmd + lctrl - k : yabai -m window --swap north
-lcmd + lctrl - l : yabai -m window --swap east
-lcmd + lctrl - j : yabai -m window --swap south
-lcmd + lctrl - h : yabai -m window --swap west
-
-# Move focused window around in the space
-lcmd + lctrl + lalt - k : yabai -m window --warp north
-lcmd + lctrl + lalt - l : yabai -m window --warp east
-lcmd + lctrl + lalt - j : yabai -m window --warp south
-lcmd + lctrl + lalt - h : yabai -m window --warp west
+lalt + lctrl - k : /usr/local/bin/yabai -m window --swap north
+lalt + lctrl - l : /usr/local/bin/yabai -m window --swap east
+lalt + lctrl - j : /usr/local/bin/yabai -m window --swap south
+lalt + lctrl - h : /usr/local/bin/yabai -m window --swap west
 
 # Send focused window to a space
-lctrl + lalt - 1 : yabai -m window --space 1
-lctrl + lalt - 2 : yabai -m window --space 2
-lctrl + lalt - 3 : yabai -m window --space 3
-lctrl + lalt - 4 : yabai -m window --space 4
-lctrl + lalt - 5 : yabai -m window --space 5
-lctrl + lalt - 6 : yabai -m window --space 6
+lalt + lshift - q : /usr/local/bin/yabai -m window --space 1
+lalt + lshift - w : /usr/local/bin/yabai -m window --space 2
+lalt + lshift - e : /usr/local/bin/yabai -m window --space 3
+lalt + lshift - r : /usr/local/bin/yabai -m window --space 4
+lalt + lshift - t : /usr/local/bin/yabai -m window --space 5
+lalt + lshift - y : /usr/local/bin/yabai -m window --space 6
 
 # Send focused window to a space and follow to that space
-lcmd + lalt - 1 : yabai -m window --space 1; skhd -k "alt - 1"
-lcmd + lalt - 2 : yabai -m window --space 2; skhd -k "alt - 2"
-lcmd + lalt - 3 : yabai -m window --space 3; skhd -k "alt - 3"
-lcmd + lalt - 4 : yabai -m window --space 4; skhd -k "alt - 4"
-lcmd + lalt - 5 : yabai -m window --space 5; skhd -k "alt - 5"
-lcmd + lalt - 6 : yabai -m window --space 6; skhd -k "alt - 6"
+lalt + lctrl - q : /usr/local/bin/yabai -m window --space 1; /usr/local/bin/skhd -k "alt - q"
+lalt + lctrl - w : /usr/local/bin/yabai -m window --space 2; /usr/local/bin/skhd -k "alt - w"
+lalt + lctrl - e : /usr/local/bin/yabai -m window --space 3; /usr/local/bin/skhd -k "alt - e"
+lalt + lctrl - r : /usr/local/bin/yabai -m window --space 4; /usr/local/bin/skhd -k "alt - r"
+lalt + lctrl - t : /usr/local/bin/yabai -m window --space 5; /usr/local/bin/skhd -k "alt - t"
+lalt + lctrl - y : /usr/local/bin/yabai -m window --space 6; /usr/local/bin/skhd -k "alt - y"
 
 # Resize windows
-lcmd + lshift - h : yabai -m window --resize left:-90:0; \
-                  yabai -m window --resize right:-90:0
-lcmd + lshift - j : yabai -m window --resize bottom:0:90; \
-                  yabai -m window --resize top:0:90
-lcmd + lshift - k : yabai -m window --resize top:0:-90; \
-                  yabai -m window --resize bottom:0:-90
-lcmd + lshift - l : yabai -m window --resize right:90:0; \
-                  yabai -m window --resize left:90:-90
+lalt + lshift - h : /usr/local/bin/yabai -m window --resize left:-30:0; \
+                    /usr/local/bin/yabai -m window --resize right:-30:0
+lalt + lshift - j : /usr/local/bin/yabai -m window --resize bottom:0:30; \
+                    /usr/local/bin/yabai -m window --resize top:0:30
+lalt + lshift - k : /usr/local/bin/yabai -m window --resize top:0:-30; \
+                    /usr/local/bin/yabai -m window --resize bottom:0:-30
+lalt + lshift - l : /usr/local/bin/yabai -m window --resize right:30:0; \
+                    /usr/local/bin/yabai -m window --resize left:30:-30
 
 # Equalize the size of windows
-lcmd + lalt - e : yabai -m space --balance
-
-# Rotate windows clockwise and anticlockwise
-lcmd + lalt - r        : yabai -m space --rotate 270
-
-# Flip windows along horizontally (across the Y axis)
-lcmd + lalt - x : yabai -m space --mirror y-axis
-
-# Float / Unfloat window
-lctrl + lalt - space : yabai -m window --toggle float; yabai -m window --toggle border
+lctrl + lshift - e : /usr/local/bin/yabai -m space --balance
 
 # Make window native fullscreen
-lalt - f        : yabai -m window --toggle zoom-fullscreen
-lcmd + lalt - f : yabai -m window --toggle native-fullscreen
+lalt - f        : /usr/local/bin/yabai -m window --toggle zoom-fullscreen
 
-.load "hotkeysrc"
-.load "hotkeysrc"
-.load "local"
+lcmd + lctrl - t : open -na /Applications/Alacritty.app
