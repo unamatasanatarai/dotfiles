@@ -63,10 +63,14 @@ while getopts "w:h:x:y:c:l:?" o; do
   esac
 done
 
-# screen size
-readarray -t ybi <<< "$(yabai -m query --displays --display | jq '.frame.w*2, .frame.h*2')"
-SW=${ybi[0]}
-SH=${ybi[1]}
+# screen size (macOS-compatible, no jq)
+readarray -t ybi < <(
+  yabai -m query --displays --display | sed -n 's/.*"w":[[:space:]]*\([0-9]\+\).*/\1/p' | head -n1
+  yabai -m query --displays --display | sed -n 's/.*"h":[[:space:]]*\([0-9]\+\).*/\1/p' | head -n1
+)
+
+SW=$(( ybi[0] * 2 ))
+SH=$(( ybi[1] * 2 ))
 
 # term size
 charw=16
@@ -100,9 +104,10 @@ exec alacritty \
   -o window.position.y="$Y" \
   -o window.dimensions.lines="$H" \
   -o window.dimensions.columns="$W" \
-  -o window.decorations=none \
+  -o 'window.decorations="none"' \
   -o window.padding.x="$PADDING" \
   -o window.padding.y="$PADDING" \
   -o font.offset.y="$LH" \
   --working-directory "$PWD" \
   -e bash -c "$cmd"
+

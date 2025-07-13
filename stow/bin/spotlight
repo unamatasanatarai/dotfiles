@@ -2,9 +2,6 @@
 
 set -euo pipefail
 
-# Load FZF style config
-source "$HOME"/.config/bash/src/fzf_config
-
 CMD_DIR="$HOME/bin/spotlight_commands"
 mapfile -t file_list < <(find "$CMD_DIR" -type f ! -iname ".*")
 
@@ -14,14 +11,8 @@ for file in "${file_list[@]}"; do
   choices+=( "${file#$CMD_DIR/}" )
 done
 
-# Present FZF selector
-cmd=$(printf "%s\n" "${choices[@]}" | fzf \
-  --prompt="►▶ " \
-  --pointer="► " \
-  --no-info \
-  --layout=reverse \
-  --border=sharp
-)
+# Present peco selector with prompt
+cmd=$(printf "%s\n" "${choices[@]}" | peco --prompt="►▶ ")
 
 # Exit if nothing selected (ESC or Ctrl-C)
 [[ -z "$cmd" ]] && exit 1
