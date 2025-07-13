@@ -10,3 +10,30 @@ shopt -s histappend # append to history i.e don't overwrite it
 # Save multiline commands in same history entry with embedded newlines
 shopt -s cmdhist
 shopt -s lithist
+
+# PECO-enhanced Ctrl+R history search (fzf-like)
+
+__peco_history_search() {
+  local tac_cmd
+
+  # Detect 'tac' or fallback to 'tail -r' (for macOS)
+  if command -v tac >/dev/null 2>&1; then
+    tac_cmd="tac"
+  else
+    tac_cmd="tail -r"
+  fi
+
+  # Run peco over reversed history
+  local selected
+  selected=$(history | $tac_cmd | awk '{$1=""; print substr($0,2)}' | peco --prompt="History > " --layout=bottom-up)
+
+  # Paste selected command into prompt if non-empty
+  if [ -n "$selected" ]; then
+    READLINE_LINE="$selected"
+    READLINE_POINT=${#READLINE_LINE}
+  fi
+}
+
+# Bind Ctrl+R to launch peco-based search
+bind -x '"\C-r": __peco_history_search'
+

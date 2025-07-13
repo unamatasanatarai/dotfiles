@@ -1,3 +1,11 @@
+# Send focused window to a space and follow to that space
+lalt - q : /usr/local/bin/skhd -k "alt - 1"
+lalt - w : /usr/local/bin/skhd -k "alt - 2"
+lalt - e : /usr/local/bin/skhd -k "alt - 3"
+lalt - r : /usr/local/bin/skhd -k "alt - 4"
+lalt - t : /usr/local/bin/skhd -k "alt - 5"
+lalt - y : /usr/local/bin/skhd -k "alt - 6"
+
 # Move focus between windows in the space
 lalt - k : /usr/local/bin/yabai -m window --focus north
 lalt - l : /usr/local/bin/yabai -m window --focus east
@@ -19,12 +27,12 @@ lalt + lshift - t : /usr/local/bin/yabai -m window --space 5
 lalt + lshift - y : /usr/local/bin/yabai -m window --space 6
 
 # Send focused window to a space and follow to that space
-lalt + lctrl - q : /usr/local/bin/yabai -m window --space 1; /usr/local/bin/skhd -k "alt - q"
-lalt + lctrl - w : /usr/local/bin/yabai -m window --space 2; /usr/local/bin/skhd -k "alt - w"
-lalt + lctrl - e : /usr/local/bin/yabai -m window --space 3; /usr/local/bin/skhd -k "alt - e"
-lalt + lctrl - r : /usr/local/bin/yabai -m window --space 4; /usr/local/bin/skhd -k "alt - r"
-lalt + lctrl - t : /usr/local/bin/yabai -m window --space 5; /usr/local/bin/skhd -k "alt - t"
-lalt + lctrl - y : /usr/local/bin/yabai -m window --space 6; /usr/local/bin/skhd -k "alt - y"
+lalt + lctrl - q : /usr/local/bin/yabai -m window --space 1; /usr/local/bin/skhd -k "alt - 1"
+lalt + lctrl - w : /usr/local/bin/yabai -m window --space 2; /usr/local/bin/skhd -k "alt - 2"
+lalt + lctrl - e : /usr/local/bin/yabai -m window --space 3; /usr/local/bin/skhd -k "alt - 3"
+lalt + lctrl - r : /usr/local/bin/yabai -m window --space 4; /usr/local/bin/skhd -k "alt - 4"
+lalt + lctrl - t : /usr/local/bin/yabai -m window --space 5; /usr/local/bin/skhd -k "alt - 5"
+lalt + lctrl - y : /usr/local/bin/yabai -m window --space 6; /usr/local/bin/skhd -k "alt - 6"
 
 # Resize windows
 lalt + lshift - h : /usr/local/bin/yabai -m window --resize left:-30:0; \
