@@ -51,4 +51,4 @@ lctrl + lshift - e : /usr/local/bin/yabai -m space --balance
 lalt - f        : /usr/local/bin/yabai -m window --toggle zoom-fullscreen
 
 lcmd + lctrl - t : open -na /Applications/Alacritty.app
-lalt - space : open -na ~/bin/open-spotlight
+lalt - space : ~/bin/open-spotlight
