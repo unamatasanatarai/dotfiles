@@ -1,16 +1,18 @@
-# Function to extract Git branch name
+# Function to check if Git repository is dirty
 extract_git_branch_name() {
-  local ps=$?  # Preserve previous exit status
-  local branch
-
-  # Try to get symbolic branch name, fallback to short commit hash
-  branch=$(git symbolic-ref --short HEAD 2>/dev/null || git rev-parse --short HEAD 2>/dev/null)
-
-  if [ -n "$branch" ]; then
-    echo " <$branch>"
+  local ps=$? # Preserve previous exit status
+  if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    local branch
+    branch=$(git symbolic-ref --short HEAD 2>/dev/null || git rev-parse --short HEAD 2>/dev/null)
+    local status
+    status=$(git status --porcelain 2>/dev/null)
+    if [ -n "$status" ]; then
+      echo " <$branch*>" # Asterisk indicates dirty state
+    else
+      echo " <$branch>"
+    fi
   fi
-
-  return "$ps"  # Restore previous exit status
+  return "$ps"
 }
 
 PS1=""
