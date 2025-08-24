@@ -3,13 +3,11 @@ wcd() {
     echo "Usage: wcd <command>"
     return 1
   fi
-
   local cmd_path
   cmd_path="$(command -v "$1")" || {
     echo "Command '$1' not found"
     return 1
   }
-
   cd -- "$(dirname "$cmd_path")" || return 1
 }
 

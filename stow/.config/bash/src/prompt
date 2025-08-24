@@ -2,12 +2,12 @@
 extract_git_branch_name() {
   local ps=$? # Preserve previous exit status
   if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-    local branch
-    branch=$(git symbolic-ref --short HEAD 2>/dev/null || git rev-parse --short HEAD 2>/dev/null)
-    local status
-    status=$(git status --porcelain 2>/dev/null)
-    if [ -n "$status" ]; then
-      echo " <$branch*>" # Asterisk indicates dirty state
+    local branch status
+    status=$(git status --porcelain --branch 2>/dev/null)
+    branch=$(echo "$status" | head -n1 | sed -n 's/## \(.*\)/\1/p' | cut -d. -f1)
+    [ -z "$branch" ] && branch=$(git rev-parse --short HEAD 2>/dev/null)
+    if [ "$(echo "$status" | wc -l)" -gt 1 ]; then
+      echo " <$branch*>"
     else
       echo " <$branch>"
     fi
@@ -15,6 +15,21 @@ extract_git_branch_name() {
   return "$ps"
 }
 
+extract_git_branch_name() {
+  local ps=$? # Preserve exit status
+  if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    local branch status
+    status=$(git status --porcelain --branch 2>/dev/null)
+    branch=$(echo "$status" | head -n1 | sed -n 's/## \(.*\)/\1/p' | cut -d. -f1)
+    [ -z "$branch" ] && branch=$(git rev-parse --short HEAD 2>/dev/null)
+    if [ "$(echo "$status" | wc -l)" -gt 1 ]; then
+      echo " <$branch*>"
+    else
+      echo " <$branch>"
+    fi
+  fi
+  return "$ps"
+}
 PS1=""
 PS1+="\[${green}\]\w" # Working directory
 PS1+="\[${yellow}\]\$(extract_git_branch_name)" # Git branch info

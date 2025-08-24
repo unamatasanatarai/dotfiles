@@ -13,16 +13,15 @@ shopt -s lithist
 
 # PECO-enhanced Ctrl+R history search (fzf-like)
 
+# Detect 'tac' or fallback to 'tail -r' (for macOS)
+if command -v tac >/dev/null 2>&1; then
+  tac_cmd="tac"
+else
+  tac_cmd="tail -r"
+fi
+readonly tac_cmd
+
 __peco_history_search() {
-  local tac_cmd
-
-  # Detect 'tac' or fallback to 'tail -r' (for macOS)
-  if command -v tac >/dev/null 2>&1; then
-    tac_cmd="tac"
-  else
-    tac_cmd="tail -r"
-  fi
-
   # Run peco over reversed history
   local selected
   selected=$(history | $tac_cmd | awk '{$1=""; print substr($0,2)}' | peco --prompt="History > " --layout=bottom-up)
