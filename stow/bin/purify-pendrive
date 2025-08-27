@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# List of macOS-specific files to delete
+FILES_TO_DELETE=( "._*" ".DS_Store" "Thumbs.db" "desktop.ini" ".fseventsd" ".Spotlight-V100" ".Trashes" ".apdisk" )
+
+# Display warning message
+echo "WARNING: This script will recursively delete the following macOS-specific files from the current directory:"
+for file in "${FILES_TO_DELETE[@]}"; do
+    echo "- $file"
+done
+echo "This action cannot be undone. Type 'YES' (case sensitive) to proceed, or any other key to abort."
+
+# Read user input
+read -r confirmation
+
+# Check if user typed exactly "YES"
+if [ "$confirmation" != "YES" ]; then
+    echo "Operation aborted."
+    exit 1
+fi
+
+# Find and delete files, printing each deleted file
+find . -type f \( $(printf " -name %s" "${FILES_TO_DELETE[@]}" | sed 's/ -name / -o -name /g' | cut -c 4-) \) -delete -print
+
+echo "Cleanup complete."
