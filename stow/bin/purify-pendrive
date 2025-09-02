@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # List of macOS and Windows-specific files and directories to delete
-FILES_TO_DELETE=("._*" ".DS_Store" "Thumbs.db" "desktop.ini" ".fseventsd" ".Spotlight-V100" ".Trashes" ".apdisk" "\$RECYCLE.BIN" "System Volume Information", ".Trash-1000")
+FILES_TO_DELETE=("._*" ".DS_Store" "Thumbs.db" "desktop.ini" ".fseventsd" ".Spotlight-V100" ".Trashes" ".apdisk" "\$RECYCLE.BIN" "System Volume Information" ".Trash-1000")
 
 echo "WARNING: This script will recursively delete the following macOS and Windows-specific files and directories from the current directory:"
 for file in "${FILES_TO_DELETE[@]}"; do
