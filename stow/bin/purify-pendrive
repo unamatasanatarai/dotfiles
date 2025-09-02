@@ -19,7 +19,9 @@ if [ "$confirmation" != "YES" ]; then
     exit 1
 fi
 
-# Find and delete files, printing each deleted file
-find . -type f \( $(printf " -name %s" "${FILES_TO_DELETE[@]}" | sed 's/ -name / -o -name /g' | cut -c 4-) \) -delete -print
+# Loop through patterns and delete matching files
+for pattern in "${FILES_TO_DELETE[@]}"; do
+    find . -type f -name "$pattern" -delete -print
+done
 
 echo "Cleanup complete."
