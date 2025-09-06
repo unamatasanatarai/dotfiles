@@ -4,13 +4,17 @@ set -euo pipefail
 
 # Constants
 readonly TITLE="TermPopup"
+readonly DEFAULT_SPACING=2
+readonly BASE_HEIGHT=20
+readonly DEFAULT_FONT_WIDTH=8  # Adjust this to your font width in pixels
 
-# Display help message
+SPACING=$DEFAULT_SPACING
+
 help() {
   cat << EOF
 Usage: $(basename "$0") <command> [-s <spacing>]
 
-Launch a command in a centered Alacritty terminal window.
+Launch a command in an Alacritty terminal window occupying full screen width.
 
 Options:
   -s <spacing>  Spacing multiplier for vertical size (default: $DEFAULT_SPACING)
@@ -21,7 +25,6 @@ Example:
 EOF
 }
 
-# Parse command-line options
 while getopts "s:?" opt; do
   case "$opt" in
     s) SPACING=${OPTARG} ;;
@@ -31,18 +34,34 @@ while getopts "s:?" opt; do
 done
 shift $((OPTIND - 1))
 
-# Validate command argument
 if [[ $# -lt 1 ]]; then
   echo "Error: Command is required."
   help
   exit 1
 fi
-cmd="$1"
 
-# Launch Alacritty
+cmd="$(printf "%q " "$@")"
+
+screen_width_px=$(system_profiler SPDisplaysDataType | awk '/Resolution/ {print $2; exit}')
+
+if [[ -z "$screen_width_px" ]]; then
+  echo "Error: Unable to determine screen width"
+  exit 1
+fi
+
+# Calculate columns as screen width divided by font width
+columns=$(( screen_width_px / DEFAULT_FONT_WIDTH ))
+
+# Calculate rows based on spacing
+rows=$(( BASE_HEIGHT * SPACING ))
+
 exec alacritty \
   -t "$TITLE" \
   --class "$TITLE" \
+  -o window.position.x=0 \
   -o window.position.y=0 \
+  -o window.dimensions.columns=$columns \
+  -o window.dimensions.lines=$rows \
   --working-directory "$PWD" \
   -e bash -c "$cmd"
+
