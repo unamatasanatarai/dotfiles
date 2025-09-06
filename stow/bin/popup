@@ -2,113 +2,47 @@
 
 set -euo pipefail
 
-# I think I must double the numbers because it is retina. but I don't know
-# it works and I don't feel like duckduckgo'ing or startpage'ing
-# but here's a command that might become useful
-# after you connect to a non-retina display
-# system_profiler SPDisplaysDataType | rg Resolution
+# Constants
+readonly TITLE="TermPopup"
 
-# dictionary
-_center="center"
-_left="left"
-_right="right"
-_bottom="bottom"
-_top="top"
-TITLE="TermPopup"
+# Display help message
+help() {
+  cat << EOF
+Usage: $(basename "$0") <command> [-s <spacing>]
 
-# defaults
-PADDING=20
-# text line height
-LH=24
-# term width and height in chars
-W=80
-H=20
-# window x and y
-X=$_center
-Y=$_center
-
-cmd='read'
-
-function help {
-  echo "usage ""$(basename "$0") [ -w 80 ] [ -h 20 ]
-            [ -x center ] [ -y center ]
-            [ -c command ] [ -? ]
+Launch a command in a centered Alacritty terminal window.
 
 Options:
-  -x    X position on screen. Possible values: center | right | left | number
-  -y    Y position on screen. Possible values: center | bottom | top | number
-  -w    Width of the popup in Characters
-  -h    Height of the popup in Characters
-  -c    Command to run in the popup
-  -l    Line height (default: 36)
-"
+  -s <spacing>  Spacing multiplier for vertical size (default: $DEFAULT_SPACING)
+  -?            Show this help message
+
+Example:
+  $(basename "$0") 'htop' -s 2
+EOF
 }
 
-while getopts "w:h:x:y:c:l:?" o; do
-  case "$o" in
-    w) W=${OPTARG} ;;
-    h) H=${OPTARG} ;;
-    x) X=${OPTARG} ;;
-    y) Y=${OPTARG} ;;
-    l) LH=${OPTARG} ;;
-    c) cmd=${OPTARG} ;;
-    ?)
-      help
-      exit 2
-      ;;
-    *)
-      help
-      exit 2
-      ;;
+# Parse command-line options
+while getopts "s:?" opt; do
+  case "$opt" in
+    s) SPACING=${OPTARG} ;;
+    ?) help; exit 0 ;;
+    *) help; exit 1 ;;
   esac
 done
+shift $((OPTIND - 1))
 
-# screen size (macOS-compatible, no jq)
-readarray -t ybi < <(
-  yabai -m query --displays --display | sed -n 's/.*"w":[[:space:]]*\([0-9]\+\).*/\1/p' | head -n1
-  yabai -m query --displays --display | sed -n 's/.*"h":[[:space:]]*\([0-9]\+\).*/\1/p' | head -n1
-)
-
-SW=$(( ybi[0] * 2 ))
-SH=$(( ybi[1] * 2 ))
-
-# term size
-charw=16
-charh=32
-TW=$((charw * W + 4 * PADDING))
-# the last + LH fixes vertical placement.... only a little. Not sure why it's not workign properly
-TH=$((((LH + charh) * H) + (4 * PADDING) + LH))
-
-# term pos
-if [[ "$X" == "$_center" ]]; then
-  X=$((SW - TW >> 1))
-elif [[ "$X" == "$_right" ]]; then
-  X=$((SW - TW))
-else
-  if [[ "$X" == "$_left" ]]; then X=0; fi
-  X=$((X << 1))
+# Validate command argument
+if [[ $# -lt 1 ]]; then
+  echo "Error: Command is required."
+  help
+  exit 1
 fi
+cmd="$1"
 
-if [[ "$Y" == "$_center" ]]; then
-  Y=$((SH - TH >> 1))
-elif [[ "$Y" == "$_bottom" ]]; then
-  Y=$((SH - TH))
-else
-  if [[ "$Y" == "$_top" ]]; then Y=0; fi
-  Y=$((Y << 1))
-fi
-
+# Launch Alacritty
 exec alacritty \
   -t "$TITLE" \
   --class "$TITLE" \
-  -o window.position.x="$X" \
-  -o window.position.y="$Y" \
-  -o window.dimensions.lines="$H" \
-  -o window.dimensions.columns="$W" \
-  -o 'window.decorations="none"' \
-  -o window.padding.x="$PADDING" \
-  -o window.padding.y="$PADDING" \
-  -o font.offset.y="$LH" \
+  -o window.position.y=0 \
   --working-directory "$PWD" \
   -e bash -c "$cmd"
-
