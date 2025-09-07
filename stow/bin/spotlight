@@ -2,21 +2,15 @@
 
 set -euo pipefail
 
-CMD_DIR="$HOME/bin/spotlight_commands"
-mapfile -t file_list < <(find "$CMD_DIR" -type f ! -iname ".*")
+declare -A commands=(
+  ["Brave"]="open -a 'Brave Browser'"
+)
 
-# Strip base path
-choices=()
-for file in "${file_list[@]}"; do
-  choices+=( "${file#$CMD_DIR/}" )
-done
+choices=("${!commands[@]}")
 
-# Present peco selector with prompt
 cmd=$(printf "%s\n" "${choices[@]}" | peco --prompt="►▶ ")
 
-# Exit if nothing selected (ESC or Ctrl-C)
 [[ -z "$cmd" ]] && exit 1
 
-# Execute the selected command
-exec "$CMD_DIR/$cmd"
+eval "${commands["$cmd"]}"
 
