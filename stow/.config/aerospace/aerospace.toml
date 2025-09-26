@@ -1,4 +1,4 @@
-# Place a copy of this config to ~/.aerospace.toml
+# USE skhd FOR left-alt left-ctrl etc.
 # After that, you can edit ~/.aerospace.toml to your liking
 
 # You can use it to add commands that run after AeroSpace startup.
@@ -27,11 +27,11 @@ default-root-container-orientation = 'auto'
 
 # Mouse follows focus when focused monitor changes
 # Drop it from your config, if you don't like this behavior
-# See https://nikitabobko.github.io/AeroSpace/guide#-callbacks
+# See https://nikitabobko.github.io/AeroSpace/guide#on-focus-changed-callbacks
 # See https://nikitabobko.github.io/AeroSpace/commands#move-mouse
 # Fallback value (if you omit the key): on-focused-monitor-changed = []
 on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
- = ['move-mouse window-lazy-center']
+on-focus-changed = ['move-mouse window-lazy-center']
 
 # You can effectively turn off macOS "Hide application" (cmd-h) feature by toggling this flag
 # Useful if you don't use this macOS feature, but accidentally hit cmd-h or cmd-alt-h key
@@ -115,18 +115,19 @@ automatically-unhide-macos-hidden-apps = false
     alt-f = 'fullscreen'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#workspace
-    alt-q = 'workspace 1'
-    alt-w = 'workspace 2'
-    alt-e = 'workspace 3'
-    alt-r = 'workspace 4'
-    alt-t = 'workspace 5'
+    # use skhd last-e: aerospace workspace 3
+    #alt-q = 'workspace 1'
+    #alt-w = 'workspace 2'
+    #alt-e = 'workspace 3'
+    #alt-r = 'workspace 4'
+    #alt-t = 'workspace 5'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
-    alt-shift-q = 'move-node-to-workspace 1 --focus-follows-window'
-    alt-shift-w = 'move-node-to-workspace 2 --focus-follows-window'
-    alt-shift-e = 'move-node-to-workspace 3 --focus-follows-window'
-    alt-shift-r = 'move-node-to-workspace 4 --focus-follows-window'
-    alt-shift-t = 'move-node-to-workspace 5 --focus-follows-window'
+    #alt-shift-q = 'move-node-to-workspace 1 --focus-follows-window'
+    #alt-shift-w = 'move-node-to-workspace 2 --focus-follows-window'
+    #alt-shift-e = 'move-node-to-workspace 3 --focus-follows-window'
+    #alt-shift-r = 'move-node-to-workspace 4 --focus-follows-window'
+    #alt-shift-t = 'move-node-to-workspace 5 --focus-follows-window'
 
     ctrl-shift-q = 'move-node-to-workspace 1'
     ctrl-shift-w = 'move-node-to-workspace 2'
@@ -142,7 +143,7 @@ automatically-unhide-macos-hidden-apps = false
     # See: https://nikitabobko.github.io/AeroSpace/commands#mode
     alt-shift-semicolon = 'mode service'
 
-    ctrl-cmd-t = 'exec-and-forget open -na /System/Applications/Utilities/Terminal.app'
+    ctrl-cmd-t = 'exec-and-forget open -na /Applications/Alacritty.app'
 # 'service' binding mode declaration.
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
 [mode.service.binding]
