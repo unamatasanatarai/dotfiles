@@ -1,116 +1,94 @@
-
-# ----- _top
-
 # ------------------------------------------------------------------------------
 # !!  This file is auto-generated.
 #     Do NOT modify it directly — your changes will be overwritten.
-#     To update or customize, run: ./rebuild
+#     To update or customize, run: make
 # ------------------------------------------------------------------------------
 
 # Skip if this is not an interactive shell.
 # Avoid loading interactive-only configurations in non-interactive contexts.
 [[ $- != *i* ]] && return
+export BASH_SILENCE_DEPRECATION_WARNING=1
+export VISUAL=vi
+export EDITOR="$VISUAL"
+export SYSTEMD_EDITOR="$VISUAL"
+export SHELL="$BREW_PREFIX/bin/bash"
 
-# Optional fun title script — uncomment if needed.
-# if command -v ~/bin/title &> /dev/null; then
-#   ~/bin/title $'I am\nserious'
-# fi
-#
+# Source user-defined XDG user dirs if available
+[ -f "$HOME/.config/user-dirs.dirs" ] && source "$HOME/.config/user-dirs.dirs"
 
-# ----- _vars
+: "${XDG_CACHE_HOME:=$HOME/.cache}"
+: "${XDG_CONFIG_HOME:=$HOME/.config}"
+: "${XDG_DATA_HOME:=$HOME/.local/share}"
+: "${XDG_STATE_HOME:=$HOME/.local/state}"
 
-# ------------------------------------------------------------------------------
-# Environment & Terminal Colors
-# ------------------------------------------------------------------------------
+: "${XDG_DESKTOP_DIR:=$HOME/Desktop}"
+: "${XDG_DOWNLOAD_DIR:=$HOME/Downloads}"
+
+export XDG_CACHE_HOME XDG_CONFIG_HOME XDG_DATA_HOME XDG_STATE_HOME XDG_DESKTOP_DIR XDG_DOWNLOAD_DIR
 
 # Determine Homebrew prefix based on architecture (faster than calling `brew`)
-if [[ "$(uname -m)" == "x86_64" ]]; then
-  BREW_PREFIX="/usr/local"
-else
-  BREW_PREFIX="/opt/homebrew"
-fi
+export BREW_PREFIX=$(command -v brew &>/dev/null && brew --prefix || ([[ "$(uname -m)" == "arm64" ]] && echo /opt/homebrew || echo /usr/local))
 readonly BREW_PREFIX
-export BREW_PREFIX
 export HOMEBREW_NO_AUTO_UPDATE=1
+
+# ------------------------------------------------------------------------------
+# Terminal Color Setup (using `tput` if available, fallback to ANSI escapes)
+# ------------------------------------------------------------------------------
 
 # Set terminal type to support 256 colors
 export TERM="xterm-256color"
 
-# Setup color variables using `tput` when available
+# Check if `tput` supports setting colors
 if tput setaf 1 &> /dev/null; then
-  tput sgr0 # Reset terminal formatting
+  tput sgr0  # Reset terminal formatting just in case
 
+  # Formatting
   bold=$(tput bold)
   reset=$(tput sgr0)
 
-  # Solarized-style ANSI colors
+  # Solarized/extended color palette using `tput`
   black=$(tput setaf 0)
-  blue=$(tput setaf 153)
-  cyan=$(tput setaf 37)
-  green=$(tput setaf 64)
+  red=$(tput setaf 1)
+  green=$(tput setaf 2)
+  yellow=$(tput setaf 3)
+  blue=$(tput setaf 4)
+  purple=$(tput setaf 5)
+  cyan=$(tput setaf 6)
+  white=$(tput setaf 7)
+
+  # Extended colors (if terminal supports more than 8 colors)
   orange=$(tput setaf 166)
-  purple=$(tput setaf 125)
-  red=$(tput setaf 9)
   violet=$(tput setaf 61)
-  white=$(tput setaf 15)
-  yellow=$(tput setaf 136)
-  gray=$(tput setaf 240)
+  gray=$(tput setaf 244)
 else
-  # Fallback ANSI escape sequences
-  bold=''
+  # Fallback to ANSI escape sequences
+  bold='\e[1m'
   reset='\e[0m'
 
-  black='\e[1;30m'
-  blue='\e[1;34m'
-  cyan='\e[1;36m'
-  green='\e[1;32m'
-  orange='\e[1;33m'
-  purple='\e[1;35m'
-  red='\e[1;31m'
-  violet='\e[1;35m'
-  white='\e[1;37m'
-  yellow='\e[1;33m'
-  gray='\e[1;33m'
+  black='\e[30m'
+  red='\e[31m'
+  green='\e[32m'
+  yellow='\e[33m'
+  blue='\e[34m'
+  purple='\e[35m'
+  cyan='\e[36m'
+  white='\e[37m'
+
+  # Approximate extended colors
+  orange='\e[38;5;166m'
+  violet='\e[38;5;61m'
+  gray='\e[38;5;244m'
 fi
 
+#these must be functions. Bash script cannot change working directory (for some reason)
 
-# ----- xdg
-
-source "$HOME/.config/user-dirs.dirs" || true
-export XDG_CACHE_HOME=${XDG_CACHE_HOME:=$HOME/.cache}
-export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:=$HOME/.config}
-export XDG_DATA_HOME=${XDG_DATA_HOME:=$HOME/.local/share}
-export XDG_DESKTOP_DIR=${XDG_DESKTOP_DIR:=$HOME/Desktop}
-export XDG_DOWNLOAD_DIR=${XDG_DOWNLOAD_DIR:=$HOME/Downloads}
-export XDG_STATE_HOME=${XDG_STATE_HOME:=$HOME/.local/state}
-
-# ----- path
-
-p="${HOME}/bin"
-p+=":${HOME}/.local/bin"
-p+=":/opt/homebrew/bin"
-p+=":/usr/local/sbin"
-export PATH="$p:$PATH"
-
-# ----- aliases
-
-# Activate virtual environment quickly
-alias vba='source venv/bin/activate'
-
-# Enhanced directory tree view
-alias tree='tree -aC --dirsfirst'
-
-# Enable colorized output for ls (macOS/BSD-style)
-alias ls='ls -G'
-
-# ----- functions
+take() {
+  [[ -z "$1" ]] && echo "Usage: take <directory_path>" && return 1
+  mkdir -p -- "$1" && cd -- "$1" || return 1
+}
 
 wcd() {
-  if [ -z "$1" ]; then
-    echo "Usage: wcd <command>"
-    return 1
-  fi
-  local cmd_path
+  [[ -z "$1" ]] && echo "Usage: $0 <command>" && return 1
   cmd_path="$(command -v "$1")" || {
     echo "Command '$1' not found"
     return 1
@@ -118,18 +96,24 @@ wcd() {
   cd -- "$(dirname "$cmd_path")" || return 1
 }
 
-take() {
-  if [ -z "$1" ]; then
-    echo "Usage: take <directory_path>"
-    return 1
+extract_git_branch_name() {
+  local ps=$?
+
+  if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    local branch status
+    status=$(git status --porcelain --branch 2>/dev/null)
+    branch=$(echo "$status" | head -n1 | sed -n 's/## \(.*\)/\1/p' | cut -d. -f1)
+    [ -z "$branch" ] && branch=$(git rev-parse --short HEAD 2>/dev/null)
+    [[ $(echo "$status" | wc -l) -gt 1 ]] && echo " <$branch*>" || echo " <$branch>"
   fi
 
-  mkdir -p -- "$1" && cd -- "$1" || return 1
+  return "$ps"
 }
 
-
-# ----- history
-
+PS1=""
+PS1+="\[${green}\]\w" # Working directory
+PS1+="\[${yellow}\]\$(extract_git_branch_name)" # Git branch info
+PS1+="\[${reset}\] \$( [ \$? -eq 0 ] && echo \"\[${white}\]\\$ \" || echo \"\[${red}\]\\$ \" )\[${reset}\]"
 # History settings (don't save lines beginning with space or matching the
 # previous entry)
 export HISTCONTROL=ignoreboth
@@ -146,12 +130,7 @@ shopt -s lithist
 # PECO-enhanced Ctrl+R history search (fzf-like)
 
 # Detect 'tac' or fallback to 'tail -r' (for macOS)
-if command -v tac >/dev/null 2>&1; then
-  tac_cmd="tac"
-else
-  tac_cmd="tail -r"
-fi
-readonly tac_cmd
+readonly tac_cmd=$(command -v tac >/dev/null 2>&1 && echo tac || echo 'tail -r')
 
 __peco_history_search() {
   # Run peco over reversed history
@@ -168,105 +147,11 @@ __peco_history_search() {
 # Bind Ctrl+R to launch peco-based search
 bind -x '"\C-r": __peco_history_search'
 
+# Activate virtual environment quickly
+alias vba='source venv/bin/activate'
 
-# ----- lynx
+# Enhanced directory tree view
+alias tree='tree -aC --dirsfirst'
 
-export LYNX_CFG="$HOME/.config/lynx/lynx.cfg"
-export LYNX_LSS="$HOME/.config/lynx/lynx.lss"
-
-function lynx {
-  #useragent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:105.0) Gecko/20100101 Firefox/105.0"
-  #let's attempt to be always mobile
-  useragent="Mozilla/5.0 (Android 13; Mobile; rv:68.0) Gecko/68.0 Firefox/106.0"
-
-  exec "$BREW_PREFIX"/bin/lynx -useragent="$useragent" "$@"
-}
-
-function ? {
-  exec lynx "https://lite.duckduckgo.com/lite?kd=-1&kp=-1&q=$*"
-}
-
-# ----- prompt
-
-# Function to check if Git repository is dirty
-extract_git_branch_name() {
-  local ps=$? # Preserve previous exit status
-  if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-    local branch status
-    status=$(git status --porcelain --branch 2>/dev/null)
-    branch=$(echo "$status" | head -n1 | sed -n 's/## \(.*\)/\1/p' | cut -d. -f1)
-    [ -z "$branch" ] && branch=$(git rev-parse --short HEAD 2>/dev/null)
-    if [ "$(echo "$status" | wc -l)" -gt 1 ]; then
-      echo " <$branch*>"
-    else
-      echo " <$branch>"
-    fi
-  fi
-  return "$ps"
-}
-
-extract_git_branch_name() {
-  local ps=$? # Preserve exit status
-  if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-    local branch status
-    status=$(git status --porcelain --branch 2>/dev/null)
-    branch=$(echo "$status" | head -n1 | sed -n 's/## \(.*\)/\1/p' | cut -d. -f1)
-    [ -z "$branch" ] && branch=$(git rev-parse --short HEAD 2>/dev/null)
-    if [ "$(echo "$status" | wc -l)" -gt 1 ]; then
-      echo " <$branch*>"
-    else
-      echo " <$branch>"
-    fi
-  fi
-  return "$ps"
-}
-PS1=""
-PS1+="\[${green}\]\w" # Working directory
-PS1+="\[${yellow}\]\$(extract_git_branch_name)" # Git branch info
-PS1+="\[${reset}\] \$( [ \$? -eq 0 ] && echo \"\[${white}\]\\$ \" || echo \"\[${red}\]\\$ \" )\[${reset}\]"
-
-# ----- settings
-
-#!/usr/bin/env bash
-# env_setup.sh - environment variables and aliases setup
-
-# --- Silence macOS bash deprecation warning for zsh users ---
-export BASH_SILENCE_DEPRECATION_WARNING=1
-
-# --- Editor settings ---
-export VISUAL=vi
-export EDITOR="$VISUAL"
-export SYSTEMD_EDITOR="$VISUAL"
-
-# --- Set SHELL environment (adjust BREW_PREFIX if needed) ---
-# Make sure BREW_PREFIX is defined; otherwise set a fallback:
-export SHELL="$BREW_PREFIX/bin/bash"
-
-# --- XDG Base Directory environment variables ---
-
-# Make sure XDG variables are defined or set defaults:
-export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
-export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
-export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
-
-export CARGO_HOME="$XDG_DATA_HOME/cargo"
-export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/npmrc"
-export MYSQL_HISTFILE="$XDG_DATA_HOME/mysql_history"
-export PYTHONPYCACHEPREFIX="$XDG_CACHE_HOME/python"
-export PYTHONUSERBASE="$XDG_DATA_HOME/python"
-export TERMINFO="$XDG_DATA_HOME/terminfo"
-export TERMINFO_DIRS="$XDG_DATA_HOME/terminfo:/usr/share/terminfo"
-export WGETRC="$XDG_CONFIG_HOME/wgetrc"
-
-# --- Aliases ---
-alias wget="wget --hsts-file=$XDG_CACHE_HOME/wget-hsts"
-
-# --- WARNING: Uncomment only after migrating passwords and data ---
-# see supported apps https://wiki.archlinux.org/title/XDG_Base_Directory
-# export GNUPGHOME="$XDG_DATA_HOME/gnupg"
-# export PASSWORD_STORE_DIR="$XDG_DATA_HOME/pass"
-
-# --- Color for manual page section titles ---
-# Define yellow color escape sequence for LESS_TERMCAP_md
-export LESS_TERMCAP_md="${yellow}"
-
+# Enable colorized output for ls (macOS/BSD-style)
+alias ls='ls -G'

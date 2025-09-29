@@ -14,12 +14,7 @@ shopt -s lithist
 # PECO-enhanced Ctrl+R history search (fzf-like)
 
 # Detect 'tac' or fallback to 'tail -r' (for macOS)
-if command -v tac >/dev/null 2>&1; then
-  tac_cmd="tac"
-else
-  tac_cmd="tail -r"
-fi
-readonly tac_cmd
+readonly tac_cmd=$(command -v tac >/dev/null 2>&1 && echo tac || echo 'tail -r')
 
 __peco_history_search() {
   # Run peco over reversed history
