@@ -6,8 +6,8 @@ This project provides a set of scripts to automate the setup of a macOS environm
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/yourusername/your-repo.git
-   cd your-repo
+   git clone https://github.com/unamatasanatarai/dotfiles.git
+   cd dotfiles
    ```
 
 2. Run the setup:
@@ -54,15 +54,6 @@ brew bundle install --file=./configs/Brewfile
   ```bash
   make brewdump
   ```
-
-## Notes
-
-- Ensure all scripts (`_relink-config.sh`, `_relink-home.sh`, `_prep-env.sh`, `_set-defaults.sh`, `_install-apps.sh`) are executable:
-  ```bash
-  chmod +x *.sh
-  ```
-- The `brewdump` target overwrites the existing `./configs/Brewfile` due to the `--force` flag.
-- Customize the scripts in the repository to match your specific dotfiles, macOS settings, or application requirements.
 
 ## Contributing
 
