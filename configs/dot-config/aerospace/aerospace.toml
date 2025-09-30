@@ -1,4 +1,4 @@
-# USE skhd FOR left-alt left-ctrl etc.
+# Place a copy of this config to ~/.aerospace.toml
 # After that, you can edit ~/.aerospace.toml to your liking
 
 # You can use it to add commands that run after AeroSpace startup.
@@ -30,13 +30,28 @@ default-root-container-orientation = 'auto'
 # See https://nikitabobko.github.io/AeroSpace/guide#on-focus-changed-callbacks
 # See https://nikitabobko.github.io/AeroSpace/commands#move-mouse
 # Fallback value (if you omit the key): on-focused-monitor-changed = []
-on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
-on-focus-changed = ['move-mouse window-lazy-center']
+# on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
+# on-focus-changed = ['move-mouse window-lazy-center']
+on-focused-monitor-changed = []
+on-focus-changed = []
+
 
 # You can effectively turn off macOS "Hide application" (cmd-h) feature by toggling this flag
 # Useful if you don't use this macOS feature, but accidentally hit cmd-h or cmd-alt-h key
 # Also see: https://nikitabobko.github.io/AeroSpace/goodies#disable-hide-app
 automatically-unhide-macos-hidden-apps = false
+
+[[on-window-detected]]
+   if.app-id = "ru.keepcoder.Telegram"
+   run = "move-node-to-workspace E"
+
+[[on-window-detected]]
+   if.app-id = "coing.ClockifyDesktop"
+   run = "move-node-to-workspace T"
+
+[[on-window-detected]]
+   if.app-id = "com.brave.Browser"
+   run = "move-node-to-workspace Q"
 
 # Possible values: (qwerty|dvorak|colemak)
 # See https://nikitabobko.github.io/AeroSpace/guide#key-mapping
@@ -144,6 +159,7 @@ automatically-unhide-macos-hidden-apps = false
     alt-shift-semicolon = 'mode service'
 
     ctrl-cmd-t = 'exec-and-forget open -na /Applications/Alacritty.app'
+
 # 'service' binding mode declaration.
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
 [mode.service.binding]
