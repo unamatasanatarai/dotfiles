@@ -5,6 +5,11 @@
     "C-k": "peco.SelectUp",
     "C-j": "peco.SelectDown"
   },
-  "Layout": "bottom-up"
+  "Layout": "bottom-up",
+  "Use256Color": true,
+  "Style": {
+    "Selected": ["on_214", "black"],
+    "Matched": ["red"]
+  }
 }
 
