@@ -5,4 +5,4 @@ alias vba='source venv/bin/activate'
 alias tree='tree -aC --dirsfirst'
 
 # Enable colorized output for ls (macOS/BSD-style)
-alias ls='ls -G'
+alias ls='ls -GF'
