@@ -78,7 +78,7 @@ hi CursorLine cterm=underline
 hi ListChar ctermfg=240 ctermbg=NONE
 hi SpecialKey ctermfg=240 ctermbg=NONE
 hi ExtraWhitespace ctermfg=240 ctermbg=NONE
-nnoremap <Leader><Space> :source ~/.config/vim/vimrc<CR>
+"nnoremap <Leader><Space> :source ~/.config/vim/vimrc<CR>
 
 " Command-line completion
 set wildmenu       " Enhanced command-line completion
