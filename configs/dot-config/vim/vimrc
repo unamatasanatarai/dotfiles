@@ -53,11 +53,12 @@ set ignorecase     " Case-insensitive searching
 set smartcase      " Case-sensitive if uppercase in search
 
 " UI and feedback
+set noruler
+set statusline=%f\ %m\ %r\ %=%y\ %l:%c
 set cursorline     " Highlight current line
 set showcmd        " Show partial commands
 set showmatch      " Highlight matching brackets
-set matchtime=2    " Show matching bracket for 0.2 seconds
-set ruler          " Show cursor position
+set matchtime=1    " Show matching bracket for number of tenths of a seconds
 set laststatus=2   " Always show status line
 set visualbell     " Use visual bell instead of beeping
 set t_vb=          " Disable visual bell flashing
@@ -65,8 +66,15 @@ set noerrorbells   " Disable beeps
 set lazyredraw     " Don't redraw during macros
 set ttyfast        " Faster redrawing
 set background=dark  " Optimize for dark themes
-hi StatusLine guibg=NONE ctermbg=NONE  " Transparent status line
-hi Normal guibg=NONE ctermbg=NONE      " Transparent background
+hi Normal guibg=NONE ctermbg=NONE ctermfg=214 guifg=#F57C00 cterm=NONE
+hi StatusLine guibg=NONE ctermbg=NONE ctermfg=240 guifg=#F57C00 cterm=NONE
+hi StatusLineNC guibg=NONE ctermbg=NONE ctermfg=240 guifg=#F57C00 cterm=NONE
+hi TabLine guibg=NONE ctermbg=NONE ctermfg=240 guifg=#F57C00 cterm=NONE
+hi TabLineNC guibg=NONE ctermbg=NONE ctermfg=240 guifg=#F57C00 cterm=NONE
+hi LineNr ctermfg=240 ctermbg=NONE
+hi CursorLineNr ctermbg=NONE ctermfg=244 cterm=none
+hi CursorLine cterm=underline
+nnoremap <Leader><Space> :source ~/.config/vim/vimrc<CR>
 
 " Command-line completion
 set wildmenu       " Enhanced command-line completion

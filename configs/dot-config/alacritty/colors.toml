@@ -1,6 +1,6 @@
 [colors.primary]
 background = "#2D3441"   # Deep slate blue-gray
-foreground = "#FFB000"   # Vibrant amber/gold
+foreground = "#ffb000"   # Vibrant amber/gold
 
 [colors.normal]
 black   = "#1d2021"       # Softer black

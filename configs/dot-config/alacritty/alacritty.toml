@@ -1,6 +1,6 @@
 
 [font]
-size = 14.0
+size = 16.0
 
 [font.bold]
 family = "Source Code Pro"
@@ -20,7 +20,7 @@ style = "Regular"
 y = 12
 
 [scrolling]
-history = 30000
+history = 50000
 
 [window]
 decorations = "none"
@@ -28,8 +28,8 @@ dynamic_padding = true
 opacity = 0.95
 
 [window.padding]
-x = 4
-y = 4
+x = 1
+y = 1
 
 [colors]
 draw_bold_text_with_bright_colors = true
