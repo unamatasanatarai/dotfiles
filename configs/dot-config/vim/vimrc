@@ -73,8 +73,11 @@ hi StatusLineNC guibg=NONE ctermbg=NONE ctermfg=240 guifg=#F57C00 cterm=NONE
 hi TabLine guibg=NONE ctermbg=NONE ctermfg=240 guifg=#F57C00 cterm=NONE
 hi TabLineNC guibg=NONE ctermbg=NONE ctermfg=240 guifg=#F57C00 cterm=NONE
 hi LineNr ctermfg=240 ctermbg=NONE
-hi CursorLineNr ctermbg=NONE ctermfg=244 cterm=none
+hi CursorLineNr ctermbg=NONE ctermfg=244 cterm=NONE
 hi CursorLine cterm=underline
+hi ListChar ctermfg=240 ctermbg=NONE
+hi SpecialKey ctermfg=240 ctermbg=NONE
+hi ExtraWhitespace ctermfg=240 ctermbg=NONE
 nnoremap <Leader><Space> :source ~/.config/vim/vimrc<CR>
 
 " Command-line completion
