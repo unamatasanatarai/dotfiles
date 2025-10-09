@@ -1,4 +1,4 @@
 PS1=""
-PS1+="\[${green}\]\w" # Working directory
-PS1+="\[${yellow}\]\$(extract_git_branch_name)" # Git branch info
-PS1+="\[${reset}\] \$( [ \$? -eq 0 ] && echo \"\[${white}\]\\$ \" || echo \"\[${red}\]\\$ \" )\[${reset}\]"
+PS1+="\w" # Working directory
+PS1+="\$(extract_git_branch_name)"
+PS1+="\[${reset}\] \$( [ \$? -eq 0 ] && echo \"\\$ \" || echo \"\[${orange}\]\\$ \" )\[${reset}\]"
