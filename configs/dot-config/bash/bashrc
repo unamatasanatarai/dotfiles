@@ -146,11 +146,8 @@ __peco_history_search() {
 # Bind Ctrl+R to launch peco-based search
 bind -x '"\C-r": __peco_history_search'
 
-# Activate virtual environment quickly
 alias vba='source venv/bin/activate'
-
-# Enhanced directory tree view
 alias tree='tree -aC --dirsfirst'
-
-# Enable colorized output for ls (macOS/BSD-style)
 alias ls='ls -GF'
+alias ..="cd .."
+alias ...="cd ../.."
