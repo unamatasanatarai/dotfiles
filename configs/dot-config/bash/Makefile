@@ -1,5 +1,6 @@
 build:
 	cat src/_top \
+		src/path \
 		src/brew \
 		src/settings \
 		src/colors \
