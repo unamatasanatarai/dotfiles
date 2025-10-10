@@ -1,0 +1,3 @@
+# Determine Homebrew prefix based on architecture (faster than calling `brew`)
+export BREW_PREFIX=$(command -v brew &>/dev/null && brew --prefix || ([[ "$(uname -m)" == "arm64" ]] && echo /opt/homebrew || echo /usr/local))
+export HOMEBREW_NO_AUTO_UPDATE=1

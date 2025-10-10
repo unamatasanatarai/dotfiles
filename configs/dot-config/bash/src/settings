@@ -17,7 +17,3 @@ export SHELL="$BREW_PREFIX/bin/bash"
 
 export XDG_CACHE_HOME XDG_CONFIG_HOME XDG_DATA_HOME XDG_STATE_HOME XDG_DESKTOP_DIR XDG_DOWNLOAD_DIR
 
-# Determine Homebrew prefix based on architecture (faster than calling `brew`)
-export BREW_PREFIX=$(command -v brew &>/dev/null && brew --prefix || ([[ "$(uname -m)" == "arm64" ]] && echo /opt/homebrew || echo /usr/local))
-export HOMEBREW_NO_AUTO_UPDATE=1
-

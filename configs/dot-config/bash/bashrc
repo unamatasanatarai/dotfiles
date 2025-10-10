@@ -7,6 +7,9 @@
 # Skip if this is not an interactive shell.
 # Avoid loading interactive-only configurations in non-interactive contexts.
 [[ $- != *i* ]] && return
+# Determine Homebrew prefix based on architecture (faster than calling `brew`)
+export BREW_PREFIX=$(command -v brew &>/dev/null && brew --prefix || ([[ "$(uname -m)" == "arm64" ]] && echo /opt/homebrew || echo /usr/local))
+export HOMEBREW_NO_AUTO_UPDATE=1
 export BASH_SILENCE_DEPRECATION_WARNING=1
 export VISUAL=vi
 export EDITOR="$VISUAL"
@@ -25,10 +28,6 @@ export SHELL="$BREW_PREFIX/bin/bash"
 : "${XDG_DOWNLOAD_DIR:=$HOME/Downloads}"
 
 export XDG_CACHE_HOME XDG_CONFIG_HOME XDG_DATA_HOME XDG_STATE_HOME XDG_DESKTOP_DIR XDG_DOWNLOAD_DIR
-
-# Determine Homebrew prefix based on architecture (faster than calling `brew`)
-export BREW_PREFIX=$(command -v brew &>/dev/null && brew --prefix || ([[ "$(uname -m)" == "arm64" ]] && echo /opt/homebrew || echo /usr/local))
-export HOMEBREW_NO_AUTO_UPDATE=1
 
 # ------------------------------------------------------------------------------
 # Terminal Color Setup (using `tput` if available, fallback to ANSI escapes)

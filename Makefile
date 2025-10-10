@@ -1,6 +1,6 @@
 .PHONY: all dotfiles osx apps brewdump
 
-all: dotfiles osx apps
+all: apps dotfiles osx
 	@echo "All done."
 
 dotfiles:
