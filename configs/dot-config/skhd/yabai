@@ -1,0 +1,54 @@
+# Send focused window to a space and follow to that space
+lalt - q : /usr/local/bin/skhd -k "alt + ctrl + cmd + shift - 1"
+lalt - w : /usr/local/bin/skhd -k "alt + ctrl + cmd + shift - 2"
+lalt - e : /usr/local/bin/skhd -k "alt + ctrl + cmd + shift - 3"
+lalt - r : /usr/local/bin/skhd -k "alt + ctrl + cmd + shift - 4"
+lalt - t : /usr/local/bin/skhd -k "alt + ctrl + cmd + shift - 5"
+lalt - y : /usr/local/bin/skhd -k "alt + ctrl + cmd + shift - 6"
+
+# Move focus between windows in the space
+lalt - k : /usr/local/bin/yabai -m window --focus north
+lalt - l : /usr/local/bin/yabai -m window --focus east
+lalt - j : /usr/local/bin/yabai -m window --focus south
+lalt - h : /usr/local/bin/yabai -m window --focus west
+
+# Swap focused window around in the space
+lalt + lctrl - k : /usr/local/bin/yabai -m window --swap north
+lalt + lctrl - l : /usr/local/bin/yabai -m window --swap east
+lalt + lctrl - j : /usr/local/bin/yabai -m window --swap south
+lalt + lctrl - h : /usr/local/bin/yabai -m window --swap west
+
+# Send focused window to a space
+lalt + lshift - q : /usr/local/bin/yabai -m window --space 1
+lalt + lshift - w : /usr/local/bin/yabai -m window --space 2
+lalt + lshift - e : /usr/local/bin/yabai -m window --space 3
+lalt + lshift - r : /usr/local/bin/yabai -m window --space 4
+lalt + lshift - t : /usr/local/bin/yabai -m window --space 5
+lalt + lshift - y : /usr/local/bin/yabai -m window --space 6
+
+# Send focused window to a space and follow to that space
+lalt + lctrl - q : /usr/local/bin/yabai -m window --space 1; /usr/local/bin/skhd -k "alt + ctrl + cmd + shift - 1"
+lalt + lctrl - w : /usr/local/bin/yabai -m window --space 2; /usr/local/bin/skhd -k "alt + ctrl + cmd + shift - 2"
+lalt + lctrl - e : /usr/local/bin/yabai -m window --space 3; /usr/local/bin/skhd -k "alt + ctrl + cmd + shift - 3"
+lalt + lctrl - r : /usr/local/bin/yabai -m window --space 4; /usr/local/bin/skhd -k "alt + ctrl + cmd + shift - 4"
+lalt + lctrl - t : /usr/local/bin/yabai -m window --space 5; /usr/local/bin/skhd -k "alt + ctrl + cmd + shift - 5"
+lalt + lctrl - y : /usr/local/bin/yabai -m window --space 6; /usr/local/bin/skhd -k "alt + ctrl + cmd + shift - 6"
+
+# Resize windows
+lalt + lshift - h : /usr/local/bin/yabai -m window --resize left:-30:0; \
+                    /usr/local/bin/yabai -m window --resize right:-30:0
+lalt + lshift - j : /usr/local/bin/yabai -m window --resize bottom:0:30; \
+                    /usr/local/bin/yabai -m window --resize top:0:30
+lalt + lshift - k : /usr/local/bin/yabai -m window --resize top:0:-30; \
+                    /usr/local/bin/yabai -m window --resize bottom:0:-30
+lalt + lshift - l : /usr/local/bin/yabai -m window --resize right:30:0; \
+                    /usr/local/bin/yabai -m window --resize left:30:-30
+
+# Equalize the size of windows
+lctrl + lshift - e : /usr/local/bin/yabai -m space --balance
+
+# Make window native fullscreen
+lalt - f        : /usr/local/bin/yabai -m window --toggle zoom-fullscreen
+
+lcmd + lctrl - t : open -na /Applications/Alacritty.app
+lalt - space : ~/bin/open-spotlight
