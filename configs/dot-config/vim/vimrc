@@ -29,23 +29,6 @@ set expandtab      " Convert tabs to spaces
 set smarttab       " Smart tab handling
 set shiftround     " Round indent to multiple of shiftwidth
 
-" Filetype-specific indentation
-augroup FiletypeIndent
-  autocmd!
-  autocmd FileType python   setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab
-  autocmd FileType javascript,typescript,json,yaml setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
-  autocmd FileType html,css,scss setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
-  autocmd FileType lua      setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
-  autocmd FileType make     setlocal noexpandtab tabstop=4 shiftwidth=4 softtabstop=0
-augroup END
-
-" Set filetypes for specific extensions
-augroup filetypedetect
-  autocmd!
-  autocmd BufRead,BufNewFile *.ts setlocal filetype=javascript
-  autocmd BufRead,BufNewFile vimrc,*.vim setlocal filetype=vim
-augroup END
-
 " Text display and formatting
 set wrap           " Wrap long lines
 set linebreak      " Break lines at word boundaries
@@ -61,8 +44,7 @@ set ignorecase     " Case-insensitive searching
 set smartcase      " Case-sensitive if uppercase in search
 
 " UI and feedback
-set noruler
-set statusline=%f\ %m\ %r\ %=%y\ %l:%c
+set ruler
 set cursorline     " Highlight current line
 set showcmd        " Show partial commands
 set showmatch      " Highlight matching brackets
