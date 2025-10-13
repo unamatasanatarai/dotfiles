@@ -1,19 +1,24 @@
-[merge]
-    conflictstyle = diff3
-
-[init]
-    defaultBranch = master
-
 [core]
     compression = 9
     whitespace = error
     autocrlf = input
 
+[init]
+    defaultBranch = master
+
+[push]
+    default = simple
+
 [pull]
     rebase = true
 
 [diff]
+    algorithm = histogram       # Smarter diffing algorithm (better than "myers")
     compactionHeuristic = true
+    indentHeuristic = true      # Better diff output for indentation changes    
+
+[merge]
+    conflictstyle = diff3
 
 [color]
     ui = auto  # Enables color output when the terminal supports it
