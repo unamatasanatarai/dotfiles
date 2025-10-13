@@ -5,4 +5,7 @@
 [diff]
     colorMoved = default
 [init]
-	defaultBranch = master
+    defaultBranch = master
+[core]
+    compression = 9
+    whitespace = error
