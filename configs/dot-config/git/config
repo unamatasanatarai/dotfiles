@@ -1,7 +1,9 @@
 [core]
     compression = 9
-    whitespace = error
     autocrlf = input
+
+[apply]
+    whitespace = error    
 
 [init]
     defaultBranch = master
@@ -15,7 +17,7 @@
 [diff]
     algorithm = histogram       # Smarter diffing algorithm (better than "myers")
     compactionHeuristic = true
-    indentHeuristic = true      # Better diff output for indentation changes    
+    indentHeuristic = true      # Better diff output for indentation changes
 
 [merge]
     conflictstyle = diff3
