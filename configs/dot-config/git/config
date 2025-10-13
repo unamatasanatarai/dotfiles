@@ -2,9 +2,6 @@
     compression = 9
     autocrlf = input
 
-[apply]
-    whitespace = fix    
-
 [init]
     defaultBranch = master
 
