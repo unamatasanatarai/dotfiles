@@ -3,7 +3,7 @@
     autocrlf = input
 
 [apply]
-    whitespace = error    
+    whitespace = fix    
 
 [init]
     defaultBranch = master
