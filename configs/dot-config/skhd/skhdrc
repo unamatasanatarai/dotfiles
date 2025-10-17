@@ -1,3 +1,3 @@
-.load "aerospace"
+.load "yabai"
 lcmd + lctrl - t : open -na /Applications/Alacritty.app
-lalt - space : ~/bin/open-spotlight
+#lalt - space : ~/bin/open-spotlight

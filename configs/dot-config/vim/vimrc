@@ -74,7 +74,7 @@ set wildmode=longest:full,full
 
 " Performance and file handling
 set noswapfile     " Disable swap files
-set synmaxcol=200  " Limit syntax highlighting for long lines
+set synmaxcol=20000 " Limit syntax highlighting for long lines
 set updatetime=100 " Faster update time for responsiveness
 set complete-=i    " Exclude included files from completion
 set nrformats-=octal  " Treat numbers as decimal, not octal
@@ -98,3 +98,4 @@ set nofoldenable   " Disable code folding by default
 set display+=lastline  " Show as much of the last line as possible
 
 "nnoremap <Leader><Space> :source ~/.config/vim/vimrc<CR>
+
