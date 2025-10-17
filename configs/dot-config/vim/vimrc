@@ -2,10 +2,6 @@
 set nocompatible
 filetype off  " Required for some plugins, re-enabled later
 
-" Enable file type detection and plugin/indent support
-filetype plugin indent on " <- this plus formatoptions=qrn1 messess up pasing
-syntax on
-
 " Leader key setup
 let mapleader = " "  " Set space as leader key
 nnoremap j gj
@@ -30,10 +26,9 @@ set smarttab       " Smart tab handling
 set shiftround     " Round indent to multiple of shiftwidth
 
 " Text display and formatting
-set wrap           " Wrap long lines
+set nowrap         " Do not wrap long lines
 set linebreak      " Break lines at word boundaries
 set textwidth=80   " Set max line width for formatting
-set formatoptions=qrn1  " Formatting options for text, messes up pasing along with filetype plugin indent on
 set list
 set listchars=tab:▷\ ,trail:·,nbsp:␣,extends:»,precedes:«  " Show special characters
 
@@ -73,10 +68,10 @@ set wildmenu       " Enhanced command-line completion
 set wildmode=longest:full,full
 
 " Performance and file handling
-set noswapfile     " Disable swap files
-set synmaxcol=20000 " Limit syntax highlighting for long lines
-set updatetime=100 " Faster update time for responsiveness
-set complete-=i    " Exclude included files from completion
+set noswapfile        " Disable swap files
+set synmaxcol=20000   " Limit syntax highlighting for long lines
+set updatetime=100    " Faster update time for responsiveness
+set complete-=i       " Exclude included files from completion
 set nrformats-=octal  " Treat numbers as decimal, not octal
 
 " Input and mappings
@@ -97,5 +92,9 @@ set nofoldenable   " Disable code folding by default
 " Display
 set display+=lastline  " Show as much of the last line as possible
 
-"nnoremap <Leader><Space> :source ~/.config/vim/vimrc<CR>
+" Enable file type detection and plugin/indent support
+"filetype plugin indent on " <- this plus formatoptions=qrn1 messess up pasting
+set formatoptions=qrn1  " Formatting options for text, messes up pasing along with filetype plugin indent on
+autocmd InsertLeave * set nopaste " a heavy handed fix for messed up pasting
+syntax on
 
