@@ -1,16 +1,16 @@
 # Vim arrows
-meh - h : /opt/homebrew/bin/skhd -k "left"
-meh - j : /opt/homebrew/bin/skhd -k "down"
-meh - k : /opt/homebrew/bin/skhd -k "up"
-meh - l : /opt/homebrew/bin/skhd -k "right"
+meh - h : sh -c "$(brew --prefix)/bin/skhd -k 'left'"
+meh - j : sh -c "$(brew --prefix)/bin/skhd -k 'down'"
+meh - k : sh -c "$(brew --prefix)/bin/skhd -k 'up'"
+meh - l : sh -c "$(brew --prefix)/bin/skhd -k 'right'"
 
 # Resize windows
-lshift + lcmd - h : /opt/homebrew/bin/yabai -m window --resize left:-30:0; /opt/homebrew/bin/yabai -m window --resize right:-30:0
-lshift + lcmd - j : /opt/homebrew/bin/yabai -m window --resize bottom:0:30; /opt/homebrew/bin/yabai -m window --resize top:0:30
-lshift + lcmd - k : /opt/homebrew/bin/yabai -m window --resize top:0:-30; /opt/homebrew/bin/yabai -m window --resize bottom:0:-30
-lshift + lcmd - l : /opt/homebrew/bin/yabai -m window --resize right:30:0; /opt/homebrew/bin/yabai -m window --resize left:30:-30
-lshift + lcmd - e : /opt/homebrew/bin/yabai -m space --balance
-lshift + lcmd - f : /opt/homebrew/bin/yabai -m window --toggle zoom-fullscreen
+lshift + lcmd - h : sh -c "$(brew --prefix)/bin/yabai -m window --resize left:-30:0; $(brew --prefix)/bin/yabai -m window --resize right:-30:0"
+lshift + lcmd - j : sh -c "$(brew --prefix)/bin/yabai -m window --resize bottom:0:30; $(brew --prefix)/bin/yabai -m window --resize top:0:30"
+lshift + lcmd - k : sh -c "$(brew --prefix)/bin/yabai -m window --resize top:0:-30; $(brew --prefix)/bin/yabai -m window --resize bottom:0:-30"
+lshift + lcmd - l : sh -c "$(brew --prefix)/bin/yabai -m window --resize right:30:0; $(brew --prefix)/bin/yabai -m window --resize left:30:-30"
+lshift + lcmd - e : sh -c "$(brew --prefix)/bin/yabai -m space --balance"
+lshift + lcmd - f : sh -c "$(brew --prefix)/bin/yabai -m window --toggle zoom-fullscreen"
 
 # fix things
 lcmd - escape : /usr/bin/osascript -e 'tell application "System Events" to key code 50'
