@@ -1,21 +1,27 @@
-lalt - q: aerospace workspace 1 > /dev/null 2>&1
-lalt - w: aerospace workspace 2 > /dev/null 2>&1
-lalt - e: aerospace workspace 3 > /dev/null 2>&1
-lalt - r: aerospace workspace 4 > /dev/null 2>&1
-lalt - t: aerospace workspace 5 > /dev/null 2>&1
+# fix things
+lcmd - escape : /usr/bin/osascript -e 'tell application "System Events" to key code 50'
 
-lalt + shift - q: aerospace move-node-to-workspace 1 --focus-follows-window > /dev/null 2>&1
-lalt + shift - w: aerospace move-node-to-workspace 2 --focus-follows-window > /dev/null 2>&1
-lalt + shift - e: aerospace move-node-to-workspace 3 --focus-follows-window > /dev/null 2>&1
-lalt + shift - r: aerospace move-node-to-workspace 5 --focus-follows-window > /dev/null 2>&1
-lalt + shift - t: aerospace move-node-to-workspace 5 --focus-follows-window > /dev/null 2>&1
+meh - a: aerospace workspace 1 > /dev/null 2>&1
+meh - s: aerospace workspace 2 > /dev/null 2>&1
+meh - d: aerospace workspace 3 > /dev/null 2>&1
+meh - f: aerospace workspace 4 > /dev/null 2>&1
+meh - g: aerospace workspace 5 > /dev/null 2>&1
 
+hyper - a: aerospace move-node-to-workspace 1 --focus-follows-window > /dev/null 2>&1
+hyper - s: aerospace move-node-to-workspace 2 --focus-follows-window > /dev/null 2>&1
+hyper - d: aerospace move-node-to-workspace 3 --focus-follows-window > /dev/null 2>&1
+hyper - f: aerospace move-node-to-workspace 5 --focus-follows-window > /dev/null 2>&1
+hyper - g: aerospace move-node-to-workspace 5 --focus-follows-window > /dev/null 2>&1
+
+# move between windows
 lalt - h: aerospace focus left
 lalt - j: aerospace focus down
 lalt - k: aerospace focus up
 lalt - l: aerospace focus right
 
-lalt + shift - h: aerospace move left
-lalt + shift - j: aerospace move down
-lalt + shift - k: aerospace move up
-lalt + shift - l: aerospace move right
+# move windows around
+#lalt + shift - h: aerospace move left
+#lalt + shift - j: aerospace move down
+#lalt + shift - k: aerospace move up
+#lalt + shift - l: aerospace move right
+
