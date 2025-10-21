@@ -51,17 +51,10 @@ set noerrorbells   " Disable beeps
 set lazyredraw     " Don't redraw during macros
 set ttyfast        " Faster redrawing
 set background=dark  " Optimize for dark themes
-hi Normal guibg=NONE ctermbg=NONE ctermfg=214 guifg=#F57C00 cterm=NONE
-hi StatusLine guibg=NONE ctermbg=NONE ctermfg=240 guifg=#F57C00 cterm=NONE
-hi StatusLineNC guibg=NONE ctermbg=NONE ctermfg=240 guifg=#F57C00 cterm=NONE
-hi TabLine guibg=NONE ctermbg=NONE ctermfg=240 guifg=#F57C00 cterm=NONE
-hi TabLineNC guibg=NONE ctermbg=NONE ctermfg=240 guifg=#F57C00 cterm=NONE
-hi LineNr ctermfg=240 ctermbg=NONE
-hi CursorLineNr ctermbg=NONE ctermfg=244 cterm=NONE
-hi CursorLine cterm=underline
-hi ListChar ctermfg=240 ctermbg=NONE
-hi SpecialKey ctermfg=240 ctermbg=NONE
-hi ExtraWhitespace ctermfg=240 ctermbg=NONE
+source ~/.config/vim/colors-amber
+if has("termguicolors")
+    set termguicolors
+endif
 
 " Command-line completion
 set wildmenu       " Enhanced command-line completion

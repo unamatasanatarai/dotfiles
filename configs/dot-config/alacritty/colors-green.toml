@@ -1,0 +1,32 @@
+[colors.primary]
+background = '#004422'  # Black background
+foreground = '#19C884'  # Bright green foreground
+
+[colors.normal]
+black = '#004422'
+red = '#19C884'
+green = '#19C884'
+yellow = '#19C884'
+blue = '#19C884'
+magenta = '#19C884'
+cyan = '#19C884'
+white = '#19C884'
+
+[colors.bright]
+black = '#004422'
+red = '#19C884'
+green = '#19C884'
+yellow = '#19C884'
+blue = '#19C884'
+magenta = '#19C884'
+cyan = '#19C884'
+white = '#19C884'
+
+[colors.cursor]
+text = "CellBackground"
+cursor = "#19C884"
+
+[colors.selection]
+text = "CellForeground"
+background = "#19C884"
+
