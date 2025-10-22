@@ -12,6 +12,3 @@ lshift + lcmd - l : sh -c "$(brew --prefix)/bin/yabai -m window --resize right:3
 lshift + lcmd - e : sh -c "$(brew --prefix)/bin/yabai -m space --balance"
 lshift + lcmd - f : sh -c "$(brew --prefix)/bin/yabai -m window --toggle zoom-fullscreen"
 
-# fix things
-lcmd - escape : /usr/bin/osascript -e 'tell application "System Events" to key code 50'
-

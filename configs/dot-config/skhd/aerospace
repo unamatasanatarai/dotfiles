@@ -1,6 +1,3 @@
-# fix things
-lcmd - escape : /usr/bin/osascript -e 'tell application "System Events" to key code 50'
-
 meh - a: aerospace workspace 1 > /dev/null 2>&1
 meh - s: aerospace workspace 2 > /dev/null 2>&1
 meh - d: aerospace workspace 3 > /dev/null 2>&1
