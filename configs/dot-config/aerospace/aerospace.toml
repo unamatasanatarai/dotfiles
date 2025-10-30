@@ -41,8 +41,8 @@ automatically-unhide-macos-hidden-apps = false
     preset = 'qwerty'
 
 [gaps]
-    inner.horizontal = 0
-    inner.vertical =   0
+    inner.horizontal = 5
+    inner.vertical =   5
     outer.left =       0
     outer.bottom =     0
     outer.top =        0
@@ -52,9 +52,9 @@ automatically-unhide-macos-hidden-apps = false
 
     # All possible commands: https://nikitabobko.github.io/AeroSpace/commands
 
-    cmd-shift-h = 'resize smart +50'
-    cmd-shift-l = 'resize smart -50'
-    cmd-shift-e = 'balance-sizes'
-    cmd-shift-f = 'fullscreen'
+    cmd-ctrl-h = 'resize smart +50'
+    cmd-ctrl-l = 'resize smart -50'
+    cmd-ctrl-v = 'balance-sizes'
+    cmd-ctrl-f = 'fullscreen'
 
     alt-tab = 'workspace-back-and-forth'
