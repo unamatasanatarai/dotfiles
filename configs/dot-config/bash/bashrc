@@ -146,8 +146,7 @@ __peco_history_search() {
 # Bind Ctrl+R to launch peco-based search
 bind -x '"\C-r": __peco_history_search'
 
+shopt -s autocd
 alias vba='source venv/bin/activate'
 alias tree='tree -aC --dirsfirst'
 alias ls='ls -GF'
-alias ..="cd .."
-alias ...="cd ../.."
