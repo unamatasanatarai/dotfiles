@@ -13,6 +13,7 @@ on-focus-changed = []
 
 automatically-unhide-macos-hidden-apps = false
 
+# get app id: lsappinfo | rg "bundleID|ASCII name"
 [[on-window-detected]]
    if.app-id = "com.microsoft.edgemac"
    run = "move-node-to-workspace 1"
@@ -36,6 +37,10 @@ automatically-unhide-macos-hidden-apps = false
 [[on-window-detected]]
    if.app-id = "com.brave.Browser"
    run = "move-node-to-workspace 1"
+
+[[on-window-detected]]
+   if.app-id = "org.keepassxc.keepassxc"
+   run = "layout floating"
 
 [key-mapping]
     preset = 'qwerty'
