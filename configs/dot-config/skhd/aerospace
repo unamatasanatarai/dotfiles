@@ -10,15 +10,8 @@ hyper - d: aerospace move-node-to-workspace 3 --focus-follows-window > /dev/null
 hyper - f: aerospace move-node-to-workspace 4 --focus-follows-window > /dev/null 2>&1
 hyper - g: aerospace move-node-to-workspace 5 --focus-follows-window > /dev/null 2>&1
 
-# move between windows
-lalt - h: aerospace focus left
-lalt - j: aerospace focus down
-lalt - k: aerospace focus up
-lalt - l: aerospace focus right
-
-# move windows around
-#lalt + shift - h: aerospace move left
-#lalt + shift - j: aerospace move down
-#lalt + shift - k: aerospace move up
-#lalt + shift - l: aerospace move right
+lctrl - h: aerospace focus left
+lctrl - j: aerospace focus down
+lctrl - k: aerospace focus up
+lctrl - l: aerospace focus right
 
