@@ -57,9 +57,9 @@ automatically-unhide-macos-hidden-apps = false
 
     # All possible commands: https://nikitabobko.github.io/AeroSpace/commands
 
-    cmd-ctrl-h = 'resize smart +50'
-    cmd-ctrl-l = 'resize smart -50'
-    cmd-ctrl-v = 'balance-sizes'
-    cmd-ctrl-f = 'fullscreen'
+    cmd-shift-h = 'resize smart +50'
+    cmd-shift-l = 'resize smart -50'
+    cmd-shift-v = 'balance-sizes'
+    cmd-shift-f = 'fullscreen'
 
     alt-tab = 'workspace-back-and-forth'
