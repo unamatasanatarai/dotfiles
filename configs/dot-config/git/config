@@ -40,3 +40,6 @@
     local = green                # Local branches
     remote = brightmagenta       # Remote branches
 
+[user]
+	name = pone
+	email = pone@example.com
