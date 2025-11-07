@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 CONFIG_HOME="$HOME/.config"
-MY_CONFIGS="$PWD/configs/dot-config"
+MY_CONFIGS="$PWD/configs/.config"
 
 mkdir -p "$CONFIG_HOME"
 shopt -s dotglob

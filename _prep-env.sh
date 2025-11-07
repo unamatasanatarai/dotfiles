@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 #at the moment of installation, bash is not yet configured. So import the defaults
-source configs/dot-config/bash/src/settings
+source configs/.config/bash/src/settings
 LOCAL_BIN="$HOME/.local/bin"
 BASH_DATA_HOME="$XDG_DATA_HOME/bash"
 
