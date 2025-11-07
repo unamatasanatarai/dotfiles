@@ -59,6 +59,9 @@ endif
 " Command-line completion
 set wildmenu       " Enhanced command-line completion
 set wildmode=longest:full,full
+" Helpers
+set path=.,**,**
+set wildignore+=*.pyc
 
 " Performance and file handling
 set noswapfile        " Disable swap files
@@ -84,9 +87,6 @@ set nofoldenable   " Disable code folding by default
 
 " Display
 set display+=lastline  " Show as much of the last line as possible
-
-" Helpers
-set path+=**
 
 " Enable file type detection and plugin/indent support
 "filetype plugin indent on " <- this plus formatoptions=qrn1 messess up pasting
