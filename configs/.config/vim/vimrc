@@ -78,9 +78,10 @@ set grepprg=grep\ -HRIn\ $*
 
 " Input and mappings
 set backspace=indent,eol,start  " Allow backspace over indents, line breaks, etc.
-nnoremap <silent> <Leader>gg :copen \| :silent grep<Space>
-inoremap <silent> jk <Esc>
-inoremap <silent> kj <Esc>
+nnoremap <Leader>gg :copen \| :silent grep<Space>
+" use ctrl+[:w
+" inoremap <silent> jk <Esc>
+" inoremap <silent> kj <Esc>
 nnoremap <leader>w :w<CR>
 set timeout        " Enable timeout for mappings
 set ttimeoutlen=10 " Fast timeout for key codes
