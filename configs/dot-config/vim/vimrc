@@ -85,6 +85,9 @@ set nofoldenable   " Disable code folding by default
 " Display
 set display+=lastline  " Show as much of the last line as possible
 
+" Helpers
+set path+=**
+
 " Enable file type detection and plugin/indent support
 "filetype plugin indent on " <- this plus formatoptions=qrn1 messess up pasting
 set formatoptions=qrn1  " Formatting options for text, messes up pasing along with filetype plugin indent on
