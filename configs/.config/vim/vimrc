@@ -78,7 +78,7 @@ set grepprg=grep\ -HRIn\ $*
 
 " Input and mappings
 set backspace=indent,eol,start  " Allow backspace over indents, line breaks, etc.
-nnoremap <silent> <Leader>gg :Copen \| :silent grep<Space>
+nnoremap <silent> <Leader>gg :copen \| :silent grep<Space>
 inoremap <silent> jk <Esc>
 inoremap <silent> kj <Esc>
 nnoremap <leader>w :w<CR>
