@@ -69,6 +69,8 @@ set synmaxcol=20000   " Limit syntax highlighting for long lines
 set updatetime=100    " Faster update time for responsiveness
 set complete-=i       " Exclude included files from completion
 set nrformats-=octal  " Treat numbers as decimal, not octal
+" Save marks for the last 50 files, plus other info, save global marks (A-Z) across files
+set viminfo='50,<1000,s100,h,!
 
 " Input and mappings
 set backspace=indent,eol,start  " Allow backspace over indents, line breaks, etc.

@@ -6,6 +6,7 @@ hi  TabLineNC        guibg=NONE     guifg=#ffb000  ctermbg=NONE  ctermfg=240   c
 hi  LineNr           guibg=NONE     guifg=NONE     ctermbg=NONE  ctermfg=240   cterm=NONE
 hi  CursorLineNr     guibg=NONE     guifg=NONE     ctermbg=NONE  ctermfg=244   cterm=NONE
 hi  ListChar         guibg=NONE     guifg=NONE     ctermbg=NONE  ctermfg=240   cterm=NONE
+hi  NonText          guibg=NONE     guifg=NONE     ctermbg=NONE  ctermfg=240   cterm=NONE
 hi  SpecialKey       guibg=NONE     guifg=NONE     ctermbg=NONE  ctermfg=240   cterm=NONE
 hi  ExtraWhitespace  guibg=NONE     guifg=NONE     ctermbg=NONE  ctermfg=240   cterm=NONE
 hi  CursorLine       guibg=#2d3441  guifg=NONE     ctermbg=NONE  ctermfg=NONE  cterm=none
