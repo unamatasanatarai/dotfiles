@@ -65,6 +65,7 @@ set wildmode=longest:full,full
 " Helpers
 set path=.,**,**
 set wildignore+=*.pyc,node_modules/**,__pycache__/**,venv/**
+set wildignorecase
 
 " Performance and file handling
 set noswapfile        " Disable swap files
