@@ -96,11 +96,10 @@ hi IncSearch        guifg=#71ade7 gui=bold
 hi MoreMsg          guifg=#95cb82 gui=bold
 hi Question         guifg=#6abf40
 hi Directory        guifg=#71aed7
-hi SpecialKey       guifg=#585858                                                                            
+hi SpecialKey       guifg=#585858
 hi NonText          guifg=#585858
 hi EndOfBuffer      guifg=#585858
 hi WildMenu         guibg=#585858
-                    
 
 hi DiagnosticError        guifg=#d13e23
 hi DiagnosticWarn         guifg=#f4b371
@@ -121,4 +120,3 @@ hi WinBar          guifg=#ffb000 guibg=#0e1415 gui=bold
 hi WinBarNC        guifg=#7d7d7d guibg=#0e1415
 
 " Done!
-
