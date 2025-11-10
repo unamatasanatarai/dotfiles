@@ -3,6 +3,10 @@ set nocompatible
 filetype off  " Required for some plugins, re-enabled later
 set encoding=UTF-8  " Set default encoding to UTF-8
 
+" Paths
+set path=.,**,**
+set runtimepath+=~/.config/vim
+
 " Leader key setup
 let mapleader = " "  " Set space as leader key
 nnoremap j gj
@@ -54,7 +58,8 @@ set noerrorbells   " Disable beeps
 set lazyredraw     " Don't redraw during macros
 set ttyfast        " Faster redrawing
 set background=dark  " Optimize for dark themes
-source ~/.config/vim/colors-amber
+colorscheme amber
+"source ~/.config/vim/colors-amber
 if has("termguicolors")
     set termguicolors
 endif
@@ -62,8 +67,6 @@ endif
 " Command-line completion
 set wildmenu       " Enhanced command-line completion
 set wildmode=longest:full,full
-" Helpers
-set path=.,**,**
 set wildignore+=*.pyc,node_modules/**,__pycache__/**,venv/**
 set wildignorecase
 
@@ -81,8 +84,8 @@ set grepprg=grep\ -HRIn\ $*
 set backspace=indent,eol,start  " Allow backspace over indents, line breaks, etc.
 nnoremap <Leader>gg :copen \| :silent grep<Space>
 " use ctrl+[:w
-" inoremap <silent> jk <Esc>
-" inoremap <silent> kj <Esc>
+inoremap <silent> jk <Esc>
+inoremap <silent> kj <Esc>
 nnoremap <leader>w :w<CR>
 set timeout        " Enable timeout for mappings
 set ttimeoutlen=10 " Fast timeout for key codes
