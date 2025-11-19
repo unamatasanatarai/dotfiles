@@ -16,8 +16,7 @@ shopt -s lithist
 __peco_history_search() {
   # Run peco over reversed history
   local selected
-  #selected=$(history | tac | awk '{$1=""; print substr($0,2)}' | peco --prompt="History > " --layout=bottom-up)
-  selected=$(HISTTIMEFORMAT= history | awk '{$1=""; print substr($0,2)}' | peco --layout=bottom-up --prompt ">")
+  selected=$(HISTTIMEFORMAT= history | tac |  awk '{$1=""; print substr($0,2)}' | peco --layout=bottom-up --prompt ">")
 
 
   # Paste selected command into prompt if non-empty
