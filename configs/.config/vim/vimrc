@@ -59,7 +59,6 @@ set lazyredraw     " Don't redraw during macros
 set ttyfast        " Faster redrawing
 set background=dark  " Optimize for dark themes
 colorscheme amber
-"source ~/.config/vim/colors-amber
 if has("termguicolors")
     set termguicolors
 endif
@@ -96,4 +95,6 @@ set timeoutlen=200 " Timeout for mappings
 set formatoptions=qrn1  " Formatting options for text, messes up pasing along with filetype plugin indent on
 autocmd InsertLeave * set nopaste " a heavy handed fix for messed up pasting
 syntax on
+
+nnoremap <leader>r :silent! source $MYVIMRC<CR>
 
