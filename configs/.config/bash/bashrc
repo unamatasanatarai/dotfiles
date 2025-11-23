@@ -102,18 +102,25 @@ extract_git_branch_name() {
   if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
     local branch status
     status=$(git status --porcelain --branch 2>/dev/null)
-    branch=$(echo "$status" | head -n1 | sed -n 's/## \(.*\)/\1/p' | cut -d. -f1)
+    #branch=$(echo "$status" | head -n1 | sed -n 's/## \(.*\)/\1/p' | cut -d. -f1)
+    branch=${status%%$'\n'*}
+    branch=${branch#"## "}
+    branch=${branch%%.*}
     [ -z "$branch" ] && branch=$(git rev-parse --short HEAD 2>/dev/null)
-    [[ $(echo "$status" | wc -l) -gt 1 ]] && echo " <$branch*>" || echo " <$branch>"
+    #[[ $(echo "$status" | wc -l) -gt 1 ]] && echo "<$branch*>" || echo "<$branch>"
+    [[ $status == *$'\n'* ]] && echo "<$branch*>" || echo "<$branch>"
+
   fi
 
   return "$ps"
 }
 
 PS1=""
-PS1+="\w" # Working directory
 PS1+="\$(extract_git_branch_name)"
-PS1+="\[${reset}\] \$( [ \$? -eq 0 ] && echo \"\\$ \" || echo \"\[${orange}\]\\$ \" )\[${reset}\]"
+PS1+="\[${reset}\]"
+PS1+="\$( [ \$? -eq 0 ] && printf \"\$\" || printf \"\[${orange}\]\\$\" )"
+PS1+="\[${reset}\]"
+
 # History settings (don't save lines beginning with space or matching the
 # previous entry)
 export HISTCONTROL=ignoreboth
