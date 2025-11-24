@@ -115,11 +115,11 @@ extract_git_branch_name() {
   return "$ps"
 }
 
-PS1=""
+PS1="\w"
 PS1+="\$(extract_git_branch_name)"
 PS1+="\[${reset}\]"
 PS1+="\$( [ \$? -eq 0 ] && printf \"\$\" || printf \"\[${orange}\]\\$\" )"
-PS1+="\[${reset}\]"
+PS1+="\[${reset}\] "
 
 # History settings (don't save lines beginning with space or matching the
 # previous entry)
