@@ -96,5 +96,8 @@ set formatoptions=qrn1  " Formatting options for text, messes up pasing along wi
 autocmd InsertLeave * set nopaste " a heavy handed fix for messed up pasting
 syntax on
 
+" Use tabs for Makefiles
+autocmd FileType make setlocal noexpandtab tabstop=4 shiftwidth=4
+
 nnoremap <leader>r :silent! source $MYVIMRC<CR>
 
