@@ -26,6 +26,7 @@ history = 50000
 decorations = "none"
 dynamic_padding = true
 opacity = 0.96
+option_as_alt = "OnlyLeft"  # Or "OnlyLeft"/"OnlyRight" if you use one side
 
 [window.padding]
 x = 1
