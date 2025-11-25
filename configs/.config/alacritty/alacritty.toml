@@ -1,3 +1,5 @@
+alt_send_esc = true
+
 [terminal.shell]
 program = "/usr/local/bin/bash"
 

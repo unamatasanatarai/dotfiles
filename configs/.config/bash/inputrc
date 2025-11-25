@@ -1,0 +1,16 @@
+# Use ESC sequences instead of 8-bit Meta (required when alt_send_esc = true in Alacritty)
+set meta-flag on
+set input-meta on
+set output-meta on
+set convert-meta off
+
+# Now explicitly bind the ESC versions that Alacritty actually sends
+"\eOD": backward-word          # Alt+Left  (some terminals)
+"\eOC": forward-word           # Alt+Right
+"\ef":  forward-word           # Alt+F
+"\eb":  backward-word          # Alt+B
+"\ed":  kill-word              # Alt+D
+"\e\x7f": unix-word-rubout     # Alt+Backspace (most common)
+"\eh":  backward-kill-word     # Alt+H (if you like it)
+"\e.":  yank-last-arg          # Alt+.
+"\ey":  yank-last-arg          # Alt+Y (some muscle memory)
