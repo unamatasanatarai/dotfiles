@@ -19,11 +19,8 @@ set number          " Show absolute line number for current line
 set relativenumber  " Show relative line numbers
 set scrolloff=4     " Keep 4 lines visible above/below cursor
 set sidescrolloff=5 " Keep 5 columns visible on sides
-set display+=lastline  " Show as much of the last line as possible
 
 " Indentation settings
-set autoindent     " Copy indent from current line
-set smartindent    " Smart indenting for C-like programs
 set tabstop=4      " Number of spaces a tab counts for
 set shiftwidth=4   " Spaces for each indent step
 set softtabstop=4  " Spaces for tab in insert mode
@@ -32,12 +29,11 @@ set smarttab       " Smart tab handling
 set shiftround     " Round indent to multiple of shiftwidth
 
 " Text display and formatting
-set nowrap         " Do not wrap long lines
+set nowrap           " Wrap long lines
 set linebreak      " Break lines at word boundaries
 set textwidth=80   " Set max line width for formatting
 set list
 set listchars=tab:▷\ ,trail:·,nbsp:␣,extends:»,precedes:«  " Show special characters
-set nofoldenable   " Disable code folding by default
 
 " Search settings
 set incsearch      " Highlight matches as you type
@@ -70,10 +66,10 @@ set wildignore+=*.pyc,node_modules/**,__pycache__/**,venv/**
 set wildignorecase
 
 " Performance and file handling
-set noswapfile        " Disable swap files
-set synmaxcol=20000   " Limit syntax highlighting for long lines
-set updatetime=100    " Faster update time for responsiveness
-set complete-=i       " Exclude included files from completion
+set noswapfile     " Disable swap files
+set synmaxcol=20000 " Limit syntax highlighting for long lines
+set updatetime=100 " Faster update time for responsiveness
+set complete-=i    " Exclude included files from completion
 set nrformats-=octal  " Treat numbers as decimal, not octal
 set viminfo='50,<1000,s100,h,! " Save marks for the last 50 files, plus other info, save global marks (A-Z) across files
 set grepprg=grep\ -HRIn\ $*
@@ -81,8 +77,6 @@ set grepprg=grep\ -HRIn\ $*
 
 " Input and mappings
 set backspace=indent,eol,start  " Allow backspace over indents, line breaks, etc.
-nnoremap <Leader>gg :copen \| :silent grep<Space>
-" use ctrl+[:w
 inoremap <silent> jk <Esc>
 inoremap <silent> kj <Esc>
 nnoremap <leader>w :w<CR>
@@ -90,14 +84,26 @@ set timeout        " Enable timeout for mappings
 set ttimeoutlen=10 " Fast timeout for key codes
 set timeoutlen=200 " Timeout for mappings
 
-" Enable file type detection and plugin/indent support
-"filetype plugin indent on " <- this plus formatoptions=qrn1 messess up pasting
-set formatoptions=qrn1  " Formatting options for text, messes up pasing along with filetype plugin indent on
-autocmd InsertLeave * set nopaste " a heavy handed fix for messed up pasting
-syntax on
+" Encoding
+set encoding=UTF-8  " Set default encoding to UTF-8
+
+" Folding
+set nofoldenable   " Disable code folding by default
+
+" Display
+set display+=lastline  " Show as much of the last line as possible
 
 " Use tabs for Makefiles
 autocmd FileType make setlocal noexpandtab tabstop=4 shiftwidth=4
 
-nnoremap <leader>r :silent! source $MYVIMRC<CR>
+" Pasting
+"filetype plugin indent on " <- this plus formatoptions=qrn1 messess up pasing
+"set formatoptions=qrn1  " Formatting options for text, messes up pasing along with filetype plugin indent on
+set noautoindent     " Copy indent from current line
+set nosmartindent    " Smart indenting for C-like programs
+autocmd InsertLeave * set nopaste
 
+syntax on
+
+nnoremap <leader>r :silent! source $MYVIMRC<CR>
+nnoremap <Leader><Space> :source ~/.config/vim/vimrc<CR>
