@@ -1,109 +1,115 @@
-" Ensure Vim behaves in a modern way
-set nocompatible
-filetype off  " Required for some plugins, re-enabled later
-set encoding=UTF-8  " Set default encoding to UTF-8
+" Core & Initialization
+set nocompatible                " Ensure Vim behaves in a modern way
+set encoding=UTF-8              " Set default encoding to UTF-8
+set fileformat=unix             " Use Unix line endings
+filetype off                    " Reset filetype detection (re-enabled later)
 
-" Paths
-set path=.,**,**
-set runtimepath+=~/.config/vim
+" General Configuration
+set path=.,**,**                " Search current dir and recursively
+set runtimepath+=~/.config/vim  " Add custom runtime path
+set noswapfile                  " Disable swap files
+set noerrorbells                " Disable beeps
+set visualbell                  " Use visual bell...
+set t_vb=                       " ...but disable the flashing
+set updatetime=100              " Faster update time (ms)
+set timeout                     " Enable timeout for mappings
+set timeoutlen=200              " Timeout for mappings (ms)
+set ttimeoutlen=10              " Fast timeout for key codes (ms)
+set viminfo='50,<1000,s100,h,!  " Save history/marks configuration
+set backspace=indent,eol,start  " Allow backspace over everything
+set complete-=i                 " Exclude included files from completion
+set nrformats-=octal            " Treat numbers as decimal
+set grepprg=grep\ -HRIn\ $*     " Use grep for :grep
 
-" Leader key setup
-let mapleader = " "  " Set space as leader key
+" UI & Visuals
+syntax on                       " Enable syntax highlighting
+set background=dark             " Optimize for dark themes
+colorscheme amber               " Set color scheme
+
+if has("termguicolors")
+    set termguicolors           " Enable true color support
+endif
+
+set number                      " Show absolute line number
+set relativenumber              " Show relative line numbers
+set cursorline                  " Highlight current line
+set ruler                       " Show cursor position
+set laststatus=2                " Always show status line
+set showcmd                     " Show partial commands
+set showmatch                   " Highlight matching brackets
+set matchtime=1                 " Tenths of a second to show match
+set lazyredraw                  " Don't redraw during macros
+set ttyfast                     " Faster redrawing
+set display+=lastline           " Show as much of last line as possible
+set synmaxcol=20000             " Limit syntax highlighting for perf
+set list                        " Show special characters
+set listchars=tab:▷\ ,trail:·,nbsp:␣,extends:»,precedes:«
+
+set scrolloff=4                 " Keep 4 lines visible vertically
+set sidescrolloff=5             " Keep 5 columns visible horizontally
+
+" Indentation & Formatting
+set tabstop=4                   " Spaces a tab counts for
+set shiftwidth=4                " Spaces for each indent step
+set softtabstop=4               " Spaces for tab in insert mode
+set expandtab                   " Convert tabs to spaces
+set smarttab                    " Smart tab handling
+set shiftround                  " Round indent to multiple of shiftwidth
+
+set nowrap                      " Don't wrap long lines
+set linebreak                   " Break lines at word boundaries
+set textwidth=88                " Max line width
+set nofoldenable                " Disable code folding by default
+set formatoptions-=t            " Disable automatic line breaking on typing
+
+" Auto-indentation settings (Disabled per user preference for pasting)
+set noautoindent                " Do not copy indent from current line
+set nosmartindent               " Do not use smart indenting
+autocmd InsertLeave * set nopaste " Turn off paste mode when leaving insert
+
+" Note: 'filetype plugin indent on' and 'formatoptions' are disabled 
+" to prevent pasting issues as requested.
+
+" Search & Completion
+set incsearch                   " Highlight matches as you type
+set hlsearch                    " Highlight all search matches
+set ignorecase                  " Case-insensitive searching
+set smartcase                   " Case-sensitive if uppercase used
+
+set wildmenu                    " Enhanced command-line completion
+set wildmode=longest:full,full  " Completion mode
+set wildignorecase              " Case-insensitive file completion
+set wildignore+=*.pyc,node_modules/**,__pycache__/**,venv/**
+
+" Key Mappings
+let mapleader = " "             " Set space as leader key
+
+" Navigation
 nnoremap j gj
 nnoremap k gk
 nnoremap gj j
 nnoremap gk k
 
-" Line numbers and navigation
-set number          " Show absolute line number for current line
-set relativenumber  " Show relative line numbers
-set scrolloff=4     " Keep 4 lines visible above/below cursor
-set sidescrolloff=5 " Keep 5 columns visible on sides
-
-" Indentation settings
-set tabstop=4      " Number of spaces a tab counts for
-set shiftwidth=4   " Spaces for each indent step
-set softtabstop=4  " Spaces for tab in insert mode
-set expandtab      " Convert tabs to spaces
-set smarttab       " Smart tab handling
-set shiftround     " Round indent to multiple of shiftwidth
-
-" Text display and formatting
-set nowrap           " Wrap long lines
-set linebreak      " Break lines at word boundaries
-set textwidth=80   " Set max line width for formatting
-set list
-set listchars=tab:▷\ ,trail:·,nbsp:␣,extends:»,precedes:«  " Show special characters
-
-" Search settings
-set incsearch      " Highlight matches as you type
-set hlsearch       " Highlight all search matches
-set ignorecase     " Case-insensitive searching
-set smartcase      " Case-sensitive if uppercase in search
-
-" UI and feedback
-set ruler
-set cursorline     " Highlight current line
-set showcmd        " Show partial commands
-set showmatch      " Highlight matching brackets
-set matchtime=1    " Show matching bracket for number of tenths of a seconds
-set laststatus=2   " Always show status line
-set visualbell     " Use visual bell instead of beeping
-set t_vb=          " Disable visual bell flashing
-set noerrorbells   " Disable beeps
-set lazyredraw     " Don't redraw during macros
-set ttyfast        " Faster redrawing
-set background=dark  " Optimize for dark themes
-colorscheme amber
-if has("termguicolors")
-    set termguicolors
-endif
-
-" Command-line completion
-set wildmenu       " Enhanced command-line completion
-set wildmode=longest:full,full
-set wildignore+=*.pyc,node_modules/**,__pycache__/**,venv/**
-set wildignorecase
-
-" Performance and file handling
-set noswapfile     " Disable swap files
-set synmaxcol=20000 " Limit syntax highlighting for long lines
-set updatetime=100 " Faster update time for responsiveness
-set complete-=i    " Exclude included files from completion
-set nrformats-=octal  " Treat numbers as decimal, not octal
-set viminfo='50,<1000,s100,h,! " Save marks for the last 50 files, plus other info, save global marks (A-Z) across files
-set grepprg=grep\ -HRIn\ $*
-
-
-" Input and mappings
-set backspace=indent,eol,start  " Allow backspace over indents, line breaks, etc.
+" Insert mode escapes
 inoremap <silent> jk <Esc>
 inoremap <silent> kj <Esc>
+
+" Shortcuts
 nnoremap <leader>w :w<CR>
-set timeout        " Enable timeout for mappings
-set ttimeoutlen=10 " Fast timeout for key codes
-set timeoutlen=200 " Timeout for mappings
+nnoremap <leader>r :silent! source $MYVIMRC<CR>
 
-" Encoding
-set encoding=UTF-8  " Set default encoding to UTF-8
-
-" Folding
-set nofoldenable   " Disable code folding by default
-
-" Display
-set display+=lastline  " Show as much of the last line as possible
-
-" Use tabs for Makefiles
+" AutoCommands
+" Makefiles (Strict Tabs)
 autocmd FileType make setlocal noexpandtab tabstop=4 shiftwidth=4
 
-" Pasting
-"filetype plugin indent on " <- this plus formatoptions=qrn1 messess up pasing
-"set formatoptions=qrn1  " Formatting options for text, messes up pasing along with filetype plugin indent on
-set noautoindent     " Copy indent from current line
-set nosmartindent    " Smart indenting for C-like programs
-autocmd InsertLeave * set nopaste
+" JSON
+autocmd FileType json setlocal expandtab shiftwidth=2 tabstop=2
 
-syntax on
+" Bash / Shell
+autocmd FileType sh,bash,zsh setlocal expandtab shiftwidth=4 tabstop=4
 
-nnoremap <leader>r :silent! source $MYVIMRC<CR>
-nnoremap <Leader><Space> :source ~/.config/vim/vimrc<CR>
+" Python (PEP 8 Standards)
+autocmd FileType python setlocal expandtab shiftwidth=4 tabstop=4 softtabstop=4
+autocmd FileType python setlocal colorcolumn=+1
+autocmd FileType python setlocal autoindent
+autocmd FileType python setlocal fileformat=unix

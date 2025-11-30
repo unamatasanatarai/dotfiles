@@ -38,10 +38,10 @@ hi WarningMsg       guifg=#e1ad4c
 
 hi Cursor           guibg=#cd974b guifg=#000000
 hi CursorLine       guibg=NONE
-hi CursorColumn     guibg=#182325
+hi CursorColumn     guibg=#585858
+hi ColorColumn      guibg=#585858
 hi CursorLineNr     guifg=#585858 gui=bold
 hi LineNr           guifg=#585858
-hi ColorColumn      guibg=#182325
 hi VertSplit        guifg=#2b3d40
 hi Visual           guibg=#293334
 hi Folded           guifg=#7d7d7d guibg=#182325
