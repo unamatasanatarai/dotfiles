@@ -85,8 +85,6 @@ hi helpIgnore       guifg=#ffb000
 hi helpHyperTextJump guifg=#71aed7
 
 hi pythonBuiltin guifg=#ffb000
+hi pythonClass guifg=#71aed7
 hi shRange guifg=#71aed7
-
-" check what is under cursor
-nnoremap <leader>i :echo synIDattr(synID(line('.'), col('.'), 1), 'name')<CR>
 

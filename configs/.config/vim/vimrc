@@ -21,6 +21,20 @@ set complete-=i                 " Exclude included files from completion
 set nrformats-=octal            " Treat numbers as decimal
 set grepprg=grep\ -HRIn\ $*     " Use grep for :grep
 
+" Persistent Undo & History
+if has("persistent_undo")
+    let target_path = expand('~/.local/state/vim/undo')
+    " Create the directory if it doesn't exist
+    if !isdirectory(target_path)
+        call mkdir(target_path, "p", 0700)
+    endif
+    let &undodir = target_path
+    set undofile                   " Enable persistent undo
+endif
+set history=1000                   " Increase command line history
+set undolevels=1000                " Increase undo levels
+set undoreload=10000               " Save whole buffer for undo when reloading
+
 " UI & Visuals
 syntax on                       " Enable syntax highlighting
 set background=dark             " Optimize for dark themes
@@ -61,14 +75,12 @@ set linebreak                   " Break lines at word boundaries
 set textwidth=88                " Max line width
 set nofoldenable                " Disable code folding by default
 set formatoptions-=t            " Disable automatic line breaking on typing
+filetype plugin indent on
 
 " Auto-indentation settings (Disabled per user preference for pasting)
-set noautoindent                " Do not copy indent from current line
-set nosmartindent               " Do not use smart indenting
+set autoindent                  " Do copy indent from current line
+set smartindent                 " Do use smart indenting
 autocmd InsertLeave * set nopaste " Turn off paste mode when leaving insert
-
-" Note: 'filetype plugin indent on' and 'formatoptions' are disabled 
-" to prevent pasting issues as requested.
 
 " Search & Completion
 set incsearch                   " Highlight matches as you type
@@ -97,6 +109,9 @@ inoremap <silent> kj <Esc>
 " Shortcuts
 nnoremap <leader>w :w<CR>
 nnoremap <leader>r :silent! source $MYVIMRC<CR>
+" check what is under cursor
+nnoremap <leader>i :echo synIDattr(synID(line('.'), col('.'), 1), 'name')<CR>
+
 
 " AutoCommands
 " Makefiles (Strict Tabs)
@@ -113,3 +128,13 @@ autocmd FileType python setlocal expandtab shiftwidth=4 tabstop=4 softtabstop=4
 autocmd FileType python setlocal colorcolumn=+1
 autocmd FileType python setlocal autoindent
 autocmd FileType python setlocal fileformat=unix
+
+" C programming language
+augroup llvm_style
+  autocmd!
+  autocmd FileType c,cpp,h,hpp setlocal
+        \ tabstop=8
+        \ softtabstop=2
+        \ shiftwidth=2
+        \ expandtab
+augroup END
