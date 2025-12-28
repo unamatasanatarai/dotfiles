@@ -86,5 +86,14 @@ hi helpHyperTextJump guifg=#71aed7
 
 hi pythonBuiltin guifg=#ffb000
 hi pythonClass guifg=#71aed7
+
 hi shRange guifg=#71aed7
+hi shQuote guifg=#ffb000
+hi shTestOpr guifg=#ffb000
+hi shHereString guifg=#ffb000
+hi shDerefVar guifg=#ffb000
+hi shOperator guifg=#ffb000
+hi shLoop guifg=#71aed7
+hi shForPP guifg=#ffb000
+hi shNoQuote guifg=#ffb000
 

@@ -108,7 +108,8 @@ inoremap <silent> kj <Esc>
 
 " Shortcuts
 nnoremap <leader>w :w<CR>
-nnoremap <leader>r :silent! source $MYVIMRC<CR>
+nnoremap <leader>r :source $MYVIMRC<CR>
+nnoremap <leader>e :source %<CR>
 " check what is under cursor
 nnoremap <leader>i :echo synIDattr(synID(line('.'), col('.'), 1), 'name')<CR>
 
@@ -116,6 +117,12 @@ nnoremap <leader>i :echo synIDattr(synID(line('.'), col('.'), 1), 'name')<CR>
 " AutoCommands
 " Makefiles (Strict Tabs)
 autocmd FileType make setlocal noexpandtab tabstop=4 shiftwidth=4
+
+" GOLang
+autocmd FileType go setlocal noexpandtab tabstop=4 shiftwidth=4
+
+" Rust
+autocmd FileType rust setlocal shiftwidth=4 tabstop=4 softtabstop=4 expandtab
 
 " JSON
 autocmd FileType json setlocal expandtab shiftwidth=2 tabstop=2

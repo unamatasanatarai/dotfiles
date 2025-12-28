@@ -1,32 +1,31 @@
 [colors.primary]
-background = '#004422'  # Black background
-foreground = '#19C884'  # Bright green foreground
+background = '#002211'
+foreground = '#19C884'
 
 [colors.normal]
-black = '#004422'
-red = '#19C884'
-green = '#19C884'
-yellow = '#19C884'
-blue = '#19C884'
-magenta = '#19C884'
-cyan = '#19C884'
-white = '#19C884'
+black   = '#002211'
+red     = '#ff5555'
+green   = '#19C884'
+yellow  = '#ffff55'
+blue    = '#5555ff'
+magenta = '#ff55ff'
+cyan    = '#55ffff'
+white   = '#19C884'
 
 [colors.bright]
-black = '#004422'
-red = '#19C884'
-green = '#19C884'
-yellow = '#19C884'
-blue = '#19C884'
-magenta = '#19C884'
-cyan = '#19C884'
-white = '#19C884'
+black   = '#004433'
+red     = '#ff7777'
+green   = '#33ff99'
+yellow  = '#ffff77'
+blue    = '#7777ff'
+magenta = '#ff77ff'
+cyan    = '#77ffff'
+white   = '#ffffff'
 
 [colors.cursor]
 text = "CellBackground"
 cursor = "#19C884"
 
 [colors.selection]
-text = "CellForeground"
+text       = "#002211"
 background = "#19C884"
-
