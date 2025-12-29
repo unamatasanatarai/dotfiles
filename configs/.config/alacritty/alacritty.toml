@@ -4,17 +4,21 @@ program = "/usr/local/bin/bash"
 [font]
 size = 16.0
 
+[font.normal]
+#family = "Archivo"
+style = "Regular"
+
 [font.bold]
+#family = "Archivo"
 style = "Bold"
 
 [font.bold_italic]
+#family = "Archivo"
 style = "Bold Italic"
 
 [font.italic]
+#family = "Archivo"
 style = "Italic"
-
-[font.normal]
-style = "Regular"
 
 [font.offset]
 y = 14
