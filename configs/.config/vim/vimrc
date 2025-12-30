@@ -109,7 +109,6 @@ inoremap <silent> kj <Esc>
 " Shortcuts
 nnoremap <leader>w :w<CR>
 nnoremap <leader>r :source $MYVIMRC<CR>
-nnoremap <leader>e :source %<CR>
 " check what is under cursor
 nnoremap <leader>i :echo synIDattr(synID(line('.'), col('.'), 1), 'name')<CR>
 
