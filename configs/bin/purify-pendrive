@@ -1,15 +1,17 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+dir=${1-"."}
 
 FILES_TO_DELETE=("._*" ".DS_Store" "Thumbs.db" "desktop.ini" ".fseventsd" ".Spotlight-V100" ".Trashes" ".apdisk" "\$RECYCLE.BIN" "System Volume Information" ".Trash-1000" "LOST.DIR")
 
 for pattern in "${FILES_TO_DELETE[@]}"; do
-    echo "Drop FILES: $pattern"
-    find . -type f -name "$pattern" -exec rm -v {} +
+    echo "Drop FILES in $dir: $pattern"
+    find "$dir" -type f -name "$pattern" -exec rm -v {} +
 done
 
 for pattern in "${FILES_TO_DELETE[@]}"; do
-    echo "Drop DIRECTORIES: $pattern"
-    find . -type d -name "$pattern" -exec rm -rfv {} +
+    echo "Drop DIRECTORIES in $dir: $pattern"
+    find "$dir" -type d -name "$pattern" -exec rm -rfv {} +
 done
 
 echo "done"
