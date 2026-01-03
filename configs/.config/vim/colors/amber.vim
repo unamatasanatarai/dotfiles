@@ -6,9 +6,8 @@ endif
 
 let g:colors_name = "amber"
 
-
-hi Normal           guifg=#ffb000 guibg=NONE cterm=NONE gui=NONE
-hi Comment          guifg=#dfdf8e guibg=NONE cterm=standout gui=standout
+hi Normal           guifg=#dd9000 guibg=NONE cterm=NONE gui=NONE
+hi Comment          guifg=#aeae5a guibg=NONE cterm=standout gui=standout
 hi Constant         guifg=#95CB82 gui=NONE cterm=NONE
 hi String           guifg=#95cb82
 hi Character        guifg=#95CB82
@@ -18,16 +17,16 @@ hi Float            guifg=#95CB82
 hi Conditional      guifg=#71ade7
 hi Function         guifg=#71ade7
 hi FunctionCall     guifg=#ff0000
-hi Identifier       guifg=#ffb000 gui=NONE cterm=NONE
-hi Statement        guifg=#ffb000
+hi Identifier       guifg=#dd9000 gui=NONE cterm=NONE
+hi Statement        guifg=#dd9000
 hi Return           guifg=#ff0000
 hi Operator         guifg=#71ade7
 hi Repeat           guifg=#71ade7
-hi Keyword          guifg=#ffb000
-hi Type             guifg=#ffb000
-hi Structure        guifg=#ffb000
-hi PreProc          guifg=#ffb000
-hi Special          guifg=#ffb000
+hi Keyword          guifg=#dd9000
+hi Type             guifg=#dd9000
+hi Structure        guifg=#dd9000
+hi PreProc          guifg=#dd9000
+hi Special          guifg=#dd9000
 hi Delimeter        guifg=#ff0000 guibg=#00ff00
 hi SpecialComment   guifg=#71aed7 guibg=#1d292b gui=standout cterm=standout
 hi Underlined       gui=underline
@@ -38,10 +37,10 @@ hi WarningMsg       guifg=#e1ad4c
 
 hi Cursor           guibg=#cd974b guifg=#000000
 hi CursorLine       guibg=NONE
-hi CursorColumn     guibg=#585858
-hi ColorColumn      guibg=#585858
-hi CursorLineNr     guifg=#585858 gui=bold
-hi LineNr           guifg=#585858
+hi CursorColumn     guibg=#343434
+hi ColorColumn      guibg=#343434
+hi CursorLineNr     guifg=#343434 gui=bold
+hi LineNr           guifg=#343434
 hi VertSplit        guifg=#2b3d40
 hi Visual           guibg=#293334
 hi Folded           guifg=#7d7d7d guibg=#182325
@@ -58,42 +57,42 @@ hi PmenuSel         guibg=#354c50
 hi PmenuSbar        guibg=#212f31
 hi PmenuThumb       guibg=#47666b
 
-hi StatusLine       guifg=#585858 guibg=NONE cterm=NONE
-hi StatusLineNC     guifg=#585858 guibg=NONE cterm=NONE
+hi StatusLine       guifg=#343434 guibg=NONE cterm=NONE
+hi StatusLineNC     guifg=#343434 guibg=NONE cterm=NONE
 hi TabLine          guifg=#7d7d7d guibg=#162022 cterm=NONE
 hi TabLineSel       guifg=#71aed7 guibg=#162022 cterm=NONE
 hi TabLineFill      guibg=#162022 cterm=NONE
-hi TabLineNC        guibg=NONE guifg=#ffb000 cterm=NONE
+hi TabLineNC        guibg=NONE guifg=#dd9000 cterm=NONE
 hi VertSplit        guifg=#2b3d40
-hi Title            guifg=#ffb000
+hi Title            guifg=#dd9000
 
 hi Search           guibg=#71ade7
 hi IncSearch        guifg=#71ade7 gui=bold
 hi MoreMsg          guifg=#95cb82 gui=bold
 hi Question         guifg=#6abf40
 hi Directory        guifg=#71aed7
-hi SpecialKey       guifg=#585858
-hi NonText          guifg=#585858
+hi SpecialKey       guifg=#343434
+hi NonText          guifg=#343434
 hi ExtraWhitespace  guibg=NONE guifg=NONE
 hi ListChar         guibg=NONE guifg=NONE
-hi EndOfBuffer      guifg=#585858
+hi EndOfBuffer      guifg=#343434
 hi WildMenu         guibg=#585858
 
-hi helpBar          guifg=#ffb000
-hi helpStar         guifg=#ffb000
-hi helpIgnore       guifg=#ffb000
+hi helpBar          guifg=#dd9000
+hi helpStar         guifg=#dd9000
+hi helpIgnore       guifg=#dd9000
 hi helpHyperTextJump guifg=#71aed7
 
-hi pythonBuiltin guifg=#ffb000
+hi pythonBuiltin guifg=#dd9000
 hi pythonClass guifg=#71aed7
 
 hi shRange guifg=#71aed7
-hi shQuote guifg=#ffb000
-hi shTestOpr guifg=#ffb000
-hi shHereString guifg=#ffb000
-hi shDerefVar guifg=#ffb000
-hi shOperator guifg=#ffb000
+hi shQuote guifg=#dd9000
+hi shTestOpr guifg=#dd9000
+hi shHereString guifg=#dd9000
+hi shDerefVar guifg=#dd9000
+hi shOperator guifg=#dd9000
 hi shLoop guifg=#71aed7
-hi shForPP guifg=#ffb000
-hi shNoQuote guifg=#ffb000
+hi shForPP guifg=#dd9000
+hi shNoQuote guifg=#dd9000
 
