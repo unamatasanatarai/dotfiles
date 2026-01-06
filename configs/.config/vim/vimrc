@@ -135,12 +135,17 @@ autocmd FileType python setlocal colorcolumn=+1
 autocmd FileType python setlocal autoindent
 autocmd FileType python setlocal fileformat=unix
 
-" C programming language
-augroup llvm_style
+" C / C++ (clang-format Microsoft style compatible)
+augroup c_microsoft_style
   autocmd!
   autocmd FileType c,cpp,h,hpp setlocal
-        \ tabstop=8
-        \ softtabstop=2
-        \ shiftwidth=2
         \ expandtab
+        \ tabstop=4
+        \ shiftwidth=4
+        \ softtabstop=4
+        \ textwidth=120
+        \ cindent
+        \ cinoptions=:0,l1,g0,(0
+        \ formatoptions-=t
+        \ formatoptions+=croq
 augroup END
