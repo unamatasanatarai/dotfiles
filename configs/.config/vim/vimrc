@@ -137,15 +137,41 @@ autocmd FileType python setlocal fileformat=unix
 
 " C / C++ (clang-format Microsoft style compatible)
 augroup c_microsoft_style
-  autocmd!
-  autocmd FileType c,cpp,h,hpp setlocal
-        \ expandtab
-        \ tabstop=4
-        \ shiftwidth=4
-        \ softtabstop=4
-        \ textwidth=120
-        \ cindent
-        \ cinoptions=:0,l1,g0,(0
-        \ formatoptions-=t
-        \ formatoptions+=croq
+    autocmd!
+    autocmd FileType c,cpp,h,hpp setlocal
+                \ expandtab
+                \ tabstop=4
+                \ shiftwidth=4
+                \ softtabstop=4
+                \ textwidth=120
+                \ cindent
+                \ cinoptions=:0,l1,g0,(0
+                \ formatoptions-=t
+                \ formatoptions+=croq
+
+    " ------------------------------------------------------------
+    " clang-format (range-aware, Microsoft fallback)
+    " ------------------------------------------------------------
+
+    function! s:ClangFormatRange(line1, line2)
+        let l:view = winsaveview()
+
+        let l:cmd = 'clang-format-mp-20'
+
+        " If no .clang-format is found, fall back to Microsoft style
+        if empty(findfile('.clang-format', '.;'))
+            let l:cmd .= ' -style=Microsoft'
+        endif
+
+        execute a:line1 . ',' . a:line2 . '!' . l:cmd
+
+        call winrestview(l:view)
+    endfunction
+
+    " Define a range-aware command
+    command! -range=% ClangFormat call <SID>ClangFormatRange(<line1>, <line2>)
+
+    " Key mappings
+    nnoremap <leader>f :ClangFormat<CR>
+    vnoremap <leader>f :ClangFormat<CR>
 augroup END
