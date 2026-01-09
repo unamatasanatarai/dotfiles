@@ -5,9 +5,9 @@ meh - k : sh -c "$(brew --prefix)/bin/skhd -k 'up'"
 meh - l : sh -c "$(brew --prefix)/bin/skhd -k 'right'"
 
 # Send windows to space
-ctrl + lshift - a : yabai -m window --space  1;
-ctrl + lshift - s : yabai -m window --space  2;
-ctrl + lshift - d : yabai -m window --space  3;
+lctrl + lshift - a : yabai -m window --space  1
+lctrl + lshift - s : yabai -m window --space  2
+lctrl + lshift - d : yabai -m window --space  3
 
 # Resize windows
 lshift + lcmd - h : sh -c "$(brew --prefix)/bin/yabai -m window --resize left:-30:0; $(brew --prefix)/bin/yabai -m window --resize right:-30:0"
