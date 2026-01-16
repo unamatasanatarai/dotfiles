@@ -1,8 +1,0 @@
-# Activate virtual environment quickly
-alias vba='source venv/bin/activate'
-
-# Enhanced directory tree view
-alias tree='tree -aC --dirsfirst'
-
-# Enable colorized output for ls (macOS/BSD-style)
-alias ls='ls -G'

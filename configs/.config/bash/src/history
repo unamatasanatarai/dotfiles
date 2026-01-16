@@ -1,0 +1,31 @@
+# History settings (don't save lines beginning with space or matching the
+# previous entry)
+export HISTCONTROL=ignoreboth
+export HISTSIZE=100000
+export HISTFILESIZE=200000
+export HISTIGNORE="ls:cd -"
+export HISTFILE=${XDG_DATA_HOME}/bash/.bash_history
+shopt -s histappend # append to history i.e don't overwrite it
+
+# Save multiline commands in same history entry with embedded newlines
+shopt -s cmdhist
+shopt -s lithist
+
+# PECO-enhanced Ctrl+R history search (fzf-like)
+
+__peco_history_search() {
+  # Run peco over reversed history
+  local selected
+  selected=$(HISTTIMEFORMAT= history | tac |  awk '{$1=""; print substr($0,2)}' | peco --layout=bottom-up --prompt ">")
+
+
+  # Paste selected command into prompt if non-empty
+  if [ -n "$selected" ]; then
+    READLINE_LINE="$selected"
+    READLINE_POINT=${#READLINE_LINE}
+  fi
+}
+
+# Bind Ctrl+R to launch peco-based search
+bind -x '"\C-r": __peco_history_search'
+

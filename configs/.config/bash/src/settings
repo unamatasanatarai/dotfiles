@@ -1,0 +1,19 @@
+export BASH_SILENCE_DEPRECATION_WARNING=1
+export VISUAL=vi
+export EDITOR="$VISUAL"
+export SYSTEMD_EDITOR="$VISUAL"
+export SHELL="$BREW_PREFIX/bin/bash"
+
+# Source user-defined XDG user dirs if available
+[ -f "$HOME/.config/user-dirs.dirs" ] && source "$HOME/.config/user-dirs.dirs"
+
+: "${XDG_CACHE_HOME:=$HOME/.cache}"
+: "${XDG_CONFIG_HOME:=$HOME/.config}"
+: "${XDG_DATA_HOME:=$HOME/.local/share}"
+: "${XDG_STATE_HOME:=$HOME/.local/state}"
+
+: "${XDG_DESKTOP_DIR:=$HOME/Desktop}"
+: "${XDG_DOWNLOAD_DIR:=$HOME/Downloads}"
+
+export XDG_CACHE_HOME XDG_CONFIG_HOME XDG_DATA_HOME XDG_STATE_HOME XDG_DESKTOP_DIR XDG_DOWNLOAD_DIR
+

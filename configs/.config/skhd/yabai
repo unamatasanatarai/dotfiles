@@ -1,0 +1,19 @@
+# Vim arrows
+meh - h : sh -c "$(brew --prefix)/bin/skhd -k 'left'"
+meh - j : sh -c "$(brew --prefix)/bin/skhd -k 'down'"
+meh - k : sh -c "$(brew --prefix)/bin/skhd -k 'up'"
+meh - l : sh -c "$(brew --prefix)/bin/skhd -k 'right'"
+
+# Send windows to space
+ctrl + lshift - a : yabai -m window --space  1
+ctrl + lshift - s : yabai -m window --space  2
+ctrl + lshift - d : yabai -m window --space  3
+
+# Resize windows
+lshift + lcmd - h : sh -c "$(brew --prefix)/bin/yabai -m window --resize left:-30:0; $(brew --prefix)/bin/yabai -m window --resize right:-30:0"
+lshift + lcmd - j : sh -c "$(brew --prefix)/bin/yabai -m window --resize bottom:0:30; $(brew --prefix)/bin/yabai -m window --resize top:0:30"
+lshift + lcmd - k : sh -c "$(brew --prefix)/bin/yabai -m window --resize top:0:-30; $(brew --prefix)/bin/yabai -m window --resize bottom:0:-30"
+lshift + lcmd - l : sh -c "$(brew --prefix)/bin/yabai -m window --resize right:30:0; $(brew --prefix)/bin/yabai -m window --resize left:30:-30"
+lshift + lcmd - e : sh -c "$(brew --prefix)/bin/yabai -m space --balance"
+lshift + lcmd - f : sh -c "$(brew --prefix)/bin/yabai -m window --toggle zoom-fullscreen"
+

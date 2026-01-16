@@ -1,0 +1,41 @@
+[core]
+    compression = 9
+    autocrlf = input
+
+[init]
+    defaultBranch = master
+
+[push]
+    default = simple
+
+[pull]
+    rebase = true
+
+[diff]
+    algorithm = histogram       # Smarter diffing algorithm (better than "myers")
+    compactionHeuristic = true
+    indentHeuristic = true      # Better diff output for indentation changes
+
+[merge]
+    conflictstyle = diff3
+
+[color]
+    ui = auto  # Enables color output when the terminal supports it
+
+[color "diff"]
+    meta = blue bold             # File headers: --- a/foo.txt +++ b/foo.txt
+    frag = magenta bold          # Hunk headers: @@ -1,4 +1,4 @@
+    old = brightred bold         # Removed lines: - old text
+    new = brightgreen bold       # Added lines: + new text
+    commit = cyan                # Commit hashes
+    whitespace = reverse brightred  # Trailing whitespace: reverse video bright red
+
+[color "status"]
+    added = brightgreen          # New files
+    changed = brightyellow bold  # Modified files
+    untracked = brightred bold   # Untracked files
+
+[color "branch"]
+    current = reverse brightcyan # Currently checked out branch
+    local = green                # Local branches
+    remote = brightmagenta       # Remote branches

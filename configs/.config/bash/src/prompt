@@ -1,0 +1,6 @@
+PS1="\w"
+PS1+="\$(extract_git_branch_name)"
+PS1+="\[${reset}\]"
+PS1+="\$( [ \$? -eq 0 ] && printf \"\$\" || printf \"\[${orange}\]\\$\" )"
+PS1+="\[${reset}\] "
+

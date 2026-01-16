@@ -1,0 +1,50 @@
+# ------------------------------------------------------------------------------
+# Terminal Color Setup (using `tput` if available, fallback to ANSI escapes)
+# ------------------------------------------------------------------------------
+
+# Set terminal type to support 256 colors
+export TERM="xterm-256color"
+export TERM="screen-256color"
+
+# Check if `tput` supports setting colors
+if tput setaf 1 &> /dev/null; then
+  tput sgr0  # Reset terminal formatting just in case
+
+  # Formatting
+  bold=$(tput bold)
+  reset=$(tput sgr0)
+
+  # Solarized/extended color palette using `tput`
+  black=$(tput setaf 0)
+  red=$(tput setaf 1)
+  green=$(tput setaf 2)
+  yellow=$(tput setaf 3)
+  blue=$(tput setaf 4)
+  purple=$(tput setaf 5)
+  cyan=$(tput setaf 6)
+  white=$(tput setaf 7)
+
+  # Extended colors (if terminal supports more than 8 colors)
+  orange=$(tput setaf 166)
+  violet=$(tput setaf 61)
+  gray=$(tput setaf 244)
+else
+  # Fallback to ANSI escape sequences
+  bold='\e[1m'
+  reset='\e[0m'
+
+  black='\e[30m'
+  red='\e[31m'
+  green='\e[32m'
+  yellow='\e[33m'
+  blue='\e[34m'
+  purple='\e[35m'
+  cyan='\e[36m'
+  white='\e[37m'
+
+  # Approximate extended colors
+  orange='\e[38;5;166m'
+  violet='\e[38;5;61m'
+  gray='\e[38;5;244m'
+fi
+

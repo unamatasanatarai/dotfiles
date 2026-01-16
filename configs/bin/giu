@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+[[ -z "$1" || -z "$2" ]] && printf "Usage: %s <username> <email>\n" "${0##*/}" && exit 1
+
+printf "> git config user.name '$1'\n"
+git config user.name "$1"
+
+printf "> git config user.email '$2'\n"
+git config user.email "$2"
+
+printf "done\n"
+

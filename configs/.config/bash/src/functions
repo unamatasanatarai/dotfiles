@@ -1,0 +1,35 @@
+#these must be functions. Bash script cannot change working directory (for some reason)
+
+take() {
+  [[ -z "$1" ]] && echo "Usage: take <directory_path>" && return 1
+  mkdir -p -- "$1" && cd -- "$1" || return 1
+}
+
+wcd() {
+  [[ -z "$1" ]] && echo "Usage: $0 <command>" && return 1
+  cmd_path="$(command -v "$1")" || {
+    echo "Command '$1' not found"
+    return 1
+  }
+  cd -- "$(dirname "$cmd_path")" || return 1
+}
+
+extract_git_branch_name() {
+  local ps=$?
+
+  if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    local branch status
+    status=$(git status --porcelain --branch 2>/dev/null)
+    #branch=$(echo "$status" | head -n1 | sed -n 's/## \(.*\)/\1/p' | cut -d. -f1)
+    branch=${status%%$'\n'*}
+    branch=${branch#"## "}
+    branch=${branch%%.*}
+    [ -z "$branch" ] && branch=$(git rev-parse --short HEAD 2>/dev/null)
+    #[[ $(echo "$status" | wc -l) -gt 1 ]] && echo "<$branch*>" || echo "<$branch>"
+    [[ $status == *$'\n'* ]] && echo "<$branch*>" || echo "<$branch>"
+
+  fi
+
+  return "$ps"
+}
+

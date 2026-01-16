@@ -1,0 +1,159 @@
+# ------------------------------------------------------------------------------
+# !!  This file is auto-generated.
+#     Do NOT modify it directly — your changes will be overwritten.
+#     To update or customize, run: make
+# ------------------------------------------------------------------------------
+
+# Skip if this is not an interactive shell.
+# Avoid loading interactive-only configurations in non-interactive contexts.
+[[ $- != *i* ]] && return
+export PATH="$PATH:/usr/local/sbin:/opt/local/bin:/opt/local/sbin"
+# Determine Homebrew prefix based on architecture (faster than calling `brew`)
+export BREW_PREFIX=$(command -v brew &>/dev/null && brew --prefix || ([[ "$(uname -m)" == "arm64" ]] && echo /opt/homebrew || echo /usr/local))
+export HOMEBREW_NO_AUTO_UPDATE=1
+export BASH_SILENCE_DEPRECATION_WARNING=1
+export VISUAL=vi
+export EDITOR="$VISUAL"
+export SYSTEMD_EDITOR="$VISUAL"
+export SHELL="$BREW_PREFIX/bin/bash"
+
+# Source user-defined XDG user dirs if available
+[ -f "$HOME/.config/user-dirs.dirs" ] && source "$HOME/.config/user-dirs.dirs"
+
+: "${XDG_CACHE_HOME:=$HOME/.cache}"
+: "${XDG_CONFIG_HOME:=$HOME/.config}"
+: "${XDG_DATA_HOME:=$HOME/.local/share}"
+: "${XDG_STATE_HOME:=$HOME/.local/state}"
+
+: "${XDG_DESKTOP_DIR:=$HOME/Desktop}"
+: "${XDG_DOWNLOAD_DIR:=$HOME/Downloads}"
+
+export XDG_CACHE_HOME XDG_CONFIG_HOME XDG_DATA_HOME XDG_STATE_HOME XDG_DESKTOP_DIR XDG_DOWNLOAD_DIR
+
+# ------------------------------------------------------------------------------
+# Terminal Color Setup (using `tput` if available, fallback to ANSI escapes)
+# ------------------------------------------------------------------------------
+
+# Set terminal type to support 256 colors
+export TERM="xterm-256color"
+export TERM="screen-256color"
+
+# Check if `tput` supports setting colors
+if tput setaf 1 &> /dev/null; then
+  tput sgr0  # Reset terminal formatting just in case
+
+  # Formatting
+  bold=$(tput bold)
+  reset=$(tput sgr0)
+
+  # Solarized/extended color palette using `tput`
+  black=$(tput setaf 0)
+  red=$(tput setaf 1)
+  green=$(tput setaf 2)
+  yellow=$(tput setaf 3)
+  blue=$(tput setaf 4)
+  purple=$(tput setaf 5)
+  cyan=$(tput setaf 6)
+  white=$(tput setaf 7)
+
+  # Extended colors (if terminal supports more than 8 colors)
+  orange=$(tput setaf 166)
+  violet=$(tput setaf 61)
+  gray=$(tput setaf 244)
+else
+  # Fallback to ANSI escape sequences
+  bold='\e[1m'
+  reset='\e[0m'
+
+  black='\e[30m'
+  red='\e[31m'
+  green='\e[32m'
+  yellow='\e[33m'
+  blue='\e[34m'
+  purple='\e[35m'
+  cyan='\e[36m'
+  white='\e[37m'
+
+  # Approximate extended colors
+  orange='\e[38;5;166m'
+  violet='\e[38;5;61m'
+  gray='\e[38;5;244m'
+fi
+
+#these must be functions. Bash script cannot change working directory (for some reason)
+
+take() {
+  [[ -z "$1" ]] && echo "Usage: take <directory_path>" && return 1
+  mkdir -p -- "$1" && cd -- "$1" || return 1
+}
+
+wcd() {
+  [[ -z "$1" ]] && echo "Usage: $0 <command>" && return 1
+  cmd_path="$(command -v "$1")" || {
+    echo "Command '$1' not found"
+    return 1
+  }
+  cd -- "$(dirname "$cmd_path")" || return 1
+}
+
+extract_git_branch_name() {
+  local ps=$?
+
+  if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    local branch status
+    status=$(git status --porcelain --branch 2>/dev/null)
+    #branch=$(echo "$status" | head -n1 | sed -n 's/## \(.*\)/\1/p' | cut -d. -f1)
+    branch=${status%%$'\n'*}
+    branch=${branch#"## "}
+    branch=${branch%%.*}
+    [ -z "$branch" ] && branch=$(git rev-parse --short HEAD 2>/dev/null)
+    #[[ $(echo "$status" | wc -l) -gt 1 ]] && echo "<$branch*>" || echo "<$branch>"
+    [[ $status == *$'\n'* ]] && echo "<$branch*>" || echo "<$branch>"
+
+  fi
+
+  return "$ps"
+}
+
+PS1="\w"
+PS1+="\$(extract_git_branch_name)"
+PS1+="\[${reset}\]"
+PS1+="\$( [ \$? -eq 0 ] && printf \"\$\" || printf \"\[${orange}\]\\$\" )"
+PS1+="\[${reset}\] "
+
+# History settings (don't save lines beginning with space or matching the
+# previous entry)
+export HISTCONTROL=ignoreboth
+export HISTSIZE=100000
+export HISTFILESIZE=200000
+export HISTIGNORE="ls:cd -"
+export HISTFILE=${XDG_DATA_HOME}/bash/.bash_history
+shopt -s histappend # append to history i.e don't overwrite it
+
+# Save multiline commands in same history entry with embedded newlines
+shopt -s cmdhist
+shopt -s lithist
+
+# PECO-enhanced Ctrl+R history search (fzf-like)
+
+__peco_history_search() {
+  # Run peco over reversed history
+  local selected
+  selected=$(HISTTIMEFORMAT= history | tac |  awk '{$1=""; print substr($0,2)}' | peco --layout=bottom-up --prompt ">")
+
+
+  # Paste selected command into prompt if non-empty
+  if [ -n "$selected" ]; then
+    READLINE_LINE="$selected"
+    READLINE_POINT=${#READLINE_LINE}
+  fi
+}
+
+# Bind Ctrl+R to launch peco-based search
+bind -x '"\C-r": __peco_history_search'
+
+shopt -s autocd
+alias vba='venv; [[ -z "$VIRTUAL_ENV" ]] && source venv/bin/activate'
+
+alias tree='tree -aC --dirsfirst'
+alias ls='ls -GF'

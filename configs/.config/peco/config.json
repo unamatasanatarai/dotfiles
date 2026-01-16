@@ -1,0 +1,15 @@
+{
+  "Keymap": {
+    "C-u": "peco.ScrollPageDown",
+    "C-d": "peco.ScrollPageUp",
+    "C-k": "peco.SelectUp",
+    "C-j": "peco.SelectDown"
+  },
+  "Layout": "bottom-up",
+  "Use256Color": true,
+  "Style": {
+    "Selected": ["on_214", "black"],
+    "Matched": ["red"]
+  }
+}
+

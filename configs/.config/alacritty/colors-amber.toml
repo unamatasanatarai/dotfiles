@@ -1,0 +1,32 @@
+[colors.primary]
+background = "#2D3441"   # Deep slate blue-gray
+foreground = "#ffb000"   # Vibrant amber/gold
+
+[colors.normal]
+black   = "#1d2021"       # Softer black
+red     = "#fb4934"       # Warm red
+green   = "#b8bb26"       # Bright olive
+yellow  = "#fabd2f"       # Soft golden yellow
+blue    = "#83a598"       # Muted sky blue
+magenta = "#d3869b"       # Dusty pink
+cyan    = "#8ec07c"       # Soft teal
+white   = "#ebdbb2"       # Warm parchment white
+
+[colors.bright]
+black   = "#665c54"       # Medium gray brown
+red     = "#fe8019"       # Orange-red
+green   = "#d5e85e"       # Brighter lime green
+yellow  = "#f9f06b"       # Bright pastel yellow
+blue    = "#7daea3"       # Cool aqua
+magenta = "#f285b8"       # Bright pink
+cyan    = "#b0f0c9"       # Light mint
+white   = "#fdf6e3"       # Cream
+
+[colors.cursor]
+text = "CellBackground"
+cursor = "#ffb000"
+
+[colors.selection]
+text = "CellForeground"
+background = "#3c4557"
+

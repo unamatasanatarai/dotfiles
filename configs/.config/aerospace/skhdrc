@@ -1,0 +1,16 @@
+.load "hotkeysrc"
+
+meh - a: aerospace workspace 1 > /dev/null 2>&1
+meh - s: aerospace workspace 2 > /dev/null 2>&1
+meh - z: aerospace workspace 3 > /dev/null 2>&1
+meh - x: aerospace workspace 4 > /dev/null 2>&1
+
+hyper - a: aerospace move-node-to-workspace 1 --focus-follows-window > /dev/null 2>&1
+hyper - s: aerospace move-node-to-workspace 2 --focus-follows-window > /dev/null 2>&1
+hyper - z: aerospace move-node-to-workspace 3 --focus-follows-window > /dev/null 2>&1
+hyper - x: aerospace move-node-to-workspace 4 --focus-follows-window > /dev/null 2>&1
+
+lctrl - h: aerospace focus left
+lctrl - j: aerospace focus down
+lctrl - k: aerospace focus up
+lctrl - l: aerospace focus right

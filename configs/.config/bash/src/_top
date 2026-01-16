@@ -1,0 +1,9 @@
+# ------------------------------------------------------------------------------
+# !!  This file is auto-generated.
+#     Do NOT modify it directly — your changes will be overwritten.
+#     To update or customize, run: make
+# ------------------------------------------------------------------------------
+
+# Skip if this is not an interactive shell.
+# Avoid loading interactive-only configurations in non-interactive contexts.
+[[ $- != *i* ]] && return

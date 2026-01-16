@@ -1,5 +1,0 @@
-p="${HOME}/bin"
-p+=":${HOME}/.local/bin"
-p+=":/opt/homebrew/bin"
-p+=":/usr/local/sbin"
-export PATH="$p:$PATH"

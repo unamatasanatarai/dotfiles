@@ -1,0 +1,43 @@
+[terminal.shell]
+program = "/usr/local/bin/bash"
+
+[font]
+size = 16.0
+
+[font.normal]
+#family = "Archivo"
+style = "Regular"
+
+[font.bold]
+#family = "Archivo"
+style = "Bold"
+
+[font.bold_italic]
+#family = "Archivo"
+style = "Bold Italic"
+
+[font.italic]
+#family = "Archivo"
+style = "Italic"
+
+[font.offset]
+y = 14
+
+[scrolling]
+history = 50000
+
+[window]
+decorations = "none"
+dynamic_padding = true
+opacity = 0.96
+option_as_alt = "OnlyLeft"  # Or "OnlyLeft"/"OnlyRight" if you use one side
+
+[window.padding]
+x = 1
+y = 1
+
+[colors]
+draw_bold_text_with_bright_colors = true
+
+[general]
+import = ["colors-green.toml"]
