@@ -144,6 +144,9 @@ function security_privacy() {
   defaults write com.apple.screensaver askForPassword -int 1
   defaults write com.apple.screensaver askForPasswordDelay -int 0
   echo "Require password immediately after sleep/screensaver"
+
+  sudo defaults write com.apple.LaunchServices LSQuarantine -bool NO
+  echo "Disable quarantining of Downloads and all other files"
 }
 
 function photos_preferences() {

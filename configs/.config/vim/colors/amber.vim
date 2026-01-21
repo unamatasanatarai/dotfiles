@@ -31,7 +31,7 @@ hi Delimeter        guifg=#ff0000 guibg=#00ff00
 hi SpecialComment   guifg=#71aed7 guibg=#1d292b gui=standout cterm=standout
 hi Underlined       gui=underline
 hi Italic           gui=standout cterm=standout
-hi Todo             guifg=#0e1415 guibg=#d0d058
+hi Todo             guifg=#ee2222 guibg=NONE gui=bold term=bold
 hi Error            guifg=#c33c33 guibg=NONE
 hi WarningMsg       guifg=#e1ad4c
 
@@ -96,3 +96,4 @@ hi shLoop guifg=#71aed7
 hi shForPP guifg=#dd9000
 hi shNoQuote guifg=#dd9000
 
+hi cIncluded guifg=NONE

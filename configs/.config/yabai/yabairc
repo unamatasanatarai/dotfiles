@@ -41,4 +41,7 @@ yabai -m rule --add label="Software Update" title="Software Update" manage=off
 # on ventura it's called System Settings and it works fine as a normal window
 yabai -m rule --add label="System Preferences" app="^System Preferences$" title=".*" manage=off
 yabai -m rule --add app="^alacritty$" class="^TermPopup$" manage=off
+
+yabai -m rule --add app="^square-clicker$" manage=off
+
 echo "yabai configuration loaded.."
