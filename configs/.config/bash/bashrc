@@ -123,7 +123,7 @@ PS1+="\[${reset}\] "
 
 # History settings (don't save lines beginning with space or matching the
 # previous entry)
-export HISTCONTROL=ignorespace
+export HISTCONTROL=ignoreboth
 export HISTSIZE=100000
 export HISTFILESIZE=200000
 export HISTFILE=${XDG_DATA_HOME}/bash/.bash_history
