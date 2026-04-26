@@ -1,9 +1,8 @@
 # History settings (don't save lines beginning with space or matching the
 # previous entry)
-export HISTCONTROL=ignoreboth
+export HISTCONTROL=ignorespace
 export HISTSIZE=100000
 export HISTFILESIZE=200000
-export HISTIGNORE="ls:cd -"
 export HISTFILE=${XDG_DATA_HOME}/bash/.bash_history
 shopt -s histappend # append to history i.e don't overwrite it
 
