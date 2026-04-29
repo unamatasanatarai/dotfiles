@@ -135,6 +135,9 @@ autocmd FileType python setlocal colorcolumn=+1
 autocmd FileType python setlocal autoindent
 autocmd FileType python setlocal fileformat=unix
 
+" Markdown
+autocmd FileType markdown setlocal wrap
+
 " C / C++ (clang-format Microsoft style compatible)
 augroup c_microsoft_style
     autocmd!
