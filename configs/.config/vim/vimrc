@@ -39,6 +39,9 @@ set undoreload=10000               " Save whole buffer for undo when reloading
 syntax on                       " Enable syntax highlighting
 set background=dark             " Optimize for dark themes
 colorscheme amber               " Set color scheme
+let g:netrw_browse_split = 4    " Make it open files in previous buffer
+let g:netrw_banner = 0          " Don't show the banner
+
 
 if has("termguicolors")
     set termguicolors           " Enable true color support
