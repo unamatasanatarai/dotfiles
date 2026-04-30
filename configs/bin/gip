@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+# Get current branch
 current_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
 
 if [ -z "$current_branch" ]; then
@@ -7,7 +8,13 @@ if [ -z "$current_branch" ]; then
   exit 1
 fi
 
-# Fetch all refs (safer)
+# Ensure remote 'origin' exists
+if ! git remote get-url origin >/dev/null 2>&1; then
+  echo "Error: Remote 'origin' is not configured."
+  exit 1
+fi
+
+# Fetch latest refs
 git fetch origin >/dev/null 2>&1
 
 # Check if remote branch exists
@@ -15,9 +22,10 @@ if git show-ref --verify --quiet "refs/remotes/origin/$current_branch"; then
   ahead_count=$(git rev-list --count HEAD ^origin/"$current_branch")
 else
   echo "Remote branch origin/$current_branch does not exist yet."
-  ahead_count=1
+  ahead_count=$(git rev-list --count HEAD)
 fi
 
+# Decide whether to push
 if [ "$ahead_count" -eq 0 ]; then
   echo "Nothing to push. Your branch is up to date with origin/$current_branch."
   exit 0
@@ -25,4 +33,5 @@ else
   echo "You have $ahead_count commit(s) ahead (or branch not yet pushed)."
 fi
 
-git push origin "$current_branch"
+# Push branch
+git push -u origin "$current_branch"
