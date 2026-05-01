@@ -75,4 +75,10 @@ if [[ -n "$BREW_BASH" ]]; then
     fi
 fi
 
+echo "==> Starting services and opening apps..."
+if command -v skhd &> /dev/null; then
+    echo "    Restarting skhd..."
+    skhd --restart-service || echo "    Failed to restart skhd"
+fi
+
 echo "==> Installation complete!"

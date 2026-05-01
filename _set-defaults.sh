@@ -21,18 +21,6 @@ osascript -e 'tell application "Safari" to quit' || true
 # NOTE: For many of these 'defaults' commands to work (especially Safari), 
 # your Terminal must have "Full Disk Access" in System Settings > Privacy & Security.
 
-echo "Checking Full Disk Access..."
-if ! defaults write com.apple.Safari _TestFDA -bool true 2>/dev/null; then
-    echo ">>> Terminal needs Full Disk Access to set some defaults (like Safari)."
-    echo ">>> Opening Privacy settings for you..."
-    open "x-apple.systempreferences:com.apple.preference.security?Privacy_AllFiles"
-    echo ">>> Please grant Full Disk Access to your Terminal and then RESTART this script."
-    exit 1
-else
-    defaults delete com.apple.Safari _TestFDA 2>/dev/null
-    echo "Full Disk Access confirmed."
-fi
-
 echo "=== Computer Name Setup ==="
 scutil --get ComputerName > /tmp/cn
 read -r current_name < /tmp/cn
@@ -520,17 +508,6 @@ echo "Rebuilt Spotlight index"
 
 killall "cfprefsd" > /dev/null 2>&1 || true
 echo "Killed cached preferences daemon"
-
-echo "=== Services & Apps ==="
-if command -v skhd &> /dev/null; then
-    echo "Restarting skhd..."
-    skhd --restart-service || echo "Failed to restart skhd"
-fi
-
-if [[ -d "/Applications/AeroSpace.app" ]]; then
-    echo "Opening AeroSpace..."
-    open -a AeroSpace || echo "Failed to open AeroSpace"
-fi
 
 echo ""
 echo "┌────────────────────────┐"

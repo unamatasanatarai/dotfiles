@@ -1,2 +1,3 @@
-.load "yabai"
-.load "hotkeys"
+.load "active_wm"
+lctrl + lcmd - t : open -na /Applications/Alacritty.app
+
