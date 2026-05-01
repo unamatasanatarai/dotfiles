@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-echo "=== Let's go! ==="
-
 echo "=== System Preferences ==="
 echo "Closing System Preferences window"
 osascript -e 'tell application "System Preferences" to quit' || true
@@ -17,7 +15,8 @@ if [[ -n "$computer_name" && "$computer_name" != "$current_name" ]]; then
   sudo scutil --set ComputerName "$computer_name" || { echo "Failed to set ComputerName"; exit 1; }
   sudo scutil --set HostName "$computer_name" || { echo "Failed to set HostName"; exit 1; }
   sudo scutil --set LocalHostName "$computer_name" || { echo "Failed to set LocalHostName"; exit 1; }
-  sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string "$computer_name" || { echo "Failed to set NetBIOSName"; exit 1; }
+# Set the NetBIOS name (visible to Windows computers on the network)
+sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string "$computer_name" || { echo "Failed to set NetBIOSName"; exit 1; }
   echo "Computer name set (System Preferences → Sharing)"
 else
   echo "Computer name unchanged"
@@ -25,78 +24,148 @@ fi
 
 echo "=== Appearance & UI ==="
 echo "> Tools and Look"
+
+# Set the highlight color (the color of selected text)
 defaults write NSGlobalDomain AppleHighlightColor -string "0.764700 0.976500 0.568600" || { echo "Failed to set highlight color"; exit 1; }
 echo "Set highlight color to green"
 
+# Disable Notification Center and remove its menu bar icon
 launchctl unload -w /System/Library/LaunchAgents/com.apple.notificationcenterui.plist 2>/dev/null || true
 echo "Disable Notification Center and remove menu bar icon"
 
+# Show battery percentage in the menu bar and control center
 defaults write com.apple.menuextra.battery ShowPercent -string 'YES' || { echo "Failed to show battery"; exit 1; }
-echo "Show battery percentage"
+defaults write com.apple.controlcenter "NSStatusItem Visible Battery" -bool true || exit 1
+defaults write com.apple.controlcenter BatteryShowPercentage -bool true || exit 1
+echo "Show battery percentage in menu bar and control center"
 
+# Remove the delay when hovering over a window title in the toolbar
 defaults write NSGlobalDomain NSToolbarTitleViewRolloverDelay -float 0 || { echo "Failed to adjust toolbar delay"; exit 1; }
 echo "Adjust toolbar title rollover delay"
 
 echo "=== Finder Preferences ==="
+
+# Disable the warning when emptying the Trash
 defaults write com.apple.finder WarnOnEmptyTrash -bool false || exit 1
+
+# Keep folders on top when sorting by name
 defaults write com.apple.finder _FXSortFoldersFirst -bool true || exit 1
+
+# When performing a search, search the current folder by default (SCcf)
 defaults write com.apple.finder FXDefaultSearchScope -string "SCcf" || exit 1
+
+# Hide hard drives on the desktop
 defaults write com.apple.finder ShowHardDrivesOnDesktop -bool false || exit 1
+
+# Set the default Finder location to the Home folder (PfHm)
 defaults write com.apple.finder NewWindowTarget -string PfHm || exit 1
 defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}" || exit 1
+
+# Disable the warning when changing a file extension
 defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false || exit 1
+
+# Allow quitting Finder via ⌘ + Q; doing so will also hide desktop icons
 defaults write com.apple.finder QuitMenuItem -bool true || exit 1
+
+# Disable window animations (opening/closing/resizing)
 defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false || exit 1
+
+# Expand save panel by default
 defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true || exit 1
 defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -bool true || exit 1
+
+# Disable various Finder animations
 defaults write com.apple.finder DisableAllAnimations -bool true || exit 1
+
+# Show all filename extensions
+defaults write com.apple.finder AppleShowAllExtensions -bool true || exit 1
+
+# Show the path bar at the bottom of Finder windows
+defaults write com.apple.finder ShowPathbar -bool true || exit 1
+
+# Show the status bar at the bottom of Finder windows (e.g., item count)
+defaults write com.apple.finder ShowStatusBar -bool true || exit 1
+
+# Show the full POSIX path in the Finder window title bar
+defaults write com.apple.finder _FXShowPosixPathInTitle -bool true || exit 1
 
 echo "Finder fine tuning completed"
 
 echo "=== Audio Settings ==="
+
+# Disable the sound effects on boot (Startup chime)
 sudo nvram SystemAudioVolume=" " || exit 1
 sudo nvram StartupMute=%01 || exit 1
+
+# Disable the sound effect when changing volume
 defaults write com.apple.sound.beep.feedback -bool false || exit 1
+
+# Set the alert volume to 0
 defaults write "Apple Global Domain" "com.apple.sound.beep.volume" -float 0 || exit 1
+
+# Increase Bluetooth audio quality (bitpool min)
 defaults write com.apple.BluetoothAudioAgent "Apple Bitpool Min (editable)" -int 40 || exit 1
 
 echo "Audio settings applied"
 
 echo "=== Keyboard Settings ==="
+
+# Set a very fast keyboard repeat rate
 defaults write -g KeyRepeat -int 1 || exit 1
 defaults write -g InitialKeyRepeat -int 15 || exit 1
+
+# Disable "Press and Hold" for keys in favor of key repeat
 defaults write -g ApplePressAndHoldEnabled -bool false || exit 1
 defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false || exit 1
 
+# Disable various automatic text substitutions
 defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false || exit 1
 defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false || exit 1
 defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false || exit 1
 defaults write NSGlobalDomain WebAutomaticSpellingCorrectionEnabled -bool false || exit 1
+
+# Enable full keyboard access for all controls (e.g. enable Tab in modal dialogs)
 defaults write NSGlobalDomain AppleKeyboardUIMode -int 3 || exit 1
 
+# Disable the "Media keys" (Play/Pause etc.) from launching iTunes/Music
 launchctl unload -w /System/Library/LaunchAgents/com.apple.rcd.plist 2>/dev/null || true
 
 echo "Keyboard configured"
 
 echo "=== Trackpad Settings ==="
+
+# Disable Force Touch and haptic feedback
 defaults write com.apple.AppleMultitouchTrackpad ForceSuppressed -bool true || exit 1
+
+# Disable dragging with drag lock
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad DragLock -bool false || exit 1
 defaults write com.apple.AppleMultitouchTrackpad DragLock -bool false || exit 1
+
+# Disable standard dragging
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Dragging -bool false || exit 1
 defaults write com.apple.AppleMultitouchTrackpad Dragging -bool false || exit 1
-defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadThreeFingerDrag -bool false || exit 1
-defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerDrag -bool false || exit 1
 
+# Enable three-finger drag
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadThreeFingerDrag -bool true || exit 1
+defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerDrag -bool true || exit 1
+defaults write com.apple.Accessibility AppIconDragGesture -bool true || exit 1
+echo "Enabled three-finger drag"
+
+# Enable tap to click
 defaults write com.apple.AppleMultitouchTrackpad Clicking -bool true || exit 1
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true || exit 1
 defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1 || exit 1
 defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1 || exit 1
 
+# Set trackpad tracking speed
 defaults write .GlobalPreferences com.apple.trackpad.scaling -int 2 || exit 1
 
+# Enable right-click (secondary click) with two fingers
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadRightClick -bool true || exit 1
 defaults write com.apple.AppleMultitouchTrackpad TrackpadRightClick -int 1 || exit 1
 defaults -currentHost write -g com.apple.trackpad.enableSecondaryClick -bool true || exit 1
+
+# Disable corner secondary click
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadCornerSecondaryClick -int 0 || exit 1
 defaults write com.apple.AppleMultitouchTrackpad TrackpadCornerSecondaryClick -int 0 || exit 1
 defaults -currentHost write -g com.apple.trackpad.trackpadCornerClickBehavior -int 0 || exit 1
@@ -104,63 +173,98 @@ defaults -currentHost write -g com.apple.trackpad.trackpadCornerClickBehavior -i
 echo "Trackpad configured"
 
 echo "=== Security & Privacy ==="
+# Enable FileVault (disk encryption)
 sudo fdesetup enable || true
 echo "FileVault enabled (or already active)"
 
+# Disable captive network control (prevents opening a browser automatically for Wi-Fi logins)
 sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.captive.control Active -bool false || exit 1
 echo "Disabled captive network control"
 
+# Enable the firewall, set logging, and enable stealth mode
 sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setglobalstate on || exit 1
 sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setloggingmode on || exit 1
-echo "Firewall enabled"
+sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setstealthmode on || exit 1
+echo "Firewall enabled with logging and stealth mode"
 
+# Disable Time Machine and prevent it from asking to use new disks for backup
 sudo tmutil disable || true
 defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true || exit 1
 echo "Time Machine disabled"
 
+# Require a password immediately after sleep or screensaver begins
 defaults write com.apple.screensaver askForPassword -int 1 || exit 1
 defaults write com.apple.screensaver askForPasswordDelay -int 0 || exit 1
 echo "Require password immediately after sleep/screensaver"
 
-sudo defaults write com.apple.LaunchServices LSQuarantine -bool NO || exit 1
-echo "Disable quarantining of Downloads and all other files"
+# Enable File Quarantine (LSQuarantine) for downloads (Security best practice)
+sudo defaults write com.apple.LaunchServices LSQuarantine -bool YES || exit 1
+echo "Enabled quarantining of Downloads (Security best practice)"
 
 echo "=== Photos Preferences ==="
+# Prevent Photos from opening automatically when a device is plugged in
 defaults -currentHost write com.apple.ImageCapture disableHotPlug -bool true || exit 1
 echo "Prevent Photos from opening on device plug-in"
 
 echo "=== Display & Screen ==="
+# Enable HiDPI display modes (requires restart)
 sudo defaults write /Library/Preferences/com.apple.windowserver DisplayResolutionEnabled -bool true || exit 1
+
+# Reduce motion and transparency (accessibility)
 sudo defaults write com.apple.universalaccess reduceMotion -bool true || exit 1
 sudo defaults write com.apple.universalaccess reduceTransparency -bool true || exit 1
 echo "Display settings applied"
 
 echo "=== Dock & Mission Control ==="
+# Disable various Dock gestures (Launchpad, App Expose)
 defaults write com.Apple.Dock showLaunchpadGestureEnabled -bool false || exit 1
 defaults write com.Apple.Dock showAppExposeGestureEnabled -bool false || exit 1
+
+# Don't show recent applications in the Dock
 defaults write com.Apple.Dock show-recents -bool false || exit 1
 
+# Enable Dock magnification and set the sizes
 defaults write com.apple.dock magnification -int 1 || exit 1
 defaults write com.apple.dock largesize -int 50 || exit 1
+
+# Clear all persistent apps and folders from the Dock
 defaults write com.apple.dock persistent-apps -array || exit 1
 defaults write com.apple.dock persistent-others -array || exit 1
+
+# Show hidden applications in the Dock (translucent icons)
 defaults write com.apple.dock showhidden -bool true || exit 1
+
+# Set the Dock tile size and orientation
 defaults write com.apple.dock tilesize -int 22 || exit 1
 defaults write com.apple.dock orientation -string 'right' || exit 1
+
+# Don't show indicators for open applications
 defaults write com.apple.dock show-process-indicators -bool false || exit 1
 
+# Don't automatically rearrange Spaces based on most recent use
 defaults write com.apple.dock mru-spaces -bool false || exit 1
+
+# Disable all hot corners
 defaults write com.apple.dock wvous-tl-corner -int 0 || exit 1
 defaults write com.apple.dock wvous-tr-corner -int 0 || exit 1
 defaults write com.apple.dock wvous-bl-corner -int 0 || exit 1
 defaults write com.apple.dock wvous-br-corner -int 0 || exit 1
+
+# Speed up Mission Control animations
 defaults write com.apple.dock expose-animation-duration -float 0.1 || exit 1
 
-echo "Dock and Mission Control configured"
+# Enable Dock auto-hide and set delays to 0 for instant response
+defaults write com.apple.dock autohide -bool true || exit 1
+defaults write com.apple.dock autohide-delay -float 0 || exit 1
+defaults write com.apple.dock autohide-time-modifier -float 0 || exit 1
+
+echo "Dock and Mission Control configured (Auto-hide enabled, animations sped up)"
 
 echo "=== Miscellaneous Settings ==="
+# Set the custom Hammerspoon config file path
 defaults write org.hammerspoon.Hammerspoon MJConfigFile -string "~/.config/.hammerspoon/init.lua" || exit 1
 
+# Disable automatic capitalization, dash substitution, etc. globally
 defaults write -g NSAutomaticCapitalizationEnabled -bool false || exit 1
 defaults write -g NSAutomaticDashSubstitutionEnabled -bool false || exit 1
 defaults write -g NSAutomaticPeriodSubstitutionEnabled -bool false || exit 1
@@ -168,28 +272,63 @@ defaults write -g NSAutomaticQuoteSubstitutionEnabled -bool false || exit 1
 defaults write -g NSAutomaticSpellingCorrectionEnabled -bool false || exit 1
 defaults write -g NSAutomaticTextCompletionEnabled -bool false || exit 1
 
+# Set Activity Monitor to show all processes (category 0)
 defaults write com.apple.ActivityMonitor ShowCategory -int 0 || exit 1
+
+# Set custom login window text
 sudo defaults write /Library/Preferences/com.apple.loginwindow LoginwindowText "I AM SERIOUS" || exit 1
+
+# Disable the firewall from automatically allowing signed/downloaded software
 sudo defaults write /Library/Preferences/com.apple.alf allowdownloadsignedenabled -bool false || true
 sudo defaults write /Library/Preferences/com.apple.alf allowsignedenabled -bool false || true
+
+# Disable console access from the login window
 sudo defaults write /Library/Preferences/com.apple.loginwindow DisableConsoleAccess -bool true || exit 1
 
+# Set display sleep timer to 5 minutes on AC power
 sudo /usr/libexec/PlistBuddy -c "Set 'AC Power':'Display Sleep Timer' 5" /Library/Preferences/com.apple.PowerManagement.plist 2>/dev/null || \
   sudo /usr/libexec/PlistBuddy -c "Add 'AC Power':'Display Sleep Timer' integer 5" /Library/Preferences/com.apple.PowerManagement.plist || exit 1
 
+# Default to saving new documents to disk instead of iCloud
 defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false || exit 1
+
+# Disable the Crash Reporter dialog
 defaults write com.apple.CrashReporter DialogType -string "none" || exit 1
+
+# Enable subpixel font smoothing on non-Apple LCDs
 defaults write NSGlobalDomain AppleFontSmoothing -int 2 || exit 1
+
+# Prevent Time Machine from creating .DS_Store files on network or USB volumes
 defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true || exit 1
 defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true || exit 1
 
+# Disable the sudden motion sensor (not useful for SSDs)
 sudo pmset -a sms 0 || exit 1
 
+echo "=== Privacy & Siri ==="
+# Disable Siri and its associated services
+defaults write com.apple.assistant.support "Assistant Enabled" -bool false || exit 1
+defaults write com.apple.assistant.backedup "Use Device Speaker For Alerts" -int 0 || exit 1
+defaults write com.apple.Siri StatusMenuVisible -bool false || exit 1
+defaults write com.apple.Siri UserHasDeclinedEnable -bool true || exit 1
+echo "Siri disabled"
+
+# Disable Apple personalized advertising
 defaults write com.apple.AdLib allowApplePersonalizedAdvertising -int 0 || exit 1
 
 echo "Miscellaneous tweaks applied"
 
+echo "=== Window Manager & Widgets ==="
+# Disable desktop widgets and the "click wallpaper to show widgets" feature (Sonoma+)
+defaults write com.apple.WindowManager StandardHideWidgets -bool true || exit 1
+defaults write com.apple.WindowManager StageManagerHideWidgets -bool true || exit 1
+defaults write com.apple.WindowManager ClickWidgetBackground -bool false || exit 1
+defaults write com.apple.WindowManager ShowWidgets -bool false || exit 1
+defaults write com.apple.widgets AllowWidgets -bool false || exit 1
+echo "Widgets removed from desktop and sidebar"
+
 echo "=== Spotlight Preferences ==="
+# Configure Spotlight search results: enable Applications and Expressions, disable the rest
 defaults write com.apple.spotlight orderedItems -array \
   '{"enabled" = 1;"name" = "APPLICATIONS";}' \
   '{"enabled" = 1;"name" = "MENU_EXPRESSION";}' \
@@ -235,5 +374,12 @@ echo "Rebuilt Spotlight index"
 killall "cfprefsd" > /dev/null 2>&1 || true
 echo "Killed cached preferences daemon"
 
-echo "> You probably want to restart your machine now...."
-echo "All done!"
+echo ""
+echo "┌────────────────────────┐"
+echo "│                        │"
+echo "│  You probably want to  │"
+echo "│  restart your machine  │"
+echo "│       now....          │"
+echo "│                        │"
+echo "└────────────────────────┘"
+echo ""
