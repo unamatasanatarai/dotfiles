@@ -108,6 +108,14 @@ echo "Finder status bar enabled"
 defaults write com.apple.finder _FXShowPosixPathInTitle -bool true || exit 1
 echo "Full POSIX path shown in Finder title"
 
+# Enable text selection in Quick Look
+defaults write com.apple.finder QLEnableTextSelection -bool true || exit 1
+echo "Quick Look text selection enabled"
+
+# Disable shadow in screenshots
+defaults write com.apple.screencapture disable-shadow -bool true || exit 1
+echo "Screenshot shadows disabled"
+
 echo "Finder fine tuning completed"
 
 echo "=== Audio Settings ==="
@@ -372,6 +380,10 @@ sudo /usr/libexec/PlistBuddy -c "Set 'AC Power':'Display Sleep Timer' 5" /Librar
 defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false || exit 1
 echo "Default save location set to disk"
 
+# Set TextEdit to default to plain text mode
+defaults write com.apple.TextEdit RichText -int 0 || exit 1
+echo "TextEdit set to plain text mode"
+
 # Disable the Crash Reporter dialog
 defaults write com.apple.CrashReporter DialogType -string "none" || exit 1
 echo "Disabled Crash Reporter dialog"
@@ -405,7 +417,22 @@ echo "Siri disabled"
 defaults write com.apple.AdLib allowApplePersonalizedAdvertising -int 0 || exit 1
 echo "Disabled Apple personalized ads"
 
+# Disable automatic submission of diagnostic data
+sudo defaults write "/Library/Application Support/CrashReporter/DiagnosticMessagesHistory.plist" AutoSubmit -bool false || true
+sudo chmod 644 "/Library/Application Support/CrashReporter/DiagnosticMessagesHistory.plist" || true
+sudo chgrp admin "/Library/Application Support/CrashReporter/DiagnosticMessagesHistory.plist" || true
+echo "Diagnostic data auto-submission disabled"
+
 echo "Miscellaneous tweaks applied"
+
+echo "=== Safari Settings ==="
+# Show the full URL in the address bar
+defaults write com.apple.Safari ShowFullURLInSmartSearchField -bool true || exit 1
+echo "Safari full URL enabled"
+
+# Disable opening "safe" files after downloading
+defaults write com.apple.Safari AutoOpenSafeDownloads -bool false || exit 1
+echo "Safari auto-open safe downloads disabled"
 
 echo "=== Window Manager & Widgets ==="
 # Disable desktop widgets and the "click wallpaper to show widgets" feature (Sonoma+)
