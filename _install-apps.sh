@@ -76,9 +76,15 @@ if [[ -n "$BREW_BASH" ]]; then
 fi
 
 echo "==> Starting services and opening apps..."
+# Launch skhd
 if command -v skhd &> /dev/null; then
-    echo "    Restarting skhd..."
-    skhd --restart-service || echo "    Failed to restart skhd"
+    echo "    Starting or restarting skhd..."
+    skhd --restart-service 2>/dev/null || skhd --start-service || echo "    Failed to start skhd"
+fi
+# Launch lulu
+if [ -d "/Applications/LuLu.app" ]; then
+    echo "    Starting LuLu..."
+    open "/Applications/LuLu.app" || echo "    Failed to start LuLu"
 fi
 
 echo "==> Installation complete!"
