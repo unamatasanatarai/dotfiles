@@ -99,8 +99,8 @@ AGENTS=(
 LOG_FILE="/tmp/stop-processes.log"
 > "$LOG_FILE"
 
-# Get current user's UID for GUI domain
-USER_UID=$(id -u)
+# Get current user's UID for GUI domain using pure bash to avoid subshell
+USER_UID=$UID
 
 for agent in "${AGENTS[@]}"; do
   # Check for plist in LaunchAgents, LaunchDaemons, and user LaunchAgents

@@ -1,292 +1,238 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
+echo "=== Let's go! ==="
 
-section() {
-    echo "=== $1 ==="
-}
+echo "=== System Preferences ==="
+echo "Closing System Preferences window"
+osascript -e 'tell application "System Preferences" to quit' || true
 
-say(){
-    echo "> $1"
-}
+echo "=== Computer Name Setup ==="
+scutil --get ComputerName > /tmp/cn
+read -r current_name < /tmp/cn
+echo -n "Set computer name [$current_name]: "
+read -r computer_name
 
-function close_system_preferences() {
-  section "System Preferences"
-  echo "Closing System Preferences window"
-  osascript -e 'tell application "System Preferences" to quit'
-}
+if [[ -n "$computer_name" && "$computer_name" != "$current_name" ]]; then
+  echo "> Setting ComputerName to: $computer_name"
+  sudo scutil --set ComputerName "$computer_name" || { echo "Failed to set ComputerName"; exit 1; }
+  sudo scutil --set HostName "$computer_name" || { echo "Failed to set HostName"; exit 1; }
+  sudo scutil --set LocalHostName "$computer_name" || { echo "Failed to set LocalHostName"; exit 1; }
+  sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string "$computer_name" || { echo "Failed to set NetBIOSName"; exit 1; }
+  echo "Computer name set (System Preferences → Sharing)"
+else
+  echo "Computer name unchanged"
+fi
 
-function set_computer_name() {
-  section "Computer Name Setup"
-  local current_name
-  current_name=$(scutil --get ComputerName)
-  echo -n "Set computer name [$current_name]: "
-  read -r computer_name
+echo "=== Appearance & UI ==="
+echo "> Tools and Look"
+defaults write NSGlobalDomain AppleHighlightColor -string "0.764700 0.976500 0.568600" || { echo "Failed to set highlight color"; exit 1; }
+echo "Set highlight color to green"
 
-  if [[ -n "$computer_name" && "$computer_name" != "$current_name" ]]; then
-    say "Setting ComputerName to: $computer_name"
-    sudo scutil --set ComputerName "$computer_name"
-    sudo scutil --set HostName "$computer_name"
-    sudo scutil --set LocalHostName "$computer_name"
-    sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string "$computer_name"
-    echo "Computer name set (System Preferences → Sharing)"
-  else
-    echo "Computer name unchanged"
-  fi
-}
+launchctl unload -w /System/Library/LaunchAgents/com.apple.notificationcenterui.plist 2>/dev/null || true
+echo "Disable Notification Center and remove menu bar icon"
 
-function appearance_ui() {
-  section "Appearance & UI"
-  say "Tools and Look"
-  defaults write NSGlobalDomain AppleHighlightColor -string "0.764700 0.976500 0.568600"
-  echo "Set highlight color to green"
+defaults write com.apple.menuextra.battery ShowPercent -string 'YES' || { echo "Failed to show battery"; exit 1; }
+echo "Show battery percentage"
 
-  launchctl unload -w /System/Library/LaunchAgents/com.apple.notificationcenterui.plist 2>/dev/null || true
-  echo "Disable Notification Center and remove menu bar icon"
+defaults write NSGlobalDomain NSToolbarTitleViewRolloverDelay -float 0 || { echo "Failed to adjust toolbar delay"; exit 1; }
+echo "Adjust toolbar title rollover delay"
 
-  defaults write com.apple.menuextra.battery ShowPercent -string 'YES'
-  echo "Show battery percentage"
+echo "=== Finder Preferences ==="
+defaults write com.apple.finder WarnOnEmptyTrash -bool false || exit 1
+defaults write com.apple.finder _FXSortFoldersFirst -bool true || exit 1
+defaults write com.apple.finder FXDefaultSearchScope -string "SCcf" || exit 1
+defaults write com.apple.finder ShowHardDrivesOnDesktop -bool false || exit 1
+defaults write com.apple.finder NewWindowTarget -string PfHm || exit 1
+defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}" || exit 1
+defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false || exit 1
+defaults write com.apple.finder QuitMenuItem -bool true || exit 1
+defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false || exit 1
+defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true || exit 1
+defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -bool true || exit 1
+defaults write com.apple.finder DisableAllAnimations -bool true || exit 1
 
-  defaults write NSGlobalDomain NSToolbarTitleViewRolloverDelay -float 0
-  echo "Adjust toolbar title rollover delay"
-}
+echo "Finder fine tuning completed"
 
-function finder_preferences() {
-  section "Finder Preferences"
-  defaults write com.apple.finder WarnOnEmptyTrash -bool false
-  defaults write com.apple.finder _FXSortFoldersFirst -bool true
-  defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
-  defaults write com.apple.finder ShowHardDrivesOnDesktop -bool false
-  defaults write com.apple.finder NewWindowTarget -string PfHm
-  defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}"
-  defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
-  defaults write com.apple.finder QuitMenuItem -bool true
-  defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
-  defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
-  defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -bool true
-  defaults write com.apple.finder DisableAllAnimations -bool true
+echo "=== Audio Settings ==="
+sudo nvram SystemAudioVolume=" " || exit 1
+sudo nvram StartupMute=%01 || exit 1
+defaults write com.apple.sound.beep.feedback -bool false || exit 1
+defaults write "Apple Global Domain" "com.apple.sound.beep.volume" -float 0 || exit 1
+defaults write com.apple.BluetoothAudioAgent "Apple Bitpool Min (editable)" -int 40 || exit 1
 
-  echo "Finder fine tuning completed"
-}
+echo "Audio settings applied"
 
-function audio_settings() {
-  section "Audio Settings"
-  sudo nvram SystemAudioVolume=" "
-  sudo nvram StartupMute=%01
-  defaults write com.apple.sound.beep.feedback -bool false
-  defaults write "Apple Global Domain" "com.apple.sound.beep.volume" -float 0
-  defaults write com.apple.BluetoothAudioAgent "Apple Bitpool Min (editable)" -int 40
+echo "=== Keyboard Settings ==="
+defaults write -g KeyRepeat -int 1 || exit 1
+defaults write -g InitialKeyRepeat -int 15 || exit 1
+defaults write -g ApplePressAndHoldEnabled -bool false || exit 1
+defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false || exit 1
 
-  echo "Audio settings applied"
-}
+defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false || exit 1
+defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false || exit 1
+defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false || exit 1
+defaults write NSGlobalDomain WebAutomaticSpellingCorrectionEnabled -bool false || exit 1
+defaults write NSGlobalDomain AppleKeyboardUIMode -int 3 || exit 1
 
-function keyboard_settings() {
-  section "Keyboard Settings"
-  defaults write -g KeyRepeat -int 1
-  defaults write -g InitialKeyRepeat -int 15
-  defaults write -g ApplePressAndHoldEnabled -bool false
-  defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
+launchctl unload -w /System/Library/LaunchAgents/com.apple.rcd.plist 2>/dev/null || true
 
-  defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
-  defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false
-  defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
-  defaults write NSGlobalDomain WebAutomaticSpellingCorrectionEnabled -bool false
-  defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
+echo "Keyboard configured"
 
-  launchctl unload -w /System/Library/LaunchAgents/com.apple.rcd.plist 2>/dev/null || true
+echo "=== Trackpad Settings ==="
+defaults write com.apple.AppleMultitouchTrackpad ForceSuppressed -bool true || exit 1
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad DragLock -bool false || exit 1
+defaults write com.apple.AppleMultitouchTrackpad DragLock -bool false || exit 1
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Dragging -bool false || exit 1
+defaults write com.apple.AppleMultitouchTrackpad Dragging -bool false || exit 1
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadThreeFingerDrag -bool false || exit 1
+defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerDrag -bool false || exit 1
 
-  echo "Keyboard configured"
-}
+defaults write com.apple.AppleMultitouchTrackpad Clicking -bool true || exit 1
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true || exit 1
+defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1 || exit 1
+defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1 || exit 1
 
-function trackpad_settings() {
-  section "Trackpad Settings"
-  defaults write com.apple.AppleMultitouchTrackpad ForceSuppressed -bool true
-  defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad DragLock -bool false
-  defaults write com.apple.AppleMultitouchTrackpad DragLock -bool false
-  defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Dragging -bool false
-  defaults write com.apple.AppleMultitouchTrackpad Dragging -bool false
-  defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadThreeFingerDrag -bool false
-  defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerDrag -bool false
+defaults write .GlobalPreferences com.apple.trackpad.scaling -int 2 || exit 1
 
-  defaults write com.apple.AppleMultitouchTrackpad Clicking -bool true
-  defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
-  defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
-  defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadRightClick -bool true || exit 1
+defaults write com.apple.AppleMultitouchTrackpad TrackpadRightClick -int 1 || exit 1
+defaults -currentHost write -g com.apple.trackpad.enableSecondaryClick -bool true || exit 1
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadCornerSecondaryClick -int 0 || exit 1
+defaults write com.apple.AppleMultitouchTrackpad TrackpadCornerSecondaryClick -int 0 || exit 1
+defaults -currentHost write -g com.apple.trackpad.trackpadCornerClickBehavior -int 0 || exit 1
 
-  defaults write .GlobalPreferences com.apple.trackpad.scaling -int 2
+echo "Trackpad configured"
 
-  defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadRightClick -bool true
-  defaults write com.apple.AppleMultitouchTrackpad TrackpadRightClick -int 1
-  defaults -currentHost write -g com.apple.trackpad.enableSecondaryClick -bool true
-  defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadCornerSecondaryClick -int 0
-  defaults write com.apple.AppleMultitouchTrackpad TrackpadCornerSecondaryClick -int 0
-  defaults -currentHost write -g com.apple.trackpad.trackpadCornerClickBehavior -int 0
+echo "=== Security & Privacy ==="
+sudo fdesetup enable || true
+echo "FileVault enabled (or already active)"
 
-  echo "Trackpad configured"
-}
+sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.captive.control Active -bool false || exit 1
+echo "Disabled captive network control"
 
-function security_privacy() {
-  section "Security & Privacy"
-  sudo fdesetup enable || true
-  echo "FileVault enabled (or already active)"
+sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setglobalstate on || exit 1
+sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setloggingmode on || exit 1
+echo "Firewall enabled"
 
-  sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.captive.control Active -bool false
-  echo "Disabled captive network control"
+sudo tmutil disable || true
+defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true || exit 1
+echo "Time Machine disabled"
 
-  sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setglobalstate on
-  sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setloggingmode on
-  echo "Firewall enabled"
+defaults write com.apple.screensaver askForPassword -int 1 || exit 1
+defaults write com.apple.screensaver askForPasswordDelay -int 0 || exit 1
+echo "Require password immediately after sleep/screensaver"
 
-  sudo tmutil disable || true
-  defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
-  echo "Time Machine disabled"
+sudo defaults write com.apple.LaunchServices LSQuarantine -bool NO || exit 1
+echo "Disable quarantining of Downloads and all other files"
 
-  defaults write com.apple.screensaver askForPassword -int 1
-  defaults write com.apple.screensaver askForPasswordDelay -int 0
-  echo "Require password immediately after sleep/screensaver"
+echo "=== Photos Preferences ==="
+defaults -currentHost write com.apple.ImageCapture disableHotPlug -bool true || exit 1
+echo "Prevent Photos from opening on device plug-in"
 
-  sudo defaults write com.apple.LaunchServices LSQuarantine -bool NO
-  echo "Disable quarantining of Downloads and all other files"
-}
+echo "=== Display & Screen ==="
+sudo defaults write /Library/Preferences/com.apple.windowserver DisplayResolutionEnabled -bool true || exit 1
+sudo defaults write com.apple.universalaccess reduceMotion -bool true || exit 1
+sudo defaults write com.apple.universalaccess reduceTransparency -bool true || exit 1
+echo "Display settings applied"
 
-function photos_preferences() {
-  section "Photos Preferences"
-  defaults -currentHost write com.apple.ImageCapture disableHotPlug -bool true
-  echo "Prevent Photos from opening on device plug-in"
-}
+echo "=== Dock & Mission Control ==="
+defaults write com.Apple.Dock showLaunchpadGestureEnabled -bool false || exit 1
+defaults write com.Apple.Dock showAppExposeGestureEnabled -bool false || exit 1
+defaults write com.Apple.Dock show-recents -bool false || exit 1
 
-function display_settings() {
-  section "Display & Screen"
-  sudo defaults write /Library/Preferences/com.apple.windowserver DisplayResolutionEnabled -bool true
-  sudo defaults write com.apple.universalaccess reduceMotion -bool true
-  sudo defaults write com.apple.universalaccess reduceTransparency -bool true
-  echo "Display settings applied"
-}
+defaults write com.apple.dock magnification -int 1 || exit 1
+defaults write com.apple.dock largesize -int 50 || exit 1
+defaults write com.apple.dock persistent-apps -array || exit 1
+defaults write com.apple.dock persistent-others -array || exit 1
+defaults write com.apple.dock showhidden -bool true || exit 1
+defaults write com.apple.dock tilesize -int 22 || exit 1
+defaults write com.apple.dock orientation -string 'right' || exit 1
+defaults write com.apple.dock show-process-indicators -bool false || exit 1
 
-function dock_mission_control() {
-  section "Dock & Mission Control"
-  defaults write com.Apple.Dock showLaunchpadGestureEnabled -bool false
-  defaults write com.Apple.Dock showAppExposeGestureEnabled -bool false
-  defaults write com.Apple.Dock show-recents -bool false
+defaults write com.apple.dock mru-spaces -bool false || exit 1
+defaults write com.apple.dock wvous-tl-corner -int 0 || exit 1
+defaults write com.apple.dock wvous-tr-corner -int 0 || exit 1
+defaults write com.apple.dock wvous-bl-corner -int 0 || exit 1
+defaults write com.apple.dock wvous-br-corner -int 0 || exit 1
+defaults write com.apple.dock expose-animation-duration -float 0.1 || exit 1
 
-  defaults write com.apple.dock magnification -int 1
-  defaults write com.apple.dock largesize -int 50
-  defaults write com.apple.dock persistent-apps -array
-  defaults write com.apple.dock persistent-others -array
-  defaults write com.apple.dock showhidden -bool true
-  defaults write com.apple.dock tilesize -int 22
-  defaults write com.apple.dock orientation -string 'right'
-  defaults write com.apple.dock show-process-indicators -bool false
+echo "Dock and Mission Control configured"
 
-  defaults write com.apple.dock mru-spaces -bool false
-  defaults write com.apple.dock wvous-tl-corner -int 0
-  defaults write com.apple.dock wvous-tr-corner -int 0
-  defaults write com.apple.dock wvous-bl-corner -int 0
-  defaults write com.apple.dock wvous-br-corner -int 0
-  defaults write com.apple.dock expose-animation-duration -float 0.1
+echo "=== Miscellaneous Settings ==="
+defaults write org.hammerspoon.Hammerspoon MJConfigFile -string "~/.config/.hammerspoon/init.lua" || exit 1
 
-  echo "Dock and Mission Control configured"
-}
+defaults write -g NSAutomaticCapitalizationEnabled -bool false || exit 1
+defaults write -g NSAutomaticDashSubstitutionEnabled -bool false || exit 1
+defaults write -g NSAutomaticPeriodSubstitutionEnabled -bool false || exit 1
+defaults write -g NSAutomaticQuoteSubstitutionEnabled -bool false || exit 1
+defaults write -g NSAutomaticSpellingCorrectionEnabled -bool false || exit 1
+defaults write -g NSAutomaticTextCompletionEnabled -bool false || exit 1
 
-function miscellaneous_settings() {
-  section "Miscellaneous Settings"
-  defaults write org.hammerspoon.Hammerspoon MJConfigFile -string "~/.config/.hammerspoon/init.lua"
+defaults write com.apple.ActivityMonitor ShowCategory -int 0 || exit 1
+sudo defaults write /Library/Preferences/com.apple.loginwindow LoginwindowText "I AM SERIOUS" || exit 1
+sudo defaults write /Library/Preferences/com.apple.alf allowdownloadsignedenabled -bool false || true
+sudo defaults write /Library/Preferences/com.apple.alf allowsignedenabled -bool false || true
+sudo defaults write /Library/Preferences/com.apple.loginwindow DisableConsoleAccess -bool true || exit 1
 
-  defaults write -g NSAutomaticCapitalizationEnabled -bool false
-  defaults write -g NSAutomaticDashSubstitutionEnabled -bool false
-  defaults write -g NSAutomaticPeriodSubstitutionEnabled -bool false
-  defaults write -g NSAutomaticQuoteSubstitutionEnabled -bool false
-  defaults write -g NSAutomaticSpellingCorrectionEnabled -bool false
-  defaults write -g NSAutomaticTextCompletionEnabled -bool false
+sudo /usr/libexec/PlistBuddy -c "Set 'AC Power':'Display Sleep Timer' 5" /Library/Preferences/com.apple.PowerManagement.plist || exit 1
 
-  defaults write com.apple.ActivityMonitor ShowCategory -int 0
-  sudo defaults write /Library/Preferences/com.apple.loginwindow LoginwindowText "I AM SERIOUS"
-  sudo defaults write /Library/Preferences/com.apple.alf allowdownloadsignedenabled -bool false || true
-  sudo defaults write /Library/Preferences/com.apple.alf allowsignedenabled -bool false || true
-  sudo defaults write /Library/Preferences/com.apple.loginwindow DisableConsoleAccess -bool true
+defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false || exit 1
+defaults write com.apple.CrashReporter DialogType -string "none" || exit 1
+defaults write NSGlobalDomain AppleFontSmoothing -int 2 || exit 1
+defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true || exit 1
+defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true || exit 1
 
-  sudo /usr/libexec/PlistBuddy -c "Set 'AC Power':'Display Sleep Timer' 5" /Library/Preferences/com.apple.PowerManagement.plist
+sudo pmset -a sms 0 || exit 1
 
-  defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
-  defaults write com.apple.CrashReporter DialogType -string "none"
-  defaults write NSGlobalDomain AppleFontSmoothing -int 2
-  defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
-  defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
+defaults write com.apple.AdLib allowApplePersonalizedAdvertising -int 0 || exit 1
 
-  sudo pmset -a sms 0
+echo "Miscellaneous tweaks applied"
 
-  defaults write com.apple.AdLib allowApplePersonalizedAdvertising -int 0
+echo "=== Spotlight Preferences ==="
+defaults write com.apple.spotlight orderedItems -array \
+  '{"enabled" = 1;"name" = "APPLICATIONS";}' \
+  '{"enabled" = 1;"name" = "MENU_EXPRESSION";}' \
+  '{"enabled" = 0;"name" = "MENU_SPOTLIGHT_SUGGESTIONS";}' \
+  '{"enabled" = 0;"name" = "MENU_CONVERSION";}' \
+  '{"enabled" = 0;"name" = "MENU_DEFINITION";}' \
+  '{"enabled" = 0;"name" = "SYSTEM_PREFS";}' \
+  '{"enabled" = 0;"name" = "DOCUMENTS";}' \
+  '{"enabled" = 0;"name" = "DIRECTORIES";}' \
+  '{"enabled" = 0;"name" = "PRESENTATIONS";}' \
+  '{"enabled" = 0;"name" = "SPREADSHEETS";}' \
+  '{"enabled" = 0;"name" = "PDF";}' \
+  '{"enabled" = 0;"name" = "MESSAGES";}' \
+  '{"enabled" = 0;"name" = "CONTACT";}' \
+  '{"enabled" = 0;"name" = "EVENT_TODO";}' \
+  '{"enabled" = 0;"name" = "IMAGES";}' \
+  '{"enabled" = 0;"name" = "BOOKMARKS";}' \
+  '{"enabled" = 0;"name" = "MUSIC";}' \
+  '{"enabled" = 0;"name" = "MOVIES";}' \
+  '{"enabled" = 0;"name" = "FONTS";}' \
+  '{"enabled" = 0;"name" = "MENU_OTHER";}' || exit 1
+echo "Spotlight preferences set"
 
-  echo "Miscellaneous tweaks applied"
-}
+echo "=== Finishup and Cleanup ==="
+killall "SystemUIServer" > /dev/null 2>&1 || true
+echo "Restarted SystemUIServer"
 
-function spotlight_preferences() {
-  section "Spotlight Preferences"
-  defaults write com.apple.spotlight orderedItems -array \
-    '{"enabled" = 1;"name" = "APPLICATIONS";}' \
-    '{"enabled" = 1;"name" = "MENU_EXPRESSION";}' \
-    '{"enabled" = 0;"name" = "MENU_SPOTLIGHT_SUGGESTIONS";}' \
-    '{"enabled" = 0;"name" = "MENU_CONVERSION";}' \
-    '{"enabled" = 0;"name" = "MENU_DEFINITION";}' \
-    '{"enabled" = 0;"name" = "SYSTEM_PREFS";}' \
-    '{"enabled" = 0;"name" = "DOCUMENTS";}' \
-    '{"enabled" = 0;"name" = "DIRECTORIES";}' \
-    '{"enabled" = 0;"name" = "PRESENTATIONS";}' \
-    '{"enabled" = 0;"name" = "SPREADSHEETS";}' \
-    '{"enabled" = 0;"name" = "PDF";}' \
-    '{"enabled" = 0;"name" = "MESSAGES";}' \
-    '{"enabled" = 0;"name" = "CONTACT";}' \
-    '{"enabled" = 0;"name" = "EVENT_TODO";}' \
-    '{"enabled" = 0;"name" = "IMAGES";}' \
-    '{"enabled" = 0;"name" = "BOOKMARKS";}' \
-    '{"enabled" = 0;"name" = "MUSIC";}' \
-    '{"enabled" = 0;"name" = "MOVIES";}' \
-    '{"enabled" = 0;"name" = "FONTS";}' \
-    '{"enabled" = 0;"name" = "MENU_OTHER";}'
-  echo "Spotlight preferences set"
-}
+killall "Finder" > /dev/null 2>&1 || true
+echo "Restarted Finder"
 
-function finish_cleanup() {
-  section "Finishup and Cleanup"
-  killall "SystemUIServer" > /dev/null 2>&1 || true
-  echo "Restarted SystemUIServer"
+killall "Dock" > /dev/null 2>&1 || true
+echo "Restarted Dock"
 
-  killall "Finder" > /dev/null 2>&1 || true
-  echo "Restarted Finder"
+killall mds > /dev/null 2>&1 || true
+echo "Restarted Spotlight daemon"
 
-  killall "Dock" > /dev/null 2>&1 || true
-  echo "Restarted Dock"
+sudo mdutil -i on / > /dev/null 2>&1 || true
+echo "Enabled Spotlight indexing on main volume"
 
-  killall mds > /dev/null 2>&1 || true
-  echo "Restarted Spotlight daemon"
+sudo mdutil -E / > /dev/null 2>&1 || true
+echo "Rebuilt Spotlight index"
 
-  sudo mdutil -i on / > /dev/null 2>&1 || true
-  echo "Enabled Spotlight indexing on main volume"
+killall "cfprefsd" > /dev/null 2>&1 || true
+echo "Killed cached preferences daemon"
 
-  sudo mdutil -E / > /dev/null 2>&1 || true
-  echo "Rebuilt Spotlight index"
-
-  killall "cfprefsd" > /dev/null 2>&1 || true
-  echo "Killed cached preferences daemon"
-
-  say "You probably want to restart your machine now...."
-  echo "All done!"
-}
-
-
-
-section "Let's go!"
-close_system_preferences
-set_computer_name
-appearance_ui
-finder_preferences
-audio_settings
-keyboard_settings
-trackpad_settings
-security_privacy
-photos_preferences
-display_settings
-dock_mission_control
-miscellaneous_settings
-spotlight_preferences
-finish_cleanup
+echo "> You probably want to restart your machine now...."
+echo "All done!"

@@ -18,6 +18,6 @@ dir_vars=(
 
 for var in "${dir_vars[@]}"; do
   dir="${!var}"
-  mkdir -vp "$dir"
+  mkdir -vp "$dir" || { echo "Failed to create directory $dir"; exit 1; }
 done
 
