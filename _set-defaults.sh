@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
-#
-# macOS Defaults Setup
-#
+
 # IMPORTANT: DO NOT run this script with 'sudo'. 
 # The script will prompt for your password only when it needs it.
 # Running the whole script as sudo will break Safari/User preferences.
@@ -13,13 +11,35 @@ if [[ $EUID -eq 0 ]]; then
 fi
 
 echo "=== System Preferences ==="
-echo "Closing System Preferences and Safari"
 # Quitting apps before modifying their preferences is best practice
 osascript -e 'tell application "System Preferences" to quit' || true
+osascript -e 'tell application "System Settings" to quit' || true
 osascript -e 'tell application "Safari" to quit' || true
 
 # NOTE: For many of these 'defaults' commands to work (especially Safari), 
 # your Terminal must have "Full Disk Access" in System Settings > Privacy & Security.
+
+# Trackpad: Silent Clicking
+defaults write com.apple.AppleMultitouchTrackpad SilentClick -bool true || exit 1
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad SilentClick -bool true || exit 1
+echo "Silent clicking enabled"
+
+# Trackpad: 4-finger swipe between spaces/pages
+defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerHorizSwipeGesture -int 0 || exit 1
+defaults write com.apple.AppleMultitouchTrackpad TrackpadFourFingerHorizSwipeGesture -int 2 || exit 1
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadThreeFingerHorizSwipeGesture -int 0 || exit 1
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadFourFingerHorizSwipeGesture -int 2 || exit 1
+echo "4-finger swipe between spaces/pages enabled"
+
+# Keyboard: Do not adjust brightness in low light
+sudo defaults write /Library/Preferences/com.apple.iokit.AmbientLightSensor "Automatic Keyboard Brightness" -bool false || exit 1
+echo "Automatic keyboard brightness disabled"
+
+# Power: Display sleep (10 minutes)
+sudo pmset -b displaysleep 10 || exit 1
+sudo pmset -c displaysleep 10 || exit 1
+echo "Display sleep set to 10 minutes"
+
 
 echo "=== Computer Name Setup ==="
 scutil --get ComputerName > /tmp/cn
@@ -148,6 +168,15 @@ echo "Disabled volume change sound effect"
 # Set the alert volume to 0
 defaults write "Apple Global Domain" "com.apple.sound.beep.volume" -float 0 || exit 1
 echo "Alert volume set to 0"
+
+# Mute microphone
+osascript -e "set volume input volume 0"
+echo "Microphone muted"
+
+# Disable UI sounds and volume change feedback
+defaults write com.apple.systemsound "com.apple.sound.uiaudio.enabled" -int 0 || exit 1
+defaults write .GlobalPreferences com.apple.sound.beep.feedback -int 0 || exit 1
+echo "UI sounds and volume feedback disabled"
 
 # Increase Bluetooth audio quality (bitpool min)
 defaults write com.apple.BluetoothAudioAgent "Apple Bitpool Min (editable)" -int 40 || exit 1
@@ -333,6 +362,54 @@ echo "Cleared Dock persistent others"
 defaults write com.apple.dock showhidden -bool true || exit 1
 echo "Show hidden apps in Dock enabled"
 
+# Widgets: Turn off iPhone widgets
+defaults write com.apple.widgets useiPhoneWidgets -bool false || exit 1
+echo "iPhone widgets disabled"
+
+# Spotlight: Disable unwanted categories
+# We keep APPLICATIONS, SYSTEM_PREFS, and DIRECTORIES
+defaults write com.apple.spotlight orderedItems -array \
+	'{"enabled" = 1;"name" = "APPLICATIONS";}' \
+	'{"enabled" = 1;"name" = "SYSTEM_PREFS";}' \
+	'{"enabled" = 0;"name" = "DIRECTORIES";}' \
+	'{"enabled" = 0;"name" = "CALCULATOR";}' \
+	'{"enabled" = 0;"name" = "CONTACTS";}' \
+	'{"enabled" = 0;"name" = "CONVERSION";}' \
+	'{"enabled" = 0;"name" = "DEFINITION";}' \
+	'{"enabled" = 0;"name" = "DOCUMENTS_ITEMS";}' \
+	'{"enabled" = 0;"name" = "EVENT_TODO";}' \
+	'{"enabled" = 0;"name" = "FOLDERS";}' \
+	'{"enabled" = 0;"name" = "FONTS";}' \
+	'{"enabled" = 0;"name" = "IMAGES";}' \
+	'{"enabled" = 0;"name" = "MESSAGES";}' \
+	'{"enabled" = 0;"name" = "MOVIES";}' \
+	'{"enabled" = 0;"name" = "MUSIC";}' \
+	'{"enabled" = 0;"name" = "OTHER";}' \
+	'{"enabled" = 0;"name" = "PDF";}' \
+	'{"enabled" = 0;"name" = "PRESENTATIONS";}' \
+	'{"enabled" = 0;"name" = "SIRI_SUGGESTIONS";}' \
+	'{"enabled" = 0;"name" = "SPREADSHEETS";}' \
+	'{"enabled" = 0;"name" = "TIPS";}' \
+	'{"enabled" = 0;"name" = "WEBSITES";}' || exit 1
+echo "Spotlight categories refined"
+
+# Spotlight: Hide icon from menu bar
+defaults write com.apple.Spotlight "NSStatusItem Visible Item-0" -bool false || exit 1
+echo "Spotlight menu bar icon hidden"
+
+# Control Center & Menu Bar visibility
+# Battery: Show in Control Center
+defaults -currentHost write com.apple.controlcenter Battery -int 1 || exit 1
+# WiFi: Don't show in Menu Bar
+defaults -currentHost write com.apple.controlcenter WiFi -int 8 || exit 1
+# Bluetooth: Don't show in Menu Bar
+defaults -currentHost write com.apple.controlcenter Bluetooth -int 8 || exit 1
+# Focus: Don't show in Menu Bar
+defaults -currentHost write com.apple.controlcenter FocusModes -int 8 || exit 1
+# Now Playing: Don't show in Menu Bar
+defaults -currentHost write com.apple.controlcenter NowPlaying -int 8 || exit 1
+echo "Control Center and Menu Bar visibility updated"
+
 # Set the Dock tile size and orientation
 defaults write com.apple.dock tilesize -int 22 || exit 1
 echo "Dock tile size set"
@@ -515,6 +592,17 @@ echo "Rebuilt Spotlight index"
 
 killall "cfprefsd" > /dev/null 2>&1 || true
 echo "Killed cached preferences daemon"
+
+echo ""
+echo "======================================================"
+echo "ACTION REQUIRED: Keyboard Shortcuts"
+echo "======================================================"
+echo "Please manually turn off ALL keyboard shortcuts EXCEPT:"
+echo "  - Move focus to next window (⌘ + \`)"
+echo "  - Spotlight search (⌘ + Space)"
+echo "System Settings has been opened for you."
+echo "======================================================"
+open "x-apple.systempreferences:com.apple.preference.keyboard?shortcuts"
 
 echo ""
 echo "┌────────────────────────┐"
