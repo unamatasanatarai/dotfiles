@@ -21,6 +21,18 @@ osascript -e 'tell application "Safari" to quit' || true
 # NOTE: For many of these 'defaults' commands to work (especially Safari), 
 # your Terminal must have "Full Disk Access" in System Settings > Privacy & Security.
 
+echo "Checking Full Disk Access..."
+if ! defaults write com.apple.Safari _TestFDA -bool true 2>/dev/null; then
+    echo ">>> Terminal needs Full Disk Access to set some defaults (like Safari)."
+    echo ">>> Opening Privacy settings for you..."
+    open "x-apple.systempreferences:com.apple.preference.security?Privacy_AllFiles"
+    echo ">>> Please grant Full Disk Access to your Terminal and then RESTART this script."
+    exit 1
+else
+    defaults delete com.apple.Safari _TestFDA 2>/dev/null
+    echo "Full Disk Access confirmed."
+fi
+
 echo "=== Computer Name Setup ==="
 scutil --get ComputerName > /tmp/cn
 read -r current_name < /tmp/cn
@@ -182,6 +194,12 @@ echo "Disabled web automatic spelling correction"
 # Enable full keyboard access for all controls (e.g. enable Tab in modal dialogs)
 defaults write NSGlobalDomain AppleKeyboardUIMode -int 3 || exit 1
 echo "Full keyboard access enabled"
+
+# Remap Caps Lock to Control
+# NOTE: This command is NOT persistent across reboots.
+# For a persistent solution, use System Settings > Keyboard > Keyboard Shortcuts > Modifier Keys.
+hidutil property --set '{"UserKeyMapping":[{"HIDKeyboardModifierMappingSrc":0x700000039,"HIDKeyboardModifierMappingDst":0x7000000E0}]}' || echo "Failed to remap Caps Lock via hidutil"
+echo "Remapped Caps Lock to Control (Note: Not persistent across reboots)"
 
 # Disable the "Media keys" (Play/Pause etc.) from launching iTunes/Music
 launchctl unload -w /System/Library/LaunchAgents/com.apple.rcd.plist 2>/dev/null || true
@@ -502,6 +520,17 @@ echo "Rebuilt Spotlight index"
 
 killall "cfprefsd" > /dev/null 2>&1 || true
 echo "Killed cached preferences daemon"
+
+echo "=== Services & Apps ==="
+if command -v skhd &> /dev/null; then
+    echo "Restarting skhd..."
+    skhd --restart-service || echo "Failed to restart skhd"
+fi
+
+if [[ -d "/Applications/AeroSpace.app" ]]; then
+    echo "Opening AeroSpace..."
+    open -a AeroSpace || echo "Failed to open AeroSpace"
+fi
 
 echo ""
 echo "┌────────────────────────┐"
