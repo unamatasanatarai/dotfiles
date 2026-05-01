@@ -1,8 +1,25 @@
 #!/usr/bin/env bash
+#
+# macOS Defaults Setup
+#
+# IMPORTANT: DO NOT run this script with 'sudo'. 
+# The script will prompt for your password only when it needs it.
+# Running the whole script as sudo will break Safari/User preferences.
+
+if [[ $EUID -eq 0 ]]; then
+   echo "Error: Please DO NOT run this script with sudo."
+   echo "Run it as a normal user: ./_set-defaults.sh"
+   exit 1
+fi
 
 echo "=== System Preferences ==="
-echo "Closing System Preferences window"
+echo "Closing System Preferences and Safari"
+# Quitting apps before modifying their preferences is best practice
 osascript -e 'tell application "System Preferences" to quit' || true
+osascript -e 'tell application "Safari" to quit' || true
+
+# NOTE: For many of these 'defaults' commands to work (especially Safari), 
+# your Terminal must have "Full Disk Access" in System Settings > Privacy & Security.
 
 echo "=== Computer Name Setup ==="
 scutil --get ComputerName > /tmp/cn
@@ -424,15 +441,6 @@ sudo chgrp admin "/Library/Application Support/CrashReporter/DiagnosticMessagesH
 echo "Diagnostic data auto-submission disabled"
 
 echo "Miscellaneous tweaks applied"
-
-echo "=== Safari Settings ==="
-# Show the full URL in the address bar
-defaults write com.apple.Safari ShowFullURLInSmartSearchField -bool true || exit 1
-echo "Safari full URL enabled"
-
-# Disable opening "safe" files after downloading
-defaults write com.apple.Safari AutoOpenSafeDownloads -bool false || exit 1
-echo "Safari auto-open safe downloads disabled"
 
 echo "=== Window Manager & Widgets ==="
 # Disable desktop widgets and the "click wallpaper to show widgets" feature (Sonoma+)
