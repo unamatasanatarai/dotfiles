@@ -11,6 +11,8 @@ export PATH="$PATH:/usr/local/sbin:/opt/local/bin:/opt/local/sbin"
 # Determine Homebrew prefix based on architecture (faster than calling `brew`)
 export BREW_PREFIX=$(command -v brew &>/dev/null && brew --prefix || ([[ "$(uname -m)" == "arm64" ]] && echo /opt/homebrew || echo /usr/local))
 export HOMEBREW_NO_AUTO_UPDATE=1
+export LANG="en_US.UTF-8"
+export LC_ALL="en_US.UTF-8"
 export BASH_SILENCE_DEPRECATION_WARNING=1
 export VISUAL=vi
 export EDITOR="$VISUAL"
@@ -156,4 +158,3 @@ alias vba='venv; [[ -z "$VIRTUAL_ENV" ]] && source venv/bin/activate'
 
 alias tree='tree -aC --dirsfirst'
 alias ls='ls -GF'
-export PATH="/Users/citizen/.antigravity/antigravity/bin:$PATH"

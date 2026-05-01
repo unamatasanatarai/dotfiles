@@ -174,7 +174,8 @@ sudo defaults write /Library/Preferences/com.apple.alf allowdownloadsignedenable
 sudo defaults write /Library/Preferences/com.apple.alf allowsignedenabled -bool false || true
 sudo defaults write /Library/Preferences/com.apple.loginwindow DisableConsoleAccess -bool true || exit 1
 
-sudo /usr/libexec/PlistBuddy -c "Set 'AC Power':'Display Sleep Timer' 5" /Library/Preferences/com.apple.PowerManagement.plist || exit 1
+sudo /usr/libexec/PlistBuddy -c "Set 'AC Power':'Display Sleep Timer' 5" /Library/Preferences/com.apple.PowerManagement.plist 2>/dev/null || \
+  sudo /usr/libexec/PlistBuddy -c "Add 'AC Power':'Display Sleep Timer' integer 5" /Library/Preferences/com.apple.PowerManagement.plist || exit 1
 
 defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false || exit 1
 defaults write com.apple.CrashReporter DialogType -string "none" || exit 1
