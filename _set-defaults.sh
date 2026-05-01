@@ -310,6 +310,13 @@ echo "Disabled App Expose gesture"
 defaults write com.Apple.Dock show-recents -bool false || exit 1
 echo "Disabled recent apps in Dock"
 
+# Disable all hot corners
+defaults write com.Apple.Dock wvous-tl-corner -int 0 || exit 1
+defaults write com.Apple.Dock wvous-tr-corner -int 0 || exit 1
+defaults write com.Apple.Dock wvous-bl-corner -int 0 || exit 1
+defaults write com.Apple.Dock wvous-br-corner -int 0 || exit 1
+echo "All Hot Corners disabled"
+
 # Enable Dock magnification and set the sizes
 defaults write com.apple.dock magnification -int 1 || exit 1
 echo "Dock magnification enabled"
