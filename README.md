@@ -7,6 +7,9 @@
 ![GNU Make](https://img.shields.io/badge/GNU_Make-Automation-0A0A0A?style=flat-square&logo=gnu&logoColor=white)
 ![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg?style=flat-square)
 
+> [!NOTE]
+> The `master` branch is for macOS Sonoma. For macOS Monterey, please use the `monterey` branch.
+
 A macOS dotfiles repository that automates system configuration, package management, and environment setup. It ensures a consistent, reproducible development environment tailored specifically for macOS Monterey.
 
 ## Features
