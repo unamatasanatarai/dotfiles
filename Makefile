@@ -1,18 +1,12 @@
-.PHONY: all dotfiles osx apps brewdump
+.PHONY: install brew-dump
 
-all: apps dotfiles osx
-	@echo "All done."
-
-dotfiles:
+install:
+	./_prep-env.sh
+	./_install-apps.sh
 	./_relink-config.sh
 	./_relink-home.sh
-	./_prep-env.sh
-
-osx:
 	./_set-defaults.sh
+	@echo "All done."
 
-apps:
-	./_install-apps.sh
-
-brewdump:
-	brew bundle dump --force --describe --file=./configs/Brewfile
+brew-dump:
+	brew bundle dump --force --file=./configs/Brewfile
