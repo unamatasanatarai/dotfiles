@@ -7,8 +7,23 @@ __FILE="$(basename -- "$0")"
 declare -r __DIR __FILE
 declare -r TMPLS="$__DIR"/new_templates
 
-. "$__DIR"/.lib
-
+function ealert {
+  local eol="\n";if [ "$1" == "-n" ]; then eol="";shift; fi
+  printf " \e[1m\e[38;5;220m‼\e[0m %s${eol}" "$*"
+}
+function ewarn {
+  ealert "$@"
+}
+function ebox {
+  local text len hl
+  text="$*"
+  len=$((${#text} + 6))
+  seq=$(for (( i=1; i<=len; i++)); do echo -n "-"; done)
+  hl="+ $seq +"
+  echo "$hl"
+  echo -e "|    \033[1;36m$text\033[0m    |"
+  echo "$hl"
+}
 VERSION="0.5"
 
 # ------------------------------------------------------------

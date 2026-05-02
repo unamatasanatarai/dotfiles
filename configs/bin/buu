@@ -1,23 +1,17 @@
 #!/usr/bin/env bash
 
-. "$(dirname "$0")"/.lib
+echo "Clearing cache"
+rm -rf "$(brew --cache)"
 
-ebox "Update & Upgrade brew"
+echo "Updating Homebrew"
+brew update
 
-einfo "Clearing cache"
-rm -rvf "$(brew --cache)" || ealert "Failed to clear cache"
+echo "Upgrading casks"
+brew upgrade --no-quarantine --cask --greedy
 
-einfo "Updating Homebrew"
-brew update || ealert "brew update failed"
+echo "Upgrading formulae"
+brew upgrade --no-quarantine --greedy
 
-einfo "Upgrading casks"
-brew upgrade --no-quarantine --cask --greedy || ealert "cask upgrade failed"
-
-einfo "Upgrading formulae"
-brew upgrade --no-quarantine --greedy || ealert "formula upgrade failed"
-
-einfo "Cleaning up"
-brew cleanup --prune=all -s || ealert "cleanup failed"
-
-eok "All done!"
+echo "Cleaning up"
+brew cleanup --prune=all -s
 

@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
-. "$(dirname "$0")/.lib"
+if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  echo "Error: Not in a git repository." >&2
+  exit 1
+fi
 
-einfo "resetting and cleaning..."
-
-# Run Git commands
+echo "Resetting repository..."
 git reset --hard
 git clean -df
-
-eok "Repository reset and cleaned."
+echo "Done."
