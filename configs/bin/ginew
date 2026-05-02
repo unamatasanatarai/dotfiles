@@ -1,60 +1,21 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
-
-# Check remote is in git@ format
-if [[ $# -lt 1 || "${1:0:4}" != "git@" ]]; then
-  echo "Usage: $(basename "$0") git@github.com:user/repo.git"
-  exit 1
-fi
-
 REMOTE="$1"
+if [[ -z "$REMOTE" || ! "$REMOTE" =~ ^git@ ]]; then
+    printf "Usage: %s git@github.com:user/repo.git\n" "${0##*/}"
+    exit 1
+fi
 
-# Create README.md if not present
-[[ -f README.md ]] || echo "# Readme" > README.md
-
-# Create a basic .gitignore if not present
+[[ -f README.md ]] || printf "# Readme\n" > README.md
 if [[ ! -f .gitignore ]]; then
-  cat <<EOF > .gitignore
-# macOS
-.DS_Store
-
-# Node
-node_modules/
-
-# Python
-__pycache__/
-*.py[cod]
-
-# Logs
-*.log
-
-# Env
-.env
-
-# General
-*.swp
-EOF
-  echo "📝 Created basic .gitignore"
+    printf "# macOS\n.DS_Store\n\n# Node\nnode_modules/\n\n# Python\n__pycache__/\n*.log\n" > .gitignore
 fi
 
-# Initialize Git repo
 git init
-
-# Optional: configure Git user/email
-if command -v giume &>/dev/null; then
-  giume
-else
-  echo "💡 Tip: You can set your Git author info with a tool like 'giume'"
-  echo "   Example: git config user.name 'Your Name'; git config user.email 'you@example.com'"
-fi
-
-# Set remote
+git branch -M master # Ensure primary branch is master
 git remote add origin "$REMOTE"
 
-# Stage and commit
 git add README.md .gitignore
 git commit -m "Let's get goin'!"
 
-echo "✅ Repo initialized and connected to $REMOTE"
-
+printf "✅ Repo initialized on 'master' and connected to %s\n" "$REMOTE"
