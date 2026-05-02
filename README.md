@@ -1,64 +1,63 @@
-# Homebrew and Dotfiles Setup
+# macOS Dotfiles
 
-This project provides a set of scripts to automate the setup of a macOS environment, including dotfiles, system preferences, and Homebrew package installation. The included Makefile orchestrates the process for easy execution.
+![macOS](https://img.shields.io/badge/macOS-Monterey-000000?style=flat-square&logo=apple&logoColor=white)
+![Bash](https://img.shields.io/badge/Bash-Scripting-4EAA25?style=flat-square&logo=gnu-bash&logoColor=white)
+![Homebrew](https://img.shields.io/badge/Homebrew-Package_Manager-F28D1A?style=flat-square&logo=homebrew&logoColor=white)
+![MacPorts](https://img.shields.io/badge/MacPorts-Package_Manager-336699?style=flat-square)
+![GNU Make](https://img.shields.io/badge/GNU_Make-Automation-0A0A0A?style=flat-square&logo=gnu&logoColor=white)
+![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg?style=flat-square)
 
-## Installation
+A macOS dotfiles repository that automates system configuration, package management, and environment setup. It ensures a consistent, reproducible development environment tailored specifically for macOS Monterey.
 
-1. Clone this repository:
+## Features
+
+- **Automated Directory Setup:** Creates XDG base directories (`~/.config`, `~/.local/bin`, etc.) for clean environment management.
+- **Package Management:** Installs packages via Homebrew and MacPorts. MacPorts is explicitly utilized as a fallback for compatibility, as Monterey's age can cause Homebrew to refuse certain installations.
+- **Configuration Management:** Safely creates symlinks for dotfiles and application configurations without manual intervention.
+- **System Defaults Automation:** Programmatically configures macOS system preferences, including Finder tweaks, Dock adjustments, Trackpad settings, and enhanced Security & Privacy controls.
+- **Service Orchestration:** Automatically starts essential background services such as `skhd` and `LuLu` post-installation.
+- **Font Setup:** Installs custom developer fonts directly to the system.
+
+## Tech Stack
+
+- **Bash:** Core scripting language for all automation scripts.
+- **GNU Make:** Build tool used as the primary entry point for execution.
+- **Homebrew:** Primary macOS package manager.
+- **MacPorts:** Secondary package manager utilized for extended compatibility.
+
+## Project Structure
+
+- `Makefile` — Primary entry point exposing the `install` and `dump-apps` commands.
+- `_prep-env.sh` — Prepares necessary directories and verifies Terminal permissions.
+- `_install-apps.sh` — Handles installation of Homebrew, MacPorts, fonts, and sets the default shell to Homebrew Bash.
+- `_relink-config.sh` — Symlinks structured application configs to `~/.config`.
+- `_relink-home.sh` — Symlinks root dotfiles (e.g., `.bashrc`, `.vimrc`) directly to `$HOME`.
+- `_set-defaults.sh` — A comprehensive script applying over 50+ macOS system preference tweaks.
+- `configs/` — Contains declarative configuration definitions (`Brewfile`, `MacPortsfile`), dotfiles, custom fonts, and local binaries.
+
+## Installation Instructions
+
+1. **Grant Permissions:** Ensure your Terminal application has "Full Disk Access" enabled in System Settings > Privacy & Security (required to apply certain macOS defaults like Safari).
+2. **Clone the Repository:** Clone this project to your local machine.
+3. **Run the Setup:** Execute the following command from the root directory:
    ```bash
-   git clone https://github.com/unamatasanatarai/dotfiles.git
-   cd dotfiles
+   make install
    ```
-
-2. Run the setup:
-   ```bash
-   make
-   ```
-
-   This will execute the `all` target, which runs the `dotfiles`, `osx`, and `apps` tasks in sequence.
-
-## Makefile Targets
-
-The `Makefile` provides the following targets:
-
-- **`make all`**: Runs `dotfiles`, `osx`, and `apps` to fully configure the environment.
-- **`make dotfiles`**:
-  - Executes `_relink-config.sh` to set up configuration files.
-  - Executes `_relink-home.sh` to link dotfiles to the home directory.
-  - Executes `_prep-env.sh` to prepare the environment (e.g., setting up variables or paths).
-- **`make osx`**:
-  - Executes `_set-defaults.sh` to configure macOS system preferences.
-- **`make apps`**:
-  - Executes `_install-apps.sh` to install applications (likely via Homebrew or other methods).
-- **`make brewdump`**:
-  - Runs `brew bundle dump --force --describe --file=./configs/Brewfile` to generate a `Brewfile` in the `./configs/` directory, capturing the current Homebrew setup with descriptions.
-
-## Custom Brewfile Location
-
-The `brewdump` target saves the Brewfile to `./configs/Brewfile`. To install packages from this custom Brewfile, use:
-```bash
-brew bundle install --file=./configs/Brewfile
-```
+   *Note: You may be prompted for your administrator password during the installation of Homebrew, MacPorts, and certain system tweaks.*
 
 ## Usage
 
-- To set up your environment from scratch, run:
-  ```bash
-  make
-  ```
-- To update only dotfiles, run:
-  ```bash
-  make dotfiles
-  ```
-- To regenerate the Brewfile, run:
-  ```bash
-  make brewdump
-  ```
+The project utilizes a `Makefile` to simplify execution. The following commands are available:
 
-## Contributing
+- `make install` — Runs the full automation pipeline: preparing directories, installing apps, linking dotfiles, and applying macOS defaults.
+- `make dump-apps` — Captures the currently installed Homebrew and MacPorts packages, saving them to `configs/Brewfile` and `configs/MacPortsfile` to track new additions.
 
-Feel free to open issues or submit pull requests to improve the scripts or add new features.
+## Configuration
+
+Package lists are managed declaratively in the `configs/` directory:
+- `configs/Brewfile`: Contains all Homebrew formulae and casks to be installed.
+- `configs/MacPortsfile`: Contains all MacPorts to be installed.
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the GNU General Public License v2.0 - see the [LICENSE](LICENSE) file for details.
