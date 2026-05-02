@@ -1,17 +1,23 @@
 #!/usr/bin/env bash
 
-symlink_config() {
-    local from="$1"
-    local to="$2"
-    [[ -h "$to" ]] && echo "Unlinking $to" && unlink "$to"
-    [[ -d "$to" || -f "$to" ]] && echo "Removing $to" && rm -rf "$to"
-    echo "linking $form $to" && ln -sf "$from" "$to"
-}
-
-symlink_config "$HOME/.config/bash/bashrc" "$HOME/.bashrc" 
-symlink_config "$HOME/.config/bash/bashrc" "$HOME/.bash_profile" 
-symlink_config "$HOME/.config/bash/bashrc" "$HOME/.profile" 
-symlink_config "$HOME/.config/bash/inputrc" "$HOME/.inputrc" 
-symlink_config "$HOME/.config/bash/bash_logout" "$HOME/.bash_logout" 
-symlink_config "$PWD/configs/bin" "$HOME/bin" 
-symlink_config "$HOME/.config/vim/vimrc" "$HOME/.vimrc" 
+while read -r from to; do
+    [[ -z "$from" ]] && continue
+    if [[ -h "$to" ]]; then
+        echo "Unlinking $to"
+        unlink "$to" || { echo "Failed to unlink $to"; exit 1; }
+    fi
+    if [[ -d "$to" || -f "$to" ]]; then
+        echo "Removing $to"
+        rm -rf "$to" || { echo "Failed to remove $to"; exit 1; }
+    fi
+    echo "linking $from $to"
+    ln -sf "$from" "$to" || { echo "Failed to link $from to $to"; exit 1; }
+done <<EOF
+$HOME/.config/bash/bashrc $HOME/.bashrc
+$HOME/.config/bash/bashrc $HOME/.bash_profile
+$HOME/.config/bash/bashrc $HOME/.profile
+$HOME/.config/bash/inputrc $HOME/.inputrc
+$HOME/.config/bash/bash_logout $HOME/.bash_logout
+$PWD/configs/bin $HOME/bin
+$HOME/.config/vim/vimrc $HOME/.vimrc
+EOF
