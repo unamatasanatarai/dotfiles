@@ -18,7 +18,6 @@ A modular, automated dotfiles and system configuration setup for macOS. This pro
 - **System Defaults Configuration**: Extensive customization of macOS defaults (Finder, Dock, Trackpad, Keyboard, UI/UX, Security).
 - **Telemetry Reduction**: Dedicated scripts to disable unnecessary macOS background daemons and agents.
 - **XDG Base Directory Support**: Configured to respect XDG standards (e.g., `~/.config`, `~/.local/share`).
-- **Dynamic Window Manager Switching**: Make targets to seamlessly switch between `yabai` and `AeroSpace` via `skhd`.
 - **Custom Font Installation**: Automatically installs custom fonts (Source Code Pro, Archivo) to the user library.
 
 ## Tech Stack
@@ -26,7 +25,7 @@ A modular, automated dotfiles and system configuration setup for macOS. This pro
 - **Languages**: Bash Scripting
 - **Build Tools**: Make
 - **Package Manager**: Homebrew
-- **Window Managers**: yabai, AeroSpace
+- **Window Managers**: AeroSpace
 - **Hotkey Daemon**: skhd
 - **System Tools**: macOS `defaults`, `launchctl`, `pmset`, `scutil`
 
@@ -57,20 +56,6 @@ A modular, automated dotfiles and system configuration setup for macOS. This pro
 6. Restart your computer once the scripts complete to ensure all macOS defaults take effect.
 
 ## Usage
-
-### Managing Window Managers
-
-This setup supports switching between `yabai` and `AeroSpace` using `skhd` for keybindings.
-
-To switch to **yabai**:
-```bash
-make select-yabai
-```
-
-To switch to **AeroSpace**:
-```bash
-make select-aerospace
-```
 
 To view all available commands:
 ```bash
