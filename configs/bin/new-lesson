@@ -1,4 +1,0 @@
-#!/usr/bin/env bash
-
-# link to https://github.com/unamatasanatarai/lessons
-exec ~/dev/lessons/new-lesson "$@"
