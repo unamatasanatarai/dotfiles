@@ -32,7 +32,7 @@ if ! command -v brew &>/dev/null; then
 fi
 
 echo "==> Installing apps from Brewfile..."
-brew bundle install --file=./configs/Brewfile || {
+brew bundle install --file=./configs/Brewfile --no-upgrade || {
 	echo "Failed to install apps from Brewfile"
 	exit 1
 }

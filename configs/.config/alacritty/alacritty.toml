@@ -1,5 +1,6 @@
 [terminal.shell]
 program = "/usr/local/bin/bash"
+#program = "/bin/bash"
 
 [font]
 size = 16.0
