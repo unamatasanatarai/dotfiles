@@ -1,5 +1,11 @@
 # macOS Dotfiles & System Configuration
 
+![macOS](https://img.shields.io/badge/macOS-Sonoma-000000?style=flat-square&logo=apple&logoColor=white)
+![Bash](https://img.shields.io/badge/Bash-Scripting-4EAA25?style=flat-square&logo=gnu-bash&logoColor=white)
+![Homebrew](https://img.shields.io/badge/Homebrew-Package_Manager-F28D1A?style=flat-square&logo=homebrew&logoColor=white)
+![GNU Make](https://img.shields.io/badge/GNU_Make-Automation-0A0A0A?style=flat-square&logo=gnu&logoColor=white)
+![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg?style=flat-square)
+
 > [!NOTE]
 > The `master` branch is for macOS Sonoma. For macOS Monterey, please use the `monterey` branch.
 
