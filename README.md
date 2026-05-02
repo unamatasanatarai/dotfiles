@@ -23,11 +23,13 @@ A macOS dotfiles repository that automates system configuration, package managem
 
 ## Tech Stack
 
-- **Bash:** Core scripting language for all automation scripts.
-- **GNU Make:** Build tool used as the primary entry point for execution.
-- **Homebrew:** Primary macOS package manager.
-- **MacPorts:** Secondary package manager utilized for extended compatibility.
-
+- **Languages**: Bash Scripting
+- **Build Tools**: Make
+- **Package Manager**: Homebrew, MacPorts
+- **Window Managers**: yabai
+- **Hotkey Daemon**: skhd
+- **System Tools**: macOS `defaults`, `launchctl`, `pmset`, `scutil`
+- 
 ## Project Structure
 
 - `Makefile` — Primary entry point exposing the `install` and `dump-apps` commands.
