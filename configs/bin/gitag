@@ -1,40 +1,83 @@
 #!/usr/bin/env bash
 
-cmd=${1:-noop}
-push=true
-[[ ${2:-noop} == "nopush" ]] && push=false
-#
-# hack, but I'm tired
-set -eo pipefail
-tag=$(git tag --sort=committerdate | tail -1)
-set +eo pipefail
+# --- 1. Fail First: Environment & Arguments ---
+CMD="${1:-noop}"
+PUSH=true
+[[ "${2:-}" == "nopush" ]] && PUSH=false
 
-if [[ $cmd == "bump" ]]; then
-  if [[ "${tag:0:1}" == "v" ]]; then
-    IFS=$'\n' read -d "" -ra els <<< "${tag//./$'\n'}"
-    bump=$((els[2] + 1))
-    tag="${els[0]}.${els[1]}.$bump"
-  fi
+# Immediate Repo Check
+git rev-parse --is-inside-work-tree >/dev/null 2>&1
+if [[ $? -ne 0 ]]; then
+    printf "Error: Not in a Git repository.\n" >&2
+    exit 1
 fi
 
-if [[ $cmd == "noop" ]]; then
-  echo "usage: gitag bump|v0.0.1 [nopush]"
-  echo "latest tag: $tag"
-  echo ""
-  echo "Options:"
-  echo "  bump   Create vM.m.r tag or bumpt r++"
-  echo "  v0.0.1 Specify the exact version to set"
-  echo "  nopush do not push tags, only create. You will need to push them yourself."
-  exit 1
+# Determine Current Branch (using the optimized 'gib' logic)
+TMP_B="/tmp/.git_br_$$"
+git rev-parse --abbrev-ref HEAD > "$TMP_B" 2>/dev/null
+read -r CURRENT_BRANCH < "$TMP_B"
+rm -f "$TMP_B"
+
+if [[ -z "$CURRENT_BRANCH" ]]; then
+    printf "Error: Could not determine current branch.\n" >&2
+    exit 1
 fi
 
-if [[ "${cmd:0:1}" == "v" ]]; then
-  tag="$cmd"
+# --- 2. Logic: Extract Latest Tag ---
+TMP_T="/tmp/.git_tags_$$"
+git tag --sort=committerdate > "$TMP_T" 2>/dev/null
+
+# Read last line of file into variable (Pure Bash replacement for 'tail -1')
+LATEST_TAG=""
+while read -r line; do
+    LATEST_TAG="$line"
+done < "$TMP_T"
+rm -f "$TMP_T"
+
+# --- 3. Action Dispatcher ---
+if [[ "$CMD" == "noop" ]]; then
+    printf "usage: gitag bump|v0.0.1 [nopush]\n"
+    printf "latest tag: %s\n\n" "${LATEST_TAG:-none}"
+    printf "Options:\n"
+    printf "  bump    Create vM.m.r tag or bump r++\n"
+    printf "  v0.0.1  Specify the exact version to set\n"
+    printf "  nopush  Do not push tags, only create.\n"
+    exit 1
 fi
 
-if [[ $tag == "" ]]; then
-  tag="v0.0.1"
+# Determine New Tag
+NEW_TAG="$LATEST_TAG"
+
+if [[ "$CMD" == "bump" ]]; then
+    if [[ -z "$LATEST_TAG" ]]; then
+        NEW_TAG="v0.0.1"
+    elif [[ "$LATEST_TAG" =~ ^v([0-9]+)\.([0-9]+)\.([0-9]+)$ ]]; then
+        # Use Regex Rematching groups BASH_REMATCH
+        major="${BASH_REMATCH[1]}"
+        minor="${BASH_REMATCH[2]}"
+        patch="${BASH_REMATCH[3]}"
+        NEW_TAG="v$major.$minor.$((patch + 1))"
+    fi
+elif [[ "$CMD" =~ ^v[0-9] ]]; then
+    NEW_TAG="$CMD"
 fi
 
-git tag "$tag"
-[[ $push == true ]] && git push --tags -u origin "$(gib)" || exit 0
+# --- 4. Execution ---
+if [[ -z "$NEW_TAG" ]]; then
+    printf "Error: Invalid tag configuration.\n" >&2
+    exit 1
+fi
+
+printf "Creating tag: %s\n" "$NEW_TAG"
+git tag "$NEW_TAG" || { printf "Error: Failed to create tag.\n" >&2; exit 1; }
+
+if [[ "$PUSH" == true ]]; then
+    printf "Pushing tags to origin/%s...\n" "$CURRENT_BRANCH"
+    git push --tags origin "$CURRENT_BRANCH"
+    if [[ $? -ne 0 ]]; then
+        printf "Error: Push failed.\n" >&2
+        exit 1
+    fi
+fi
+
+printf "Done.\n"
