@@ -23,4 +23,3 @@ white=$'\e[37m'
 orange=$'\e[38;5;166m'
 violet=$'\e[38;5;61m'
 gray=$'\e[38;5;244m'
-

@@ -1,17 +1,17 @@
 #these must be functions. Bash script cannot change working directory (for some reason)
 
 take() {
-	[[ -z "$1" ]] && printf "usage: take <directory_path>\n" >&2 && return 1
-	mkdir -p -- "$1" && cd -- "$1" || return 1
+    [[ -z "$1" ]] && printf "usage: take <directory_path>\n" >&2 && return 1
+    mkdir -p -- "$1" && cd -- "$1" || return 1
 }
 
 wcd() {
-	[[ -z "$1" ]] && printf "usage: wcd <command>\n" >&2 && return 1
+    [[ -z "$1" ]] && printf "usage: wcd <command>\n" >&2 && return 1
 
-	local cmd_path
-	cmd_path="$(command -v "$1")" || {
-		printf "Command '%s' not found\n" "$1" >&2
-		return 1
-	}
-	cd -- "${cmd_path%/*}" || return 1
+    local cmd_path
+    cmd_path="$(command -v "$1")" || {
+        printf "Command '%s' not found\n" "$1" >&2
+        return 1
+    }
+    cd -- "${cmd_path%/*}" || return 1
 }

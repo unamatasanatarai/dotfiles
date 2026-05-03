@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
+REPO_ROOT="${BASH_SOURCE[0]%/*}/.."
 CONFIG_HOME="$HOME/.config"
-MY_CONFIGS="$PWD/configs/.config"
+MY_CONFIGS="$REPO_ROOT/configs/.config"
 
 mkdir -p "$CONFIG_HOME" || {
     echo "Failed to create $CONFIG_HOME"

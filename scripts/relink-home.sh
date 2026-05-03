@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+REPO_ROOT="${BASH_SOURCE[0]%/*}/.."
 
 while read -r from to; do
     [[ -z "$from" ]] && continue
@@ -27,6 +28,6 @@ $HOME/.config/bash/bashrc $HOME/.bash_profile
 $HOME/.config/bash/bashrc $HOME/.profile
 $HOME/.config/bash/inputrc $HOME/.inputrc
 $HOME/.config/bash/bash_logout $HOME/.bash_logout
-$PWD/configs/bin $HOME/bin
+$REPO_ROOT/configs/bin $HOME/bin
 $HOME/.config/vim/vimrc $HOME/.vimrc
 EOF

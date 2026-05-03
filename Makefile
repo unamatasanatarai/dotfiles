@@ -7,9 +7,13 @@ help: ## Show this help
 
 install: ## Run all installation scripts
 	./scripts/prep-env.sh
-	./scripts/install-apps.sh
+	./scripts/install-brew.sh
+	./scripts/install-macports.sh
+	./scripts/install-fonts.sh
+	./scripts/setup-bash.sh
 	./scripts/relink-config.sh
 	./scripts/relink-home.sh
+	./scripts/launch-services.sh
 	./scripts/setup-macos.sh
 	@echo "==> All done."
 

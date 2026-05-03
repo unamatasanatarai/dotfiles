@@ -9,9 +9,9 @@
 [[ $- != *i* ]] && return
 export PATH="$PATH:/usr/local/sbin:/opt/local/bin:/opt/local/sbin"
 if [[ -x /opt/homebrew/bin/brew ]]; then
-  eval "$(/opt/homebrew/bin/brew shellenv)"
+    eval "$(/opt/homebrew/bin/brew shellenv)"
 elif [[ -x /usr/local/bin/brew ]]; then
-  eval "$(/usr/local/bin/brew shellenv)"
+    eval "$(/usr/local/bin/brew shellenv)"
 fi
 export HOMEBREW_NO_AUTO_UPDATE=1
 export BASH_SILENCE_DEPRECATION_WARNING=1
@@ -20,9 +20,9 @@ export EDITOR="$VISUAL"
 export SYSTEMD_EDITOR="$VISUAL"
 [[ -n "$HOMEBREW_PREFIX" ]] && export SHELL="$HOMEBREW_PREFIX/bin/bash"
 [[ -r "$HOME/.config/xdg-user-dirs" ]] && {
-	set -a
-	source "$HOME/.config/xdg-user-dirs"
-	set +a
+    set -a
+    source "$HOME/.config/xdg-user-dirs"
+    set +a
 }
 # ------------------------------------------------------------------------------
 # Terminal Color Setup (using `tput` if available, fallback to ANSI escapes)
@@ -49,61 +49,60 @@ white=$'\e[37m'
 orange=$'\e[38;5;166m'
 violet=$'\e[38;5;61m'
 gray=$'\e[38;5;244m'
-
 #these must be functions. Bash script cannot change working directory (for some reason)
 
 take() {
-	[[ -z "$1" ]] && printf "usage: take <directory_path>\n" >&2 && return 1
-	mkdir -p -- "$1" && cd -- "$1" || return 1
+    [[ -z "$1" ]] && printf "usage: take <directory_path>\n" >&2 && return 1
+    mkdir -p -- "$1" && cd -- "$1" || return 1
 }
 
 wcd() {
-	[[ -z "$1" ]] && printf "usage: wcd <command>\n" >&2 && return 1
+    [[ -z "$1" ]] && printf "usage: wcd <command>\n" >&2 && return 1
 
-	local cmd_path
-	cmd_path="$(command -v "$1")" || {
-		printf "Command '%s' not found\n" "$1" >&2
-		return 1
-	}
-	cd -- "${cmd_path%/*}" || return 1
+    local cmd_path
+    cmd_path="$(command -v "$1")" || {
+        printf "Command '%s' not found\n" "$1" >&2
+        return 1
+    }
+    cd -- "${cmd_path%/*}" || return 1
 }
 get_git_branch() {
-	# return previous exit status
-	ps=$?
+    # return previous exit status
+    ps=$?
 
-	# ensure git exists and we're inside a repo
-	command -v git >/dev/null 2>&1 || return "$ps"
-	git rev-parse --is-inside-work-tree >/dev/null 2>&1 || return "$ps"
+    # ensure git exists and we're inside a repo
+    command -v git >/dev/null 2>&1 || return "$ps"
+    git rev-parse --is-inside-work-tree >/dev/null 2>&1 || return "$ps"
 
-	# get branch or fallback to short hash
-	branch=$(git symbolic-ref --quiet --short HEAD 2>/dev/null)
-	if [[ -z $branch ]]; then
-		branch=$(git rev-parse --short HEAD 2>/dev/null) || return "$ps"
-	fi
+    # get branch or fallback to short hash
+    branch=$(git symbolic-ref --quiet --short HEAD 2>/dev/null)
+    if [[ -z $branch ]]; then
+        branch=$(git rev-parse --short HEAD 2>/dev/null) || return "$ps"
+    fi
 
-	# dirty check (fast)
-	git diff --quiet --ignore-submodules 2>/dev/null
-	if [[ $? -ne 0 ]]; then
-		printf '<%s*>' "$branch"
-	else
-		printf '<%s>' "$branch"
-	fi
+    # dirty check (fast)
+    git diff --quiet --ignore-submodules 2>/dev/null
+    if [[ $? -ne 0 ]]; then
+        printf '<%s*>' "$branch"
+    else
+        printf '<%s>' "$branch"
+    fi
 
-	return "$ps"
+    return "$ps"
 }
 
 __build_prompt() {
-	local exit_code=$?
-	local branch_str
-	local symbol="\$"
+    local exit_code=$?
+    local branch_str
+    local symbol="\$"
 
-	branch_str="$(get_git_branch)"
+    branch_str="$(get_git_branch)"
 
-	if [[ $exit_code -ne 0 ]]; then
-		symbol="\[${orange}\]\$\[${reset}\]"
-	fi
+    if [[ $exit_code -ne 0 ]]; then
+        symbol="\[${orange}\]\$\[${reset}\]"
+    fi
 
-	PS1="\w${branch_str}\[${reset}\]${symbol}\[${reset}\] "
+    PS1="\w${branch_str}\[${reset}\]${symbol}\[${reset}\] "
 }
 
 PROMPT_COMMAND=__build_prompt
@@ -121,19 +120,19 @@ shopt -s lithist
 
 # PECO-enhanced Ctrl+R history search (fzf-like)
 __peco_history_search() {
-	local selected
+    local selected
 
-	selected=$(fc -l -n -r -10000 | peco --layout=bottom-up --prompt ">")
+    selected=$(fc -l -n -r -10000 | peco --layout=bottom-up --prompt ">")
 
-	[[ -n $selected ]] && {
-		# trim leading whitespace
-		selected=${selected#"${selected%%[![:space:]]*}"}
-		# trim trailing whitespace
-		selected=${selected%"${selected##*[![:space:]]}"}
+    [[ -n $selected ]] && {
+        # trim leading whitespace
+        selected=${selected#"${selected%%[![:space:]]*}"}
+        # trim trailing whitespace
+        selected=${selected%"${selected##*[![:space:]]}"}
 
-		READLINE_LINE=$selected
-		READLINE_POINT=${#READLINE_LINE}
-	}
+        READLINE_LINE=$selected
+        READLINE_POINT=${#READLINE_LINE}
+    }
 }
 
 # Bind Ctrl+R to launch peco-based search

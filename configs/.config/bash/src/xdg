@@ -1,5 +1,5 @@
 [[ -r "$HOME/.config/xdg-user-dirs" ]] && {
-	set -a
-	source "$HOME/.config/xdg-user-dirs"
-	set +a
+    set -a
+    source "$HOME/.config/xdg-user-dirs"
+    set +a
 }

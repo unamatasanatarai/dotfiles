@@ -12,19 +12,19 @@ shopt -s lithist
 
 # PECO-enhanced Ctrl+R history search (fzf-like)
 __peco_history_search() {
-	local selected
+    local selected
 
-	selected=$(fc -l -n -r -10000 | peco --layout=bottom-up --prompt ">")
+    selected=$(fc -l -n -r -10000 | peco --layout=bottom-up --prompt ">")
 
-	[[ -n $selected ]] && {
-		# trim leading whitespace
-		selected=${selected#"${selected%%[![:space:]]*}"}
-		# trim trailing whitespace
-		selected=${selected%"${selected##*[![:space:]]}"}
+    [[ -n $selected ]] && {
+        # trim leading whitespace
+        selected=${selected#"${selected%%[![:space:]]*}"}
+        # trim trailing whitespace
+        selected=${selected%"${selected##*[![:space:]]}"}
 
-		READLINE_LINE=$selected
-		READLINE_POINT=${#READLINE_LINE}
-	}
+        READLINE_LINE=$selected
+        READLINE_POINT=${#READLINE_LINE}
+    }
 }
 
 # Bind Ctrl+R to launch peco-based search
