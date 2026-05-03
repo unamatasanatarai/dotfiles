@@ -8,6 +8,7 @@ take() {
 wcd() {
 	[[ -z "$1" ]] && printf "usage: wcd <command>\n" >&2 && return 1
 
+	local cmd_path
 	cmd_path="$(command -v "$1")" || {
 		printf "Command '%s' not found\n" "$1" >&2
 		return 1

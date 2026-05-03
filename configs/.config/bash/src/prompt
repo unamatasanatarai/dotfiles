@@ -23,8 +23,18 @@ get_git_branch() {
 	return "$ps"
 }
 
-PS1="\w"
-PS1+="\$(get_git_branch)"
-PS1+="\[${reset}\]"
-PS1+="\$( [ \$? -eq 0 ] && printf \"\$\" || printf \"\[${orange}\]\\$\" )"
-PS1+="\[${reset}\] "
+__build_prompt() {
+	local exit_code=$?
+	local branch_str
+	local symbol="\$"
+
+	branch_str="$(get_git_branch)"
+
+	if [[ $exit_code -ne 0 ]]; then
+		symbol="\[${orange}\]\$\[${reset}\]"
+	fi
+
+	PS1="\w${branch_str}\[${reset}\]${symbol}\[${reset}\] "
+}
+
+PROMPT_COMMAND=__build_prompt
