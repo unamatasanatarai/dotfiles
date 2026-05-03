@@ -1,6 +1,30 @@
+get_git_branch() {
+	# return previous exit status
+	ps=$?
+
+	# ensure git exists and we're inside a repo
+	command -v git >/dev/null 2>&1 || return "$ps"
+	git rev-parse --is-inside-work-tree >/dev/null 2>&1 || return "$ps"
+
+	# get branch or fallback to short hash
+	branch=$(git symbolic-ref --quiet --short HEAD 2>/dev/null)
+	if [[ -z $branch ]]; then
+		branch=$(git rev-parse --short HEAD 2>/dev/null) || return "$ps"
+	fi
+
+	# dirty check (fast)
+	git diff --quiet --ignore-submodules 2>/dev/null
+	if [[ $? -ne 0 ]]; then
+		printf '<%s*>' "$branch"
+	else
+		printf '<%s>' "$branch"
+	fi
+
+	return "$ps"
+}
+
 PS1="\w"
-PS1+="\$(extract_git_branch_name)"
+PS1+="\$(get_git_branch)"
 PS1+="\[${reset}\]"
 PS1+="\$( [ \$? -eq 0 ] && printf \"\$\" || printf \"\[${orange}\]\\$\" )"
 PS1+="\[${reset}\] "
-

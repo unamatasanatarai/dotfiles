@@ -15,21 +15,18 @@ export BASH_SILENCE_DEPRECATION_WARNING=1
 export VISUAL=vi
 export EDITOR="$VISUAL"
 export SYSTEMD_EDITOR="$VISUAL"
-export SHELL="$BREW_PREFIX/bin/bash"
+[ -n "$BREW_PREFIX" ] && export SHELL="$BREW_PREFIX/bin/bash"
 
 # Source user-defined XDG user dirs if available
-[ -f "$HOME/.config/user-dirs.dirs" ] && source "$HOME/.config/user-dirs.dirs"
+[ -r "$HOME/.config/user-dirs.dirs" ] && source "$HOME/.config/user-dirs.dirs"
 
-: "${XDG_CACHE_HOME:=$HOME/.cache}"
-: "${XDG_CONFIG_HOME:=$HOME/.config}"
-: "${XDG_DATA_HOME:=$HOME/.local/share}"
-: "${XDG_STATE_HOME:=$HOME/.local/state}"
+export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
+export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
+export XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
 
-: "${XDG_DESKTOP_DIR:=$HOME/Desktop}"
-: "${XDG_DOWNLOAD_DIR:=$HOME/Downloads}"
-
-export XDG_CACHE_HOME XDG_CONFIG_HOME XDG_DATA_HOME XDG_STATE_HOME XDG_DESKTOP_DIR XDG_DOWNLOAD_DIR
-
+export XDG_DESKTOP_DIR="${XDG_DESKTOP_DIR:-$HOME/Desktop}"
+export XDG_DOWNLOAD_DIR="${XDG_DOWNLOAD_DIR:-$HOME/Downloads}"
 # ------------------------------------------------------------------------------
 # Terminal Color Setup (using `tput` if available, fallback to ANSI escapes)
 # ------------------------------------------------------------------------------
@@ -96,9 +93,8 @@ wcd() {
 	}
 	cd -- "${cmd_path%/*}" || return 1
 }
-
-# prints current git branch (if inside repo)
-extract_git_branch_name() {
+get_git_branch() {
+	# return previous exit status
 	ps=$?
 
 	# ensure git exists and we're inside a repo
@@ -121,12 +117,12 @@ extract_git_branch_name() {
 
 	return "$ps"
 }
+
 PS1="\w"
-PS1+="\$(extract_git_branch_name)"
+PS1+="\$(get_git_branch)"
 PS1+="\[${reset}\]"
 PS1+="\$( [ \$? -eq 0 ] && printf \"\$\" || printf \"\[${orange}\]\\$\" )"
 PS1+="\[${reset}\] "
-
 # History settings (don't save lines beginning with space or matching the
 # previous entry)
 export HISTCONTROL=ignoreboth
@@ -140,23 +136,24 @@ shopt -s cmdhist
 shopt -s lithist
 
 # PECO-enhanced Ctrl+R history search (fzf-like)
-
 __peco_history_search() {
-  # Run peco over reversed history
-  local selected
-  selected=$(HISTTIMEFORMAT= history | tac |  awk '{$1=""; print substr($0,2)}' | peco --layout=bottom-up --prompt ">")
+	local selected
 
+	selected=$(fc -l -n -r -10000 | peco --layout=bottom-up --prompt ">")
 
-  # Paste selected command into prompt if non-empty
-  if [ -n "$selected" ]; then
-    READLINE_LINE="$selected"
-    READLINE_POINT=${#READLINE_LINE}
-  fi
+	[[ -n $selected ]] && {
+		# trim leading whitespace
+		selected=${selected#"${selected%%[![:space:]]*}"}
+		# trim trailing whitespace
+		selected=${selected%"${selected##*[![:space:]]}"}
+
+		READLINE_LINE=$selected
+		READLINE_POINT=${#READLINE_LINE}
+	}
 }
 
 # Bind Ctrl+R to launch peco-based search
 bind -x '"\C-r": __peco_history_search'
-
 shopt -s autocd
 alias vba='venv; [[ -z "$VIRTUAL_ENV" ]] && source venv/bin/activate'
 
