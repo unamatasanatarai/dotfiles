@@ -17,7 +17,7 @@ else
 fi
 
 #at the moment of installation, bash is not yet configured. So import the defaults
-REPO_ROOT="${BASH_SOURCE[0]%/*}/.."
+REPO_ROOT="$(cd -- "${BASH_SOURCE[0]%/*}/.." && pwd -P)"
 source "$REPO_ROOT/configs/.config/bash/src/xdg"
 LOCAL_BIN="$HOME/.local/bin"
 BASH_DATA_HOME="$XDG_DATA_HOME/bash"

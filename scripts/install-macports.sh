@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-REPO_ROOT="${BASH_SOURCE[0]%/*}/.."
+REPO_ROOT="$(cd -- "${BASH_SOURCE[0]%/*}/.." && pwd -P)"
 
 echo "==> Setting up MacPorts..."
 export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
