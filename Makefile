@@ -8,7 +8,6 @@ help: ## Show this help
 install: ## Run all installation scripts
 	./scripts/prep-env.sh
 	./scripts/install-brew.sh
-	./scripts/install-macports.sh
 	./scripts/install-fonts.sh
 	./scripts/setup-bash.sh
 	./scripts/relink-config.sh
