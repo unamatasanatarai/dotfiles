@@ -8,15 +8,18 @@
 # Avoid loading interactive-only configurations in non-interactive contexts.
 [[ $- != *i* ]] && return
 export PATH="$PATH:/usr/local/sbin:/opt/local/bin:/opt/local/sbin"
-# Determine Homebrew prefix based on architecture (faster than calling `brew`)
-export BREW_PREFIX=$(command -v brew &>/dev/null && brew --prefix || ([[ "$(uname -m)" == "arm64" ]] && echo /opt/homebrew || echo /usr/local))
+if [[ -x /opt/homebrew/bin/brew ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+elif [[ -x /usr/local/bin/brew ]]; then
+  eval "$(/usr/local/bin/brew shellenv)"
+fi
 export HOMEBREW_NO_AUTO_UPDATE=1
 export BASH_SILENCE_DEPRECATION_WARNING=1
 export VISUAL=vi
 export EDITOR="$VISUAL"
 export SYSTEMD_EDITOR="$VISUAL"
-[ -n "$BREW_PREFIX" ] && export SHELL="$BREW_PREFIX/bin/bash"
-[ -r "$HOME/.config/xdg-user-dirs" ] && {
+[[ -n "$HOMEBREW_PREFIX" ]] && export SHELL="$HOMEBREW_PREFIX/bin/bash"
+[[ -r "$HOME/.config/xdg-user-dirs" ]] && {
 	set -a
 	source "$HOME/.config/xdg-user-dirs"
 	set +a
@@ -29,47 +32,23 @@ export SYSTEMD_EDITOR="$VISUAL"
 export TERM="xterm-256color"
 export TERM="screen-256color"
 
-# Check if `tput` supports setting colors
-if tput setaf 1 &> /dev/null; then
-  tput sgr0  # Reset terminal formatting just in case
+# Hardcoded ANSI escape sequences for performance
+bold=$'\e[1m'
+reset=$'\e[0m'
 
-  # Formatting
-  bold=$(tput bold)
-  reset=$(tput sgr0)
+black=$'\e[30m'
+red=$'\e[31m'
+green=$'\e[32m'
+yellow=$'\e[33m'
+blue=$'\e[34m'
+purple=$'\e[35m'
+cyan=$'\e[36m'
+white=$'\e[37m'
 
-  # Solarized/extended color palette using `tput`
-  black=$(tput setaf 0)
-  red=$(tput setaf 1)
-  green=$(tput setaf 2)
-  yellow=$(tput setaf 3)
-  blue=$(tput setaf 4)
-  purple=$(tput setaf 5)
-  cyan=$(tput setaf 6)
-  white=$(tput setaf 7)
-
-  # Extended colors (if terminal supports more than 8 colors)
-  orange=$(tput setaf 166)
-  violet=$(tput setaf 61)
-  gray=$(tput setaf 244)
-else
-  # Fallback to ANSI escape sequences
-  bold='\e[1m'
-  reset='\e[0m'
-
-  black='\e[30m'
-  red='\e[31m'
-  green='\e[32m'
-  yellow='\e[33m'
-  blue='\e[34m'
-  purple='\e[35m'
-  cyan='\e[36m'
-  white='\e[37m'
-
-  # Approximate extended colors
-  orange='\e[38;5;166m'
-  violet='\e[38;5;61m'
-  gray='\e[38;5;244m'
-fi
+# Approximate extended colors
+orange=$'\e[38;5;166m'
+violet=$'\e[38;5;61m'
+gray=$'\e[38;5;244m'
 
 #these must be functions. Bash script cannot change working directory (for some reason)
 
@@ -81,6 +60,7 @@ take() {
 wcd() {
 	[[ -z "$1" ]] && printf "usage: wcd <command>\n" >&2 && return 1
 
+	local cmd_path
 	cmd_path="$(command -v "$1")" || {
 		printf "Command '%s' not found\n" "$1" >&2
 		return 1
@@ -112,11 +92,21 @@ get_git_branch() {
 	return "$ps"
 }
 
-PS1="\w"
-PS1+="\$(get_git_branch)"
-PS1+="\[${reset}\]"
-PS1+="\$( [ \$? -eq 0 ] && printf \"\$\" || printf \"\[${orange}\]\\$\" )"
-PS1+="\[${reset}\] "
+__build_prompt() {
+	local exit_code=$?
+	local branch_str
+	local symbol="\$"
+
+	branch_str="$(get_git_branch)"
+
+	if [[ $exit_code -ne 0 ]]; then
+		symbol="\[${orange}\]\$\[${reset}\]"
+	fi
+
+	PS1="\w${branch_str}\[${reset}\]${symbol}\[${reset}\] "
+}
+
+PROMPT_COMMAND=__build_prompt
 # History settings (don't save lines beginning with space or matching the
 # previous entry)
 export HISTCONTROL=ignoreboth
