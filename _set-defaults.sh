@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
-# IMPORTANT: DO NOT run this script with 'sudo'. 
+# IMPORTANT: DO NOT run this script with 'sudo'.
 # The script will prompt for your password only when it needs it.
 # Running the whole script as sudo will break Safari/User preferences.
 
 if [[ $EUID -eq 0 ]]; then
-   echo "Error: Please DO NOT run this script with sudo."
-   echo "Run it as a normal user: ./_set-defaults.sh"
-   exit 1
+	echo "Error: Please DO NOT run this script with sudo."
+	echo "Run it as a normal user: ./_set-defaults.sh"
+	exit 1
 fi
 
 echo "=== System Preferences ==="
@@ -16,7 +16,7 @@ osascript -e 'tell application "System Preferences" to quit' || true
 osascript -e 'tell application "System Settings" to quit' || true
 osascript -e 'tell application "Safari" to quit' || true
 
-# NOTE: For many of these 'defaults' commands to work (especially Safari), 
+# NOTE: For many of these 'defaults' commands to work (especially Safari),
 # your Terminal must have "Full Disk Access" in System Settings > Privacy & Security.
 
 # Trackpad: Silent Clicking
@@ -40,31 +40,45 @@ sudo pmset -b displaysleep 10 || exit 1
 sudo pmset -c displaysleep 10 || exit 1
 echo "Display sleep set to 10 minutes"
 
-
 echo "=== Computer Name Setup ==="
-scutil --get ComputerName > /tmp/cn
-read -r current_name < /tmp/cn
+scutil --get ComputerName >/tmp/cn
+read -r current_name </tmp/cn
 echo -n "Set computer name [$current_name]: "
 read -r computer_name
 
 if [[ -n "$computer_name" && "$computer_name" != "$current_name" ]]; then
-  echo "> Setting ComputerName to: $computer_name"
-  sudo scutil --set ComputerName "$computer_name" || { echo "Failed to set ComputerName"; exit 1; }
-  sudo scutil --set HostName "$computer_name" || { echo "Failed to set HostName"; exit 1; }
-  sudo scutil --set LocalHostName "$computer_name" || { echo "Failed to set LocalHostName"; exit 1; }
-# Set the NetBIOS name (visible to Windows computers on the network)
-sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string "$computer_name" || { echo "Failed to set NetBIOSName"; exit 1; }
-echo "NetBIOS name set to $computer_name"
-  echo "Computer name set (System Preferences → Sharing)"
+	echo "> Setting ComputerName to: $computer_name"
+	sudo scutil --set ComputerName "$computer_name" || {
+		echo "Failed to set ComputerName"
+		exit 1
+	}
+	sudo scutil --set HostName "$computer_name" || {
+		echo "Failed to set HostName"
+		exit 1
+	}
+	sudo scutil --set LocalHostName "$computer_name" || {
+		echo "Failed to set LocalHostName"
+		exit 1
+	}
+	# Set the NetBIOS name (visible to Windows computers on the network)
+	sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string "$computer_name" || {
+		echo "Failed to set NetBIOSName"
+		exit 1
+	}
+	echo "NetBIOS name set to $computer_name"
+	echo "Computer name set (System Preferences → Sharing)"
 else
-  echo "Computer name unchanged"
+	echo "Computer name unchanged"
 fi
 
 echo "=== Appearance & UI ==="
 echo "> Tools and Look"
 
 # Set the highlight color (the color of selected text)
-defaults write NSGlobalDomain AppleHighlightColor -string "0.764700 0.976500 0.568600" || { echo "Failed to set highlight color"; exit 1; }
+defaults write NSGlobalDomain AppleHighlightColor -string "0.764700 0.976500 0.568600" || {
+	echo "Failed to set highlight color"
+	exit 1
+}
 echo "Highlight color set to green"
 
 # Disable Notification Center and remove its menu bar icon
@@ -72,7 +86,10 @@ launchctl unload -w /System/Library/LaunchAgents/com.apple.notificationcenterui.
 echo "Disable Notification Center and remove menu bar icon"
 
 # Show battery percentage in the menu bar and control center
-defaults write com.apple.menuextra.battery ShowPercent -string 'YES' || { echo "Failed to show battery"; exit 1; }
+defaults write com.apple.menuextra.battery ShowPercent -string 'YES' || {
+	echo "Failed to show battery"
+	exit 1
+}
 echo "Battery percentage enabled in menu bar"
 defaults write com.apple.controlcenter "NSStatusItem Visible Battery" -bool true || exit 1
 echo "Battery visibility enabled in Control Center"
@@ -80,7 +97,10 @@ defaults write com.apple.controlcenter BatteryShowPercentage -bool true || exit 
 echo "Battery percentage enabled in Control Center"
 
 # Remove the delay when hovering over a window title in the toolbar
-defaults write NSGlobalDomain NSToolbarTitleViewRolloverDelay -float 0 || { echo "Failed to adjust toolbar delay"; exit 1; }
+defaults write NSGlobalDomain NSToolbarTitleViewRolloverDelay -float 0 || {
+	echo "Failed to adjust toolbar delay"
+	exit 1
+}
 echo "Removed toolbar title rollover delay"
 
 echo "=== Finder Preferences ==="
@@ -480,8 +500,8 @@ sudo defaults write /Library/Preferences/com.apple.alf allowsignedenabled -bool 
 sudo defaults write /Library/Preferences/com.apple.loginwindow DisableConsoleAccess -bool true || exit 1
 
 # Set display sleep timer to 5 minutes on AC power
-sudo /usr/libexec/PlistBuddy -c "Set 'AC Power':'Display Sleep Timer' 5" /Library/Preferences/com.apple.PowerManagement.plist 2>/dev/null || \
-  sudo /usr/libexec/PlistBuddy -c "Add 'AC Power':'Display Sleep Timer' integer 5" /Library/Preferences/com.apple.PowerManagement.plist || exit 1
+sudo /usr/libexec/PlistBuddy -c "Set 'AC Power':'Display Sleep Timer' 5" /Library/Preferences/com.apple.PowerManagement.plist 2>/dev/null ||
+	sudo /usr/libexec/PlistBuddy -c "Add 'AC Power':'Display Sleep Timer' integer 5" /Library/Preferences/com.apple.PowerManagement.plist || exit 1
 
 # Default to saving new documents to disk instead of iCloud
 defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false || exit 1
@@ -548,49 +568,49 @@ echo "Disabled widgets entirely"
 echo "=== Spotlight Preferences ==="
 # Configure Spotlight search results: enable Applications and Expressions, disable the rest
 defaults write com.apple.spotlight orderedItems -array \
-  '{"enabled" = 1;"name" = "APPLICATIONS";}' \
-  '{"enabled" = 1;"name" = "MENU_EXPRESSION";}' \
-  '{"enabled" = 0;"name" = "MENU_SPOTLIGHT_SUGGESTIONS";}' \
-  '{"enabled" = 0;"name" = "MENU_CONVERSION";}' \
-  '{"enabled" = 0;"name" = "MENU_DEFINITION";}' \
-  '{"enabled" = 0;"name" = "SYSTEM_PREFS";}' \
-  '{"enabled" = 0;"name" = "DOCUMENTS";}' \
-  '{"enabled" = 0;"name" = "DIRECTORIES";}' \
-  '{"enabled" = 0;"name" = "PRESENTATIONS";}' \
-  '{"enabled" = 0;"name" = "SPREADSHEETS";}' \
-  '{"enabled" = 0;"name" = "PDF";}' \
-  '{"enabled" = 0;"name" = "MESSAGES";}' \
-  '{"enabled" = 0;"name" = "CONTACT";}' \
-  '{"enabled" = 0;"name" = "EVENT_TODO";}' \
-  '{"enabled" = 0;"name" = "IMAGES";}' \
-  '{"enabled" = 0;"name" = "BOOKMARKS";}' \
-  '{"enabled" = 0;"name" = "MUSIC";}' \
-  '{"enabled" = 0;"name" = "MOVIES";}' \
-  '{"enabled" = 0;"name" = "FONTS";}' \
-  '{"enabled" = 0;"name" = "MENU_OTHER";}' || exit 1
+	'{"enabled" = 1;"name" = "APPLICATIONS";}' \
+	'{"enabled" = 1;"name" = "MENU_EXPRESSION";}' \
+	'{"enabled" = 0;"name" = "MENU_SPOTLIGHT_SUGGESTIONS";}' \
+	'{"enabled" = 0;"name" = "MENU_CONVERSION";}' \
+	'{"enabled" = 0;"name" = "MENU_DEFINITION";}' \
+	'{"enabled" = 0;"name" = "SYSTEM_PREFS";}' \
+	'{"enabled" = 0;"name" = "DOCUMENTS";}' \
+	'{"enabled" = 0;"name" = "DIRECTORIES";}' \
+	'{"enabled" = 0;"name" = "PRESENTATIONS";}' \
+	'{"enabled" = 0;"name" = "SPREADSHEETS";}' \
+	'{"enabled" = 0;"name" = "PDF";}' \
+	'{"enabled" = 0;"name" = "MESSAGES";}' \
+	'{"enabled" = 0;"name" = "CONTACT";}' \
+	'{"enabled" = 0;"name" = "EVENT_TODO";}' \
+	'{"enabled" = 0;"name" = "IMAGES";}' \
+	'{"enabled" = 0;"name" = "BOOKMARKS";}' \
+	'{"enabled" = 0;"name" = "MUSIC";}' \
+	'{"enabled" = 0;"name" = "MOVIES";}' \
+	'{"enabled" = 0;"name" = "FONTS";}' \
+	'{"enabled" = 0;"name" = "MENU_OTHER";}' || exit 1
 echo "Spotlight categories configured"
 echo "Spotlight preferences set"
 
 echo "=== Finishup and Cleanup ==="
-killall "SystemUIServer" > /dev/null 2>&1 || true
+killall "SystemUIServer" >/dev/null 2>&1 || true
 echo "Restarted SystemUIServer"
 
-killall "Finder" > /dev/null 2>&1 || true
+killall "Finder" >/dev/null 2>&1 || true
 echo "Restarted Finder"
 
-killall "Dock" > /dev/null 2>&1 || true
+killall "Dock" >/dev/null 2>&1 || true
 echo "Restarted Dock"
 
-killall mds > /dev/null 2>&1 || true
+killall mds >/dev/null 2>&1 || true
 echo "Restarted Spotlight daemon"
 
-sudo mdutil -i on / > /dev/null 2>&1 || true
-echo "Enabled Spotlight indexing on main volume"
+sudo mdutil -i -a off / >/dev/null 2>&1 || true
+echo "Disabled Spotlight indexing on main volume"
 
-sudo mdutil -E / > /dev/null 2>&1 || true
+sudo mdutil -E / >/dev/null 2>&1 || true
 echo "Rebuilt Spotlight index"
 
-killall "cfprefsd" > /dev/null 2>&1 || true
+killall "cfprefsd" >/dev/null 2>&1 || true
 echo "Killed cached preferences daemon"
 
 echo ""

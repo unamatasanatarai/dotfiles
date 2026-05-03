@@ -1,145 +1,144 @@
-#!/usr/bin/env bash
+# version 1.4.1
+# defaults
+user_uid="$UID"
 
-# Array of agents and daemons to disable (focused on telemetry and non-essential services)
-AGENTS=(
-  com.apple.AMPArtworkAgent
-  com.apple.AMPLibraryAgent
-  com.apple.AOSNotificationOSX
-  com.apple.AOSPushRelay
-  com.apple.AddressBook.AssistantService
-  com.apple.AddressBook.SourceSync
-  com.apple.AddressBook.abd
-  com.apple.AirPlayUIAgent
-  com.apple.AirPlayXPCHelper
-  com.apple.AirPortBaseStationAgent
-  com.apple.CalendarAgent
-  com.apple.CallHistoryPluginHelper
-  com.apple.CallHistorySyncHelper
-  com.apple.CrashReporterSupportHelper
-  com.apple.DictationIM
-  com.apple.ManagedClient.cloudconfigurationd
-  com.apple.Maps.mapspushd
-  com.apple.Safari.History
-  com.apple.Safari.PasswordBreachAgent
-  com.apple.Safari.SafeBrowsing.Service
-  com.apple.SafariBookmarksSyncAgent
-  com.apple.SafariCloudHistoryPushAgent
-  com.apple.SafariHistoryServiceAgent
-  com.apple.SafariLaunchAgent
-  com.apple.SafariNotificationAgent
-  com.apple.ScreenTimeAgent
-  com.apple.SubmitDiagInfo
-  com.apple.UsageTrackingAgent
-  com.apple.appleseed.fbahelperd
-  com.apple.appleseed.seedusaged
-  com.apple.applespell
-  com.apple.apsd
-  com.apple.assistant_service
-  com.apple.awacsd
-  com.apple.awdd
-  com.apple.bird
-  com.apple.cloudd
-  com.apple.cloudfamilyrestrictionsd-mac
-  com.apple.cloudpaird
-  com.apple.cloudphotod
-  com.apple.cloudphotosd
-  com.apple.commerce
-  com.apple.contacts.donation-agent
-  com.apple.contactsd
-  com.apple.familycircled
-  com.apple.familycontrols
-  com.apple.familycontrols.useragent
-  com.apple.familynotificationd
-  com.apple.findmymac
-  com.apple.findmymacmessenger
-  com.apple.gamed
-  com.apple.geod
-  com.apple.geodMachServiceBridge
-  com.apple.helpd
-  com.apple.iCloudHelper
-  com.apple.iCloudNotificationAgent
-  com.apple.iCloudStats
-  com.apple.iCloudUserNotifications
-  com.apple.iCloudUserNotificationsd
-  com.apple.icloud.findmydeviced
-  com.apple.icloud.findmydeviced.findmydevice-user-agent
-  com.apple.icloud.fmfd
-  com.apple.icloud.searchpartyuseragent
-  com.apple.imagent
-  com.apple.itunescloudd
-  com.apple.locationd
-  com.apple.maps.destinationd
-  com.apple.mbicloudsetupd
-  com.apple.netbiosd
-  com.apple.parentalcontrols.check
-  com.apple.parsecd
-  com.apple.photoanalysisd
-  com.apple.photolibraryd
-  com.apple.podcasts.PodcastContentService
-  com.apple.remotepairtool
-  com.apple.rpmuxd
-  com.apple.rtcreportingd
-  com.apple.safaridavclient
-  com.apple.screensharing
-  com.apple.security.cloudkeychainproxy3
-  com.apple.security.idskeychainsyncingproxy
-  com.apple.security.keychain-circle-notification
-  com.apple.siri-distributed-evaluation
-  com.apple.siri.context.service
-  com.apple.siriactionsd
-  com.apple.siriknowledged
-  com.apple.speech.speechdatainstallerd
-  com.apple.speech.speechsynthesisd.arm64
-  com.apple.speech.speechsynthesisd.x86_64
-  com.apple.speech.synthesisserver
-  com.apple.tipsd
+printf "warning: this will break some functionality. continue? (y/N): "
+read -r confirm
+if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
+    exit 0
+fi
+
+# service definitions
+services=(
+    com.apple.AddressBook.abd                              # address book daemon
+    com.apple.AddressBook.AssistantService                 # siri contacts integration
+    com.apple.AddressBook.SourceSync                       # contact syncing
+    com.apple.AirPlayUIAgent                               # airplay ui
+    com.apple.AirPlayXPCHelper                             # airplay backend
+    com.apple.AirPortBaseStationAgent                      # apple router management
+    com.apple.AMPArtworkAgent                              # media artwork downloader
+    com.apple.AMPLibraryAgent                              # media library sync
+    com.apple.analyticsd                                   # telemetry data collection
+    com.apple.AOSNotificationOSX                           # apple online alerts
+    com.apple.AOSPushRelay                                 # icloud notification relay
+    com.apple.appleseed.fbahelperd                         # feedback assistant helper
+    com.apple.appleseed.seedusaged                         # beta program usage
+    com.apple.applespell                                   # system spell checking
+    com.apple.apsd                                         # push notifications (imessage)
+    com.apple.assistant_service                            # siri core service
+    com.apple.awacsd                                       # wireless access control
+    com.apple.awdd                                         # wireless diagnostics
+    com.apple.bird                                         # icloud drive sync
+    com.apple.CalendarAgent                                # calendar sync
+    com.apple.CallHistoryPluginHelper                      # call log integration
+    com.apple.CallHistorySyncHelper                        # sync call logs across devices
+    com.apple.cloudd                                       # icloud core sync
+    com.apple.cloudfamilyrestrictionsd-mac                 # icloud family limits
+    com.apple.cloudpaird                                   # icloud peripheral pairing (airpods)
+    com.apple.cloudphotod                                  # icloud photo sync
+    com.apple.cloudphotosd                                 # legacy photo sync
+    com.apple.commerce                                     # app store backend
+    com.apple.contacts.donation-agent                      # automated contact suggestions
+    com.apple.contactsd                                    # contacts database
+    com.apple.coreduetd                                    # battery/app context management
+    com.apple.coreduetd-context                            # duet storage
+    com.apple.CrashReporterSupportHelper                   # crash reporting ui framework
+    com.apple.diagnosticd                                  # diagnostic log management
+    com.apple.DictationIM                                  # keyboard dictation
+    com.apple.familycircled                                # family sharing
+    com.apple.familycontrols                               # parental controls
+    com.apple.familycontrols.useragent                     # parental control ui
+    com.apple.familynotificationd                          # family alerts
+    com.apple.findmymac                                    # find my tracking
+    com.apple.findmymacmessenger                           # find my alerts
+    com.apple.gamed                                        # game center
+    com.apple.geod                                         # maps location provider
+    com.apple.geodMachServiceBridge                        # location bridge service
+    com.apple.helpd                                        # background help viewer
+    com.apple.icloud.findmydeviced                         # find my device core
+    com.apple.icloud.findmydeviced.findmydevice-user-agent # find my device ui
+    com.apple.icloud.fmfd                                  # find my friends sync
+    com.apple.icloud.searchpartyuseragent                  # find my offline network
+    com.apple.iCloudHelper                                 # icloud account helper
+    com.apple.iCloudNotificationAgent                      # icloud alerts agent
+    com.apple.iCloudStats                                  # icloud storage tracking
+    com.apple.iCloudUserNotifications                      # icloud user alerts
+    com.apple.iCloudUserNotificationsd                     # icloud alert daemon
+    com.apple.imagent                                      # imessage/facetime handler
+    com.apple.itunescloudd                                 # apple music sync
+    com.apple.knowledge-agent                              # behavior tracking for suggestions
+    com.apple.locationd                                    # location services management
+    com.apple.ManagedClient.cloudconfigurationd            # corporate mdm management
+    com.apple.maps.destinationd                            # suggested maps destinations
+    com.apple.Maps.mapspushd                               # send-to-mac maps notifications
+    com.apple.mbicloudsetupd                               # icloud setup assistant tasks
+    com.apple.metadata.mds                                 # spotlight indexing
+    com.apple.metadata.mds_stores                          # spotlight databases
+    com.apple.metadata.mds.check                           # background file checking
+    com.apple.metadata.mds.index                           # background file indexing
+    com.apple.metadata.mds.scan                            # background file scanning
+    com.apple.netbiosd                                     # windows file sharing discovery
+    com.apple.osanalytics.osanalyticshelper                # analytics upload orchestration
+    com.apple.parentalcontrols.check                       # restriction enforcement
+    com.apple.parsecd                                      # spotlight web suggestions
+    com.apple.photoanalysisd                               # local image recognition
+    com.apple.photolibraryd                                # photos library management
+    com.apple.podcasts.PodcastContentService               # podcast syncing
+    com.apple.proactiveeventtrackerd                       # suggestion event tracking
+    com.apple.ReportCrash                                  # crash reporter
+    com.apple.ReportCrash.Root                             # root crash reporter
+    com.apple.rtcreportingd                                # rtc diagnostic reporting
+    com.apple.Safari.History                               # safari history management
+    com.apple.Safari.PasswordBreachAgent                   # password leak checks
+    com.apple.Safari.SafeBrowsing.Service                  # anti-phishing filter
+    com.apple.SafariBookmarksSyncAgent                     # safari bookmark syncing
+    com.apple.SafariCloudHistoryPushAgent                  # safari history push sync
+    com.apple.safaridavclient                              # safari webdav sync
+    com.apple.SafariHistoryServiceAgent                    # background history sync
+    com.apple.SafariLaunchAgent                            # safari startup optimizer
+    com.apple.SafariNotificationAgent                      # website push notifications
+    com.apple.screensharing                                # remote desktop listener
+    com.apple.ScreenTimeAgent                              # screen time limits
+    com.apple.security.cloudkeychainproxy3                 # icloud keychain sync
+    com.apple.security.idskeychainsyncingproxy             # keychain encryption sync
+    com.apple.security.keychain-circle-notification        # new device alerts
+    com.apple.siri-distributed-evaluation                  # siri local machine learning
+    com.apple.siri.context.service                         # siri app context provider
+    com.apple.siriactionsd                                 # siri shortcuts
+    com.apple.siriknowledged                               # siri local knowledge
+    com.apple.softwareupdate_firstrun_tasks                # post-upgrade update tasks
+    com.apple.softwareupdated                              # automatic system updates
+    com.apple.speech.speechdatainstallerd                  # voice data downloader
+    com.apple.speech.speechsynthesisd                      # text-to-speech (general)
+    com.apple.speech.speechsynthesisd.arm64                # text-to-speech (silicon)
+    com.apple.speech.speechsynthesisd.x86_64               # text-to-speech (intel)
+    com.apple.speech.synthesisserver                       # centralized speech server
+    com.apple.spindump                                     # unresponsive app monitoring
+    com.apple.spotlightknowledged                          # search intelligence
+    com.apple.SubmitDiagInfo                               # diagnostic submission
+    com.apple.symptomsd                                    # system health monitoring
+    com.apple.tipsd                                        # siri tips notifications
+    com.apple.UsageTrackingAgent                           # app usage statistics
 )
 
-# Initialize log file and tracking file
-LOG_FILE="/tmp/stop-processes.log"
-> "$LOG_FILE"
-
-# Get current user's UID for GUI domain using pure bash to avoid subshell
-USER_UID=$UID
-
-for agent in "${AGENTS[@]}"; do
-  # Check for plist in LaunchAgents, LaunchDaemons, and user LaunchAgents
-  agent_plist="/System/Library/LaunchAgents/${agent}.plist"
-  daemon_plist="/System/Library/LaunchDaemons/${agent}.plist"
-  user_plist="$HOME/Library/LaunchAgents/${agent}.plist"
-
-  if [[ -f "$agent_plist" ]]; then
-    plist_path="$agent_plist"
-    domain="gui/$USER_UID"
-  elif [[ -f "$daemon_plist" ]]; then
-    plist_path="$daemon_plist"
-    domain="system"
-  elif [[ -f "$user_plist" ]]; then
-    plist_path="$user_plist"
-    domain="gui/$USER_UID"
-  else
-    echo "Plist not found: ($agent)"
-    echo "Plist not found for $agent in LaunchAgents, LaunchDaemons, or user LaunchAgents" >> "$LOG_FILE"
-    continue
-  fi
-
-  # Check if service is loaded
-  if launchctl list "$agent" >/dev/null 2>&1; then
-    # Attempt to disable and stop the agent/daemon using bootout
-    if sudo launchctl bootout "$domain/$agent" >>"$LOG_FILE" 2>&1; then
-      echo "Disabled and stopped: ($agent)"
-      echo "$agent $domain" >> "$LOG_FILE"
-    else
-      echo "Failed to disable/stop: ($agent)"
-      echo "Failed to bootout $agent in $domain. Check $LOG_FILE for details." >> "$LOG_FILE"
+# manual deduplication
+declare -A unique_map
+final_services=()
+for s in "${services[@]}"; do
+    if [[ -z "${unique_map[$s]}" ]]; then
+        unique_map[$s]=1
+        final_services+=("$s")
     fi
-  else
-    echo "Service not loaded: ($agent)"
-    echo "Service $agent not loaded or already disabled" >> "$LOG_FILE"
-  fi
 done
 
-echo "To re-enable an agent, use: sudo launchctl bootstrap gui/$USER_UID /System/Library/LaunchAgents/<agent>.plist"
-echo "To re-enable a daemon, use: sudo launchctl bootstrap system /System/Library/LaunchDaemons/<agent>.plist"
-echo "To re-enable a user agent, use: launchctl bootstrap gui/$USER_UID ~/Library/LaunchAgents/<agent>.plist"
-echo "Operation complete. Check $LOG_FILE for more information"
+# execution
+for svc in "${final_services[@]}"; do
+    printf "processing %s\n" "$svc"
+
+    sudo launchctl disable "system/$svc" 2>/dev/null
+    sudo launchctl disable "gui/$user_uid/$svc" 2>/dev/null
+    sudo launchctl bootout "system/$svc" 2>/dev/null
+    launchctl bootout "gui/$user_uid/$svc" 2>/dev/null
+done
+
+printf "\ndone.\n"
