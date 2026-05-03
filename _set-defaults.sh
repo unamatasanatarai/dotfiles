@@ -11,10 +11,11 @@ if [[ $EUID -eq 0 ]]; then
 fi
 
 echo "=== System Preferences ==="
-# Quitting apps before modifying their preferences is best practice
+# Quitting apps and killing cfprefsd before modifying their preferences is best practice
 osascript -e 'tell application "System Preferences" to quit' || true
 osascript -e 'tell application "System Settings" to quit' || true
 osascript -e 'tell application "Safari" to quit' || true
+killall "cfprefsd" &>/dev/null || true
 
 # NOTE: For many of these 'defaults' commands to work (especially Safari),
 # your Terminal must have "Full Disk Access" in System Settings > Privacy & Security.
@@ -600,6 +601,12 @@ echo "Restarted Finder"
 
 killall "Dock" >/dev/null 2>&1 || true
 echo "Restarted Dock"
+
+killall "ControlCenter" >/dev/null 2>&1 || true
+echo "Restarted ControlCenter"
+
+killall "NotificationCenter" >/dev/null 2>&1 || true
+echo "Restarted NotificationCenter"
 
 killall mds >/dev/null 2>&1 || true
 echo "Restarted Spotlight daemon"
