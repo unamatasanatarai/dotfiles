@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+TMP_L="/tmp/.git_pull_tmp_$$"
+git branch --show-current > "$TMP_L" 2>/dev/null
+read -r CURRENT_BRANCH < "$TMP_L"
+
+if [[ -z "$CURRENT_BRANCH" ]]; then
+    printf "Error: Unable to determine current branch.\n" >&2
+    rm -f "$TMP_L"
+    exit 1
+fi
+
+git pull origin "$CURRENT_BRANCH"
+rm -f "$TMP_L"

@@ -2,11 +2,10 @@
 
 [[ -z "$1" || -z "$2" ]] && printf "Usage: %s <username> <email>\n" "${0##*/}" && exit 1
 
-printf "> git config user.name '$1'\n"
+printf "> git config user.name '%s'\n" "$1"
 git config user.name "$1"
 
-printf "> git config user.email '$2'\n"
+printf "> git config user.email '%s'\n" "$2"
 git config user.email "$2"
 
 printf "done\n"
-

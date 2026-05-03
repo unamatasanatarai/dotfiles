@@ -1,37 +1,24 @@
 #!/usr/bin/env bash
 
-# Get current branch
-current_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+TMP_P="/tmp/.git_push_tmp_$$"
+git rev-parse --abbrev-ref HEAD > "$TMP_P" 2>/dev/null
+read -r CURRENT_BRANCH < "$TMP_P"
 
-if [ -z "$current_branch" ]; then
-  echo "Error: Not inside a Git repository."
-  exit 1
+if [[ -z "$CURRENT_BRANCH" ]]; then
+    printf "Error: Not inside a Git repository.\n" >&2
+    rm -f "$TMP_P"
+    exit 1
 fi
 
-# Ensure remote 'origin' exists
-if ! git remote get-url origin >/dev/null 2>&1; then
-  echo "Error: Remote 'origin' is not configured."
-  exit 1
-fi
-
-# Fetch latest refs
 git fetch origin >/dev/null 2>&1
 
-# Check if remote branch exists
-if git show-ref --verify --quiet "refs/remotes/origin/$current_branch"; then
-  ahead_count=$(git rev-list --count HEAD ^origin/"$current_branch")
+if git show-ref --verify --quiet "refs/remotes/origin/$CURRENT_BRANCH"; then
+    git rev-list --count "origin/$CURRENT_BRANCH..HEAD" > "$TMP_P"
+    read -r AHEAD < "$TMP_P"
+    [[ "$AHEAD" -eq 0 ]] && printf "Branch is up to date.\n" && rm -f "$TMP_P" && exit 0
 else
-  echo "Remote branch origin/$current_branch does not exist yet."
-  ahead_count=$(git rev-list --count HEAD)
+    printf "New branch detected.\n"
 fi
 
-# Decide whether to push
-if [ "$ahead_count" -eq 0 ]; then
-  echo "Nothing to push. Your branch is up to date with origin/$current_branch."
-  exit 0
-else
-  echo "You have $ahead_count commit(s) ahead (or branch not yet pushed)."
-fi
-
-# Push branch
-git push -u origin "$current_branch"
+git push -u origin "$CURRENT_BRANCH"
+rm -f "$TMP_P"

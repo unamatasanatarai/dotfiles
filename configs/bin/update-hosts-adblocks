@@ -1,78 +1,67 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
+HOSTS_URL="https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts"
+HOSTS_FILE="/etc/hosts"
+MARK_BEGIN="# adblocking begin #"
+MARK_END="# adblocking end #"
 
-echo ""
-echo "Only root can do this. I will ask you to put in your password."
-echo ""
-
-backup_dir=${XDG_STATE_HOME:-$HOME/.local/state}/hosts-adblocks
-mkdir -vp "$backup_dir"
-
-hosts_url="https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts"
-hosts_file="/etc/hosts"
-downloaded_hosts_file="/tmp/hosts.downloaded"
-tmp="/tmp/hosts.tmp"
-
-mark_begin="# adblocking begin #"
-mark_end="# adblocking end #"
-readonly mark_begin mark_end hosts_url
-
-echo "This will modify your /etc/hosts file. Are you sure? [No/yes]"
-read -r answer
-if [[ "${answer,,}" != "yes" ]]; then
-  echo "Aborted"
-  exit 0
+if [[ $EUID -ne 0 ]]; then
+    printf "Error: This script must be run with sudo.\n" >&2
+    exit 1
 fi
 
-function truncateHosts {
-  local lb le
-  if ! grep -q "$mark_begin" "$hosts_file"; then
-    return 0
-  fi
-  lb=$(grep -ne "$mark_begin" "$hosts_file" | head -n 1 | awk -F: '{print $1}')
-  le=$(grep -ne "$mark_end" "$hosts_file" | head -n 1 | awk -F: '{print $1}')
-  sed "$lb,$le d" "$hosts_file" > "$tmp"
-  sudo tee "$hosts_file" < "$tmp" &> /dev/null
+printf "This will modify your /etc/hosts file. Are you sure? [No/yes] "
+read -r answer
+if [[ "${answer,,}" != "yes" ]]; then
+    printf "Aborted\n"
+    exit 0
+fi
 
-  return 0
-}
+TMP_DOWNLOAD="/tmp/hosts_dl_$$"
+TMP_NEW_HOSTS="/tmp/hosts_new_$$"
+TMP_OLD_HOSTS="/tmp/hosts_old_$$"
 
-function markStart {
-  echo "$mark_begin" | sudo tee -a "$hosts_file" &> /dev/null
-}
+printf "Downloading hosts from %s...\n" "$HOSTS_URL"
+curl -so "$TMP_DOWNLOAD" "$HOSTS_URL"
+if [[ $? -ne 0 ]]; then
+    printf "Error: Failed to download hosts file.\n" >&2
+    exit 1
+fi
 
-function markEnd {
-  echo "$mark_end" | sudo tee -a "$hosts_file" &> /dev/null
-}
+BACKUP_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/hosts-adblocks"
+[[ -d "$BACKUP_DIR" ]] || mkdir -p "$BACKUP_DIR"
 
-function downloadHostsFile {
-  rm -vf "$downloaded_hosts_file"
-  curl -so "$downloaded_hosts_file" "$hosts_url"
-}
+TIMESTAMP=$(date +"%Y-%m-%d-%H-%M-%S")
+BACKUP_FILE="$BACKUP_DIR/hosts-$TIMESTAMP-$RANDOM"
+cp "$HOSTS_FILE" "$BACKUP_FILE" && printf "Backup created: %s\n" "$BACKUP_FILE"
 
-function updateHostsFile {
-  sudo tee -a "$hosts_file" < "$downloaded_hosts_file" &> /dev/null
-}
+IN_BLOCK=0
+while IFS= read -r line; do
+    if [[ "$line" == "$MARK_BEGIN" ]]; then
+        IN_BLOCK=1
+        continue
+    elif [[ "$line" == "$MARK_END" ]]; then
+        IN_BLOCK=0
+        continue
+    fi
 
-function backupHostsFile {
-  local filename
-  filename="$backup_dir/hosts-$(date +"%Y-%m-%d-%H-%M-%s")-$RANDOM"
-  cp "$hosts_file" "$filename"
-  echo "hosts backed up to:"
-  echo "  $filename"
-}
+    if [[ $IN_BLOCK -eq 0 ]]; then
+        printf "%s\n" "$line" >> "$TMP_OLD_HOSTS"
+    fi
+done < "$HOSTS_FILE"
 
-echo "downloading..."
-downloadHostsFile
-echo "backup up..."
-backupHostsFile
-echo "updating entries..."
-truncateHosts
-markStart
-updateHostsFile
-markEnd
+cat "$TMP_OLD_HOSTS" > "$TMP_NEW_HOSTS" 
+printf "\n%s\n" "$MARK_BEGIN" >> "$TMP_NEW_HOSTS"
+cat "$TMP_DOWNLOAD" >> "$TMP_NEW_HOSTS"
+printf "\n%s\n" "$MARK_END" >> "$TMP_NEW_HOSTS"
 
+cp "$TMP_NEW_HOSTS" "$HOSTS_FILE"
+if [[ $? -eq 0 ]]; then
+    printf "✅ /etc/hosts updated successfully.\n"
+else
+    printf "❌ Error: Failed to write to %s\n" "$HOSTS_FILE" >&2
+    exit 1
+fi
+
+rm -f "$TMP_DOWNLOAD" "$TMP_NEW_HOSTS" "$TMP_OLD_HOSTS"
 sudo -k
-
-echo "I'm done"

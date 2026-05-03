@@ -1,0 +1,75 @@
+# executable
+#!/usr/bin/env bash
+
+# version
+__VERSION="0.0.1"
+
+# script name and directory
+__FILE=${0##*/}
+__DIR=${0%/*}
+if [[ "$__DIR" == "$__FILE" ]]; then
+  __DIR="."
+fi
+
+# config
+o_flag=1
+
+# args
+task=""
+name=""
+i=1
+
+# parse input (flat)
+if [[ $# -gt 0 ]]; then
+  task=$1
+  shift
+fi
+
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    --flag)
+      shift
+      if [[ -z "$1" ]]; then
+        printf "error: missing value for --flag\n" >&2
+        exit 1
+      fi
+      o_flag=$1
+      shift
+      ;;
+    *)
+      if [[ -z "$name" ]]; then
+        name=$1
+      fi
+      shift
+      ;;
+  esac
+done
+
+# dispatch
+
+if [[ -z "$task" || "$task" == "help" ]]; then
+  printf "%s v%s\n" "$__FILE" "$__VERSION"
+  printf "Usage: %s <task> [options]\n\n" "$__FILE"
+
+  printf "Tasks:\n"
+  printf "    prepend-hello   Prepend Hello to what you type\n\n"
+
+  printf "Options:\n"
+  printf "    --flag <val>    set flag value (default: 1)\n\n"
+
+  printf "Example:\n"
+  printf "    %s prepend-hello John\n" "$__FILE"
+  exit 0
+fi
+
+if [[ "$task" == "prepend-hello" ]]; then
+  if [[ -z "$name" ]]; then
+    printf "error: missing name\n" >&2
+    exit 1
+  fi
+  printf "Hello, %s!\n" "$name"
+  exit 0
+fi
+
+printf "error: unknown task: %s\n" "$task" >&2
+exit 1

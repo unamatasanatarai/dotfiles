@@ -1,0 +1,87 @@
+# executable
+#!/usr/bin/env bash
+
+# version
+__VERSION="0.0.1"
+
+# script name and directory
+__FILE=${0##*/}
+__DIR=${0%/*}
+if [[ "$__DIR" == "$__FILE" ]]; then
+  __DIR="."
+fi
+
+# defaults
+o_flag=1
+__args=()
+
+# parse options
+while [[ $# -gt 0 ]]; do
+  case $1 in
+
+    -h|--help)
+      printf "%s, version %s\n" "$__FILE" "$__VERSION"
+      printf "Usage: %s template filename [options]\n\n" "$__FILE"
+      printf "Options:\n"
+      printf "    -f, --flag        change the flag from 1 (default)\n"
+      printf "    -h, --help        show help\n"
+      printf "    -V, --version     show version\n\n"
+      printf "Examples:\n"
+      printf "    %s -f 'value'\n" "$__FILE"
+      exit 2
+      ;;
+
+    -V|--version)
+      printf "%s, version %s\n" "$__FILE" "$__VERSION"
+      exit 0
+      ;;
+
+    -f|--flag)
+      shift
+      if [[ -z "$1" ]]; then
+        printf "error: missing value for -f|--flag\n" >&2
+        exit 1
+      fi
+      o_flag=$1
+      shift
+      continue
+      ;;
+
+    --)
+      shift
+      break
+      ;;
+
+    -*)
+      printf "error: unknown option: %s\n" "$1" >&2
+      exit 1
+      ;;
+
+    *)
+      __args+=("$1")
+      shift
+      ;;
+  esac
+done
+
+# collect remaining args after --
+while [[ $# -gt 0 ]]; do
+  __args+=("$1")
+  shift
+done
+
+# main output
+printf "o_flag is set to: %s\n" "$o_flag"
+
+# print args space-separated
+i=0
+while [[ $i -lt ${#__args[@]} ]]; do
+  printf "%s" "${__args[$i]}"
+  if [[ $i -lt $((${#__args[@]} - 1)) ]]; then
+    printf " "
+  fi
+  ((i++))
+done
+printf "\n"
+
+exit 0
