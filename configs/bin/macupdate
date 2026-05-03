@@ -1,75 +1,46 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
+# --- 1. Fail First: Argument Parsing (Pure Bash) ---
+FORCE=0
+REBUILD=0
 
-# -----------------------------------------------------------------------------
-# PRIVATE
-# -----------------------------------------------------------------------------
+while getopts "fhr" opt; do
+  case "$opt" in
+    f) FORCE=1 ;;
+    r) REBUILD=1 ;;
+    h|*)
+      printf "Usage: %s [ -f ] [ -h ] [ -r ]\n" "${0##*/}"
+      printf "\nOptions:\n  -r   rebuild license\n  -f   Remove and reinstall CommandLineTools\n  -h   Show this help\n"
+      exit 2
+      ;;
+  esac
+done
+shift $((OPTIND - 1))
 
-function _runUpdate() {
-  softwareupdate --all --install --force
-}
+# --- 2. Fail First: Check for Sudo Privileges ---
+# Many of these commands require root; check early to avoid partial failure
+if [[ $EUID -ne 0 ]]; then
+   printf "Error: This script must be run with sudo.\n" >&2
+   exit 1
+fi
 
-function _runForcedUpdate() {
-  sudo rm -rf /Library/Developer/CommandLineTools
-  sudo xcode-select --install
-}
+# --- 3. Execution Flow (Flat) ---
 
-function _rebuild() {
-  sudo xcodebuild -license
-}
+# Scenario A: Rebuild License
+if [[ "$REBUILD" -eq 1 ]]; then
+  printf "Rebuilding xcodebuild license...\n"
+  xcodebuild -license || { printf "Failed to accept license.\n" >&2; exit 1; }
+  exit 0
+fi
 
-# -----------------------------------------------------------------------------
-# PUBLIC
-# -----------------------------------------------------------------------------
+# Scenario B: Forced Reinstall
+if [[ "$FORCE" -eq 1 ]]; then
+  printf "Removing and reinstalling CommandLineTools...\n"
+  rm -rf /Library/Developer/CommandLineTools || { printf "Failed to remove tools.\n" >&2; exit 1; }
+  xcode-select --install || { printf "Failed to trigger installation.\n" >&2; exit 1; }
+  exit 0
+fi
 
-__force=0
-__rebuild=0
-
-function _help() {
-  echo -e "
-Usage: $(basename "${0}") [ -f ] [ -h ]
-
-Options:
-  -r   rebuild license
-  -f   Remove and reinstall CommandLineTools
-  -h   Show this help
-"
-}
-
-function _parse_args() {
-  while getopts "fhr" opt; do
-    case $opt in
-      f)
-        __force=1
-        ;;
-      r)
-        __rebuild=1
-        ;;
-      *)
-        _help
-        exit 2
-        ;;
-
-    esac
-  done
-
-  shift $((OPTIND - 1))
-}
-
-function main() {
-  _parse_args "$@"
-  if [[ $__rebuild == 1 ]]; then
-    _rebuild
-    exit
-  fi
-  if [ "$__force" == 1 ]; then
-    _runForcedUpdate
-  else
-    :
-    _runUpdate
-  fi
-}
-
-# -----------------------------------------------------------------------------
-main "$@"
+# Scenario C: Default Update
+printf "Running software update...\n"
+softwareupdate --all --install --force || { printf "Update failed.\n" >&2; exit 1; }

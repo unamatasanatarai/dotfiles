@@ -1,200 +1,138 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
+# CONSTANTS
 
-__DIR="$(cd -- "$(dirname -- "$0")" && pwd)"
-__FILE="$(basename -- "$0")"
-declare -r __DIR __FILE
-declare -r TMPLS="$__DIR"/new_templates
+__FILE=${0##*/}
+__DIR=${0%/*}
+if [[ "$__DIR" == "$__FILE" ]]; then
+  __DIR="."
+fi
 
-function ealert {
-  local eol="\n";if [ "$1" == "-n" ]; then eol="";shift; fi
-  printf " \e[1m\e[38;5;220m‼\e[0m %s${eol}" "$*"
-}
-function ewarn {
-  ealert "$@"
-}
-function ebox {
-  local text len hl
-  text="$*"
-  len=$((${#text} + 6))
-  seq=$(for (( i=1; i<=len; i++)); do echo -n "-"; done)
-  hl="+ $seq +"
-  echo "$hl"
-  echo -e "|    \033[1;36m$text\033[0m    |"
-  echo "$hl"
-}
-VERSION="0.5"
+TMPLS="$__DIR/nt-templates"
 
-# ------------------------------------------------------------
-# DEFAULTS
-# ------------------------------------------------------------
+arg_template=$1
+arg_filepath=$2
 
-o_executables=("sh" "bash" "bashapp")
-overwrite=false
+# VALIDATION
 
-# ------------------------------------------------------------
-# PUBLIC INTERFACES
-# ------------------------------------------------------------
+if [[ -z "$arg_template" ]]; then
+  printf "error: missing template name\n" >&2
+  exit 1
+fi
 
-load_template() {
-  local -r template="$TMPLS/$1"
-  if [[ ! -f "$template" ]]; then
-    ewarn "Template: \`$1\` not found. Aborted."
-    return 1
+template_path="$TMPLS/$arg_template"
+
+if [[ ! -f "$template_path" ]]; then
+  printf "error: template not found: %s\n" "$arg_template" >&2
+  exit 1
+fi
+
+# LOAD TEMPLATE
+
+contents=""
+first_line=""
+skip_first=false
+make_exec=false
+
+# read first line separately
+IFS= read -r first_line < "$template_path"
+if [[ $? -ne 0 ]]; then
+  printf "error: failed to read template: %s\n" "$template_path" >&2
+  exit 1
+fi
+
+# check conditions
+if [[ ${first_line:0:1} == "#" ]]; then
+  if [[ "$first_line" == *executable* ]]; then
+    skip_first=true
+    make_exec=true
   fi
-  local -r c="$(< "$template")"
-  echo "$c"
-}
+fi
 
-save_to_file() {
-  local -r contents="$1"
-  local -r filepath="$2"
+# if not skipping, include first line
+if [[ "$skip_first" != true ]]; then
+  contents+="$first_line"
+  contents+=$'\n'
+fi
 
-  if [[ -f "$filepath" && $overwrite == false ]]; then
-    ewarn "File: \`$filepath\` already exists. Use --force to overwrite. Aborted."
-    return 1
+# read remaining lines
+line=""
+line_no=0
+while IFS= read -r line; do
+  ((line_no++))
+  if [[ $line_no -eq 1 ]]; then
+    continue
   fi
+  contents+="$line"
+  contents+=$'\n'
+done < "$template_path"
 
-  mkdir -p "$(dirname "$filepath")"
-  echo "$contents" > "$filepath"
-  ebox "Created: $filepath"
-  ls -l "$filepath"
-}
+if [[ $? -ne 0 ]]; then
+  printf "error: failed to read template body: %s\n" "$template_path" >&2
+  exit 1
+fi
 
-function main {
-  parseOptions "$@"
+# OUTPUT OR CREATE FILE
 
-  if [[ $# -lt 1 ]] || [[ $1 == -* ]]; then
-    help >&2
-    return 1
+if [[ -z "$arg_filepath" ]]; then
+  printf "%s" "$contents"
+  exit 0
+fi
+
+if [[ -f "$arg_filepath" ]]; then
+  printf "error: file exists: %s\n" "$arg_filepath" >&2
+  exit 1
+fi
+
+# DIRECTORY HANDLING
+
+dir=${arg_filepath%/*}
+
+if [[ "$dir" != "$arg_filepath" ]]; then
+  if [[ ! -d "$dir" ]]; then
+    mkdir -p "$dir"
+    if [[ $? -ne 0 ]]; then
+      printf "error: failed to create directory: %s\n" "$dir" >&2
+      exit 1
+    fi
   fi
+fi
 
-  local -r template="$1"
-  local -r contents="$(load_template "$template")"
+# WRITE FILE
 
-  if [[ -z ${2:-} ]]; then
-    echo "$contents"
-    return
-  fi
+printf "%s" "$contents" > "$arg_filepath"
+if [[ $? -ne 0 ]]; then
+  printf "error: failed to write file: %s\n" "$arg_filepath" >&2
+  exit 1
+fi
 
-  local -r filepath="$2"
-  save_to_file "$contents" "$filepath"
+# APPLY EXECUTABLE PERMISSION IF NEEDED
 
-  if [[ " ${o_executables[*]} " == *" $template "* ]]; then
-    chmod +x "$filepath"
-  fi
-
-  : "${EDITOR:=vi}"
-  $EDITOR "$filepath" "+/##cursor##" "+noh"
-}
-
-function parseOptions {
-  while [[ "$#" -ge 1 ]]; do
-    case $1 in
-      -h | --help)
-        help
-        exit 0
-        ;;
-      -V | --version)
-        ebox "version $VERSION"
-        exit 0
-        ;;
-      -l | -ls | --list-templates)
-        list_templates
-        exit 0
-        ;;
-      --list-json)
-        list_templates_json
-        exit 0
-        ;;
-      --force)
-        overwrite=true
-        ;;
-    esac
-    shift
-  done
-}
-
-# ------------------------------------------------------------
-# INTERNALS
-# ------------------------------------------------------------
-
-function list_templates {
-  if [[ ! -d "$TMPLS" ]]; then
-    ewarn "Templates directory \`$TMPLS\` not found."
+if [[ "$make_exec" == true ]]; then
+  chmod u+x "$arg_filepath"
+  if [[ $? -ne 0 ]]; then
+    printf "error: failed to set executable permission: %s\n" "$arg_filepath" >&2
     exit 1
   fi
+fi
 
-  shopt -s nullglob
-  local templates=("$TMPLS"/*)
-  shopt -u nullglob
+# EDITOR
 
-  if [[ ${#templates[@]} -eq 0 ]]; then
-    ewarn "No templates found in \`$TMPLS\`."
-    exit 1
-  fi
+if [[ -z "$EDITOR" ]]; then
+  EDITOR="vim"
+fi
 
-  ebox "Available templates:"
-  for file in "${templates[@]}"; do
-    local name="${file##*/}"
-    local desc
-    desc=$(grep -m1 '^# Description:' "$file" | sed 's/^# Description: *//')
-    printf " - %-20s %s\n" "$name" "$desc"
-  done
-}
+if ! command -v "$EDITOR" >/dev/null 2>&1; then
+  printf "error: editor not found: %s\n" "$EDITOR" >&2
+  exit 1
+fi
 
-function list_templates_json {
-  if [[ ! -d "$TMPLS" ]]; then
-    ewarn "Templates directory \`$TMPLS\` not found."
-    exit 1
-  fi
+"$EDITOR" "$arg_filepath"
+status=$?
 
-  shopt -s nullglob
-  local templates=("$TMPLS"/*)
-  shopt -u nullglob
+if [[ $status -ne 0 ]]; then
+  printf "error: editor exited with status %d\n" "$status" >&2
+  exit $status
+fi
 
-  if [[ ${#templates[@]} -eq 0 ]]; then
-    ewarn "No templates found in \`$TMPLS\`."
-    exit 1
-  fi
-
-  echo "["
-  local first=true
-  for file in "${templates[@]}"; do
-    $first || echo ","
-    local name="${file##*/}"
-    local desc
-    desc=$(grep -m1 '^# Description:' "$file" | sed 's/^# Description: *//' | tr -d '\n' | jq -Rs .)
-    echo "  { \"name\": \"$name\", \"description\": $desc }"
-    first=false
-  done
-  echo "]"
-}
-
-function _helpOptions {
-  local options
-  options="
-    -h, --help                 # Display this help message
-    -l, -ls, --list-templates  # List available templates
-        --list-json           # Output template list in JSON
-    -V, --version              # Display the script version
-        --force               # Overwrite existing files
-  "
-  echo "$options" | column -s "#" -t | sed 's/^ */    /'
-}
-
-function help {
-  echo "$(basename "$0"), version ${VERSION}"
-  echo "Usage: $(basename "$0") template [filename] [options]
-
-Options:
-$(_helpOptions)"
-}
-
-# ------------------------------------------------------------
-# MAIN
-# ------------------------------------------------------------
-
-main "$@"
-
+exit 0

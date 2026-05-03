@@ -1,24 +1,31 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
-
-# Default to 'vi' if $EDITOR is not set
-EDITOR="${EDITOR:-vi}"
-
-# Check for input
 if [[ $# -lt 1 ]]; then
-  echo "Usage: $(basename "$0") <command>" >&2
-  exit 1
+    printf "Usage: %s <command>\n" "${0##*/}" >&2
+    exit 1
 fi
 
-# Resolve command path
-cmd_path=$(command -v "$1" || true)
+EDIT_BIN="${EDITOR:-vim}"
 
-if [[ -z "$cmd_path" ]]; then
-  echo "Error: Command '$1' not found in PATH." >&2
-  exit 1
+if ! command -v "$EDIT_BIN" >/dev/null 2>&1; then
+    printf "Error: Editor '%s' not found or not executable.\n" "$EDIT_BIN" >&2
+    exit 1
 fi
 
-# Open in editor
-exec "$EDITOR" "$cmd_path"
+TMP_PATH="/tmp/.cmd_path_$$"
 
+if ! command -v "$1" > "$TMP_PATH" 2>/dev/null; then
+    printf "Error: Command '%s' not found in PATH.\n" "$1" >&2
+    rm -f "$TMP_PATH"
+    exit 1
+fi
+
+read -r CMD_PATH < "$TMP_PATH"
+rm -f "$TMP_PATH"
+
+if [[ -z "$CMD_PATH" ]]; then
+    printf "Error: Failed to resolve path for '%s'.\n" "$1" >&2
+    exit 1
+fi
+
+exec "$EDIT_BIN" "$CMD_PATH"

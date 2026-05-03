@@ -1,9 +1,31 @@
 #!/usr/bin/env bash
 
-# Check if we're inside a Git repository
 if ! git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
   echo "Not inside a Git repository." >&2
   exit 1
 fi
 
-git diff
+SCRIPT_PATH=${BASH_SOURCE[0]}
+SCRIPT_DIR=${SCRIPT_PATH%/*}
+[[ "$SCRIPT_PATH" == "$SCRIPT_DIR" ]] && SCRIPT_DIR="."
+
+DELTA_PATH="$SCRIPT_DIR/delta"
+
+git diff "$@" | "$DELTA_PATH" \
+  --side-by-side \
+  --line-fill-method=spaces \
+  --syntax-theme=GitHub \
+  --file-style='bold yellow' \
+  --file-decoration-style='none' \
+  --keep-plus-minus-markers \
+  --hunk-header-style='cyan bold' \
+  --hunk-header-decoration-style='cyan box' \
+  --plus-style='#5faf5f' \
+  --minus-style='#d75f5f' \
+  --zero-style='normal dim' \
+  --plus-emph-style='bold #87d787' \
+  --minus-emph-style='bold #ff8787' \
+  --line-numbers \
+  --line-numbers-left-style='#666666' \
+  --line-numbers-right-style='#666666' \
+  --navigate
