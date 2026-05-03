@@ -6,11 +6,11 @@ help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
 
 install: ## Run all installation scripts
-	./_prep-env.sh
-	./_install-apps.sh
-	./_relink-config.sh
-	./_relink-home.sh
-	./_set-defaults.sh
+	./scripts/prep-env.sh
+	./scripts/install-apps.sh
+	./scripts/relink-config.sh
+	./scripts/relink-home.sh
+	./scripts/setup-macos.sh
 	@echo "==> All done."
 
 dump-apps: ## Dump installed Homebrew formulae and casks to Brewfile

@@ -33,11 +33,12 @@ A macOS dotfiles repository that automates system configuration, package managem
 ## Project Structure
 
 - `Makefile` — Primary entry point exposing the `install` and `dump-apps` commands.
-- `_prep-env.sh` — Prepares necessary directories and verifies Terminal permissions.
-- `_install-apps.sh` — Handles installation of Homebrew, MacPorts, fonts, and sets the default shell to Homebrew Bash.
-- `_relink-config.sh` — Symlinks structured application configs to `~/.config`.
-- `_relink-home.sh` — Symlinks root dotfiles (e.g., `.bashrc`, `.vimrc`) directly to `$HOME`.
-- `_set-defaults.sh` — A comprehensive script applying over 50+ macOS system preference tweaks.
+- `scripts/prep-env.sh` — Prepares necessary directories and verifies Terminal permissions.
+- `scripts/install-apps.sh` — Handles installation of Homebrew, MacPorts, fonts, and sets the default shell to Homebrew Bash.
+- `scripts/relink-config.sh` — Symlinks structured application configs to `~/.config`.
+- `scripts/relink-home.sh` — Symlinks root dotfiles (e.g., `.bashrc`, `.vimrc`) directly to `$HOME`.
+- `scripts/setup-macos.sh` — A comprehensive script applying over 50+ macOS system preference tweaks.
+- `scripts/disable-services.sh` — Optimizes system performance by disabling unnecessary background services.
 - `configs/` — Contains declarative configuration definitions (`Brewfile`, `MacPortsfile`), dotfiles, custom fonts, and local binaries.
 
 ## Installation Instructions
