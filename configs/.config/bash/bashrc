@@ -83,38 +83,44 @@ fi
 #these must be functions. Bash script cannot change working directory (for some reason)
 
 take() {
-  [[ -z "$1" ]] && echo "Usage: take <directory_path>" && return 1
-  mkdir -p -- "$1" && cd -- "$1" || return 1
+	[[ -z "$1" ]] && printf "usage: take <directory_path>\n" >&2 && return 1
+	mkdir -p -- "$1" && cd -- "$1" || return 1
 }
 
 wcd() {
-  [[ -z "$1" ]] && echo "Usage: $0 <command>" && return 1
-  cmd_path="$(command -v "$1")" || {
-    echo "Command '$1' not found"
-    return 1
-  }
-  cd -- "$(dirname "$cmd_path")" || return 1
+	[[ -z "$1" ]] && printf "usage: wcd <command>\n" >&2 && return 1
+
+	cmd_path="$(command -v "$1")" || {
+		printf "Command '%s' not found\n" "$1" >&2
+		return 1
+	}
+	cd -- "${cmd_path%/*}" || return 1
 }
 
+# prints current git branch (if inside repo)
 extract_git_branch_name() {
-  local ps=$?
+	ps=$?
 
-  if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-    local branch status
-    status=$(git status --porcelain --branch 2>/dev/null)
-    #branch=$(echo "$status" | head -n1 | sed -n 's/## \(.*\)/\1/p' | cut -d. -f1)
-    branch=${status%%$'\n'*}
-    branch=${branch#"## "}
-    branch=${branch%%.*}
-    [ -z "$branch" ] && branch=$(git rev-parse --short HEAD 2>/dev/null)
-    #[[ $(echo "$status" | wc -l) -gt 1 ]] && echo "<$branch*>" || echo "<$branch>"
-    [[ $status == *$'\n'* ]] && echo "<$branch*>" || echo "<$branch>"
+	# ensure git exists and we're inside a repo
+	command -v git >/dev/null 2>&1 || return "$ps"
+	git rev-parse --is-inside-work-tree >/dev/null 2>&1 || return "$ps"
 
-  fi
+	# get branch or fallback to short hash
+	branch=$(git symbolic-ref --quiet --short HEAD 2>/dev/null)
+	if [[ -z $branch ]]; then
+		branch=$(git rev-parse --short HEAD 2>/dev/null) || return "$ps"
+	fi
 
-  return "$ps"
+	# dirty check (fast)
+	git diff --quiet --ignore-submodules 2>/dev/null
+	if [[ $? -ne 0 ]]; then
+		printf '<%s*>' "$branch"
+	else
+		printf '<%s>' "$branch"
+	fi
+
+	return "$ps"
 }
-
 PS1="\w"
 PS1+="\$(extract_git_branch_name)"
 PS1+="\[${reset}\]"
@@ -156,4 +162,3 @@ alias vba='venv; [[ -z "$VIRTUAL_ENV" ]] && source venv/bin/activate'
 
 alias tree='tree -aC --dirsfirst'
 alias ls='ls -GF'
-export PATH="/Users/citizen/.antigravity/antigravity/bin:$PATH"
