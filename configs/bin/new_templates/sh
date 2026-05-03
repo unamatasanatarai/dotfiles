@@ -1,6 +1,0 @@
-# Description: short bash throwaway
-#!/usr/bin/env bash
-
-set -euo pipefail
-
-##cursor##

@@ -1,6 +1,0 @@
-# Description: Basic python script
-def main():
-  print("##cursor##")
-
-if __name__ == "__main__":
-  main()
