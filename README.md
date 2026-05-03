@@ -51,8 +51,8 @@ Opinionated macOS dotfiles targeting Sonoma and later. A single `make install` c
 
 1. Clone this repository to your local machine:
    ```bash
-   git clone https://github.com/<user>/df-sonoma.git ~/dev/dotfiles
-   cd ~/dev/dotfiles
+   git clone https://github.com/unamatasanatarai/dotfiles.git
+   cd dotfiles
    ```
 2. Run the installation pipeline:
    ```bash
