@@ -5,9 +5,9 @@
 # Running the whole script as sudo will break Safari/User preferences.
 
 if [[ $EUID -eq 0 ]]; then
-    echo "Error: Please DO NOT run this script with sudo."
-    echo "Run it as a normal user: ./_set-defaults.sh"
-    exit 1
+	echo "Error: Please DO NOT run this script with sudo."
+	echo "Run it as a normal user: ./_set-defaults.sh"
+	exit 1
 fi
 
 echo "=== System Preferences ==="
@@ -44,32 +44,33 @@ echo "Display sleep set to 10 minutes"
 echo "=== Computer Name Setup ==="
 scutil --get ComputerName >/tmp/cn
 read -r current_name </tmp/cn
+echo "! Only alphanumeric characters and hyphens are allowed!"
 echo -n "Set computer name [$current_name]: "
 read -r computer_name
 
 if [[ -n "$computer_name" && "$computer_name" != "$current_name" ]]; then
-    echo "> Setting ComputerName to: $computer_name"
-    sudo scutil --set ComputerName "$computer_name" || {
-        echo "Failed to set ComputerName"
-        exit 1
-    }
-    sudo scutil --set HostName "$computer_name" || {
-        echo "Failed to set HostName"
-        exit 1
-    }
-    sudo scutil --set LocalHostName "$computer_name" || {
-        echo "Failed to set LocalHostName"
-        exit 1
-    }
-    # Set the NetBIOS name (visible to Windows computers on the network)
-    sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string "$computer_name" || {
-        echo "Failed to set NetBIOSName"
-        exit 1
-    }
-    echo "NetBIOS name set to $computer_name"
-    echo "Computer name set (System Preferences → Sharing)"
+	echo "> Setting ComputerName to: $computer_name"
+	sudo scutil --set ComputerName "$computer_name" || {
+		echo "Failed to set ComputerName"
+		exit 1
+	}
+	sudo scutil --set HostName "$computer_name" || {
+		echo "Failed to set HostName"
+		exit 1
+	}
+	sudo scutil --set LocalHostName "$computer_name" || {
+		echo "Failed to set LocalHostName"
+		exit 1
+	}
+	# Set the NetBIOS name (visible to Windows computers on the network)
+	sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string "$computer_name" || {
+		echo "Failed to set NetBIOSName"
+		exit 1
+	}
+	echo "NetBIOS name set to $computer_name"
+	echo "Computer name set (System Preferences → Sharing)"
 else
-    echo "Computer name unchanged"
+	echo "Computer name unchanged"
 fi
 
 echo "=== Appearance & UI ==="
@@ -77,8 +78,8 @@ echo "> Tools and Look"
 
 # Set the highlight color (the color of selected text)
 defaults write NSGlobalDomain AppleHighlightColor -string "0.764700 0.976500 0.568600" || {
-    echo "Failed to set highlight color"
-    exit 1
+	echo "Failed to set highlight color"
+	exit 1
 }
 echo "Highlight color set to green"
 
@@ -88,8 +89,8 @@ echo "Disable Notification Center and remove menu bar icon"
 
 # Show battery percentage in the menu bar and control center
 defaults write com.apple.menuextra.battery ShowPercent -string 'YES' || {
-    echo "Failed to show battery"
-    exit 1
+	echo "Failed to show battery"
+	exit 1
 }
 echo "Battery percentage enabled in menu bar"
 defaults write com.apple.controlcenter "NSStatusItem Visible Battery" -bool true || exit 1
@@ -99,8 +100,8 @@ echo "Battery percentage enabled in Control Center"
 
 # Remove the delay when hovering over a window title in the toolbar
 defaults write NSGlobalDomain NSToolbarTitleViewRolloverDelay -float 0 || {
-    echo "Failed to adjust toolbar delay"
-    exit 1
+	echo "Failed to adjust toolbar delay"
+	exit 1
 }
 echo "Removed toolbar title rollover delay"
 
@@ -390,28 +391,28 @@ echo "iPhone widgets disabled"
 # Spotlight: Disable unwanted categories
 # We keep APPLICATIONS, SYSTEM_PREFS, and DIRECTORIES
 defaults write com.apple.spotlight orderedItems -array \
-    '{"enabled" = 1;"name" = "APPLICATIONS";}' \
-    '{"enabled" = 1;"name" = "SYSTEM_PREFS";}' \
-    '{"enabled" = 0;"name" = "DIRECTORIES";}' \
-    '{"enabled" = 0;"name" = "CALCULATOR";}' \
-    '{"enabled" = 0;"name" = "CONTACTS";}' \
-    '{"enabled" = 0;"name" = "CONVERSION";}' \
-    '{"enabled" = 0;"name" = "DEFINITION";}' \
-    '{"enabled" = 0;"name" = "DOCUMENTS_ITEMS";}' \
-    '{"enabled" = 0;"name" = "EVENT_TODO";}' \
-    '{"enabled" = 0;"name" = "FOLDERS";}' \
-    '{"enabled" = 0;"name" = "FONTS";}' \
-    '{"enabled" = 0;"name" = "IMAGES";}' \
-    '{"enabled" = 0;"name" = "MESSAGES";}' \
-    '{"enabled" = 0;"name" = "MOVIES";}' \
-    '{"enabled" = 0;"name" = "MUSIC";}' \
-    '{"enabled" = 0;"name" = "OTHER";}' \
-    '{"enabled" = 0;"name" = "PDF";}' \
-    '{"enabled" = 0;"name" = "PRESENTATIONS";}' \
-    '{"enabled" = 0;"name" = "SIRI_SUGGESTIONS";}' \
-    '{"enabled" = 0;"name" = "SPREADSHEETS";}' \
-    '{"enabled" = 0;"name" = "TIPS";}' \
-    '{"enabled" = 0;"name" = "WEBSITES";}' || exit 1
+	'{"enabled" = 1;"name" = "APPLICATIONS";}' \
+	'{"enabled" = 1;"name" = "SYSTEM_PREFS";}' \
+	'{"enabled" = 0;"name" = "DIRECTORIES";}' \
+	'{"enabled" = 0;"name" = "CALCULATOR";}' \
+	'{"enabled" = 0;"name" = "CONTACTS";}' \
+	'{"enabled" = 0;"name" = "CONVERSION";}' \
+	'{"enabled" = 0;"name" = "DEFINITION";}' \
+	'{"enabled" = 0;"name" = "DOCUMENTS_ITEMS";}' \
+	'{"enabled" = 0;"name" = "EVENT_TODO";}' \
+	'{"enabled" = 0;"name" = "FOLDERS";}' \
+	'{"enabled" = 0;"name" = "FONTS";}' \
+	'{"enabled" = 0;"name" = "IMAGES";}' \
+	'{"enabled" = 0;"name" = "MESSAGES";}' \
+	'{"enabled" = 0;"name" = "MOVIES";}' \
+	'{"enabled" = 0;"name" = "MUSIC";}' \
+	'{"enabled" = 0;"name" = "OTHER";}' \
+	'{"enabled" = 0;"name" = "PDF";}' \
+	'{"enabled" = 0;"name" = "PRESENTATIONS";}' \
+	'{"enabled" = 0;"name" = "SIRI_SUGGESTIONS";}' \
+	'{"enabled" = 0;"name" = "SPREADSHEETS";}' \
+	'{"enabled" = 0;"name" = "TIPS";}' \
+	'{"enabled" = 0;"name" = "WEBSITES";}' || exit 1
 echo "Spotlight categories refined"
 
 # Spotlight: Hide icon from menu bar
@@ -502,7 +503,7 @@ sudo defaults write /Library/Preferences/com.apple.loginwindow DisableConsoleAcc
 
 # Set display sleep timer to 5 minutes on AC power
 sudo /usr/libexec/PlistBuddy -c "Set 'AC Power':'Display Sleep Timer' 5" /Library/Preferences/com.apple.PowerManagement.plist 2>/dev/null ||
-    sudo /usr/libexec/PlistBuddy -c "Add 'AC Power':'Display Sleep Timer' integer 5" /Library/Preferences/com.apple.PowerManagement.plist || exit 1
+	sudo /usr/libexec/PlistBuddy -c "Add 'AC Power':'Display Sleep Timer' integer 5" /Library/Preferences/com.apple.PowerManagement.plist || exit 1
 
 # Default to saving new documents to disk instead of iCloud
 defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false || exit 1
@@ -569,26 +570,26 @@ echo "Disabled widgets entirely"
 echo "=== Spotlight Preferences ==="
 # Configure Spotlight search results: enable Applications and Expressions, disable the rest
 defaults write com.apple.spotlight orderedItems -array \
-    '{"enabled" = 1;"name" = "APPLICATIONS";}' \
-    '{"enabled" = 1;"name" = "MENU_EXPRESSION";}' \
-    '{"enabled" = 0;"name" = "MENU_SPOTLIGHT_SUGGESTIONS";}' \
-    '{"enabled" = 0;"name" = "MENU_CONVERSION";}' \
-    '{"enabled" = 0;"name" = "MENU_DEFINITION";}' \
-    '{"enabled" = 0;"name" = "SYSTEM_PREFS";}' \
-    '{"enabled" = 0;"name" = "DOCUMENTS";}' \
-    '{"enabled" = 0;"name" = "DIRECTORIES";}' \
-    '{"enabled" = 0;"name" = "PRESENTATIONS";}' \
-    '{"enabled" = 0;"name" = "SPREADSHEETS";}' \
-    '{"enabled" = 0;"name" = "PDF";}' \
-    '{"enabled" = 0;"name" = "MESSAGES";}' \
-    '{"enabled" = 0;"name" = "CONTACT";}' \
-    '{"enabled" = 0;"name" = "EVENT_TODO";}' \
-    '{"enabled" = 0;"name" = "IMAGES";}' \
-    '{"enabled" = 0;"name" = "BOOKMARKS";}' \
-    '{"enabled" = 0;"name" = "MUSIC";}' \
-    '{"enabled" = 0;"name" = "MOVIES";}' \
-    '{"enabled" = 0;"name" = "FONTS";}' \
-    '{"enabled" = 0;"name" = "MENU_OTHER";}' || exit 1
+	'{"enabled" = 1;"name" = "APPLICATIONS";}' \
+	'{"enabled" = 1;"name" = "MENU_EXPRESSION";}' \
+	'{"enabled" = 0;"name" = "MENU_SPOTLIGHT_SUGGESTIONS";}' \
+	'{"enabled" = 0;"name" = "MENU_CONVERSION";}' \
+	'{"enabled" = 0;"name" = "MENU_DEFINITION";}' \
+	'{"enabled" = 0;"name" = "SYSTEM_PREFS";}' \
+	'{"enabled" = 0;"name" = "DOCUMENTS";}' \
+	'{"enabled" = 0;"name" = "DIRECTORIES";}' \
+	'{"enabled" = 0;"name" = "PRESENTATIONS";}' \
+	'{"enabled" = 0;"name" = "SPREADSHEETS";}' \
+	'{"enabled" = 0;"name" = "PDF";}' \
+	'{"enabled" = 0;"name" = "MESSAGES";}' \
+	'{"enabled" = 0;"name" = "CONTACT";}' \
+	'{"enabled" = 0;"name" = "EVENT_TODO";}' \
+	'{"enabled" = 0;"name" = "IMAGES";}' \
+	'{"enabled" = 0;"name" = "BOOKMARKS";}' \
+	'{"enabled" = 0;"name" = "MUSIC";}' \
+	'{"enabled" = 0;"name" = "MOVIES";}' \
+	'{"enabled" = 0;"name" = "FONTS";}' \
+	'{"enabled" = 0;"name" = "MENU_OTHER";}' || exit 1
 echo "Spotlight categories configured"
 echo "Spotlight preferences set"
 
