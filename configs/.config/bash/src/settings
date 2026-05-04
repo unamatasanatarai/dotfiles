@@ -2,4 +2,4 @@ export BASH_SILENCE_DEPRECATION_WARNING=1
 export VISUAL=vi
 export EDITOR="$VISUAL"
 export SYSTEMD_EDITOR="$VISUAL"
-[[ -n "$HOMEBREW_PREFIX" ]] && export SHELL="$HOMEBREW_PREFIX/bin/bash"
+export SHELL="$HOMEBREW_PREFIX/bin/bash"

@@ -1,9 +1,9 @@
 build:
 	cat src/_top \
+		src/xdg \
 		src/path \
 		src/brew \
 		src/settings \
-		src/xdg \
 		src/colors \
 		src/functions \
 		src/prompt \

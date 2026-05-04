@@ -1,36 +1,31 @@
-# ------------------------------------------------------------------------------
-# !!  This file is auto-generated.
-#     Do NOT modify it directly — your changes will be overwritten.
-#     To update or customize, run: make
-# ------------------------------------------------------------------------------
-
 # Skip if this is not an interactive shell.
 # Avoid loading interactive-only configurations in non-interactive contexts.
 [[ $- != *i* ]] && return
-export PATH="$PATH:$HOME/bin:$HOME/.local/bin:/usr/local/sbin:/opt/local/bin:/opt/local/sbin"
-if [[ -x /opt/homebrew/bin/brew ]]; then
-    eval "$(/opt/homebrew/bin/brew shellenv)"
-elif [[ -x /usr/local/bin/brew ]]; then
-    eval "$(/usr/local/bin/brew shellenv)"
-fi
-export HOMEBREW_NO_AUTO_UPDATE=1
-export BASH_SILENCE_DEPRECATION_WARNING=1
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_STATE_HOME="$HOME/.local/state"
+export XDG_TEMPLATES_DIR="$HOME/Public"
+export XDG_VIDEOS_DIR="$HOME/Movies"
+export XDG_DESKTOP_DIR="$HOME/Desktop"
+export XDG_DOCUMENTS_DIR="$HOME/Documents"
+export XDG_DOWNLOAD_DIR="$HOME/Downloads"
+export XDG_MUSIC_DIR="$HOME/Music"
+export XDG_PICTURES_DIR="$HOME/Pictures"
+export XDG_PUBLICSHARE_DIR="$HOME/Public"
+export PATH="$PATH:$HOME/bin:$HOME/.local/bin:/usr/local/sbin:/opt/local/bin:/opt/local/sbin:$XDG_DATA_HOME/bash"
+export HOMEBREW_PREFIX="/usr/local";
+export HOMEBREW_CELLAR="/usr/local/Cellar";
+export HOMEBREW_REPOSITORY="/usr/local/Homebrew";
+eval "$(/usr/bin/env PATH_HELPER_ROOT="/usr/local" /usr/libexec/path_helper -s)"
+[ -z "${MANPATH-}" ] || export MANPATH=":${MANPATH#:}";
+export INFOPATH="/usr/local/share/info:${INFOPATH:-}";
+export HOMEBREW_NO_AUTO_UPDATE=1export BASH_SILENCE_DEPRECATION_WARNING=1
 export VISUAL=vi
 export EDITOR="$VISUAL"
 export SYSTEMD_EDITOR="$VISUAL"
-[[ -n "$HOMEBREW_PREFIX" ]] && export SHELL="$HOMEBREW_PREFIX/bin/bash"
-[[ -r "$HOME/.config/xdg-user-dirs" ]] && {
-    set -a
-    source "$HOME/.config/xdg-user-dirs"
-    set +a
-}
-# ------------------------------------------------------------------------------
-# Terminal Color Setup (using `tput` if available, fallback to ANSI escapes)
-# ------------------------------------------------------------------------------
-
-# Set terminal type to support 256 colors
-export TERM="xterm-256color"
-export TERM="screen-256color"
+export SHELL="$HOMEBREW_PREFIX/bin/bash"
+xport TERM="screen-256color"
 
 # Hardcoded ANSI escape sequences for performance
 bold=$'\e[1m'
@@ -111,7 +106,7 @@ PROMPT_COMMAND=__build_prompt
 export HISTCONTROL=ignoreboth
 export HISTSIZE=100000
 export HISTFILESIZE=200000
-export HISTFILE=${XDG_DATA_HOME}/bash/.bash_history
+export HISTFILE="${BASH_DATA_HOME}/.bash_history"
 shopt -s histappend # append to history i.e don't overwrite it
 
 # Save multiline commands in same history entry with embedded newlines

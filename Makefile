@@ -9,6 +9,7 @@ install: ## Run all installation scripts
 	./scripts/prep-env.sh
 	./scripts/install-brew.sh
 	./scripts/install-fonts.sh
+	$(MAKE) -C configs/.config/bash
 	./scripts/setup-bash.sh
 	./scripts/relink-config.sh
 	./scripts/relink-home.sh
