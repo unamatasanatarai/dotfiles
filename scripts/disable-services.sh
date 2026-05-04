@@ -25,6 +25,8 @@ services=(
     com.apple.appleseed.seedusaged                         # beta program usage
     com.apple.applespell                                   # system spell checking
     com.apple.apsd                                         # push notifications (imessage)
+    com.apple.appstoreagent                                # app store agent    
+    com.apple.askpermissiond                               # app store parental controls
     com.apple.assistant_service                            # siri core service
     com.apple.awacsd                                       # wireless access control
     com.apple.awdd                                         # wireless diagnostics
@@ -55,6 +57,7 @@ services=(
     com.apple.geod                                         # maps location provider
     com.apple.geodMachServiceBridge                        # location bridge service
     com.apple.helpd                                        # background help viewer
+    com.apple.homed                                        # homekit and home app
     com.apple.icloud.findmydeviced                         # find my device core
     com.apple.icloud.findmydeviced.findmydevice-user-agent # find my device ui
     com.apple.icloud.fmfd                                  # find my friends sync
@@ -64,6 +67,7 @@ services=(
     com.apple.iCloudStats                                  # icloud storage tracking
     com.apple.iCloudUserNotifications                      # icloud user alerts
     com.apple.iCloudUserNotificationsd                     # icloud alert daemon
+    com.apple.idleassetsd                                  # asset downloading and cacing
     com.apple.imagent                                      # imessage/facetime handler
     com.apple.itunescloudd                                 # apple music sync
     com.apple.knowledge-agent                              # behavior tracking for suggestions
@@ -77,7 +81,10 @@ services=(
     com.apple.metadata.mds.check                           # background file checking
     com.apple.metadata.mds.index                           # background file indexing
     com.apple.metadata.mds.scan                            # background file scanning
+    com.apple.mobileassetd                                 # mobile assets downloader
+    com.apple.ndoagent                                     # network diagnostics
     com.apple.netbiosd                                     # windows file sharing discovery
+    com.apple.nsurlsessiond                                # manages background network transfers for icloud, podcasts, and safari
     com.apple.osanalytics.osanalyticshelper                # analytics upload orchestration
     com.apple.parentalcontrols.check                       # restriction enforcement
     com.apple.parsecd                                      # spotlight web suggestions
@@ -85,6 +92,8 @@ services=(
     com.apple.photolibraryd                                # photos library management
     com.apple.podcasts.PodcastContentService               # podcast syncing
     com.apple.proactiveeventtrackerd                       # suggestion event tracking
+    com.apple.promotedcontentd                             # suggested app content from the app store
+    com.apple.remindd                                      # reminder sync
     com.apple.ReportCrash                                  # crash reporter
     com.apple.ReportCrash.Root                             # root crash reporter
     com.apple.rtcreportingd                                # rtc diagnostic reporting
@@ -115,10 +124,13 @@ services=(
     com.apple.speech.synthesisserver                       # centralized speech server
     com.apple.spindump                                     # unresponsive app monitoring
     com.apple.spotlightknowledged                          # search intelligence
+    com.apple.studentd                                     # classroom and education features
+    com.apple.storekitagent                                # App Store transactions, in-app purchases, and receipt validation
     com.apple.SubmitDiagInfo                               # diagnostic submission
     com.apple.symptomsd                                    # system health monitoring
     com.apple.tipsd                                        # siri tips notifications
     com.apple.UsageTrackingAgent                           # app usage statistics
+    com.apple.weatherd                                     # weather updates and widgets
 )
 
 # manual deduplication
