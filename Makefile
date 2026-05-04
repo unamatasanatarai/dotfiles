@@ -10,6 +10,7 @@ install: ## Run all installation scripts
 	./scripts/install-brew.sh
 	./scripts/install-macports.sh
 	./scripts/install-fonts.sh
+	$(MAKE) -C configs/.config/bash
 	./scripts/setup-bash.sh
 	./scripts/relink-config.sh
 	./scripts/relink-home.sh
@@ -20,5 +21,3 @@ install: ## Run all installation scripts
 dump-apps: ## Dump installed Homebrew formulae and casks to Brewfile
 	@brew bundle dump --file=configs/Brewfile --force
 	@echo "==> Dumped Homebrew configuration to configs/Brewfile"
-	@port echo requested 2>/dev/null | sed 's/@.*//' | tr '\n' ' ' > configs/MacPortsfile
-	@echo "==> Dumped MacPorts configuration to configs/MacPortsfile"

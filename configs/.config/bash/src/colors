@@ -1,10 +1,4 @@
-# ------------------------------------------------------------------------------
-# Terminal Color Setup (using `tput` if available, fallback to ANSI escapes)
-# ------------------------------------------------------------------------------
-
-# Set terminal type to support 256 colors
-export TERM="xterm-256color"
-export TERM="screen-256color"
+xport TERM="screen-256color"
 
 # Hardcoded ANSI escape sequences for performance
 bold=$'\e[1m'

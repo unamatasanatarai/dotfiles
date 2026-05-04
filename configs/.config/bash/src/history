@@ -3,7 +3,7 @@
 export HISTCONTROL=ignoreboth
 export HISTSIZE=100000
 export HISTFILESIZE=200000
-export HISTFILE=${XDG_DATA_HOME}/bash/.bash_history
+export HISTFILE="${BASH_DATA_HOME}/.bash_history"
 shopt -s histappend # append to history i.e don't overwrite it
 
 # Save multiline commands in same history entry with embedded newlines
