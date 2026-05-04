@@ -14,7 +14,6 @@ DELTA_PATH="$SCRIPT_DIR/delta"
 git diff "$@" | "$DELTA_PATH" \
   --side-by-side \
   --line-fill-method=spaces \
-  --syntax-theme=GitHub \
   --file-style='bold yellow' \
   --file-decoration-style='none' \
   --keep-plus-minus-markers \
