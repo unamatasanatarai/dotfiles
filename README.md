@@ -9,8 +9,7 @@
 > [!NOTE]
 > The `master` branch is for macOS Sonoma. For macOS Monterey, please use the `monterey` branch.
 
-<video src="https://github.com/unamatasanatarai/dotfiles/raw/refs/heads/master/assets/Kotki_dwa.mp4" controls="controls" style="max-width: 100%;">
-</video>
+![look-at-me](assets/look-at-me.png)
 
 Opinionated macOS dotfiles targeting Sonoma and later. A single `make install` command provisions a fresh Mac from scratch, installing packages via Homebrew, symlinking configuration files into XDG-compliant locations, and applying comprehensive system hardening and UX tweaks.
 
