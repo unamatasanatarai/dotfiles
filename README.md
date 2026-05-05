@@ -1,5 +1,6 @@
 # macOS Dotfiles
 
+
 ![macOS](https://img.shields.io/badge/macOS-Monterey-000000?style=flat-square&logo=apple&logoColor=white)
 ![Bash](https://img.shields.io/badge/Bash-Scripting-4EAA25?style=flat-square&logo=gnu-bash&logoColor=white)
 ![Homebrew](https://img.shields.io/badge/Homebrew-Package_Manager-F28D1A?style=flat-square&logo=homebrew&logoColor=white)
@@ -9,6 +10,8 @@
 
 > [!NOTE]
 > The `master` branch is for macOS Sonoma. For macOS Monterey, please use the `monterey` branch.
+
+![look-at-me](assets/look-at-me.png)
 
 A macOS dotfiles repository that automates system configuration, package management, and environment setup. It ensures a consistent, reproducible development environment tailored specifically for macOS Monterey.
 
