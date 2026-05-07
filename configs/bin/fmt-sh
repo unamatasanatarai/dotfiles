@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+if [[ -z "$1" ]]; then
+    printf "Usage: %s <file path>\n\n" "${0##*/}" >&2
+    printf "Formats shell scripts to maintain consistent style.\n" >&2
+    exit 1
+fi
+
+shfmt -ln bash -i 4 -w "$1"
