@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+if [[ -z "$1" ]]; then
+	printf "Usage: %s <file path>\n\n" "${0##*/}" >&2
+	printf "Copies the contents of a specified file to the macOS system clipboard.\n" >&2
+	exit 1
+fi
+
+if [[ ! -f "$1" ]]; then
+	printf "Error: File not found\n"
+	exit 1
+fi
+
+cat "$1" | pbcopy

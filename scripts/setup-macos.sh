@@ -438,9 +438,9 @@ echo "Dock tile size set"
 defaults write com.apple.dock orientation -string 'right' || exit 1
 echo "Dock orientation set to right"
 
-# Don't show indicators for open applications
-defaults write com.apple.dock show-process-indicators -bool false || exit 1
-echo "Disabled Dock process indicators"
+# Show indicators for open applications
+defaults write com.apple.dock show-process-indicators -bool true || exit 1
+echo "Enabled Dock process indicators"
 
 # Don't automatically rearrange Spaces based on most recent use
 defaults write com.apple.dock mru-spaces -bool false || exit 1
