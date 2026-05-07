@@ -83,6 +83,10 @@ defaults write NSGlobalDomain AppleHighlightColor -string "0.764700 0.976500 0.5
 }
 echo "Highlight color set to green"
 
+# Hide menu bar
+defaults write NSGlobalDomain _HIHideMenuBar -bool true || exit 1
+echo "Menu bar hidden"
+
 # Disable Notification Center and remove its menu bar icon
 launchctl unload -w /System/Library/LaunchAgents/com.apple.notificationcenterui.plist 2>/dev/null || true
 echo "Disable Notification Center and remove menu bar icon"
