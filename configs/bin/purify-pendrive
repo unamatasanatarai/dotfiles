@@ -1,18 +1,45 @@
 #!/usr/bin/env bash
 
-dir=${1-"."}
+dir='.'
 
-FILES_TO_DELETE=("._*" ".DS_Store" "Thumbs.db" "desktop.ini" ".fseventsd" ".Spotlight-V100" ".Trashes" ".apdisk" "\$RECYCLE.BIN" "System Volume Information" ".Trash-1000" "LOST.DIR")
+if [[ $# -gt 0 ]]; then
+    dir=$1
+fi
 
-for pattern in "${FILES_TO_DELETE[@]}"; do
-    echo "Drop FILES in $dir: $pattern"
-    find "$dir" -type f -name "$pattern" -exec rm -v {} +
-done
+if [[ ! -e "$dir" ]]; then
+    printf 'error: path does not exist: %s\n' "$dir" >&2
+    exit 1
+fi
 
-for pattern in "${FILES_TO_DELETE[@]}"; do
-    echo "Drop DIRECTORIES in $dir: $pattern"
-    find "$dir" -type d -name "$pattern" -exec rm -rfv {} +
-done
+if [[ ! -d "$dir" ]]; then
+    printf 'error: not a directory: %s\n' "$dir" >&2
+    exit 2
+fi
 
-echo "done"
+printf "wait...\n"
 
+# Single traversal minimizes I/O and process overhead.
+find "$dir" -depth \( \
+    -name '._*' -o \
+    -name '.DS_Store' -o \
+    -name 'Thumbs.db' -o \
+    -name 'desktop.ini' -o \
+    -name '.fseventsd' -o \
+    -name '.Spotlight-V100' -o \
+    -name '.Trashes' -o \
+    -name '.apdisk' -o \
+    -name '$RECYCLE.BIN' -o \
+    -name 'System Volume Information' -o \
+    -name '.Trash-1000' -o \
+    -name 'LOST.DIR' \
+\) -exec rm -rfv -- {} +
+
+status=$?
+
+if [[ $status -ne 0 ]]; then
+    printf 'error: cleanup failed\n' >&2
+    exit 3
+fi
+
+printf 'done\n'
+exit 0
