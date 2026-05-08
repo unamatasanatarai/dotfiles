@@ -5,7 +5,7 @@ if git config user.name >/dev/null 2>&1 && git config user.email >/dev/null 2>&1
 	exit 0
 fi
 
-__conf="${XDG_CONFIG_HOME:-$HOME/.config}/gi/giume-config"
+__conf="${XDG_CONFIG_HOME:-$HOME/.config}/gi/giume.config"
 
 if [[ -f "$__conf" ]]; then
 	# shellcheck disable=SC1090
