@@ -138,3 +138,4 @@ alias vba='venv; [[ -z "$VIRTUAL_ENV" ]] && source venv/bin/activate'
 
 alias tree='tree -aC --dirsfirst'
 alias ls='ls -GF'
+alias cpr='rsync -ah --info=progress2'
