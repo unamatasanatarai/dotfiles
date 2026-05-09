@@ -1,11 +1,9 @@
 #!/usr/bin/env bash
 
-# CONSTANTS
-
 __FILE=${0##*/}
 __DIR=${0%/*}
 if [[ "$__DIR" == "$__FILE" ]]; then
-  __DIR="."
+	__DIR="."
 fi
 
 TMPLS="$__DIR/nt-templates"
@@ -13,126 +11,108 @@ TMPLS="$__DIR/nt-templates"
 arg_template=$1
 arg_filepath=$2
 
-# VALIDATION
-
 if [[ -z "$arg_template" ]]; then
-  printf "error: missing template name\n" >&2
-  exit 1
+	printf "error: missing template name\n" >&2
+	exit 1
 fi
 
 template_path="$TMPLS/$arg_template"
 
 if [[ ! -f "$template_path" ]]; then
-  printf "error: template not found: %s\n" "$arg_template" >&2
-  exit 1
+	printf "error: template not found: %s\n" "$arg_template" >&2
+	exit 1
 fi
-
-# LOAD TEMPLATE
 
 contents=""
 first_line=""
 skip_first=false
 make_exec=false
 
-# read first line separately
-IFS= read -r first_line < "$template_path"
+IFS= read -r first_line <"$template_path"
 if [[ $? -ne 0 ]]; then
-  printf "error: failed to read template: %s\n" "$template_path" >&2
-  exit 1
+	printf "error: failed to read template: %s\n" "$template_path" >&2
+	exit 1
 fi
 
-# check conditions
 if [[ ${first_line:0:1} == "#" ]]; then
-  if [[ "$first_line" == *executable* ]]; then
-    skip_first=true
-    make_exec=true
-  fi
+	if [[ "$first_line" == *executable* ]]; then
+		skip_first=true
+		make_exec=true
+	fi
 fi
 
-# if not skipping, include first line
 if [[ "$skip_first" != true ]]; then
-  contents+="$first_line"
-  contents+=$'\n'
+	contents+="$first_line"
+	contents+=$'\n'
 fi
 
-# read remaining lines
 line=""
 line_no=0
 while IFS= read -r line; do
-  ((line_no++))
-  if [[ $line_no -eq 1 ]]; then
-    continue
-  fi
-  contents+="$line"
-  contents+=$'\n'
-done < "$template_path"
+	((line_no++))
+	if [[ $line_no -eq 1 ]]; then
+		continue
+	fi
+	contents+="$line"
+	contents+=$'\n'
+done <"$template_path"
 
 if [[ $? -ne 0 ]]; then
-  printf "error: failed to read template body: %s\n" "$template_path" >&2
-  exit 1
+	printf "error: failed to read template body: %s\n" "$template_path" >&2
+	exit 1
 fi
 
-# OUTPUT OR CREATE FILE
-
 if [[ -z "$arg_filepath" ]]; then
-  printf "%s" "$contents"
-  exit 0
+	printf "%s" "$contents"
+	exit 0
 fi
 
 if [[ -f "$arg_filepath" ]]; then
-  printf "error: file exists: %s\n" "$arg_filepath" >&2
-  exit 1
+	printf "error: file exists: %s\n" "$arg_filepath" >&2
+	exit 1
 fi
-
-# DIRECTORY HANDLING
 
 dir=${arg_filepath%/*}
 
 if [[ "$dir" != "$arg_filepath" ]]; then
-  if [[ ! -d "$dir" ]]; then
-    mkdir -p "$dir"
-    if [[ $? -ne 0 ]]; then
-      printf "error: failed to create directory: %s\n" "$dir" >&2
-      exit 1
-    fi
-  fi
+	if [[ ! -d "$dir" ]]; then
+		mkdir -p "$dir"
+		if [[ $? -ne 0 ]]; then
+			printf "error: failed to create directory: %s\n" "$dir" >&2
+			exit 1
+		fi
+	fi
 fi
 
-# WRITE FILE
-
-printf "%s" "$contents" > "$arg_filepath"
+printf "%s" "$contents" >"$arg_filepath"
 if [[ $? -ne 0 ]]; then
-  printf "error: failed to write file: %s\n" "$arg_filepath" >&2
-  exit 1
+	printf "error: failed to write file: %s\n" "$arg_filepath" >&2
+	exit 1
 fi
-
-# APPLY EXECUTABLE PERMISSION IF NEEDED
 
 if [[ "$make_exec" == true ]]; then
-  chmod u+x "$arg_filepath"
-  if [[ $? -ne 0 ]]; then
-    printf "error: failed to set executable permission: %s\n" "$arg_filepath" >&2
-    exit 1
-  fi
+	chmod u+x "$arg_filepath"
+	if [[ $? -ne 0 ]]; then
+		printf "error: failed to set executable permission: %s\n" "$arg_filepath" >&2
+		exit 1
+	fi
 fi
 
-# EDITOR
-
 if [[ -z "$EDITOR" ]]; then
-  EDITOR="vim"
+	EDITOR="vim"
 fi
 
 if ! command -v "$EDITOR" >/dev/null 2>&1; then
-  printf "error: editor not found: %s\n" "$EDITOR" >&2
-  exit 1
+	printf "error: editor not found: %s\n" "$EDITOR" >&2
+	exit 1
 fi
 
 "$EDITOR" "$arg_filepath"
 status=$?
 
 if [[ $status -ne 0 ]]; then
-  printf "error: editor exited with status %d\n" "$status" >&2
-  exit $status
+	printf "error: editor exited with status %d\n" "$status" >&2
+	exit $status
 fi
 
 exit 0
