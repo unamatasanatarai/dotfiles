@@ -1,12 +1,12 @@
 # make sure you use skhd, otherwise forget about "ł"
+config-version = 2
 
 after-startup-command = []
 
 start-at-login = true
 
 default-root-container-layout = 'tiles'
-
-default-root-container-orientation = 'auto'
+default-root-container-orientation = 'horizontal'
 
 on-focused-monitor-changed = []
 on-focus-changed = []
@@ -14,29 +14,6 @@ on-focus-changed = []
 automatically-unhide-macos-hidden-apps = false
 
 # get app id: lsappinfo | rg "bundleID|ASCII name"
-[[on-window-detected]]
-   if.app-id = "com.microsoft.edgemac"
-   run = "move-node-to-workspace 1"
-
-[[on-window-detected]]
-   if.app-id = "com.microsoft.teams2"
-   run = "move-node-to-workspace 3"
-
-[[on-window-detected]]
-   if.app-id = "com.microsoft.Outlook"
-   run = "move-node-to-workspace 2"
-
-[[on-window-detected]]
-   if.app-id = "ru.keepcoder.Telegram"
-   run = "move-node-to-workspace 3"
-
-[[on-window-detected]]
-   if.app-id = "coing.ClockifyDesktop"
-   run = "move-node-to-workspace 5"
-
-[[on-window-detected]]
-   if.app-id = "com.brave.Browser"
-   run = "move-node-to-workspace 1"
 
 [[on-window-detected]]
    if.app-id = "org.keepassxc.keepassxc"
@@ -46,20 +23,22 @@ automatically-unhide-macos-hidden-apps = false
     preset = 'qwerty'
 
 [gaps]
-    inner.horizontal = 5
-    inner.vertical =   5
+    inner.horizontal = 3
+    inner.vertical =   3
     outer.left =       0
     outer.bottom =     0
     outer.top =        0
     outer.right =      0
 
 [mode.main.binding]
-
     # All possible commands: https://nikitabobko.github.io/AeroSpace/commands
 
-    cmd-shift-h = 'resize smart +50'
-    cmd-shift-l = 'resize smart -50'
-    cmd-shift-v = 'balance-sizes'
     cmd-shift-f = 'fullscreen'
+    cmd-shift-h = 'resize width -50'
+    cmd-shift-j = 'resize height +50'
+    cmd-shift-k = 'resize height -50'
+    cmd-shift-l = 'resize width +50'
+    cmd-shift-e = 'balance-sizes'
+    cmd-shift-n = 'flatten-workspace-tree'
 
     alt-tab = 'workspace-back-and-forth'

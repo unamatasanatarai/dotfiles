@@ -1,19 +1,24 @@
 lctrl + lcmd - t : open -na /Applications/Alacritty.app
+alt - return : open -na /Applications/Alacritty.app
 
-meh - a: aerospace workspace 1 > /dev/null 2>&1
-meh - s: aerospace workspace 2 > /dev/null 2>&1
-meh - d: aerospace workspace 3 > /dev/null 2>&1
-meh - f: aerospace workspace 4 > /dev/null 2>&1
-meh - g: aerospace workspace 5 > /dev/null 2>&1
+lalt - q: aerospace workspace 1 > /dev/null 2>&1
+lalt - w: aerospace workspace 2 > /dev/null 2>&1
+lalt - e: aerospace workspace 3 > /dev/null 2>&1
+lalt - r: aerospace workspace 4 > /dev/null 2>&1
 
-hyper - a: aerospace move-node-to-workspace 1 --focus-follows-window > /dev/null 2>&1
-hyper - s: aerospace move-node-to-workspace 2 --focus-follows-window > /dev/null 2>&1
-hyper - d: aerospace move-node-to-workspace 3 --focus-follows-window > /dev/null 2>&1
-hyper - f: aerospace move-node-to-workspace 4 --focus-follows-window > /dev/null 2>&1
-hyper - g: aerospace move-node-to-workspace 5 --focus-follows-window > /dev/null 2>&1
+lalt + lctrl - q: aerospace move-node-to-workspace 1 --focus-follows-window > /dev/null 2>&1
+lalt + lctrl - w: aerospace move-node-to-workspace 2 --focus-follows-window > /dev/null 2>&1
+lalt + lctrl - e: aerospace move-node-to-workspace 3 --focus-follows-window > /dev/null 2>&1
+lalt + lctrl - r: aerospace move-node-to-workspace 4 --focus-follows-window > /dev/null 2>&1
 
-lctrl - h: aerospace focus left
-lctrl - j: aerospace focus down
-lctrl - k: aerospace focus up
-lctrl - l: aerospace focus right
+lalt - h: aerospace focus left
+lalt - j: aerospace focus down
+lalt - k: aerospace focus up
+lalt - l: aerospace focus right
+
+lalt + lshift - h : aerospace move left
+lalt + lshift - j : aerospace move down
+lalt + lshift - k : aerospace move up
+lalt + lshift - l : aerospace move right
+kalt + lshift - space : aerospace layout floating tiling
 
