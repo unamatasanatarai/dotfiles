@@ -29,16 +29,3 @@ automatically-unhide-macos-hidden-apps = false
     outer.bottom =     0
     outer.top =        0
     outer.right =      0
-
-[mode.main.binding]
-    # All possible commands: https://nikitabobko.github.io/AeroSpace/commands
-
-    cmd-shift-f = 'fullscreen'
-    cmd-shift-h = 'resize width -50'
-    cmd-shift-j = 'resize height +50'
-    cmd-shift-k = 'resize height -50'
-    cmd-shift-l = 'resize width +50'
-    cmd-shift-e = 'balance-sizes'
-    cmd-shift-n = 'flatten-workspace-tree'
-
-    alt-tab = 'workspace-back-and-forth'
