@@ -6,10 +6,10 @@ lalt - w: aerospace workspace 2 > /dev/null 2>&1
 lalt - e: aerospace workspace 3 > /dev/null 2>&1
 lalt - r: aerospace workspace 4 > /dev/null 2>&1
 
-lalt + lctrl - q: aerospace move-node-to-workspace 1 --focus-follows-window > /dev/null 2>&1
-lalt + lctrl - w: aerospace move-node-to-workspace 2 --focus-follows-window > /dev/null 2>&1
-lalt + lctrl - e: aerospace move-node-to-workspace 3 --focus-follows-window > /dev/null 2>&1
-lalt + lctrl - r: aerospace move-node-to-workspace 4 --focus-follows-window > /dev/null 2>&1
+lalt + lshift - q: aerospace move-node-to-workspace 1 --focus-follows-window > /dev/null 2>&1
+lalt + lshift - w: aerospace move-node-to-workspace 2 --focus-follows-window > /dev/null 2>&1
+lalt + lshift - e: aerospace move-node-to-workspace 3 --focus-follows-window > /dev/null 2>&1
+lalt + lshift - r: aerospace move-node-to-workspace 4 --focus-follows-window > /dev/null 2>&1
 
 lalt - h: aerospace focus left
 lalt - j: aerospace focus down
@@ -20,5 +20,5 @@ lalt + lshift - h : aerospace move left
 lalt + lshift - j : aerospace move down
 lalt + lshift - k : aerospace move up
 lalt + lshift - l : aerospace move right
-kalt + lshift - space : aerospace layout floating tiling
+lalt + lshift - space : aerospace layout floating tiling
 
