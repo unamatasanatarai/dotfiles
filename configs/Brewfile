@@ -1,4 +1,3 @@
-tap "homebrew/services"
 tap "koekeishiya/formulae"
 brew "skhd"
 brew "bash"
