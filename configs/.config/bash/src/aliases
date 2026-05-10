@@ -1,6 +1,24 @@
 shopt -s autocd
+
 alias vba='venv; [[ -z "$VIRTUAL_ENV" ]] && source venv/bin/activate'
 
 alias tree='tree -aC --dirsfirst'
+
+# GNU/BSD compatible-ish ls coloring
 alias ls='ls -GF'
-alias cpr='rsync -ah --info=progress2'
+
+# General-purpose rsync preserving symlinks + mtimes
+alias cpr='rsync -rltDvh --modify-window=1 --info=progress2'
+
+# Cross-filesystem safe copy (ext*, HFS+, ExFAT, USB drives)
+alias rcp='rsync -rtvh \
+  --partial \
+  --human-readable \
+  --modify-window=1 \
+  --no-perms \
+  --no-owner \
+  --no-group \
+  --exclude=".DS_Store" \
+  --exclude="._*" \
+  --info=progress2'
+
