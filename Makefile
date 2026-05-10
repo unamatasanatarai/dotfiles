@@ -7,8 +7,7 @@ help: ## Show this help
 
 install: ## Run all installation scripts
 	./scripts/prep-env.sh
-	./scripts/install-brew.sh
-	./scripts/install-macports.sh
+	./scripts/install-apps.sh
 	./scripts/install-fonts.sh
 	$(MAKE) -C configs/.config/bash
 	./scripts/setup-bash.sh
