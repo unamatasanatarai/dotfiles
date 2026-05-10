@@ -6,9 +6,6 @@
 ![GNU Make](https://img.shields.io/badge/GNU_Make-Automation-0A0A0A?style=flat-square&logo=gnu&logoColor=white)
 ![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg?style=flat-square)
 
-> [!NOTE]
-> The `master` branch is for macOS Sonoma. For macOS Monterey, please use the `monterey` branch.
-
 ![look-at-me](assets/look-at-me.png)
 
 Opinionated macOS dotfiles targeting Sonoma and later. A single `make install` command provisions a fresh Mac from scratch, installing packages via Homebrew, symlinking configuration files into XDG-compliant locations, and applying comprehensive system hardening and UX tweaks.
