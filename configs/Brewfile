@@ -1,4 +1,4 @@
-tap "koekeishiya/formulae"
+tap "asmvik/formulae"
 brew "skhd"
 brew "bash"
 brew "coreutils"

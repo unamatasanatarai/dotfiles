@@ -29,9 +29,9 @@ if ! command -v brew &>/dev/null; then
 	fi
 fi
 
-brew tap koekeishiya/formulae
+brew tap asmvik/formulae
 echo "==> Installing yabai..."
-brew install koekeishiya/formulae/yabai || {
+brew install yabai || {
 	echo "Failed to install yabai"
 	exit 1
 }
