@@ -1,21 +1,21 @@
 #!/usr/bin/env bash
 
 if git config user.name >/dev/null 2>&1 && git config user.email >/dev/null 2>&1; then
-	printf "Git identity already configured. Skipping.\n"
-	exit 0
+    printf "Git identity already configured. Skipping.\n"
+    exit 0
 fi
 
 __conf="${XDG_CONFIG_HOME:-$HOME/.config}/gi/giume.config"
 
 if [[ -f "$__conf" ]]; then
-	# shellcheck disable=SC1090
-	source "$__conf"
+    # shellcheck disable=SC1090
+    source "$__conf"
 
-	if [[ -n "${GIU_NAME:-}" && -n "${GIU_EMAIL:-}" ]]; then
-		printf "Using defaults from %s\n" "$__conf"
-		giu "$GIU_NAME" "$GIU_EMAIL"
-		exit $?
-	fi
+    if [[ -n "${GIU_NAME:-}" && -n "${GIU_EMAIL:-}" ]]; then
+        printf "Using defaults from %s\n" "$__conf"
+        giu "$GIU_NAME" "$GIU_EMAIL"
+        exit $?
+    fi
 fi
 
 printf 'No global git identity found and no GIU defaults configured.
@@ -28,6 +28,6 @@ To set up, run:
 Alternatively set git globals directly:
   git config --global user.name "Your Name"
   git config --global user.email "you@example.com"\n' \
-	"${__conf%/*}" "$__conf" "$__conf" >&2
+    "${__conf%/*}" "$__conf" "$__conf" >&2
 
 exit 1

@@ -3,52 +3,52 @@
 __remote="${1:-}"
 
 if [[ -z "$__remote" || ! "$__remote" =~ ^git@ ]]; then
-	printf "Usage: %s git@github.com:user/repo.git\n" "${0##*/}" >&2
-	exit 1
+    printf "Usage: %s git@github.com:user/repo.git\n" "${0##*/}" >&2
+    exit 1
 fi
 
 __repo_name="${__remote##*/}"
 __repo_name="${__repo_name%.git}"
 
 if ! git init; then
-	printf "Error: Failed to initialize git repository.\n" >&2
-	exit 1
+    printf "Error: Failed to initialize git repository.\n" >&2
+    exit 1
 fi
 
 git branch -M master
 
 git remote remove origin >/dev/null 2>&1
 if ! git remote add origin "$__remote"; then
-	printf "Error: Failed to add remote origin %s\n" "$__remote" >&2
-	exit 1
+    printf "Error: Failed to add remote origin %s\n" "$__remote" >&2
+    exit 1
 fi
 
 giume
 
 __empty=1
 for __f in .*; do
-	[[ "$__f" == "." || "$__f" == ".." || "$__f" == ".git" ]] && continue
-	__empty=0
-	break
+    [[ "$__f" == "." || "$__f" == ".." || "$__f" == ".git" ]] && continue
+    __empty=0
+    break
 done
 if [[ "$__empty" -eq 1 ]]; then
-	for __f in *; do
-		__empty=0
-		break
-	done
+    for __f in *; do
+        __empty=0
+        break
+    done
 fi
 
 if [[ "$__empty" -eq 1 ]]; then
-	printf "# %s\n" "$__repo_name" >README.md
+    printf "# %s\n" "$__repo_name" >README.md
 fi
 
 git add --all
 
 if ! git diff --cached --quiet; then
-	if ! git commit -m "Initial commit"; then
-		printf "Error: Initial commit failed.\n" >&2
-		exit 1
-	fi
+    if ! git commit -m "Initial commit"; then
+        printf "Error: Initial commit failed.\n" >&2
+        exit 1
+    fi
 fi
 
 printf "Repo initialized on 'master' and connected to %s\n" "$__remote"

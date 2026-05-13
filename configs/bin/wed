@@ -14,13 +14,13 @@ fi
 
 TMP_PATH="/tmp/.cmd_path_$$"
 
-if ! command -v "$1" > "$TMP_PATH" 2>/dev/null; then
+if ! command -v "$1" >"$TMP_PATH" 2>/dev/null; then
     printf "Error: Command '%s' not found in PATH.\n" "$1" >&2
     rm -f "$TMP_PATH"
     exit 1
 fi
 
-read -r CMD_PATH < "$TMP_PATH"
+read -r CMD_PATH <"$TMP_PATH"
 rm -f "$TMP_PATH"
 
 if [[ -z "$CMD_PATH" ]]; then

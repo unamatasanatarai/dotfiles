@@ -14,8 +14,8 @@ fi
 
 # Determine Current Branch (using the optimized 'gib' logic)
 TMP_B="/tmp/.git_br_$$"
-git rev-parse --abbrev-ref HEAD > "$TMP_B" 2>/dev/null
-read -r CURRENT_BRANCH < "$TMP_B"
+git rev-parse --abbrev-ref HEAD >"$TMP_B" 2>/dev/null
+read -r CURRENT_BRANCH <"$TMP_B"
 rm -f "$TMP_B"
 
 if [[ -z "$CURRENT_BRANCH" ]]; then
@@ -25,13 +25,13 @@ fi
 
 # --- 2. Logic: Extract Latest Tag ---
 TMP_T="/tmp/.git_tags_$$"
-git tag --sort=committerdate > "$TMP_T" 2>/dev/null
+git tag --sort=committerdate >"$TMP_T" 2>/dev/null
 
 # Read last line of file into variable (Pure Bash replacement for 'tail -1')
 LATEST_TAG=""
 while read -r line; do
     LATEST_TAG="$line"
-done < "$TMP_T"
+done <"$TMP_T"
 rm -f "$TMP_T"
 
 # --- 3. Action Dispatcher ---
@@ -69,7 +69,10 @@ if [[ -z "$NEW_TAG" ]]; then
 fi
 
 printf "Creating tag: %s\n" "$NEW_TAG"
-git tag "$NEW_TAG" || { printf "Error: Failed to create tag.\n" >&2; exit 1; }
+git tag "$NEW_TAG" || {
+    printf "Error: Failed to create tag.\n" >&2
+    exit 1
+}
 
 if [[ "$PUSH" == true ]]; then
     printf "Pushing tags to origin/%s...\n" "$CURRENT_BRANCH"

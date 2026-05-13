@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 TMP_P="/tmp/.git_push_tmp_$$"
-git rev-parse --abbrev-ref HEAD > "$TMP_P" 2>/dev/null
-read -r CURRENT_BRANCH < "$TMP_P"
+git rev-parse --abbrev-ref HEAD >"$TMP_P" 2>/dev/null
+read -r CURRENT_BRANCH <"$TMP_P"
 
 if [[ -z "$CURRENT_BRANCH" ]]; then
     printf "Error: Not inside a Git repository.\n" >&2
@@ -13,8 +13,8 @@ fi
 git fetch origin >/dev/null 2>&1
 
 if git show-ref --verify --quiet "refs/remotes/origin/$CURRENT_BRANCH"; then
-    git rev-list --count "origin/$CURRENT_BRANCH..HEAD" > "$TMP_P"
-    read -r AHEAD < "$TMP_P"
+    git rev-list --count "origin/$CURRENT_BRANCH..HEAD" >"$TMP_P"
+    read -r AHEAD <"$TMP_P"
     [[ "$AHEAD" -eq 0 ]] && printf "Branch is up to date.\n" && rm -f "$TMP_P" && exit 0
 else
     printf "New branch detected.\n"

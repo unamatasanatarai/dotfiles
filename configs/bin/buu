@@ -14,4 +14,3 @@ brew upgrade --no-quarantine --greedy
 
 echo "Cleaning up"
 brew cleanup --prune=all -s
-

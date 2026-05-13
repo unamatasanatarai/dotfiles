@@ -32,7 +32,7 @@ find "$dir" -depth \( \
     -name 'System Volume Information' -o \
     -name '.Trash-1000' -o \
     -name 'LOST.DIR' \
-\) -exec rm -rfv -- {} +
+    \) -exec rm -rfv -- {} +
 
 status=$?
 

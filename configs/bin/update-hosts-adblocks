@@ -46,14 +46,14 @@ while IFS= read -r line; do
     fi
 
     if [[ $IN_BLOCK -eq 0 ]]; then
-        printf "%s\n" "$line" >> "$TMP_OLD_HOSTS"
+        printf "%s\n" "$line" >>"$TMP_OLD_HOSTS"
     fi
-done < "$HOSTS_FILE"
+done <"$HOSTS_FILE"
 
-cat "$TMP_OLD_HOSTS" > "$TMP_NEW_HOSTS" 
-printf "\n%s\n" "$MARK_BEGIN" >> "$TMP_NEW_HOSTS"
-cat "$TMP_DOWNLOAD" >> "$TMP_NEW_HOSTS"
-printf "\n%s\n" "$MARK_END" >> "$TMP_NEW_HOSTS"
+cat "$TMP_OLD_HOSTS" >"$TMP_NEW_HOSTS"
+printf "\n%s\n" "$MARK_BEGIN" >>"$TMP_NEW_HOSTS"
+cat "$TMP_DOWNLOAD" >>"$TMP_NEW_HOSTS"
+printf "\n%s\n" "$MARK_END" >>"$TMP_NEW_HOSTS"
 
 cp "$TMP_NEW_HOSTS" "$HOSTS_FILE"
 if [[ $? -eq 0 ]]; then

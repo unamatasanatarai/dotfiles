@@ -5,42 +5,54 @@ FORCE=0
 REBUILD=0
 
 while getopts "fhr" opt; do
-  case "$opt" in
+    case "$opt" in
     f) FORCE=1 ;;
     r) REBUILD=1 ;;
-    h|*)
-      printf "Usage: %s [ -f ] [ -h ] [ -r ]\n" "${0##*/}"
-      printf "\nOptions:\n  -r   rebuild license\n  -f   Remove and reinstall CommandLineTools\n  -h   Show this help\n"
-      exit 2
-      ;;
-  esac
+    h | *)
+        printf "Usage: %s [ -f ] [ -h ] [ -r ]\n" "${0##*/}"
+        printf "\nOptions:\n  -r   rebuild license\n  -f   Remove and reinstall CommandLineTools\n  -h   Show this help\n"
+        exit 2
+        ;;
+    esac
 done
 shift $((OPTIND - 1))
 
 # --- 2. Fail First: Check for Sudo Privileges ---
 # Many of these commands require root; check early to avoid partial failure
 if [[ $EUID -ne 0 ]]; then
-   printf "Error: This script must be run with sudo.\n" >&2
-   exit 1
+    printf "Error: This script must be run with sudo.\n" >&2
+    exit 1
 fi
 
 # --- 3. Execution Flow (Flat) ---
 
 # Scenario A: Rebuild License
 if [[ "$REBUILD" -eq 1 ]]; then
-  printf "Rebuilding xcodebuild license...\n"
-  xcodebuild -license || { printf "Failed to accept license.\n" >&2; exit 1; }
-  exit 0
+    printf "Rebuilding xcodebuild license...\n"
+    xcodebuild -license || {
+        printf "Failed to accept license.\n" >&2
+        exit 1
+    }
+    exit 0
 fi
 
 # Scenario B: Forced Reinstall
 if [[ "$FORCE" -eq 1 ]]; then
-  printf "Removing and reinstalling CommandLineTools...\n"
-  rm -rf /Library/Developer/CommandLineTools || { printf "Failed to remove tools.\n" >&2; exit 1; }
-  xcode-select --install || { printf "Failed to trigger installation.\n" >&2; exit 1; }
-  exit 0
+    printf "Removing and reinstalling CommandLineTools...\n"
+    rm -rf /Library/Developer/CommandLineTools || {
+        printf "Failed to remove tools.\n" >&2
+        exit 1
+    }
+    xcode-select --install || {
+        printf "Failed to trigger installation.\n" >&2
+        exit 1
+    }
+    exit 0
 fi
 
 # Scenario C: Default Update
 printf "Running software update...\n"
-softwareupdate --all --install --force || { printf "Update failed.\n" >&2; exit 1; }
+softwareupdate --all --install --force || {
+    printf "Update failed.\n" >&2
+    exit 1
+}
