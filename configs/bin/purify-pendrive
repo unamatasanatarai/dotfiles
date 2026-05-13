@@ -1,10 +1,7 @@
 #!/usr/bin/env bash
 
-dir='.'
-
-if [[ $# -gt 0 ]]; then
-    dir=$1
-fi
+dir="${1:-.}"
+[[ "$dir" != "/" ]] && dir="${dir%/}"
 
 if [[ ! -e "$dir" ]]; then
     printf 'error: path does not exist: %s\n' "$dir" >&2
@@ -18,7 +15,6 @@ fi
 
 printf "wait...\n"
 
-# Single traversal minimizes I/O and process overhead.
 find "$dir" -depth \( \
     -name '._*' -o \
     -name '.DS_Store' -o \
