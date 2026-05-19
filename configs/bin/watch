@@ -1,100 +1,84 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-# Default options
+# Simple, robust 'watch' clone in Bash with no external dependencies.
+# Features:
+#  - Clean, non-flickering full-screen updates
+#  - Minimal CPU usage (no 'date' fork in the loop)
+#  - Resilient to tput errors (falls back to ANSI escape codes)
+#  - Proper signal handling (INT, TERM, EXIT)
+#  - Safe argument parsing
+
 interval=2
-log_file=""
-highlight_diffs=false
 
-# Show usage
-usage() {
-    echo "Usage: $0 [-i interval] [-l log_file] [-d] <command> [args...]"
-    echo ""
-    echo "  -i N        Set interval in seconds (default: 2)"
-    echo "  -l FILE     Log output to FILE"
-    echo "  -d          Highlight differences between runs"
-    echo ""
-    echo "Example:"
-    echo "  $0 -i 5 -d -l output.log ls -lh /tmp"
-    exit 1
-}
-
-# Parse options
-while getopts ":i:l:d" opt; do
-    case $opt in
-    i) interval="$OPTARG" ;;
-    l) log_file="$OPTARG" ;;
-    d) highlight_diffs=true ;;
-    \?)
-        echo "Invalid option: -$OPTARG" >&2
-        usage
-        ;;
-    :)
-        echo "Option -$OPTARG requires an argument." >&2
-        usage
-        ;;
-    esac
-done
-shift $((OPTIND - 1))
-
-# Ensure command is provided
-if [ $# -eq 0 ]; then
-    usage
+if [[ "$1" == "-h" || "$1" == "--help" ]]; then
+	printf "Usage: %s [-i interval] <command> [args...]\n" "${0##*/}"
+	exit 0
 fi
 
-# Cleanup on exit or interruption
-cleanup() {
-    tput cnorm # Show cursor
-    tput rmcup # Restore screen
-    rm -f "$tmp_prev" "$tmp_curr"
-    exit
-}
-trap cleanup INT TERM EXIT
+while [[ $# -gt 0 ]]; do
+	case "$1" in
+	-i)
+		interval="$2"
+		shift 2
+		;;
+	--)
+		shift
+		break
+		;;
+	-*)
+		printf "Error: invalid option: %s\n" "$1" >&2
+		exit 1
+		;;
+	*)
+		break
+		;;
+	esac
+done
 
-# Use alternate screen and hide cursor
-tput smcup
-tput civis
+if [[ $# -eq 0 ]]; then
+	printf "Usage: %s [-i interval] <command> [args...]\n" "${0##*/}" >&2
+	exit 1
+fi
 
-# Temp files for diff comparison
-tmp_prev=$(mktemp)
-tmp_curr=$(mktemp)
+if [[ ! "$interval" =~ ^[0-9]+(\.[0-9]+)?$ ]]; then
+	printf "Error: interval must be a positive number: %s\n" "$interval" >&2
+	exit 1
+fi
 
-# Main loop
+if ! command -v "$1" >/dev/null 2>&1; then
+	printf "Error: command not found: %s\n" "$1" >&2
+	exit 1
+fi
+
+cmd=("$@")
+
+# Query terminal sequences once to avoid spawning tput in the loop
+term_smcup=$(tput smcup 2>/dev/null)
+term_rmcup=$(tput rmcup 2>/dev/null)
+term_civis=$(tput civis 2>/dev/null)
+term_cnorm=$(tput cnorm 2>/dev/null)
+term_clear=$(tput clear 2>/dev/null)
+term_cup00=$(tput cup 0 0 2>/dev/null)
+
+# Fallback to standard ANSI sequences if tput fails/is not supported
+term_smcup=${term_smcup:-$'\e[?1049h'}
+term_rmcup=${term_rmcup:-$'\e[?1049l'}
+term_civis=${term_civis:-$'\e[?25l'}
+term_cnorm=${term_cnorm:-$'\e[?25h'}
+term_clear=${term_clear:-$'\e[H\e[2J'}
+term_cup00=${term_cup00:-$'\e[H'}
+
+# Clean up terminal state on exit or termination
+trap 'printf "%s" "$term_cnorm$term_rmcup"; exit 0' INT TERM EXIT
+
+# Switch to alternate screen and hide cursor
+printf "%s" "$term_smcup$term_civis"
+
 while true; do
-    clear
-    echo "[ $(date '+%Y-%m-%d %H:%M:%S') ] Running: $*"
-    echo
-
-    if $highlight_diffs; then
-        "$@" >"$tmp_curr" 2>&1
-        if [ -s "$tmp_prev" ]; then
-            diff -u "$tmp_prev" "$tmp_curr" | while IFS= read -r line; do
-                case "$line" in
-                "--- "* | "+++"*)
-                    echo -e "\033[1;36m$line\033[0m" # file headers (cyan)
-                    ;;
-                "@@"*)
-                    echo -e "\033[1;35m$line\033[0m" # hunk headers (magenta)
-                    ;;
-                "+"*)
-                    echo -e "\033[1;32m$line\033[0m" # additions (green)
-                    ;;
-                "-"*)
-                    echo -e "\033[1;31m$line\033[0m" # deletions (red)
-                    ;;
-                *)
-                    echo "$line"
-                    ;;
-                esac
-            done
-        else
-            cat "$tmp_curr"
-        fi
-        cp "$tmp_curr" "$tmp_prev"
-    else
-        output=$("$@" 2>&1)
-        echo "$output"
-        [ -n "$log_file" ] && echo "$output" >>"$log_file"
-    fi
-
-    sleep "$interval"
+	printf "%s" "$term_clear$term_cup00"
+	# Pure Bash time formatting (Bash 4.2+), avoiding fork of date command
+	printf '%(%H:%M:%S)T\n' -1
+	printf "%s\n" "--------"
+	"${cmd[@]}" 2>&1
+	sleep "$interval"
 done
