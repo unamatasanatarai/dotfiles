@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+if [[ -z ${1:-} ]]; then
+    printf 'Usage: %s <repository>\n' "${0##*/}" >&2
+    exit 1
+fi
+
+export GINEW_SKIP_INSTRUCTIONS=1
+
+if ! ginew "$1"; then
+    printf 'Error: ginew failed.\n' >&2
+    exit 2
+fi
+
+if ! git add --all; then
+    printf 'Error: git add failed.\n' >&2
+    exit 3
+fi
+
+if ! git diff --cached --quiet; then
+    if ! git commit -m 'Initial commit'; then
+        printf 'Error: initial commit failed.\n' >&2
+        exit 4
+    fi
+fi
+
+printf '\nrun:\n'
+printf 'git push -u origin master\n'

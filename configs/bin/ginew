@@ -42,14 +42,11 @@ if [[ "$__empty" -eq 1 ]]; then
     printf "# %s\n" "$__repo_name" >README.md
 fi
 
-git add --all
-
-if ! git diff --cached --quiet; then
-    if ! git commit -m "Initial commit"; then
-        printf "Error: Initial commit failed.\n" >&2
-        exit 1
-    fi
+printf "Repo initialized on 'master'\n"
+printf "Connected to %s\n" "$__remote"
+if [[ -z $GINEW_SKIP_INSTRUCTIONS ]]; then
+    printf "run:\n"
+    printf " git add -all\n"
+    printf " git commit -m 'Initial commit'\n"
+    printf " git push -u origin master\n"
 fi
-
-printf "Repo initialized on 'master' and connected to %s\n" "$__remote"
-printf "now just run: git push -u origin master\n"
