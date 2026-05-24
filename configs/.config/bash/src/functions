@@ -15,3 +15,62 @@ wcd() {
     }
     cd -- "${cmd_path%/*}" || return 1
 }
+
+venv() {
+    if [[ -n "$VIRTUAL_ENV" ]]; then
+        printf "Error: Already in virtual environment: %s\n" "$VIRTUAL_ENV" >&2
+        return 1
+    fi
+
+    local venv_dir="$PWD/venv"
+
+    if [[ ! -d "$venv_dir" ]]; then
+        if ! command -v python3 >/dev/null 2>&1; then
+            printf "Error: python3 not found in PATH.\n" >&2
+            return 1
+        fi
+
+        printf "Creating virtual environment at %s\n" "$venv_dir"
+
+        python3 -m venv "$venv_dir" || {
+            printf "Error: Failed to create venv.\n" >&2
+            return 1
+        }
+
+        source "$venv_dir/bin/activate" || {
+            printf "Error: Failed to activate venv.\n" >&2
+            return 1
+        }
+
+        python3 -m pip install --upgrade pip || {
+            printf "Error: Pip upgrade failed.\n" >&2
+            deactivate 2>/dev/null
+            return 1
+        }
+
+        python3 -m pip install uv || {
+            printf "Error: uv installation failed.\n" >&2
+            deactivate 2>/dev/null
+            return 1
+        }
+
+        if [[ -f requirements.txt ]]; then
+            printf "Installing dependencies from requirements.txt\n"
+
+            python3 -m pip install -r requirements.txt || {
+                printf "Error: requirements installation failed.\n" >&2
+                deactivate 2>/dev/null
+                return 1
+            }
+        fi
+
+        deactivate
+    fi
+
+    source "$venv_dir/bin/activate" || {
+        printf "Error: Failed to activate venv.\n" >&2
+        return 1
+    }
+
+    printf "✅ Virtual environment activated: %s\n" "$venv_dir"
+}
