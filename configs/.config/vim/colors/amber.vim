@@ -97,3 +97,83 @@ hi shForPP guifg=#dd9000
 hi shNoQuote guifg=#dd9000
 
 hi cIncluded guifg=NONE
+
+" =========================
+" Markdown Highlight Groups
+" =========================
+
+" Headings
+hi markdownH1                 guifg=#ffb347 gui=bold
+hi markdownH2                 guifg=#ffad33 gui=bold
+hi markdownH3                 guifg=#dd9000 gui=bold
+hi markdownH4                 guifg=#c97d00 gui=bold
+hi markdownH5                 guifg=#b86f00 gui=bold
+hi markdownH6                 guifg=#9f6200 gui=bold
+
+" # delimiter itself
+hi markdownH1Delimiter        guifg=#71ade7 gui=bold
+hi markdownH2Delimiter        guifg=#71ade7 gui=bold
+hi markdownH3Delimiter        guifg=#71ade7 gui=bold
+hi markdownH4Delimiter        guifg=#71ade7 gui=bold
+hi markdownH5Delimiter        guifg=#71ade7 gui=bold
+hi markdownH6Delimiter        guifg=#71ade7 gui=bold
+
+" Alternative heading syntax (=== / ---)
+hi markdownHeadingRule        guifg=#71ade7
+hi markdownRule               guifg=#343434
+
+" Bold / Italic
+hi markdownBold               guifg=#ffcc66 gui=bold
+hi markdownItalic             guifg=#e3b341 gui=italic
+hi markdownBoldItalic         guifg=#ffd580 gui=bold,italic
+
+" Code
+hi markdownCode               guifg=#95CB82
+hi markdownCodeBlock          guifg=#95CB82
+hi markdownCodeDelimiter      guifg=#71ade7
+
+" Inline backticks
+hi markdownCodeSpan           guifg=#95CB82
+
+" Blockquotes
+hi markdownBlockquote         guifg=#aeae5a gui=italic
+
+" Links
+hi markdownLinkText           guifg=#71ade7 gui=underline
+hi markdownUrl                guifg=#95CB82 gui=underline
+hi markdownLinkDelimiter      guifg=#343434
+hi markdownIdDelimiter        guifg=#343434
+hi markdownAutomaticLink      guifg=#95CB82 gui=underline
+
+" Lists
+hi markdownListMarker         guifg=#71ade7
+hi markdownOrderedListMarker  guifg=#71ade7
+
+" Escape chars
+hi markdownEscape             guifg=#ff5555
+
+" Tables
+hi markdownTableDelimiter     guifg=#343434
+
+" Errors
+hi markdownError              guifg=#c33c33 guibg=NONE
+
+" Frontmatter / YAML
+hi markdownYamlBlock          guifg=#aeae5a
+
+" HTML inside markdown
+hi markdownHtmlTag            guifg=#71ade7
+hi markdownTag                guifg=#71ade7
+
+" Checkbox lists (plugins)
+hi markdownTask               guifg=#71ade7
+hi markdownTaskDone           guifg=#95CB82 gui=bold
+
+" Conceal formatting chars softly
+hi markdownDelimiter          guifg=#343434
+
+" URLs inside <>
+hi markdownUrlDelimiter       guifg=#343434
+
+" Horizontal separators
+hi markdownHr                 guifg=#343434
