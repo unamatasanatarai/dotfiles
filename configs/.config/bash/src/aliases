@@ -11,7 +11,7 @@ alias ls='ls -GF'
 alias cpr='rsync -rltDvh --modify-window=1 --info=progress2'
 
 # Cross-filesystem safe copy (ext*, HFS+, ExFAT, USB drives)
-alias rcp='rsync -rtvh \
+alias cpbackup='rsync -rtvh \
   --partial \
   --human-readable \
   --modify-window=1 \
