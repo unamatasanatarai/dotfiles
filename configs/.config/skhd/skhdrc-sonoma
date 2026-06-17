@@ -20,6 +20,11 @@ lalt + lshift - w     : aerospace move-node-to-workspace 2 --focus-follows-windo
 lalt + lshift - e     : aerospace move-node-to-workspace 3 --focus-follows-window > /dev/null 2>&1
 lalt + lshift - r     : aerospace move-node-to-workspace 4 --focus-follows-window > /dev/null 2>&1
 
+lctrl + lshift - q     : aerospace move-node-to-workspace 1 > /dev/null 2>&1
+lctrl + lshift - w     : aerospace move-node-to-workspace 2 > /dev/null 2>&1
+lctrl + lshift - e     : aerospace move-node-to-workspace 3 > /dev/null 2>&1
+lctrl + lshift - r     : aerospace move-node-to-workspace 4 > /dev/null 2>&1
+
 lalt - tab           : aerospace workspace-back-and-forth
 
 
