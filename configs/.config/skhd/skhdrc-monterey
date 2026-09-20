@@ -3,39 +3,40 @@
 # -----------------------------------------------------------------------------
 
 lctrl + lcmd - t      : open -na /Applications/Alacritty.app
-ralt - return        : open -na /Applications/Alacritty.app
+ralt - return         : open -na /Applications/Alacritty.app
+lcmd + lshift - m     : curVol=$(osascript -e 'input volume of (get volume settings)'); if [ "$curVol" -eq 0 ]; then osascript -e 'set volume input volume 100'; afplay /System/Library/Sounds/Tink.aiff & osascript -e 'display notification "🎤 Live (100%)" with title "Mic Status"'; else osascript -e 'set volume input volume 0'; afplay /System/Library/Sounds/Submarine.aiff & osascript -e 'display notification "🔇 Muted (0%)" with title "Mic Status"'; fi
 
 
 # -----------------------------------------------------------------------------
 # Workspaces (Spaces)
 # -----------------------------------------------------------------------------
 
-lalt - q             : yabai -m space --focus 1
-lalt - w             : yabai -m space --focus 2
-lalt - e             : yabai -m space --focus 3
-lalt - r             : yabai -m space --focus 4
+lalt - q              : yabai -m space --focus 1
+lalt - w              : yabai -m space --focus 2
+lalt - e              : yabai -m space --focus 3
+lalt - r              : yabai -m space --focus 4
 
 lalt + lshift - q     : yabai -m window --space 1; yabai -m space --focus 1
 lalt + lshift - w     : yabai -m window --space 2; yabai -m space --focus 2
 lalt + lshift - e     : yabai -m window --space 3; yabai -m space --focus 3
 lalt + lshift - r     : yabai -m window --space 4; yabai -m space --focus 4
 
-lctrl + lshift - q     : yabai -m window --space 1
-lctrl + lshift - w     : yabai -m window --space 2
-lctrl + lshift - e     : yabai -m window --space 3
-lctrl + lshift - r     : yabai -m window --space 4
+lctrl + lshift - q    : yabai -m window --space 1
+lctrl + lshift - w    : yabai -m window --space 2
+lctrl + lshift - e    : yabai -m window --space 3
+lctrl + lshift - r    : yabai -m window --space 4
 
-lalt - tab           : yabai -m space --focus recent
+lalt - tab            : yabai -m space --focus recent
 
 
 # -----------------------------------------------------------------------------
 # Focus
 # -----------------------------------------------------------------------------
 
-lalt - h             : yabai -m window --focus west
-lalt - j             : yabai -m window --focus south
-lalt - k             : yabai -m window --focus north
-lalt - l             : yabai -m window --focus east
+lalt - h              : yabai -m window --focus west
+lalt - j              : yabai -m window --focus south
+lalt - k              : yabai -m window --focus north
+lalt - l              : yabai -m window --focus east
 
 
 # -----------------------------------------------------------------------------

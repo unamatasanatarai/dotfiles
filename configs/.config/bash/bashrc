@@ -215,3 +215,5 @@ alias cpbackup='rsync -rtvh \
   --exclude=".DS_Store" \
   --exclude="._*" \
   --info=progress2'
+
+. "$HOME/.local/share/../bin/env"
