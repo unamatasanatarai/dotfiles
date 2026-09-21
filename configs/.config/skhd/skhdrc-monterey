@@ -4,7 +4,7 @@
 
 lctrl + lcmd - t      : open -na /Applications/Alacritty.app
 ralt - return         : open -na /Applications/Alacritty.app
-lcmd + lshift - m     : curVol=$(osascript -e 'input volume of (get volume settings)'); if [ "$curVol" -eq 0 ]; then osascript -e 'set volume input volume 100'; afplay /System/Library/Sounds/Tink.aiff & osascript -e 'display notification "🎤 Live (100%)" with title "Mic Status"'; else osascript -e 'set volume input volume 0'; afplay /System/Library/Sounds/Submarine.aiff & osascript -e 'display notification "🔇 Muted (0%)" with title "Mic Status"'; fi
+lcmd + lshift - m     : ~/bin/mic-toggle
 
 
 # -----------------------------------------------------------------------------

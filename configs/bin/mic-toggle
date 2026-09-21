@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+script_dir=${BASH_SOURCE[0]%/*}
+if [[ "$script_dir" == "${BASH_SOURCE[0]}" ]]; then
+    script_dir=.
+fi
+
+/usr/bin/osascript <<APPLESCRIPT
+set curVol to input volume of (get volume settings)
+set soundOn to "$script_dir/mic-toggle-on.wav"
+set soundOff to "$script_dir/mic-toggle-off.wav"
+
+if curVol = 0 then
+    set volume input volume 100
+    do shell script "/usr/bin/afplay " & quoted form of soundOn & " >/dev/null 2>&1 &"
+    display notification "🎤 Live (100%)" with title "Mic Status"
+else
+    set volume input volume 0
+    do shell script "/usr/bin/afplay " & quoted form of soundOff & " >/dev/null 2>&1 &"
+    display notification "🔇 Muted (0%)" with title "Mic Status"
+end if
+APPLESCRIPT
+
+status=$?
+
+if ((status != 0)); then
+    printf '%s\n' "Failed to toggle microphone input volume" >&2
+    exit 1
+fi
+
+exit 0
