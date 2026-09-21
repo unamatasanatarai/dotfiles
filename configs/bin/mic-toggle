@@ -9,15 +9,18 @@ fi
 set curVol to input volume of (get volume settings)
 set soundOn to "$script_dir/mic-toggle-on.wav"
 set soundOff to "$script_dir/mic-toggle-off.wav"
+set flashEmoji to "$script_dir/flash-emoji"
 
 if curVol = 0 then
     set volume input volume 100
     do shell script "/usr/bin/afplay " & quoted form of soundOn & " >/dev/null 2>&1 &"
     display notification "🎤 Live (100%)" with title "Mic Status"
+    do shell script quoted form of flashEmoji & " \"🎙️🟢\" >/dev/null 2>&1 &"
 else
     set volume input volume 0
     do shell script "/usr/bin/afplay " & quoted form of soundOff & " >/dev/null 2>&1 &"
     display notification "🔇 Muted (0%)" with title "Mic Status"
+    do shell script quoted form of flashEmoji & " \"🎙️🔴\" >/dev/null 2>&1 &"
 end if
 APPLESCRIPT
 
