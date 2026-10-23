@@ -6,7 +6,7 @@
 
 if [[ $EUID -eq 0 ]]; then
 	echo "Error: Please DO NOT run this script with sudo."
-	echo "Run it as a normal user: ./_set-defaults.sh"
+	echo "Run it as a normal user: ./scripts/setup-macos.sh"
 	exit 1
 fi
 
@@ -42,11 +42,14 @@ sudo pmset -c displaysleep 10 || exit 1
 echo "Display sleep set to 10 minutes"
 
 echo "=== Computer Name Setup ==="
-scutil --get ComputerName >/tmp/cn
-read -r current_name </tmp/cn
-echo "! Only alphanumeric characters and hyphens are allowed!"
-echo -n "Set computer name [$current_name]: "
-read -r computer_name
+current_name=$(scutil --get ComputerName)
+while true; do
+	echo "! Only alphanumeric characters and hyphens are allowed!"
+	echo -n "Set computer name [$current_name]: "
+	read -r computer_name
+	[[ -z "$computer_name" || "$computer_name" =~ ^[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?$ ]] && break
+	echo "Invalid name: $computer_name"
+done
 
 if [[ -n "$computer_name" && "$computer_name" != "$current_name" ]]; then
 	echo "> Setting ComputerName to: $computer_name"
@@ -310,8 +313,19 @@ echo "Trackpad configured"
 
 echo "=== Security & Privacy ==="
 # Enable FileVault (disk encryption)
-sudo fdesetup enable || true
-echo "FileVault enabled (or already active)"
+if fdesetup isactive >/dev/null 2>&1; then
+	echo "FileVault already enabled"
+else
+	echo "Enabling FileVault. A RECOVERY KEY will be printed below."
+	if sudo fdesetup enable; then
+		echo ""
+		echo "!!! Store the recovery key above somewhere safe (password manager)."
+		echo "!!! Without it and your password, the disk cannot be decrypted."
+		read -r -p "Press Enter once the recovery key is saved..."
+	else
+		echo "Warning: Failed to enable FileVault; enable it in System Settings." >&2
+	fi
+fi
 
 # Disable captive network control (prevents opening a browser automatically for Wi-Fi logins)
 sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.captive.control Active -bool false || exit 1
@@ -323,10 +337,10 @@ sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setloggingmode on || exit
 sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setstealthmode on || exit 1
 echo "Firewall enabled with logging and stealth mode"
 
-# Disable Time Machine and prevent it from asking to use new disks for backup
+# Prevent Time Machine from asking to use new disks for backup
 sudo tmutil disable || true
 defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true || exit 1
-echo "Disabled Time Machine (new disk offers)"
+echo "Disabled Time Machine new disk offers"
 
 # Require a password immediately after sleep or screensaver begins
 defaults write com.apple.screensaver askForPassword -int 1 || exit 1
@@ -335,7 +349,7 @@ defaults write com.apple.screensaver askForPasswordDelay -int 0 || exit 1
 echo "Password delay set to 0"
 
 # Enable File Quarantine (LSQuarantine) for downloads (Security best practice)
-sudo defaults write com.apple.LaunchServices LSQuarantine -bool YES || exit 1
+defaults write com.apple.LaunchServices LSQuarantine -bool true || exit 1
 echo "File Quarantine enabled"
 
 echo "=== Photos Preferences ==="
@@ -349,20 +363,23 @@ sudo defaults write /Library/Preferences/com.apple.windowserver DisplayResolutio
 echo "HiDPI display modes enabled"
 
 # Reduce motion and transparency (accessibility)
-sudo defaults write com.apple.universalaccess reduceMotion -bool true || exit 1
-echo "Reduced motion enabled"
-sudo defaults write com.apple.universalaccess reduceTransparency -bool true || exit 1
-echo "Reduced transparency enabled"
+# Per-user domain: must not run under sudo. Newer macOS may refuse the write.
+if defaults write com.apple.universalaccess reduceMotion -bool true &&
+	defaults write com.apple.universalaccess reduceTransparency -bool true; then
+	echo "Reduced motion and transparency enabled"
+else
+	echo "Warning: set Reduce motion/transparency in System Settings > Accessibility > Display" >&2
+fi
 
 echo "=== Dock & Mission Control ==="
 # Disable various Dock gestures (Launchpad, App Expose)
-defaults write com.Apple.Dock showLaunchpadGestureEnabled -bool false || exit 1
+defaults write com.apple.dock showLaunchpadGestureEnabled -bool false || exit 1
 echo "Disabled Launchpad gesture"
-defaults write com.Apple.Dock showAppExposeGestureEnabled -bool false || exit 1
+defaults write com.apple.dock showAppExposeGestureEnabled -bool false || exit 1
 echo "Disabled App Expose gesture"
 
 # Don't show recent applications in the Dock
-defaults write com.Apple.Dock show-recents -bool false || exit 1
+defaults write com.apple.dock show-recents -bool false || exit 1
 echo "Disabled recent apps in Dock"
 
 # Disable all hot corners

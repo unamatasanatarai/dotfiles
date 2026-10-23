@@ -4,6 +4,7 @@
 
 lctrl + lcmd - t      : open -na /Applications/Alacritty.app
 ralt - return        : open -na /Applications/Alacritty.app
+lcmd + lshift - m     : ~/bin/mic-toggle
 
 
 # -----------------------------------------------------------------------------

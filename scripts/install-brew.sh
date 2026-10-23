@@ -12,12 +12,15 @@ if ! command -v brew &>/dev/null; then
         exit 1
     }
 
-    curl -fsSL -o /tmp/brew_install.sh https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh || {
+    brew_install=$(mktemp) || exit 1
+    trap 'rm -f "$brew_install"' EXIT
+
+    curl -fsSL -o "$brew_install" https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh || {
         echo "Failed to download Homebrew installer"
         exit 1
     }
 
-    if ! NONINTERACTIVE=1 bash /tmp/brew_install.sh; then
+    if ! NONINTERACTIVE=1 bash "$brew_install"; then
         echo "Error: Failed to install Homebrew." >&2
         exit 1
     fi

@@ -7,10 +7,10 @@ echo "Updating Homebrew"
 brew update
 
 echo "Upgrading casks"
-brew upgrade --no-quarantine --cask --greedy
+brew upgrade --cask --greedy
 
 echo "Upgrading formulae"
-brew upgrade --no-quarantine --greedy
+brew upgrade --formula
 
 echo "Cleaning up"
 brew cleanup --prune=all -s

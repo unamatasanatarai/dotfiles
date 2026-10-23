@@ -5,6 +5,7 @@ brew "coreutils"
 brew "ffmpeg"
 brew "fprobe"
 brew "git"
+brew "git-delta"
 brew "go", link: false
 brew "jq"
 brew "llvm"

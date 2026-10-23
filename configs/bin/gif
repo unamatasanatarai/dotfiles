@@ -5,13 +5,12 @@ if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
     exit 1
 fi
 
-SCRIPT_PATH=${BASH_SOURCE[0]}
-SCRIPT_DIR=${SCRIPT_PATH%/*}
-[[ "$SCRIPT_PATH" == "$SCRIPT_DIR" ]] && SCRIPT_DIR="."
+if ! command -v delta >/dev/null 2>&1; then
+    echo "delta not found; install it with: brew install git-delta" >&2
+    exit 1
+fi
 
-DELTA_PATH="$SCRIPT_DIR/delta"
-
-git diff "$@" | "$DELTA_PATH" \
+git diff "$@" | delta \
     --side-by-side \
     --line-fill-method=spaces \
     --file-style='bold yellow' \

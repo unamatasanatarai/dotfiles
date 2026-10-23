@@ -10,8 +10,23 @@ if ! command -v port >/dev/null 2>&1; then
     echo "==> The MacPorts installer requires administrator privileges."
     echo "==> Please enter your Mac password when prompted to authenticate sudo."
 
-    curl -fL "https://github.com/macports/macports-base/releases/download/v2.12.5/MacPorts-2.12.5-12-Monterey.pkg" -o /tmp/M.pkg
-    sudo installer -pkg /tmp/M.pkg -target /
+    pkg_dir=$(mktemp -d) || exit 1
+    trap 'rm -rf "$pkg_dir"' EXIT
+    pkg="$pkg_dir/MacPorts.pkg"
+
+    curl -fL "https://github.com/macports/macports-base/releases/download/v2.12.5/MacPorts-2.12.5-12-Monterey.pkg" -o "$pkg" || {
+        echo "Failed to download MacPorts installer"
+        exit 1
+    }
+    # Gatekeeper check: must be signed and notarized before it runs as root
+    spctl --assess --type install "$pkg" || {
+        echo "MacPorts installer failed signature verification"
+        exit 1
+    }
+    sudo installer -pkg "$pkg" -target / || {
+        echo "Failed to install MacPorts"
+        exit 1
+    }
 fi
 
 PORTS_FILE="$REPO_ROOT/configs/MacPortsfile"

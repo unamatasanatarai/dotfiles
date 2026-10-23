@@ -1,6 +1,5 @@
 [terminal.shell]
 program = "/usr/local/bin/bash"
-#program = "/bin/bash"
 
 [font]
 size = 16.0
@@ -31,7 +30,7 @@ history = 50000
 decorations = "none"
 dynamic_padding = true
 opacity = 0.96
-option_as_alt = "OnlyLeft"  # Or "OnlyLeft"/"OnlyRight" if you use one side
+option_as_alt = "OnlyLeft"
 
 [window.padding]
 x = 1
@@ -42,3 +41,8 @@ draw_bold_text_with_bright_colors = true
 
 [general]
 import = ["colors-green.toml"]
+
+[[keyboard.bindings]]
+key = "Return"
+mods = "Shift"
+chars = "\u001B\r"

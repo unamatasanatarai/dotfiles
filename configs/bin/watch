@@ -18,6 +18,10 @@ fi
 while [[ $# -gt 0 ]]; do
 	case "$1" in
 	-i)
+		if [[ $# -lt 2 ]]; then
+			printf "Error: -i requires an interval\n" >&2
+			exit 1
+		fi
 		interval="$2"
 		shift 2
 		;;
@@ -40,7 +44,7 @@ if [[ $# -eq 0 ]]; then
 	exit 1
 fi
 
-if [[ ! "$interval" =~ ^[0-9]+(\.[0-9]+)?$ ]]; then
+if [[ ! "$interval" =~ ^[0-9]+(\.[0-9]+)?$ || "$interval" =~ ^0+(\.0+)?$ ]]; then
 	printf "Error: interval must be a positive number: %s\n" "$interval" >&2
 	exit 1
 fi
@@ -69,7 +73,9 @@ term_clear=${term_clear:-$'\e[H\e[2J'}
 term_cup00=${term_cup00:-$'\e[H'}
 
 # Clean up terminal state on exit or termination
-trap 'printf "%s" "$term_cnorm$term_rmcup"; exit 0' INT TERM EXIT
+trap 'printf "%s" "$term_cnorm$term_rmcup"' EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
 
 # Switch to alternate screen and hide cursor
 printf "%s" "$term_smcup$term_civis"

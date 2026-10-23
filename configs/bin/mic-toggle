@@ -1,15 +1,20 @@
 #!/usr/bin/env bash
 
-script_dir=${BASH_SOURCE[0]%/*}
-if [[ "$script_dir" == "${BASH_SOURCE[0]}" ]]; then
-    script_dir=.
-fi
+# Absolute path: AppleScript's `do shell script` runs from /, not our cwd
+script_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P) || exit 1
 
 /usr/bin/osascript <<APPLESCRIPT
 set curVol to input volume of (get volume settings)
 set soundOn to "$script_dir/mic-toggle-on.wav"
 set soundOff to "$script_dir/mic-toggle-off.wav"
 set flashEmoji to "$script_dir/flash-emoji"
+
+-- Devices without software input volume report missing value and ignore
+-- "set volume input volume", so we cannot mute them; never claim we did
+if curVol is missing value then
+    display notification "⚠️ Input device has no volume control — NOT muted" with title "Mic Status"
+    error "input device has no volume control" number 2
+end if
 
 if curVol = 0 then
     set volume input volume 100

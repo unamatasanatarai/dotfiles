@@ -12,19 +12,11 @@ if ! command -v "$EDIT_BIN" >/dev/null 2>&1; then
     exit 1
 fi
 
-TMP_PATH="/tmp/.cmd_path_$$"
-
-if ! command -v "$1" >"$TMP_PATH" 2>/dev/null; then
-    printf "Error: Command '%s' not found in PATH.\n" "$1" >&2
-    rm -f "$TMP_PATH"
-    exit 1
-fi
-
-read -r CMD_PATH <"$TMP_PATH"
-rm -f "$TMP_PATH"
+# Only files on PATH: aliases, functions and builtins have no file to edit
+CMD_PATH=$(type -P -- "$1")
 
 if [[ -z "$CMD_PATH" ]]; then
-    printf "Error: Failed to resolve path for '%s'.\n" "$1" >&2
+    printf "Error: Command '%s' not found in PATH.\n" "$1" >&2
     exit 1
 fi
 

@@ -4,6 +4,7 @@ HOSTS_URL="https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts"
 HOSTS_FILE="/etc/hosts"
 MARK_BEGIN="# adblocking begin #"
 MARK_END="# adblocking end #"
+MIN_ENTRIES=1000
 
 if [[ $EUID -ne 0 ]]; then
     printf "Error: This script must be run with sudo.\n" >&2
@@ -17,14 +18,32 @@ if [[ "${answer,,}" != "yes" ]]; then
     exit 0
 fi
 
-TMP_DOWNLOAD="/tmp/hosts_dl_$$"
-TMP_NEW_HOSTS="/tmp/hosts_new_$$"
-TMP_OLD_HOSTS="/tmp/hosts_old_$$"
+TMP_DIR=$(mktemp -d) || {
+    printf "Error: Failed to create temp directory.\n" >&2
+    exit 1
+}
+trap 'rm -rf "$TMP_DIR"' EXIT
+TMP_DOWNLOAD="$TMP_DIR/download"
+TMP_NEW_HOSTS="$TMP_DIR/new"
 
 printf "Downloading hosts from %s...\n" "$HOSTS_URL"
-curl -so "$TMP_DOWNLOAD" "$HOSTS_URL"
-if [[ $? -ne 0 ]]; then
+if ! curl -fsSL -o "$TMP_DOWNLOAD" "$HOSTS_URL"; then
     printf "Error: Failed to download hosts file.\n" >&2
+    exit 1
+fi
+
+# Only accept "0.0.0.0 <host>" block entries from upstream; anything else
+# (localhost lines, an HTML error page, a hijacked redirect) is dropped
+entries=0
+while IFS= read -r line; do
+    [[ "$line" =~ ^0\.0\.0\.0[[:space:]]+[A-Za-z0-9._-]+([[:space:]]*#.*)?$ ]] || continue
+    [[ "$line" == 0.0.0.0[[:space:]]0.0.0.0* ]] && continue
+    printf "%s\n" "$line" >>"$TMP_NEW_HOSTS.block"
+    ((entries++))
+done <"$TMP_DOWNLOAD"
+
+if ((entries < MIN_ENTRIES)); then
+    printf "Error: Download has only %d block entries; refusing to apply.\n" "$entries" >&2
     exit 1
 fi
 
@@ -33,7 +52,11 @@ BACKUP_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/hosts-adblocks"
 
 TIMESTAMP=$(date +"%Y-%m-%d-%H-%M-%S")
 BACKUP_FILE="$BACKUP_DIR/hosts-$TIMESTAMP-$RANDOM"
-cp "$HOSTS_FILE" "$BACKUP_FILE" && printf "Backup created: %s\n" "$BACKUP_FILE"
+if ! cp "$HOSTS_FILE" "$BACKUP_FILE"; then
+    printf "Error: Failed to back up %s.\n" "$HOSTS_FILE" >&2
+    exit 1
+fi
+printf "Backup created: %s\n" "$BACKUP_FILE"
 
 IN_BLOCK=0
 while IFS= read -r line; do
@@ -46,22 +69,26 @@ while IFS= read -r line; do
     fi
 
     if [[ $IN_BLOCK -eq 0 ]]; then
-        printf "%s\n" "$line" >>"$TMP_OLD_HOSTS"
+        printf "%s\n" "$line" >>"$TMP_NEW_HOSTS"
     fi
 done <"$HOSTS_FILE"
 
-cat "$TMP_OLD_HOSTS" >"$TMP_NEW_HOSTS"
-printf "\n%s\n" "$MARK_BEGIN" >>"$TMP_NEW_HOSTS"
-cat "$TMP_DOWNLOAD" >>"$TMP_NEW_HOSTS"
-printf "\n%s\n" "$MARK_END" >>"$TMP_NEW_HOSTS"
+if [[ $IN_BLOCK -eq 1 ]]; then
+    printf "Error: '%s' has no matching '%s'; fix %s by hand.\n" "$MARK_BEGIN" "$MARK_END" "$HOSTS_FILE" >&2
+    exit 1
+fi
 
-cp "$TMP_NEW_HOSTS" "$HOSTS_FILE"
-if [[ $? -eq 0 ]]; then
-    printf "✅ /etc/hosts updated successfully.\n"
+printf "\n%s\n" "$MARK_BEGIN" >>"$TMP_NEW_HOSTS"
+cat "$TMP_NEW_HOSTS.block" >>"$TMP_NEW_HOSTS"
+printf "%s\n" "$MARK_END" >>"$TMP_NEW_HOSTS"
+
+if cp "$TMP_NEW_HOSTS" "$HOSTS_FILE"; then
+    printf "✅ /etc/hosts updated successfully (%d entries).\n" "$entries"
 else
     printf "❌ Error: Failed to write to %s\n" "$HOSTS_FILE" >&2
     exit 1
 fi
 
-rm -f "$TMP_DOWNLOAD" "$TMP_NEW_HOSTS" "$TMP_OLD_HOSTS"
+dscacheutil -flushcache
+killall -HUP mDNSResponder 2>/dev/null
 sudo -k

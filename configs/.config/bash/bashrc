@@ -15,20 +15,23 @@ export XDG_PICTURES_DIR="$HOME/Pictures"
 export XDG_PUBLICSHARE_DIR="$HOME/Public"
 export BASH_DATA_HOME="$XDG_DATA_HOME/bash"
 export PATH="$PATH:$HOME/bin:$HOME/.local/bin:/usr/local/sbin:/opt/local/bin:/opt/local/sbin:$BASH_DATA_HOME/bin"
-export HOMEBREW_PREFIX="/usr/local"
-export HOMEBREW_CELLAR="/usr/local/Cellar"
-export HOMEBREW_REPOSITORY="/usr/local/Homebrew"
-eval "$(/usr/bin/env PATH_HELPER_ROOT="/usr/local" /usr/libexec/path_helper -s)"
+if [[ -x /opt/homebrew/bin/brew ]]; then
+    export HOMEBREW_PREFIX="/opt/homebrew"
+    export HOMEBREW_REPOSITORY="/opt/homebrew"
+else
+    export HOMEBREW_PREFIX="/usr/local"
+    export HOMEBREW_REPOSITORY="/usr/local/Homebrew"
+fi
+export HOMEBREW_CELLAR="$HOMEBREW_PREFIX/Cellar"
+eval "$(/usr/bin/env PATH_HELPER_ROOT="$HOMEBREW_PREFIX" /usr/libexec/path_helper -s)"
 [ -z "${MANPATH-}" ] || export MANPATH=":${MANPATH#:}"
-export INFOPATH="/usr/local/share/info:${INFOPATH:-}"
+export INFOPATH="$HOMEBREW_PREFIX/share/info:${INFOPATH:-}"
 export HOMEBREW_NO_AUTO_UPDATE=1
 export BASH_SILENCE_DEPRECATION_WARNING=1
 export VISUAL=vi
 export EDITOR="$VISUAL"
 export SYSTEMD_EDITOR="$VISUAL"
 export SHELL="$HOMEBREW_PREFIX/bin/bash"
-export TERM="screen-256color"
-
 # Hardcoded ANSI escape sequences for performance
 bold=$'\e[1m'
 reset=$'\e[0m'
@@ -136,8 +139,10 @@ get_git_branch() {
         branch=$(git rev-parse --short HEAD 2>/dev/null) || return "$ps"
     fi
 
-    # dirty check (fast) including untracked files
-    if ! git diff --quiet --ignore-submodules 2>/dev/null || [ -n "$(git ls-files --others --exclude-standard)" ]; then
+    # dirty check: unstaged, staged, then first untracked file only
+    if ! git diff --quiet --ignore-submodules 2>/dev/null ||
+        ! git diff --cached --quiet --ignore-submodules 2>/dev/null ||
+        [ -n "$(git ls-files --others --exclude-standard --directory --no-empty-directory | head -n1)" ]; then
         printf '<%s*>' "$branch"
     else
         printf '<%s>' "$branch"
@@ -161,6 +166,10 @@ __build_prompt() {
 }
 
 PROMPT_COMMAND=__build_prompt
+
+# PS1 is fully built above; never re-expand it, or a branch named
+# '$(cmd)' would execute cmd on every prompt
+shopt -u promptvars
 # History settings (don't save lines beginning with space or matching the
 # previous entry)
 export HISTCONTROL=ignoreboth
@@ -215,5 +224,3 @@ alias cpbackup='rsync -rtvh \
   --exclude=".DS_Store" \
   --exclude="._*" \
   --info=progress2'
-
-. "$HOME/.local/share/../bin/env"

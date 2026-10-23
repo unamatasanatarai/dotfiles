@@ -12,8 +12,10 @@ get_git_branch() {
         branch=$(git rev-parse --short HEAD 2>/dev/null) || return "$ps"
     fi
 
-    # dirty check (fast) including untracked files
-    if ! git diff --quiet --ignore-submodules 2>/dev/null || [ -n "$(git ls-files --others --exclude-standard)" ]; then
+    # dirty check: unstaged, staged, then first untracked file only
+    if ! git diff --quiet --ignore-submodules 2>/dev/null ||
+        ! git diff --cached --quiet --ignore-submodules 2>/dev/null ||
+        [ -n "$(git ls-files --others --exclude-standard --directory --no-empty-directory | head -n1)" ]; then
         printf '<%s*>' "$branch"
     else
         printf '<%s>' "$branch"
@@ -37,3 +39,7 @@ __build_prompt() {
 }
 
 PROMPT_COMMAND=__build_prompt
+
+# PS1 is fully built above; never re-expand it, or a branch named
+# '$(cmd)' would execute cmd on every prompt
+shopt -u promptvars
