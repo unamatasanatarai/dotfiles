@@ -32,6 +32,8 @@ export VISUAL=vi
 export EDITOR="$VISUAL"
 export SYSTEMD_EDITOR="$VISUAL"
 export SHELL="$HOMEBREW_PREFIX/bin/bash"
+export TERM="screen-256color"
+
 # Hardcoded ANSI escape sequences for performance
 bold=$'\e[1m'
 reset=$'\e[0m'
