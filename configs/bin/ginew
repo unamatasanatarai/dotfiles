@@ -2,51 +2,27 @@
 
 __remote="${1:-}"
 
-if [[ -z "$__remote" || ! "$__remote" =~ ^git@ ]]; then
-    printf "Usage: %s git@github.com:user/repo.git\n" "${0##*/}" >&2
-    exit 1
-fi
-
-__repo_name="${__remote##*/}"
-__repo_name="${__repo_name%.git}"
-
 if ! git init; then
-    printf "Error: Failed to initialize git repository.\n" >&2
-    exit 1
+	printf "Error: Failed to initialize git repository.\n" >&2
+	exit 1
 fi
 
 git branch -M master
 
-git remote remove origin >/dev/null 2>&1
-if ! git remote add origin "$__remote"; then
-    printf "Error: Failed to add remote origin %s\n" "$__remote" >&2
-    exit 1
+if [[ -n "$__remote" ]]; then
+	git remote remove origin >/dev/null 2>&1
+	if ! git remote add origin "$__remote"; then
+		printf "Error: Failed to add remote origin %s\n" "$__remote" >&2
+		exit 1
+	fi
 fi
 
 giume
 
-__empty=1
-for __f in .*; do
-    [[ "$__f" == "." || "$__f" == ".." || "$__f" == ".git" ]] && continue
-    __empty=0
-    break
-done
-if [[ "$__empty" -eq 1 ]]; then
-    for __f in *; do
-        __empty=0
-        break
-    done
-fi
-
-if [[ "$__empty" -eq 1 ]]; then
-    printf "# %s\n" "$__repo_name" >README.md
-fi
-
 printf "Repo initialized on 'master'\n"
-printf "Connected to %s\n" "$__remote"
-if [[ -z $GINEW_SKIP_INSTRUCTIONS ]]; then
-    printf "run:\n"
-    printf " git add --all\n"
-    printf " git commit -m 'Initial commit'\n"
-    printf " git push -u origin master\n"
-fi
+[[ -n "$__remote" ]] && printf "Connected to %s\n" "$__remote"
+printf "run:\n"
+printf " git add --all\n"
+printf " git commit -m 'Initial commit'\n"
+[[ -z "$__remote" ]] && printf " git remote add origin <url>\n"
+printf " git push -u origin master\n"
